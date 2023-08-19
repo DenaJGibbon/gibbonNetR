@@ -14,7 +14,9 @@ Depends:
     torch,
     torchvision,
     stringr,
-    ggpubr
+    ggpubr,
+    seewave,
+    tuneR
 Imports:
     tibble
 

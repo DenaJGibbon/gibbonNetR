@@ -9,52 +9,92 @@ output: github_document
 
 This readme provides instructions and code for training and testing a deep learning model on spectrogram images. 
 
+
+## Installation
+
+You can install the `gibbonNetR` package from its repository using `devtools`:
+
+```{r eval = FALSE}
+# If you don't have devtools installed
+install.packages("devtools")
+
+# Install gibbonNetR
+devtools::install_github("https://github.com/DenaJGibbon/gibbonNetR")
+```
+
+
 ```{r, message=FALSE}
 devtools::load_all("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
 ```
 
-## Location of Spectrogram Images
+## Create spectrogram images
 
-### Training Data Path:
+Load the package and then utilize the `spectrogram_images` function:
+
+``` {r eval = FALSE}
+library(gibbonNetR)
+
+# Parameters
+
+- `trainingBasePath`: The base directory containing the training folders with audio files.
+  
+- `outputBasePath`: Directory where the processed spectrogram images will be saved.
+  
+- `splits`: A numeric vector specifying the split ratios for train, valid, and test sets. The default split is `c(0.8, 0.1, 0.1)` but can be modified by the user.
+
+
+gibbonNetR::spectrogram_images(
+  trainingBasePath ='/Volumes/DJC Files/Clink et al Zenodo Data/TrainingFilesValidated/',
+  outputBasePath ='data/imagesmalaysia/',
+  splits = c(0.6, 0.2, 0.2)
+)
+
+
+```
+
+The function will process the audio files from the `trainingBasePath`, create spectrogram images and then save these images into the respective train, valid, and test folders inside the `outputBasePath`.
+
+
+## Parameters for Training
+
+Training Data Path:
 
 ```{r}
 input.data.path <-  c('/Users/denaclink/Desktop/RStudioProjects/Multi-species-detector/data/imagesmalaysiaHQ/')
 ```
 
-### Testing Data Path:
+Testing Data Path:
 
 ```{r}
 test.data.path <- c('/Users/denaclink/Desktop/RStudioProjects/Multi-species-detector/data/imagesmalaysiamaliau/')
 ```
 
-## Parameters for Training
-
-### Training Data Folder Short Name:
+Training Data Folder Short Name:
 
 ```{r}
 trainingfolder.short <- 'imagesmalaysiaHQ'
 ```
 
-### Unfreezing Layers:
+Unfreezing Layers:
 
 ```{r}
 unfreeze.param <- TRUE  # FALSE means the features are frozen; TRUE unfrozen
 ```
 
-### Number of Epoch Iterations:
+Number of Epoch Iterations:
 
 ```{r}
 epoch.iterations <- c(1,2,3,4,5,20)
 ```
 
-### Location to Save the Output:
+Location to Save the Output:
 
 ```{r}
 output.data.path <-paste('data/','output','unfrozen',unfreeze.param,trainingfolder.short,'/', sep='_')
 dir.create(output.data.path)
 ```
 
-### Early Stopping:
+Early Stopping:
 
 ```{r}
 early.stop <- 'yes'  # NOTE: Currently only early stopping available
@@ -64,29 +104,29 @@ early.stop <- 'yes'  # NOTE: Currently only early stopping available
 
 ```{r,eval = FALSE}
 gibbonNetR::train_alexnet(input.data.path=input.data.path,
-                          test.data.path=test.data.path,
+                          test.data=test.data.path,
                           unfreeze = TRUE,
                           epoch.iterations=epoch.iterations,
                           early.stop = "yes",
                           output.base.path = "data/",
-                          trainingfolder.short=trainingfolder.short)
+                          trainingfolder=trainingfolder.short)
 ```
 
 ## Extracting Performance Data
 
 ```{r}
-performancetables.dir <- 'data/_output_unfrozen_TRUE_imagesmalaysiaHQ_/performance_tables/'
+performancetables.dir <- '/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/_output_unfrozen_TRUE_imagesmalaysia_/performance_tables/'
 PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir)
+
 ```
 
-### Displaying Performance Plots
+Displaying Performance Plots
 
 ```{r}
 PerformanceOutput$f1_plot
 PerformanceOutput$pr_plot
 ```
 
-## Repeat the Training (if required)
 
 
 

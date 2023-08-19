@@ -78,7 +78,7 @@ train_VGG16 <- function(input.data.path, test.data, unfreeze = TRUE,
     Negative.class=negative.class
   )
 
-  write_csv(metadata, paste0(output.data.path, "model_metadata.csv"))
+  write_csv(metadata, paste0(output.data.path, "VGG16model_metadata.csv"))
 
   for(a in 1:length(epoch.iterations )){
 

@@ -9,7 +9,8 @@ spectrogram_images(
   outputBasePath,
   splits = c(0.8, 0.1, 0.1),
   minfreq.khz = 0.4,
-  maxfreq.khz = 2
+  maxfreq.khz = 2,
+  new.sampleratehz = 16000
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ spectrogram_images(
 \item{minfreq.khz}{Minimum frequency in kHz for the spectrogram. Defaults to 0.4.}
 
 \item{maxfreq.khz}{Maximum frequency in kHz for the spectrogram. Defaults to 2.}
+
+\item{new.sampleratehz}{New sample rate in Hz for resampling the audio. Defaults to 16000. Set to 'NA' if no resampling is required.}
 }
 \value{
 Invisible NULL
@@ -32,7 +35,7 @@ Process and Save Spectrogram Images from Sound Files
 \examples{
 spectrogram_images(
   trainingBasePath = "data/Clips",
-  outputBasePath = "data//TrainingImages",
+  outputBasePath = "data/TrainingImages",
   splits = c(0.7, 0.2, 0.1)
 )
 

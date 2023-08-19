@@ -5,24 +5,25 @@
 #' @param splits Numeric vector specifying the split ratios for train, valid, and test sets. Defaults to c(0.8, 0.1, 0.1).
 #' @param minfreq.khz Minimum frequency in kHz for the spectrogram. Defaults to 0.4.
 #' @param maxfreq.khz Maximum frequency in kHz for the spectrogram. Defaults to 2.
+#' @param new.sampleratehz New sample rate in Hz for resampling the audio. Defaults to 16000. Set to 'NA' if no resampling is required.
 #'
 #' @return Invisible NULL
 #'
 #' @examples
 #' spectrogram_images(
 #'   trainingBasePath = "data/Clips",
-#'   outputBasePath = "data//TrainingImages",
+#'   outputBasePath = "data/TrainingImages",
 #'   splits = c(0.7, 0.2, 0.1)
 #' )
 #'
 #' @importFrom tuneR readWave
 #' @importFrom seewave spectro
 #' @importFrom tools file_path_sans_ext
-#'
+#' @export
 
 spectrogram_images <- function(trainingBasePath,
                                outputBasePath, splits = c(0.8, 0.1, 0.1),
-                               minfreq.khz= 0.4, maxfreq.khz=2 ) {
+                               minfreq.khz= 0.4, maxfreq.khz=2,new.sampleratehz=16000 ) {
 
   # Check if splits are valid
   if (sum(splits) != 1) stop("The sum of the splits must equal 1.")
@@ -69,6 +70,11 @@ spectrogram_images <- function(trainingBasePath,
       jpeg(jpeg_filename, res = 50)
 
       short_wav <- tuneR::readWave(SoundFiles[y])
+
+      if(new.sampleratehz != 'NA'){
+      short_wav <- tuneR::downsample(short_wav,new.sampleratehz)
+      }
+
       seewave::spectro(short_wav, tlab = '', flab = '', axisX = FALSE,
                        axisY = FALSE, scale = FALSE, flim = c(minfreq.khz, maxfreq.khz), grid = FALSE)
       graphics.off()
