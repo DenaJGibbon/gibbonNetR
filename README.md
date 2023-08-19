@@ -53,22 +53,6 @@ The function will process the audio files from the `trainingBasePath`,
 create spectrogram images and then save these images into the respective
 train, valid, and test folders inside the `outputBasePath`.
 
-<figure>
-<img
-src="/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/imagesmalaysia/train/Gibbons/duet_S10_20180620_080003_1236.64391631774_1254.21379409804_.jpg"
-alt="Figure 1a. Example Spectrogram image" />
-<figcaption aria-hidden="true">Figure 1a. Example Spectrogram
-image</figcaption>
-</figure>
-
-<figure>
-<img
-src="/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/imagesmalaysia/train/Gibbons/duet_S10_20180620_080003_1462.01200252694_1479.35785636468_.jpg"
-alt="Figure 1b. Example Spectrogram image" />
-<figcaption aria-hidden="true">Figure 1b. Example Spectrogram
-image</figcaption>
-</figure>
-
 ## Parameters for Training
 
 Training Data Path:
@@ -128,13 +112,6 @@ gibbonNetR::train_alexnet(input.data.path=input.data.path,
                           output.base.path = "data/",
                           trainingfolder=trainingfolder.short)
 ```
-
-<figure>
-<img
-src="/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/README_files/sampleloss.png"
-alt="Figure 2. Sample Loss Plot" />
-<figcaption aria-hidden="true">Figure 2. Sample Loss Plot</figcaption>
-</figure>
 
 ## Extracting Performance Data
 
