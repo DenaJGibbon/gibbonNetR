@@ -1,4 +1,5 @@
-gibbonNetR: an R package for the use of CNNs on acoustic data
+gibbonNetR: R Package for the Use of CNNs and Transfer Learning on
+Acoustic Data
 ================
 Dena J. Clink
 2023-08-19
@@ -59,10 +60,10 @@ dir.create(output.data.path)
 ### Early Stopping:
 
 ``` r
-early.stop <- 'yes'  # NOTE: Must comment out if you don't want early stopping
+early.stop <- 'yes'  # NOTE: Currently only early stopping available
 ```
 
-## Training the Model using gibbonNetR and evaluating on a test set
+## Training the models using gibbonNetR and evaluating on a test set
 
 ``` r
 gibbonNetR::train_alexnet(input.data.path=input.data.path,

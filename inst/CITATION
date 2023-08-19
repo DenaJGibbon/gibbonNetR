@@ -1,0 +1,8 @@
+bibentry(
+  bibtype  = "Manual",
+  title    = "gibbonNetR: R Package for the Use of CNNs and Transfer Learning on Acoustic Data",
+  year = "2023",
+  author   = "Dena J. Clink",
+  journal  = "GitHub",
+  url = {'https://github.com/DenaJGibbon/gibbonNetR'}
+)
