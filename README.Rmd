@@ -54,6 +54,9 @@ gibbonNetR::spectrogram_images(
 
 The function will process the audio files from the `trainingBasePath`, create spectrogram images and then save these images into the respective train, valid, and test folders inside the `outputBasePath`.
 
+![Figure 1a. Example Spectrogram image](/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/imagesmalaysia/train/Gibbons/duet_S10_20180620_080003_1236.64391631774_1254.21379409804_.jpg)
+
+![Figure 1b. Example Spectrogram image](/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/imagesmalaysia/train/Gibbons/duet_S10_20180620_080003_1462.01200252694_1479.35785636468_.jpg)
 
 ## Parameters for Training
 
@@ -112,7 +115,7 @@ gibbonNetR::train_alexnet(input.data.path=input.data.path,
                           trainingfolder=trainingfolder.short)
 ```
 
-![Figure 1. Sample Loss Plot](/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/README_files/sampleloss.png)
+![Figure 2. Sample Loss Plot](/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/README_files/sampleloss.png)
 
 
 
