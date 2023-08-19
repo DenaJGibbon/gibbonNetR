@@ -113,6 +113,13 @@ gibbonNetR::train_alexnet(input.data.path=input.data.path,
                           trainingfolder=trainingfolder.short)
 ```
 
+<figure>
+<img
+src="/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/README_files/sampleloss.png"
+alt="Figure 1. Sample Loss Plot" />
+<figcaption aria-hidden="true">Figure 1. Sample Loss Plot</figcaption>
+</figure>
+
 ## Extracting Performance Data
 
 ``` r
@@ -124,19 +131,19 @@ PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=perf
     ## # A tibble: 1 × 9
     ##   Precision Recall    F1 `Validation loss` `Training Data` `N epochs`
     ##       <dbl>  <dbl> <dbl>             <dbl> <chr>                <dbl>
-    ## 1     0.674  0.929 0.781             0.224 imagesmalaysia           2
+    ## 1     0.753  0.995 0.857             0.145 imagesmalaysia          20
     ## # ℹ 3 more variables: `CNN Architecture` <chr>, Threshold <dbl>, Frozen <lgl>
     ## [1] "Best Precision results"
     ## # A tibble: 1 × 9
     ##   Precision Recall    F1 `Validation loss` `Training Data` `N epochs`
     ##       <dbl>  <dbl> <dbl>             <dbl> <chr>                <dbl>
-    ## 1     0.932  0.612 0.739             0.224 imagesmalaysia           2
+    ## 1         1  0.433 0.604            0.0897 imagesmalaysia          20
     ## # ℹ 3 more variables: `CNN Architecture` <chr>, Threshold <dbl>, Frozen <lgl>
     ## [1] "Best Recall results"
     ## # A tibble: 1 × 9
     ##   Precision Recall    F1 `Validation loss` `Training Data` `N epochs`
     ##       <dbl>  <dbl> <dbl>             <dbl> <chr>                <dbl>
-    ## 1     0.623      1 0.767             0.647 imagesmalaysia           1
+    ## 1     0.635      1 0.777            0.0790 imagesmalaysia          20
     ## # ℹ 3 more variables: `CNN Architecture` <chr>, Threshold <dbl>, Frozen <lgl>
 
 Displaying Performance Plots
@@ -145,17 +152,10 @@ Displaying Performance Plots
 PerformanceOutput$f1_plot
 ```
 
-    ## Warning: Removed 7 rows containing missing values (`geom_line()`).
-
-    ## Warning: Removed 7 rows containing missing values (`geom_point()`).
-
 ![](README_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
 
 ``` r
 PerformanceOutput$pr_plot
 ```
-
-    ## Warning: Removed 7 rows containing missing values (`geom_line()`).
-    ## Removed 7 rows containing missing values (`geom_point()`).
 
 ![](README_files/figure-gfm/unnamed-chunk-13-2.png)<!-- -->

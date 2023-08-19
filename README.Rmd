@@ -112,6 +112,11 @@ gibbonNetR::train_alexnet(input.data.path=input.data.path,
                           trainingfolder=trainingfolder.short)
 ```
 
+![Figure 1. Sample Loss Plot](/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/README_files/sampleloss.png)
+
+
+
+
 ## Extracting Performance Data
 
 ```{r}
