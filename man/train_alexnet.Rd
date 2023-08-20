@@ -30,7 +30,7 @@ Default is TRUE.}
 "yes" to apply and "no" to skip. Default is 'yes'.}
 
 \item{output.base.path}{Character. The base path where the output files should be saved.
-Default is '/Users/denaclink/Desktop/RStudioProjects/Multi-species-detector/data/'.}
+Default is 'data/'.}
 
 \item{trainingfolder}{Character. A shortened descriptor of the training data, used for naming output files.
 Default is 'imagesmalaysiaHQ'.}

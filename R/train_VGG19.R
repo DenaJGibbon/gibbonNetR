@@ -125,7 +125,7 @@ train_VGG19 <- function(input.data.path, test.data, unfreeze = TRUE,
 
     net <- torch::nn_module(
       initialize = function() {
-        self$model <- model_vgg19 (pretrained = TRUE)
+        self$model <- model_VGG19 (pretrained = TRUE)
 
         for (par in self$parameters) {
           par$requires_grad_(unfreeze.param)

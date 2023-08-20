@@ -2,6 +2,9 @@
 
 export(get_best_performance)
 export(spectrogram_images)
+export(train_ResNet152)
+export(train_ResNet18)
+export(train_ResNet50)
 export(train_VGG16)
 export(train_VGG19)
 export(train_alexnet)

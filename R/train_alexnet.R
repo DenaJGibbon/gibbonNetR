@@ -11,7 +11,7 @@
 #' @param early.stop Character. Determines whether early stopping should be applied or not.
 #'                   "yes" to apply and "no" to skip. Default is 'yes'.
 #' @param output.base.path Character. The base path where the output files should be saved.
-#'                          Default is '/Users/denaclink/Desktop/RStudioProjects/Multi-species-detector/data/'.
+#'                          Default is 'data/'.
 #' @param trainingfolder Character. A shortened descriptor of the training data, used for naming output files.
 #'                             Default is 'imagesmalaysiaHQ'.
 #' @param positive.class Character. The name of the positive class label. Default is 'Gibbons'.
