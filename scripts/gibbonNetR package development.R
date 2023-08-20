@@ -2,31 +2,6 @@ devtools::document()
 devtools::load_all()
 
 
-# Prepare the spectrogram images ------------------------------------------
-# Process spectrogram images for training data:
-# The splits are set to ensure all data (100%) goes into the training folder.
-gibbonNetR::spectrogram_images(
-  trainingBasePath = '/Volumes/DJC Files/Danum Deep Learning/TrainingClips/',
-  outputBasePath   = 'data/imagesmalaysia/',
-  splits           = c(1, 0, 0)  # 100% training, 0% validation, 0% testing
-)
-
-# Process spectrogram images for validation data:
-# The splits are set to ensure all data (100%) goes into the validation folder.
-gibbonNetR::spectrogram_images(
-  trainingBasePath = '/Volumes/DJC Files/Clink et al Zenodo Data/ValidationClipsDanum',
-  outputBasePath   = 'data/imagesmalaysia/',
-  splits           = c(0, 1, 0)  # 0% training, 100% validation, 0% testing
-)
-
-# Process spectrogram images for testing data:
-# The splits are set to ensure all data (100%) goes into the testing folder.
-gibbonNetR::spectrogram_images(
-  trainingBasePath = '/Volumes/DJC Files/Clink et al Zenodo Data/TestClipsDanum/', #'/Volumes/DJC Files/Danum Deep Learning/TestClips', #
-  outputBasePath   = 'data/imagesmalaysia/',
-  splits           = c(0, 0, 1)  # 0% training, 0% validation, 100% testing
-)
-
 
 # Get setup for training --------------------------------------------------
 
