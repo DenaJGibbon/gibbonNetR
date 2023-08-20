@@ -81,7 +81,7 @@ train_ResNet18 <- function(input.data.path, test.data, unfreeze = TRUE,
   write_csv(metadata, paste0(output.data.path, "ResNet18model_metadata.csv"))
 
   for(a in 1:length(epoch.iterations )){
-
+    print('Training ResNet18')
     n.epoch <- epoch.iterations [a]
 
     # Data loaders setup
@@ -142,7 +142,7 @@ train_ResNet18 <- function(input.data.path, test.data, unfreeze = TRUE,
     )
 
     model <- net %>%
-      setup(
+      luz::setup(
         loss = nn_bce_with_logits_loss(),
         optimizer = optim_adam,
         metrics = list(
@@ -228,7 +228,7 @@ train_ResNet18 <- function(input.data.path, test.data, unfreeze = TRUE,
       )$byClass
 
       TempRowResNet18 <- cbind.data.frame(
-        t(ResNet18Perf[5:7]),
+        t(ResNet18Perf),
         ResNet18.loss,
         trainingfolder,
         n.epoch,
@@ -236,14 +236,15 @@ train_ResNet18 <- function(input.data.path, test.data, unfreeze = TRUE,
       )
 
       colnames(TempRowResNet18) <- c(
-        "Precision",
-        "Recall",
-        "F1",
+        "Sensitivity", "Specificity", "Pos Pred Value", "Neg Pred Value",
+        "Precision", "Recall", "F1", "Prevalence", "Detection Rate",
+        "Detection Prevalence", "Balanced Accuracy",
         "Validation loss",
         "Training Data",
         "N epochs",
         "CNN Architecture"
       )
+
 
       TempRowResNet18$Threshold <- as.character(threshold)
       CombinedTempRow <- rbind.data.frame(CombinedTempRow, TempRowResNet18)

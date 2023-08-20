@@ -11,7 +11,7 @@
 #' @param early.stop Character. Determines whether early stopping should be applied or not.
 #'                   "yes" to apply and "no" to skip. Default is 'yes'.
 #' @param output.base.path Character. The base path where the output files should be saved.
-#'                          Default is '/Users/denaclink/Desktop/RStudioProjects/Multi-species-detector/data/'.
+#'                          Default is 'data/'.
 #' @param trainingfolder Character. A shortened descriptor of the training data, used for naming output files.
 #'                             Default is 'imagesmalaysiaHQ'.
 #' @param positive.class Character. The name of the positive class label. Default is 'Gibbons'.
@@ -81,7 +81,7 @@ train_VGG19 <- function(input.data.path, test.data, unfreeze = TRUE,
   write_csv(metadata, paste0(output.data.path, "VGG19model_metadata.csv"))
 
   for(a in 1:length(epoch.iterations )){
-
+    print('Training VGG19')
     n.epoch <- epoch.iterations [a]
 
     # Data loaders setup
@@ -125,7 +125,7 @@ train_VGG19 <- function(input.data.path, test.data, unfreeze = TRUE,
 
     net <- torch::nn_module(
       initialize = function() {
-        self$model <- model_VGG19 (pretrained = TRUE)
+        self$model <- model_vgg19(pretrained = TRUE)
 
         for (par in self$parameters) {
           par$requires_grad_(unfreeze.param)
@@ -148,7 +148,7 @@ train_VGG19 <- function(input.data.path, test.data, unfreeze = TRUE,
     )
 
     fitted <- net %>%
-      setup(
+      luz::setup(
         loss = nn_bce_with_logits_loss(),
         optimizer = optim_adam,
         metrics = list(
@@ -233,7 +233,7 @@ train_VGG19 <- function(input.data.path, test.data, unfreeze = TRUE,
       )$byClass
 
       TempRowVGG19 <- cbind.data.frame(
-        t(VGG19Perf[5:7]),
+        t(VGG19Perf),
         VGG19.loss,
         trainingfolder,
         n.epoch,
@@ -241,9 +241,9 @@ train_VGG19 <- function(input.data.path, test.data, unfreeze = TRUE,
       )
 
       colnames(TempRowVGG19) <- c(
-        "Precision",
-        "Recall",
-        "F1",
+        "Sensitivity", "Specificity", "Pos Pred Value", "Neg Pred Value",
+        "Precision", "Recall", "F1", "Prevalence", "Detection Rate",
+        "Detection Prevalence", "Balanced Accuracy",
         "Validation loss",
         "Training Data",
         "N epochs",

@@ -81,7 +81,7 @@ train_alexnet <- function(input.data.path, test.data, unfreeze = TRUE,
   write_csv(metadata, paste0(output.data.path, "AlexNetmodel_metadata.csv"))
 
 for(a in 1:length(epoch.iterations )){
-
+print('Training AlexNet')
   n.epoch <- epoch.iterations [a]
 
     # Data loaders setup
@@ -147,7 +147,7 @@ for(a in 1:length(epoch.iterations )){
     )
 
     fitted <- net %>%
-      setup(
+      luz::setup(
         loss = nn_bce_with_logits_loss(),
         optimizer = optim_adam,
         metrics = list(
@@ -232,7 +232,7 @@ for(a in 1:length(epoch.iterations )){
       )$byClass
 
       TempRowAlexNet <- cbind.data.frame(
-        t(AlexNetPerf[5:7]),
+        t(AlexNetPerf),
         AlexNet.loss,
         trainingfolder,
         n.epoch,
@@ -240,9 +240,9 @@ for(a in 1:length(epoch.iterations )){
       )
 
       colnames(TempRowAlexNet) <- c(
-        "Precision",
-        "Recall",
-        "F1",
+        "Sensitivity", "Specificity", "Pos Pred Value", "Neg Pred Value",
+        "Precision", "Recall", "F1", "Prevalence", "Detection Rate",
+        "Detection Prevalence", "Balanced Accuracy",
         "Validation loss",
         "Training Data",
         "N epochs",

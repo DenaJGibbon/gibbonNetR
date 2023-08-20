@@ -81,7 +81,7 @@ train_ResNet152 <- function(input.data.path, test.data, unfreeze = TRUE,
   write_csv(metadata, paste0(output.data.path, "ResNet152model_metadata.csv"))
 
   for(a in 1:length(epoch.iterations )){
-
+    print('Training ResNet152')
     n.epoch <- epoch.iterations [a]
 
     # Data loaders setup
@@ -142,7 +142,7 @@ train_ResNet152 <- function(input.data.path, test.data, unfreeze = TRUE,
     )
 
     model <- net %>%
-      setup(
+      luz::setup(
         loss = nn_bce_with_logits_loss(),
         optimizer = optim_adam,
         metrics = list(
@@ -228,7 +228,7 @@ train_ResNet152 <- function(input.data.path, test.data, unfreeze = TRUE,
       )$byClass
 
       TempRowResNet152 <- cbind.data.frame(
-        t(ResNet152Perf[5:7]),
+        t(ResNet152Perf),
         ResNet152.loss,
         trainingfolder,
         n.epoch,
@@ -236,9 +236,9 @@ train_ResNet152 <- function(input.data.path, test.data, unfreeze = TRUE,
       )
 
       colnames(TempRowResNet152) <- c(
-        "Precision",
-        "Recall",
-        "F1",
+        "Sensitivity", "Specificity", "Pos Pred Value", "Neg Pred Value",
+        "Precision", "Recall", "F1", "Prevalence", "Detection Rate",
+        "Detection Prevalence", "Balanced Accuracy",
         "Validation loss",
         "Training Data",
         "N epochs",

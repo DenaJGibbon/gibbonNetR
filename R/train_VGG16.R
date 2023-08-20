@@ -81,7 +81,7 @@ train_VGG16 <- function(input.data.path, test.data, unfreeze = TRUE,
   write_csv(metadata, paste0(output.data.path, "VGG16model_metadata.csv"))
 
   for(a in 1:length(epoch.iterations )){
-
+    print('Training VGG16')
     n.epoch <- epoch.iterations [a]
 
     # Data loaders setup
@@ -148,7 +148,7 @@ train_VGG16 <- function(input.data.path, test.data, unfreeze = TRUE,
     )
 
     fitted <- net %>%
-      setup(
+      luz::setup(
         loss = nn_bce_with_logits_loss(),
         optimizer = optim_adam,
         metrics = list(
@@ -233,7 +233,7 @@ train_VGG16 <- function(input.data.path, test.data, unfreeze = TRUE,
       )$byClass
 
       TempRowVGG16 <- cbind.data.frame(
-        t(VGG16Perf[5:7]),
+        t(VGG16Perf),
         VGG16.loss,
         trainingfolder,
         n.epoch,
@@ -241,9 +241,9 @@ train_VGG16 <- function(input.data.path, test.data, unfreeze = TRUE,
       )
 
       colnames(TempRowVGG16) <- c(
-        "Precision",
-        "Recall",
-        "F1",
+        "Sensitivity", "Specificity", "Pos Pred Value", "Neg Pred Value",
+        "Precision", "Recall", "F1", "Prevalence", "Detection Rate",
+        "Detection Prevalence", "Balanced Accuracy",
         "Validation loss",
         "Training Data",
         "N epochs",

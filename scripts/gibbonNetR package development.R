@@ -2,9 +2,9 @@ devtools::document()
 devtools::load_all()
 
 
-
 # Get setup for training --------------------------------------------------
-
+setwd("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
+devtools::load_all()
 # Location of spectrogram images for training
 input.data.path <-  'data/imagesmalaysia/'
 
@@ -63,7 +63,7 @@ gibbonNetR::train_VGG19(input.data.path=input.data.path,
 gibbonNetR::train_ResNet18(input.data.path=input.data.path,
                             test.data=test.data.path,
                             unfreeze = TRUE,
-                            epoch.iterations=1,
+                            epoch.iterations=epoch.iterations,
                             early.stop = "yes",
                             output.base.path = "data/",
                             trainingfolder=trainingfolder.short,
@@ -73,7 +73,7 @@ gibbonNetR::train_ResNet18(input.data.path=input.data.path,
 gibbonNetR::train_ResNet50(input.data.path=input.data.path,
                             test.data=test.data.path,
                             unfreeze = TRUE,
-                            epoch.iterations=1,
+                            epoch.iterations=epoch.iterations,
                             early.stop = "yes",
                             output.base.path = "data/",
                             trainingfolder=trainingfolder.short,
@@ -83,7 +83,7 @@ gibbonNetR::train_ResNet50(input.data.path=input.data.path,
 gibbonNetR::train_ResNet152(input.data.path=input.data.path,
                             test.data=test.data.path,
                             unfreeze = TRUE,
-                            epoch.iterations=1,
+                            epoch.iterations=epoch.iterations,
                             early.stop = "yes",
                             output.base.path = "data/",
                             trainingfolder=trainingfolder.short,
