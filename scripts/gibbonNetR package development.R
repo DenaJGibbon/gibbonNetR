@@ -125,3 +125,38 @@ PerformanceOutPutTrained$FPRTPR_plot
 PerformanceOutPutTrained$best_auc$AUC
 
 
+library(dplyr)
+train_ds <- image_folder_dataset(
+  file.path(input.data.path,'train' ),
+  transform = . %>%
+    torchvision::transform_to_tensor() %>%
+    torchvision::transform_resize(size = c(224, 224)) %>%
+    #torchvision::transform_color_jitter() %>%
+    torchvision::transform_normalize(mean = c(0.485, 0.456, 0.406), std = c(0.229, 0.224, 0.225)),
+  target_transform = function(x) as.double(x) - 1
+)
+
+train_dl <- dataloader(train_ds, batch_size = 24, shuffle = TRUE, drop_last = TRUE)
+
+
+
+batch <- train_dl$.iter()$.next()
+classes <- batch[[2]]
+class_names <- ifelse(batch$y, 'Noise','Gibbons')
+
+
+images <- as_array(batch[[1]]) %>% aperm(perm = c(1, 3, 4, 2))
+mean <- c(0.485, 0.456, 0.406)
+std <- c(0.229, 0.224, 0.225)
+images <- std * images + mean
+images <- images * 255
+images[images > 255] <- 255
+images[images < 0] <- 0
+
+par(mfcol = c(4,6), mar = rep(1, 4))
+
+images %>%
+  purrr::array_tree(1) %>%
+  purrr::set_names(class_names) %>%
+  purrr::map(as.raster, max = 255) %>%
+  purrr::iwalk(~{plot(.x); title(.y)})

@@ -75,8 +75,8 @@ evaluate_trainedmodel_performance <- function(trained_models_dir, image_data_dir
         TempRowTrainedModel <- cbind.data.frame(
           t(TrainedModelPerf),
           'NA',
-          trainingfolder,
-          n.epoch,
+          training_data,
+          n_epochs,
           model_type
         )
 
@@ -101,7 +101,7 @@ evaluate_trainedmodel_performance <- function(trained_models_dir, image_data_dir
 
 
       TransferLearningCNNDF <- rbind.data.frame(TransferLearningCNNDF, CombinedTempRow)
-      filename <- paste(output_dir,'performance_tables_trained/', trainingfolder, '_', n.epoch, '_', model_type, '_TransferLearningTrainedModel.csv', sep = '')
+      filename <- paste(output_dir,'performance_tables_trained/', training_data, '_', n_epochs, '_', model_type, '_TransferLearningTrainedModel.csv', sep = '')
       dir.create(dirname(filename), showWarnings = FALSE)
       write.csv(TransferLearningCNNDF, filename, row.names = FALSE)
 

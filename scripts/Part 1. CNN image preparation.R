@@ -359,24 +359,23 @@ overlap_threshold <- 0.5
 clip.duration <- 12
 hop.size <- 4
 
-MaliauBoxDrive <-'/Users/denaclink/Library/CloudStorage/Box-Box/CCB Datastore/Projects/2018/2018_BRP_Borneo_T0046/Clink_BRP_3TB/2019 Maliau Basin/Focals/'
+MaliauBoxDrive <-'/Volumes/DJC Files/Clink et al Zenodo Data/MaliauAnnotations/'
 
 # Prepare selection tables ------------------------------------------------
 
 # List selection table full names
 SelectionTables <-
-  list.files('/Users/denaclink/Desktop/RStudioProjects/Multi-species-detector/Old Code/Data/MaliauAnnotations/',pattern = '.txt',full.names = T)
+  list.files('/Volumes/DJC Files/Clink et al Zenodo Data/MaliauAnnotations/MaliauAnnotations/',pattern = '.txt',full.names = T)
 
 # List selection table short names
 SelectionTablesShort <-
-  list.files('/Users/denaclink/Desktop/RStudioProjects/Multi-species-detector/Old Code/Data/MaliauAnnotations/',pattern = '.txt')
+  list.files('/Volumes/DJC Files/Clink et al Zenodo Data/MaliauAnnotations/MaliauAnnotations/',pattern = '.txt')
 
 # Remove .txt
 SelectionTablesID <- str_split_fixed(SelectionTablesShort,pattern = '.Table',n=2)[,1]
 
 # Start with one file
-SoundFilePathFull <- list.files(MaliauBoxDrive,full.names = T,recursive = T)
-SoundFilePathFull <- SoundFilePathFull[-which(str_detect(SoundFilePathFull,'all'))]
+SoundFilePathFull <- list.files(MaliauBoxDrive,full.names = T,recursive = T, pattern='.wav')
 
 nslash <- str_count(SoundFilePathFull[1],'/')+1
 
@@ -398,6 +397,7 @@ for( b in 1: length(AnnotationsPathFull)){tryCatch({
   TempAnnotations <- read.delim2(AnnotationsPathFull[b])
   print(unique(TempAnnotations$Call.type))
   TempAnnotationsGibbon <- subset(TempAnnotations,Call.type=='female.gibbon')
+  TempAnnotations <- subset(TempAnnotations,Call.type!='female.gibbon')
 
   if(nrow(TempAnnotationsGibbon) >0 ){
   TempWav <- readWave(SoundFilePathFull[WavIndex])
@@ -479,7 +479,9 @@ for( b in 1: length(AnnotationsPathFull)){tryCatch({
     }
   }
 
-} else{
+}
+
+  if(nrow(TempAnnotations)>0) {
 
   TempWav <- readWave(SoundFilePathFull[WavIndex])
   WavDur <- duration(TempWav)
@@ -504,10 +506,6 @@ for( b in 1: length(AnnotationsPathFull)){tryCatch({
 
     # Plus add 10 random clips
     set.seed(13)
-    # TempClipsRan <- ClipDataFrame[sample(1:nrow(ClipDataFrame),20),]
-    #
-    #
-    # TempClips <- rbind.data.frame(TempClips,TempClipsRan)
 
     TempClass <- 'Noise'
 

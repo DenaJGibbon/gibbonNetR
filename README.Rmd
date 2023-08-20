@@ -34,6 +34,7 @@ Load the package and then utilize the `spectrogram_images` function:
 ``` {r eval = FALSE}
 library(gibbonNetR)
 
+# Prepare the spectrogram images ------------------------------------------
 # Process spectrogram images for training data:
 # The splits are set to ensure all data (100%) goes into the training folder.
 gibbonNetR::spectrogram_images(
@@ -45,7 +46,7 @@ gibbonNetR::spectrogram_images(
 # Process spectrogram images for validation data:
 # The splits are set to ensure all data (100%) goes into the validation folder.
 gibbonNetR::spectrogram_images(
-  trainingBasePath = '/Volumes/DJC Files/Danum Deep Learning/ValidationClips',
+  trainingBasePath = '/Volumes/DJC Files/Clink et al Zenodo Data/ValidationClipsDanum',
   outputBasePath   = 'data/imagesmalaysia/',
   splits           = c(0, 1, 0)  # 0% training, 100% validation, 0% testing
 )
@@ -53,72 +54,178 @@ gibbonNetR::spectrogram_images(
 # Process spectrogram images for testing data:
 # The splits are set to ensure all data (100%) goes into the testing folder.
 gibbonNetR::spectrogram_images(
-  trainingBasePath = '/Volumes/DJC Files/Danum Deep Learning/TestClipsMaliau',
+  trainingBasePath = '/Volumes/DJC Files/Clink et al Zenodo Data/TestClipsDanum/', #'/Volumes/DJC Files/Danum Deep Learning/TestClips', #
   outputBasePath   = 'data/imagesmalaysia/',
   splits           = c(0, 0, 1)  # 0% training, 0% validation, 100% testing
 )
-
 
 ```
 
 The function will process the audio files from the `trainingBasePath`, create spectrogram images and then save these images into the respective train, valid, and test folders inside the `outputBasePath`.
 
+```{r eval = FALSE}
+# Load required libraries
+library(dplyr)
+library(torch)
+library(torchvision)
+library(purrr)
 
-## Parameters for Training
+input.data.path <-  'data/imagesmalaysia/'
 
-Training Data Path:
+# Define transformation pipeline for the images
+transforms <- function(.) {
+  . %>%
+    # Convert the images into tensors
+    torchvision::transform_to_tensor() %>%
+    # Resize the images to the specified dimensions (224x224)
+    torchvision::transform_resize(size = c(224, 224)) %>%
+    # Normalize the images with given mean and standard deviation
+    torchvision::transform_normalize(
+      mean = c(0.485, 0.456, 0.406), 
+      std = c(0.229, 0.224, 0.225)
+    )
+}
 
-```{r}
-input.data.path <-  c('/Users/denaclink/Desktop/RStudioProjects/Multi-species-detector/data/imagesmalaysiaHQ/')
+# Create a dataset using the image_folder_dataset function. The images will be loaded and transformed.
+train_ds <- image_folder_dataset(
+  file.path(input.data.path, 'train'),
+  transform = transforms,
+  # Convert labels into double and subtract 1
+  target_transform = function(x) as.double(x) - 1
+)
+
+# Create a dataloader to manage batches of the dataset
+train_dl <- dataloader(train_ds, batch_size = 24, shuffle = TRUE, drop_last = TRUE)
+
+# Extract the next batch of images and labels from the dataloader
+batch <- train_dl$.iter()$.next()
+# Retrieve the class labels from the batch
+classes <- batch[[2]]
+# Convert numerical labels to class names ('Noise' or 'Gibbons')
+class_names <- ifelse(batch$y, 'Noise', 'Gibbons')
+
+# Define a function to process images: Convert tensor to array and denormalize
+process_images <- function(images) {
+  images <- as_array(images) %>% aperm(perm = c(1, 3, 4, 2))
+  # Define the normalization parameters
+  mean <- c(0.485, 0.456, 0.406)
+  std <- c(0.229, 0.224, 0.225)
+  # Denormalize the images
+  images <- std * images + mean
+  images <- images * 255
+  # Clip image values to the range [0, 255]
+  pmin(255, pmax(0, images))
+}
+
+# Process the batch of images
+images <- process_images(batch[[1]])
+
+# Set plotting parameters and visualize the batch of images with their class names
+par(mfcol = c(4, 6), mar = rep(1, 4))
+images %>%
+  # Convert the image array to a list of matrices
+  purrr::array_tree(1) %>%
+  # Set names to the images based on their classes
+  purrr::set_names(class_names) %>%
+  # Convert the image matrices to raster objects for plotting
+  purrr::map(as.raster, max = 255) %>%
+  # Plot each image with its class name as title
+  purrr::iwalk(~{plot(.x); title(.y)})
+
 ```
 
-Testing Data Path:
-
-```{r}
-test.data.path <- c('/Users/denaclink/Desktop/RStudioProjects/Multi-species-detector/data/imagesmalaysiamaliau/')
-```
-
-Training Data Folder Short Name:
-
-```{r}
-trainingfolder.short <- 'imagesmalaysiaHQ'
-```
-
-Unfreezing Layers:
-
-```{r}
-unfreeze.param <- TRUE  # FALSE means the features are frozen; TRUE unfrozen
-```
-
-Number of Epoch Iterations:
-
-```{r}
-epoch.iterations <- c(1,2,3,4,5,20)
-```
-
-Location to Save the Output:
-
-```{r}
-output.data.path <-paste('data/','output','unfrozen',unfreeze.param,trainingfolder.short,'/', sep='_')
-dir.create(output.data.path)
-```
-
-Early Stopping:
-
-```{r}
-early.stop <- 'yes'  # NOTE: Currently only early stopping available
+```{r, echo=FALSE}
+knitr::include_graphics("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/README_files/spectro.png")
 ```
 
 ## Training the models using gibbonNetR and evaluating on a test set
 
 ```{r,eval = FALSE}
+# Location of spectrogram images for training
+input.data.path <-  'data/imagesmalaysia/'
+
+# Location of spectrogram images for testing
+test.data.path <- 'data/imagesmalaysia/'
+
+# Training data folder short
+trainingfolder.short <- 'imagesmalaysia'
+
+# Whether to unfreeze the layers
+unfreeze.param <- TRUE # FALSE means the features are frozen; TRUE unfrozen
+
+# Number of epochs to include
+epoch.iterations <- c(1,2,3,4,5,20)
+
+# Location to save the out
+output.data.path <-paste('data/','output','unfrozen',unfreeze.param,trainingfolder.short,'/', sep='_')
+
+# Create if doesn't exist
+dir.create(output.data.path)
+
+# Allow early stopping?
+early.stop <- 'yes' # NOTE: Must comment out if don't want early stopping
+
 gibbonNetR::train_alexnet(input.data.path=input.data.path,
                           test.data=test.data.path,
                           unfreeze = TRUE,
                           epoch.iterations=epoch.iterations,
                           early.stop = "yes",
                           output.base.path = "data/",
-                          trainingfolder=trainingfolder.short)
+                          trainingfolder=trainingfolder.short,
+                          positive.class="Gibbons",
+                          negative.class="Noise")
+
+
+gibbonNetR::train_VGG16(input.data.path=input.data.path,
+                          test.data=test.data.path,
+                          unfreeze = TRUE,
+                          epoch.iterations=epoch.iterations,
+                          early.stop = "yes",
+                          output.base.path = "data/",
+                          trainingfolder=trainingfolder.short,
+                          positive.class="Gibbons",
+                          negative.class="Noise")
+
+gibbonNetR::train_VGG19(input.data.path=input.data.path,
+                        test.data=test.data.path,
+                        unfreeze = TRUE,
+                        epoch.iterations=epoch.iterations,
+                        early.stop = "yes",
+                        output.base.path = "data/",
+                        trainingfolder=trainingfolder.short,
+                        positive.class="Gibbons",
+                        negative.class="Noise")
+
+gibbonNetR::train_ResNet18(input.data.path=input.data.path,
+                            test.data=test.data.path,
+                            unfreeze = TRUE,
+                            epoch.iterations=epoch.iterations,
+                            early.stop = "yes",
+                            output.base.path = "data/",
+                            trainingfolder=trainingfolder.short,
+                            positive.class="Gibbons",
+                            negative.class="Noise")
+
+gibbonNetR::train_ResNet50(input.data.path=input.data.path,
+                            test.data=test.data.path,
+                            unfreeze = TRUE,
+                            epoch.iterations=epoch.iterations,
+                            early.stop = "yes",
+                            output.base.path = "data/",
+                            trainingfolder=trainingfolder.short,
+                            positive.class="Gibbons",
+                            negative.class="Noise")
+
+gibbonNetR::train_ResNet152(input.data.path=input.data.path,
+                            test.data=test.data.path,
+                            unfreeze = TRUE,
+                            epoch.iterations=epoch.iterations,
+                            early.stop = "yes",
+                            output.base.path = "data/",
+                            trainingfolder=trainingfolder.short,
+                            positive.class="Gibbons",
+                            negative.class="Noise")
+
 ```
 
 
@@ -135,6 +242,7 @@ Displaying Performance Plots
 ```{r}
 PerformanceOutput$f1_plot
 PerformanceOutput$pr_plot
+PerformanceOutput$FPRTPR_plot
 ```
 
 
