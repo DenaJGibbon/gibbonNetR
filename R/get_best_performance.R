@@ -23,6 +23,7 @@ get_best_performance <- function(performancetables.dir) {
   best_f1_results <- data.frame()
   best_precision_results <- data.frame()
   best_recall_results <- data.frame()
+  best_auc_results <- data.frame()
 
   # Loop through each 'TrainingData' type and extract best performance metrics
   for (td in unique_training_data) {
@@ -36,6 +37,9 @@ get_best_performance <- function(performancetables.dir) {
 
     max_recall_row <- subset_data[which.max(subset_data$Recall), ]
     best_recall_results <- rbind(best_recall_results, max_recall_row[which.max(max_recall_row$F1), ])
+
+    max_auc_row <- subset_data[which.max(subset_data$AUC), ]
+    best_auc_results <- rbind(best_auc_results, max_auc_row)
   }
 
   # Create visualizations
@@ -43,21 +47,33 @@ get_best_performance <- function(performancetables.dir) {
   FrozenCombined$Recall <- round(FrozenCombined$Recall,1)
   pr_plot <- ggpubr::ggline(data = FrozenCombined, x = 'Recall', y = 'Precision', color = 'CNN Architecture', facet.by = 'N epochs')
 
+
+  FrozenCombined$TPR <- FrozenCombined$Sensitivity
+  FrozenCombined$FPR <- 1-FrozenCombined$Specificity
+  FPRTPR_plot <-ggpubr::ggline(data = FrozenCombined,  x = 'FPR', y = 'TPR',
+                               color = 'CNN Architecture', facet.by = 'N epochs',numeric.x.axis = TRUE)+
+    geom_abline(slope=1,intercept=0,lty='dashed')+ coord_cartesian(xlim = c(0, 1), ylim = c(0, 1))
+
+
   print('Best F1 results')
-  print(best_f1_results)
+  print(best_f1_results[,c(5:7,13:17)])
 
   print('Best Precision results')
-  print(best_precision_results)
+  print(best_precision_results[,c(5:7,13:17)])
 
   print('Best Recall results')
-  print(best_recall_results)
+  print(best_recall_results[,c(5:7,13:17)])
+
+  print('Best AUC results')
+  print(best_auc_results[c(13:15,17)])
 
   return(list(
     best_f1 = best_f1_results,
     best_precision = best_precision_results,
     best_recall = best_recall_results,
+    best_auc = best_auc_results,
     f1_plot = f1_plot,
-    pr_plot = pr_plot
-
+    pr_plot = pr_plot,
+    FPRTPR_plot =FPRTPR_plot
   ))
 }

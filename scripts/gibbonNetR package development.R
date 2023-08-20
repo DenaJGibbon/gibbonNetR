@@ -18,7 +18,7 @@ trainingfolder.short <- 'imagesmalaysia'
 unfreeze.param <- TRUE # FALSE means the features are frozen; TRUE unfrozen
 
 # Number of epochs to include
-epoch.iterations <- c(1,2,3,4,5,20)
+epoch.iterations <-1# c(1,2,3,4,5,20)
 
 # Location to save the out
 output.data.path <-paste('data/','output','unfrozen',unfreeze.param,trainingfolder.short,'/', sep='_')
@@ -95,4 +95,5 @@ PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=perf
 
 PerformanceOutput$f1_plot
 PerformanceOutput$pr_plot
-
+PerformanceOutput$FPRTPR_plot
+PerformanceOutput$best_auc$AUC

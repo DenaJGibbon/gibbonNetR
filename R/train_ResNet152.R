@@ -249,6 +249,11 @@ train_ResNet152 <- function(input.data.path, test.data, unfreeze = TRUE,
       CombinedTempRow <- rbind.data.frame(CombinedTempRow, TempRowResNet152)
     }
 
+    ROCRpred <-  ROCR::prediction(predictions = outputTableResNet152$Probability,
+                                  labels = outputTableResNet152$ActualClass)
+    AUCval <- ROCR::performance(ROCRpred,'auc')
+    CombinedTempRow$AUC <- AUCval@y.values[[1]]
+
     TransferLearningCNNDF <- rbind.data.frame(TransferLearningCNNDF, CombinedTempRow)
     TransferLearningCNNDF$Frozen <- unfreeze.param
     filename <- paste(output.data.path,'performance_tables/', trainingfolder, '_', n.epoch, '_', '_TransferLearningCNNDFResNet152.csv', sep = '')

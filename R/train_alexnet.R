@@ -253,6 +253,12 @@ print('Training AlexNet')
       CombinedTempRow <- rbind.data.frame(CombinedTempRow, TempRowAlexNet)
     }
 
+   ROCRpred <-  ROCR::prediction(predictions = outputTableAlexNet$Probability,
+                     labels = outputTableAlexNet$ActualClass)
+   AUCval <- ROCR::performance(ROCRpred,'auc')
+   CombinedTempRow$AUC <- AUCval@y.values[[1]]
+
+
     TransferLearningCNNDF <- rbind.data.frame(TransferLearningCNNDF, CombinedTempRow)
     TransferLearningCNNDF$Frozen <- unfreeze.param
     filename <- paste(output.data.path,'performance_tables/', trainingfolder, '_', n.epoch, '_', '_TransferLearningCNNDFAlexNET.csv', sep = '')

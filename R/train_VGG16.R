@@ -254,6 +254,11 @@ train_VGG16 <- function(input.data.path, test.data, unfreeze = TRUE,
       CombinedTempRow <- rbind.data.frame(CombinedTempRow, TempRowVGG16)
     }
 
+    ROCRpred <-  ROCR::prediction(predictions = outputTableVGG16$Probability,
+                                  labels = outputTableVGG16$ActualClass)
+    AUCval <- ROCR::performance(ROCRpred,'auc')
+    CombinedTempRow$AUC <- AUCval@y.values[[1]]
+
     TransferLearningCNNDF <- rbind.data.frame(TransferLearningCNNDF, CombinedTempRow)
     TransferLearningCNNDF$Frozen <- unfreeze.param
     filename <- paste(output.data.path,'performance_tables/', trainingfolder, '_', n.epoch, '_', '_TransferLearningCNNDFVGG16.csv', sep = '')
