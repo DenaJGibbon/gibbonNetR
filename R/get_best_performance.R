@@ -56,16 +56,16 @@ get_best_performance <- function(performancetables.dir) {
 
 
   print('Best F1 results')
-  print(best_f1_results[,c(5:7,13:17)])
+  print(as.data.frame(best_f1_results[,c(5:7,13:17)]))
 
   print('Best Precision results')
-  print(best_precision_results[,c(5:7,13:17)])
+  print(as.data.frame(best_precision_results[,c(5:7,13:17)]))
 
   print('Best Recall results')
-  print(best_recall_results[,c(5:7,13:17)])
+  print(as.data.frame(best_recall_results[,c(5:7,13:17)]))
 
   print('Best AUC results')
-  print(best_auc_results[c(13:15,17)])
+  print(as.data.frame(best_auc_results[c(5:7,13:15,17)]))
 
   return(list(
     best_f1 = best_f1_results,

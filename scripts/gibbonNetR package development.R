@@ -1,6 +1,14 @@
 devtools::document()
 devtools::load_all()
 
+# Process spectrogram images for testing data:
+# The splits are set to ensure all data (100%) goes into the testing folder.
+gibbonNetR::spectrogram_images(
+  trainingBasePath = '/Volumes/DJC Files/Clink et al Zenodo Data/TestClipsMaliau/', #'/Volumes/DJC Files/Danum Deep Learning/TestClips', #
+  outputBasePath   = 'data/imagesmalaysiamaliau/',
+  splits           = c(0, 0, 1)  # 0% training, 0% validation, 100% testing
+)
+
 
 # Get setup for training --------------------------------------------------
 setwd("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
@@ -18,7 +26,7 @@ trainingfolder.short <- 'imagesmalaysia'
 unfreeze.param <- TRUE # FALSE means the features are frozen; TRUE unfrozen
 
 # Number of epochs to include
-epoch.iterations <-1# c(1,2,3,4,5,20)
+epoch.iterations <- c(1,2,3,4,5,20)
 
 # Location to save the out
 output.data.path <-paste('data/','output','unfrozen',unfreeze.param,trainingfolder.short,'/', sep='_')
@@ -97,3 +105,23 @@ PerformanceOutput$f1_plot
 PerformanceOutput$pr_plot
 PerformanceOutput$FPRTPR_plot
 PerformanceOutput$best_auc$AUC
+
+
+
+trained_models_dir <- '/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/_output_unfrozen_TRUE_imagesmalaysia_'
+
+#image_data_dir <- '/Volumes/DJC 1TB/VocalIndividualityClips/RandomSelectionImages/'
+image_data_dir <- 'data/imagesmalaysiamaliau/test/'
+
+evaluate_trainedmodel_performance(trained_models_dir=trained_models_dir,
+                                  image_data_dir=image_data_dir)
+
+
+PerformanceOutPutTrained <- gibbonNetR::get_best_performance(performancetables.dir='data/performance_tables_trained/')
+
+PerformanceOutPutTrained$f1_plot
+PerformanceOutPutTrained$pr_plot
+PerformanceOutPutTrained$FPRTPR_plot
+PerformanceOutPutTrained$best_auc$AUC
+
+
