@@ -23,7 +23,7 @@
 
 spectrogram_images <- function(trainingBasePath,
                                outputBasePath, splits = c(0.8, 0.1, 0.1),
-                               minfreq.khz= 0.4, maxfreq.khz=2,new.sampleratehz=16000 ) {
+                               minfreq.khz= 0.4, maxfreq.khz=1.6,new.sampleratehz=16000 ) {
 
   # Check if splits are valid
   if (sum(splits) != 1) stop("The sum of the splits must equal 1.")
