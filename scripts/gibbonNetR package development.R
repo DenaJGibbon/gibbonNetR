@@ -1,13 +1,80 @@
+library(dplyr)
+
 devtools::document()
 devtools::load_all()
 
-# Process spectrogram images for testing data:
+
+# Process spectrogram images for testing data:-------------------------------------------------------------------------
+
 # The splits are set to ensure all data (100%) goes into the testing folder.
 gibbonNetR::spectrogram_images(
   trainingBasePath = '/Volumes/DJC Files/Clink et al Zenodo Data/TestClipsMaliau/', #'/Volumes/DJC Files/Danum Deep Learning/TestClips', #
   outputBasePath   = 'data/imagesmalaysiamaliau/',
   splits           = c(0, 0, 1)  # 0% training, 0% validation, 100% testing
 )
+
+# Visualize spectrogram images for training data:-------------------------------------------------------------------------
+# Load dplyr package for data manipulation functions
+library(dplyr)
+
+# Location of spectrogram images for training
+input.data.path <-  'data/imagesmalaysia/'
+
+# Create a dataset of images:
+# - The images are sourced from the 'train' subdirectory within the specified path `input.data.path`.
+# - The images undergo several transformations:
+#     1. They are converted to tensors.
+#     2. They are resized to 224x224 pixels.
+#     3. Their pixel values are normalized.
+train_ds <- image_folder_dataset(
+  file.path(input.data.path,'train' ),   # Path to the image directory
+  transform = . %>%
+    torchvision::transform_to_tensor() %>%
+    torchvision::transform_resize(size = c(224, 224)) %>%
+    torchvision::transform_normalize(
+      mean = c(0.485, 0.456, 0.406),      # Mean for normalization
+      std = c(0.229, 0.224, 0.225)        # Standard deviation for normalization
+    ),
+  target_transform = function(x) as.double(x) - 1  # Transformation for target/labels
+)
+
+# Create a dataloader from the dataset:
+# - This helps in efficiently loading and batching the data.
+# - The batch size is set to 24, with shuffling enabled and the last incomplete batch is dropped.
+train_dl <- dataloader(train_ds, batch_size = 24, shuffle = TRUE, drop_last = TRUE)
+
+# Extract the next batch from the dataloader
+batch <- train_dl$.iter()$.next()
+
+# Extract the labels for the batch and determine class names
+classes <- batch[[2]]
+class_names <- ifelse(batch$y, 'Noise','Gibbons')
+
+# Convert the batch tensor of images to an array and process them:
+# - The image tensor is permuted to change the dimension order.
+# - The pixel values of the images are denormalized.
+images <- as_array(batch[[1]]) %>% aperm(perm = c(1, 3, 4, 2))
+mean <- c(0.485, 0.456, 0.406)
+std <- c(0.229, 0.224, 0.225)
+images <- std * images + mean
+images <- images * 255
+# Clip the pixel values to lie within [0, 255]
+images[images > 255] <- 255
+images[images < 0] <- 0
+
+# Set the plotting parameters for a 4x6 grid
+par(mfcol = c(4,6), mar = rep(1, 4))
+
+# Visualize the images:
+# - Use `purrr` functions to handle arrays.
+# - Set the name of each image based on its class.
+# - Convert each image to a raster format for plotting.
+# - Finally, iterate over each image, plotting it and setting its title.
+images %>%
+  purrr::array_tree(1) %>%
+  purrr::set_names(class_names) %>%
+  purrr::map(as.raster, max = 255) %>%
+  purrr::iwalk(~{plot(.x); title(.y)})
 
 
 # Get setup for training --------------------------------------------------
@@ -108,6 +175,70 @@ PerformanceOutput$best_auc$AUC
 
 
 
+
+# Visualize spectrograms for testing data ---------------------------------
+
+# Location of spectrogram images
+input.data.path <-  'data/imagesmalaysiamaliau/'
+
+# Create a dataset of images:
+# - The images are sourced from the 'train' subdirectory within the specified path `input.data.path`.
+# - The images undergo several transformations:
+#     1. They are converted to tensors.
+#     2. They are resized to 224x224 pixels.
+#     3. Their pixel values are normalized.
+train_ds <- image_folder_dataset(
+  file.path(input.data.path,'test' ),   # Path to the image directory
+  transform = . %>%
+    torchvision::transform_to_tensor() %>%
+    torchvision::transform_resize(size = c(224, 224)) %>%
+    torchvision::transform_normalize(
+      mean = c(0.485, 0.456, 0.406),      # Mean for normalization
+      std = c(0.229, 0.224, 0.225)        # Standard deviation for normalization
+    ),
+  target_transform = function(x) as.double(x) - 1  # Transformation for target/labels
+)
+
+# Create a dataloader from the dataset:
+# - This helps in efficiently loading and batching the data.
+# - The batch size is set to 24, with shuffling enabled and the last incomplete batch is dropped.
+train_dl <- dataloader(train_ds, batch_size = 24, shuffle = TRUE, drop_last = TRUE)
+
+# Extract the next batch from the dataloader
+batch <- train_dl$.iter()$.next()
+
+# Extract the labels for the batch and determine class names
+classes <- batch[[2]]
+class_names <- ifelse(batch$y, 'Noise','Gibbons')
+
+# Convert the batch tensor of images to an array and process them:
+# - The image tensor is permuted to change the dimension order.
+# - The pixel values of the images are denormalized.
+images <- as_array(batch[[1]]) %>% aperm(perm = c(1, 3, 4, 2))
+mean <- c(0.485, 0.456, 0.406)
+std <- c(0.229, 0.224, 0.225)
+images <- std * images + mean
+images <- images * 255
+# Clip the pixel values to lie within [0, 255]
+images[images > 255] <- 255
+images[images < 0] <- 0
+
+# Set the plotting parameters for a 4x6 grid
+par(mfcol = c(4,6), mar = rep(1, 4))
+
+# Visualize the images:
+# - Use `purrr` functions to handle arrays.
+# - Set the name of each image based on its class.
+# - Convert each image to a raster format for plotting.
+# - Finally, iterate over each image, plotting it and setting its title.
+images %>%
+  purrr::array_tree(1) %>%
+  purrr::set_names(class_names) %>%
+  purrr::map(as.raster, max = 255) %>%
+  purrr::iwalk(~{plot(.x); title(.y)})
+
+
+
 trained_models_dir <- '/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/_output_unfrozen_TRUE_imagesmalaysia_'
 
 #image_data_dir <- '/Volumes/DJC 1TB/VocalIndividualityClips/RandomSelectionImages/'
@@ -125,38 +256,6 @@ PerformanceOutPutTrained$FPRTPR_plot
 PerformanceOutPutTrained$best_auc$AUC
 
 
-library(dplyr)
-train_ds <- image_folder_dataset(
-  file.path(input.data.path,'train' ),
-  transform = . %>%
-    torchvision::transform_to_tensor() %>%
-    torchvision::transform_resize(size = c(224, 224)) %>%
-    #torchvision::transform_color_jitter() %>%
-    torchvision::transform_normalize(mean = c(0.485, 0.456, 0.406), std = c(0.229, 0.224, 0.225)),
-  target_transform = function(x) as.double(x) - 1
-)
-
-train_dl <- dataloader(train_ds, batch_size = 24, shuffle = TRUE, drop_last = TRUE)
 
 
 
-batch <- train_dl$.iter()$.next()
-classes <- batch[[2]]
-class_names <- ifelse(batch$y, 'Noise','Gibbons')
-
-
-images <- as_array(batch[[1]]) %>% aperm(perm = c(1, 3, 4, 2))
-mean <- c(0.485, 0.456, 0.406)
-std <- c(0.229, 0.224, 0.225)
-images <- std * images + mean
-images <- images * 255
-images[images > 255] <- 255
-images[images < 0] <- 0
-
-par(mfcol = c(4,6), mar = rep(1, 4))
-
-images %>%
-  purrr::array_tree(1) %>%
-  purrr::set_names(class_names) %>%
-  purrr::map(as.raster, max = 255) %>%
-  purrr::iwalk(~{plot(.x); title(.y)})

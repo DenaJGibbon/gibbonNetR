@@ -7,13 +7,12 @@
 #' @param test.data Character. The path to the test data folder.
 #' @param unfreeze Logical. Determines if all layers of the pretrained ResNet50 should be unfrozen for retraining.
 #'                 Default is TRUE.
-#' @param epoch.iterations List of integers. The number of epochs for training the model. Default is 20.
+#' @param epoch.iterations List of integers. The number of epochs for training the model. Default is 1.
 #' @param early.stop Character. Determines whether early stopping should be applied or not.
 #'                   "yes" to apply and "no" to skip. Default is 'yes'.
 #' @param output.base.path Character. The base path where the output files should be saved.
 #'                          Default is 'data/'.
 #' @param trainingfolder Character. A shortened descriptor of the training data, used for naming output files.
-#'                             Default is 'imagesmalaysiaHQ'.
 #' @param positive.class Character. The name of the positive class label. Default is 'Gibbons'.
 #' @param negative.class Character. The name of the negative class label. Default is 'Noise'.
 #'
@@ -45,7 +44,7 @@
 #'
 
 train_ResNet50 <- function(input.data.path, test.data, unfreeze = TRUE,
-                           epoch.iterations, early.stop = 'yes',
+                           epoch.iterations=1, early.stop = 'yes',
                            output.base.path = 'data/',
                            trainingfolder,
                            positive.class="Gibbons",
