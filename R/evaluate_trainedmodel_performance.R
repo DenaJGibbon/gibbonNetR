@@ -99,7 +99,7 @@ evaluate_trainedmodel_performance <- function(trained_models_dir, image_data_dir
       AUCval <- ROCR::performance(ROCRpred,'auc')
       CombinedTempRow$AUC <- AUCval@y.values[[1]]
 
-
+      CombinedTempRow$TestData <- str_replace_all(image_data_dir,pattern = '/',replacement ='_')
       TransferLearningCNNDF <- rbind.data.frame(TransferLearningCNNDF, CombinedTempRow)
       filename <- paste(output_dir,'performance_tables_trained/', training_data, '_', n_epochs, '_', model_type, '_TransferLearningTrainedModel.csv', sep = '')
       dir.create(dirname(filename), showWarnings = FALSE)

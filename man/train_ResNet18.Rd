@@ -8,7 +8,7 @@ train_ResNet18(
   input.data.path,
   test.data,
   unfreeze = TRUE,
-  epoch.iterations,
+  epoch.iterations = 1,
   early.stop = "yes",
   output.base.path = "data/",
   trainingfolder,
@@ -24,7 +24,7 @@ train_ResNet18(
 \item{unfreeze}{Logical. Determines if all layers of the pretrained ResNet18 should be unfrozen for retraining.
 Default is TRUE.}
 
-\item{epoch.iterations}{List of integers. The number of epochs for training the model. Default is 20.}
+\item{epoch.iterations}{List of integers. The number of epochs for training the model. Default is 1.}
 
 \item{early.stop}{Character. Determines whether early stopping should be applied or not.
 "yes" to apply and "no" to skip. Default is 'yes'.}
@@ -32,8 +32,7 @@ Default is TRUE.}
 \item{output.base.path}{Character. The base path where the output files should be saved.
 Default is 'data/'.}
 
-\item{trainingfolder}{Character. A shortened descriptor of the training data, used for naming output files.
-Default is 'imagesmalaysiaHQ'.}
+\item{trainingfolder}{Character. A shortened descriptor of the training data, used for naming output files.}
 
 \item{positive.class}{Character. The name of the positive class label. Default is 'Gibbons'.}
 
@@ -56,7 +55,7 @@ The model is saved, and other metadata is stored for further usage.
     input.data.path = "path_to_input_data",
     test.data = "path_to_test_data",
     unfreeze = TRUE,
-    epoch.iterations = list(20),  # Or any other list of integer epochs
+    epoch.iterations = 1,  # Or any other list of integer epochs
     early.stop = "yes",
     output.base.path = "data/",
     trainingfolder = "example_folder_name"

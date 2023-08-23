@@ -7,13 +7,12 @@
 #' @param test.data Character. The path to the test data folder.
 #' @param unfreeze Logical. Determines if all layers of the pretrained VGG16 should be unfrozen for retraining.
 #'                 Default is TRUE.
-#' @param epoch.iterations List of integers. The number of epochs for training the model. Default is 20.
+#' @param epoch.iterations List of integers. The number of epochs for training the model. Default is 1.
 #' @param early.stop Character. Determines whether early stopping should be applied or not.
 #'                   "yes" to apply and "no" to skip. Default is 'yes'.
 #' @param output.base.path Character. The base path where the output files should be saved.
 #'                          Default is 'data/'.
 #' @param trainingfolder Character. A shortened descriptor of the training data, used for naming output files.
-#'                             Default is 'imagesmalaysiaHQ'.
 #' @param positive.class Character. The name of the positive class label. Default is 'Gibbons'.
 #' @param negative.class Character. The name of the negative class label. Default is 'Noise'.
 #'
@@ -29,7 +28,7 @@
 #'     input.data.path = "path_to_input_data",
 #'     test.data = "path_to_test_data",
 #'     unfreeze = TRUE,
-#'     epoch.iterations = list(20),  # Or any other list of integer epochs
+#'     epoch.iterations = 1,  # Or any other list of integer epochs
 #'     early.stop = "yes",
 #'     output.base.path = "data/",
 #'     trainingfolder = "example_folder_name"
@@ -45,7 +44,7 @@
 #'
 
 train_VGG16 <- function(input.data.path, test.data, unfreeze = TRUE,
-                          epoch.iterations, early.stop = 'yes',
+                        epoch.iterations=1, early.stop = 'yes',
                           output.base.path = 'data/',
                           trainingfolder,
                           positive.class="Gibbons",

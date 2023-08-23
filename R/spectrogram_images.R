@@ -22,7 +22,7 @@
 #' @export
 
 spectrogram_images <- function(trainingBasePath,
-                               outputBasePath, splits = c(0.8, 0.1, 0.1),
+                               outputBasePath, splits,
                                minfreq.khz= 0.4, maxfreq.khz=1.6,new.sampleratehz=16000 ) {
 
   # Check if splits are valid
@@ -41,9 +41,28 @@ spectrogram_images <- function(trainingBasePath,
     total_files <- length(SoundFiles)
 
     # Calculate indices for splitting
-    train_idx <- 1:round(splits[1] * total_files)
-    valid_idx <- (max(train_idx) + 1):(max(train_idx) + round(splits[2] * total_files))
-    test_idx <- (max(valid_idx) + 1):total_files
+    # Shuffle indices
+    shuffled_indices <- sample(1:total_files)
+
+    # Calculate indices for splitting
+    train_n <- floor(splits[1] * total_files)
+    valid_n <- floor(splits[2] * total_files)
+
+    train_idx <- shuffled_indices[1:train_n]
+    valid_idx <- shuffled_indices[(train_n + 1):(train_n + valid_n)]
+    test_idx <- shuffled_indices[(train_n + valid_n + 1):total_files]
+
+    if(splits[1]==0){
+      train_idx <- 0
+    }
+
+    if(splits[2]==0){
+      valid_idx <-0
+    }
+
+    if(splits[3]==0){
+      test_idx <- 0
+    }
 
     for (y in seq_along(SoundFiles)) {
       # Determine the DataType based on the index

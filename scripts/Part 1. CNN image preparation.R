@@ -5,7 +5,7 @@ set.seed(13)
 
 
 # Danum validation data prep --------------------------------------------------------
-overlap_threshold <-1/3
+overlap_threshold <-0.5
 clip.duration <- 12
 hop.size <- 4
 
@@ -77,7 +77,7 @@ for( b in 1: length(AnnotationsPathFull)){tryCatch({
       EndTime <- as.numeric(TempRow$End.Time..s.)
 
       # Compute the overlap threshold
-      overlap_threshold <-1/3
+      overlap_threshold <-0.5
 
       # Duration of each clip
       ClipDataFrame$Duration <- ClipDataFrame$ClipEnd - ClipDataFrame$ClipStart
@@ -250,7 +250,7 @@ for( b in 1: length(AnnotationsPathFull)){tryCatch({
       EndTime <- as.numeric(TempRow$End.Time..s.)
 
       # Compute the overlap threshold
-      overlap_threshold <-1/3
+      overlap_threshold <-0.5
 
       # Duration of each clip
       ClipDataFrame$Duration <- ClipDataFrame$ClipEnd - ClipDataFrame$ClipStart

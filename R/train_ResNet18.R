@@ -28,7 +28,7 @@
 #'     input.data.path = "path_to_input_data",
 #'     test.data = "path_to_test_data",
 #'     unfreeze = TRUE,
-#'     epoch.iterations = list(1),  # Or any other list of integer epochs
+#'     epoch.iterations = 1,  # Or any other list of integer epochs
 #'     early.stop = "yes",
 #'     output.base.path = "data/",
 #'     trainingfolder = "example_folder_name"

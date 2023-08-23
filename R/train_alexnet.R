@@ -1,11 +1,11 @@
-#' Train the AlexNet Model
+#' Train the alexNet Model
 #'
-#' This function is designed to train the AlexNet model on a given dataset.
+#' This function is designed to train the alexNet model on a given dataset.
 #' The model is saved, and other metadata is stored for further usage.
 #'
 #' @param input.data.path Character. The path to the input data folder.
 #' @param test.data Character. The path to the test data folder.
-#' @param unfreeze Logical. Determines if all layers of the pretrained AlexNet should be unfrozen for retraining.
+#' @param unfreeze Logical. Determines if all layers of the pretrained alexNet should be unfrozen for retraining.
 #'                 Default is TRUE.
 #' @param epoch.iterations List of integers. The number of epochs for training the model. Default is 1.
 #' @param early.stop Character. Determines whether early stopping should be applied or not.
@@ -24,11 +24,11 @@
 #'
 #' @examples
 #' \dontrun{
-#'   train_alexnet(
+#'   train_alexNet(
 #'     input.data.path = "path_to_input_data",
 #'     test.data = "path_to_test_data",
 #'     unfreeze = TRUE,
-#'     epoch.iterations = list(1),  # Or any other list of integer epochs
+#'     epoch.iterations = 1,  # Or any other list of integer epochs
 #'     early.stop = "yes",
 #'     output.base.path = "data/",
 #'     trainingfolder = "example_folder_name"
@@ -43,7 +43,7 @@
 #' @importFrom ggpubr ggline
 #'
 
-train_alexnet <- function(input.data.path, test.data, unfreeze = TRUE,
+train_alexNet <- function(input.data.path, test.data, unfreeze = TRUE,
                           epoch.iterations=1, early.stop = 'yes',
                           output.base.path = 'data/',
                           trainingfolder,
@@ -65,7 +65,7 @@ train_alexnet <- function(input.data.path, test.data, unfreeze = TRUE,
 
   # Metadata
   metadata <- tibble(
-    Model_Name = "AlexNet",
+    Model_Name = "alexNet",
     Training_Data_Path = input.data.path,
     Test_Data_Path = test.data,
     Output_Path = output.data.path,
@@ -77,10 +77,10 @@ train_alexnet <- function(input.data.path, test.data, unfreeze = TRUE,
     Negative.class=negative.class
   )
 
-  write_csv(metadata, paste0(output.data.path, "AlexNetmodel_metadata.csv"))
+  write_csv(metadata, paste0(output.data.path, "alexNetmodel_metadata.csv"))
 
 for(a in 1:length(epoch.iterations )){
-print('Training AlexNet')
+print('Training alexNet')
   n.epoch <- epoch.iterations [a]
 
     # Data loaders setup
@@ -122,7 +122,7 @@ print('Training AlexNet')
     train_dl <- dataloader(train_ds, batch_size = 32, shuffle = TRUE, drop_last = TRUE)
     valid_dl <- dataloader(valid_ds, batch_size = 32, shuffle = FALSE, drop_last = TRUE)
 
-    # AlexNet Training
+    # alexNet Training
     net <- torch::nn_module(
       initialize = function() {
         self$model <- model_alexnet(pretrained = TRUE)
@@ -154,7 +154,7 @@ print('Training AlexNet')
         )
       )
 
-    modelAlexNetGibbon <- fitted %>%
+    modelalexNetGibbon <- fitted %>%
       fit(train_dl, epochs = n.epoch, valid_data = valid_dl,
           callbacks = list(
             luz_callback_early_stopping(patience = 2),
@@ -166,20 +166,20 @@ print('Training AlexNet')
               call_on = "on_batch_end"
             ),
             #luz_callback_model_checkpoint(path = paste(output.data.path, trainingfolder,'/', sep = '_')),
-            luz_callback_csv_logger(paste(output.data.path, trainingfolder, n.epoch, "logs_AlexNet.csv", sep = '_'))
+            luz_callback_csv_logger(paste(output.data.path, trainingfolder, n.epoch, "logs_alexNet.csv", sep = '_'))
           ),
           verbose = TRUE
       )
 
-    luz_save(modelAlexNetGibbon, paste( output.data.path,trainingfolder,n.epoch, "modelAlexNet.pt",sep='_'))
+    luz_save(modelalexNetGibbon, paste( output.data.path,trainingfolder,n.epoch, "modelalexNet.pt",sep='_'))
 
-    TempCSV.AlexNet <- read.csv(paste(output.data.path, trainingfolder, n.epoch, "logs_AlexNet.csv", sep = '_'))
-    AlexNet.loss <- TempCSV.AlexNet[nrow(TempCSV.AlexNet),]$loss
+    TempCSV.alexNet <- read.csv(paste(output.data.path, trainingfolder, n.epoch, "logs_alexNet.csv", sep = '_'))
+    alexNet.loss <- TempCSV.alexNet[nrow(TempCSV.alexNet),]$loss
 
-    LossPlot <- ggline(data=TempCSV.AlexNet,x='epoch',y='loss',color = 'set')
+    LossPlot <- ggline(data=TempCSV.alexNet,x='epoch',y='loss',color = 'set')
     print(LossPlot)
 
-    # Calculate performance metrics for AlexNet -------------------------------------
+    # Calculate performance metrics for alexNet -------------------------------------
     dir.create(paste(output.data.path,'performance_tables',sep=''))
 
     # Get the list of image files
@@ -189,7 +189,7 @@ print('Training AlexNet')
     imageFileShort <- str_split_fixed(imageFileShort,pattern = '/',n=2)[,2]
 
     # Prepare output tables
-    outputTableAlexNet <- data.frame()
+    outputTablealexNet <- data.frame()
 
     # Prepare dataset for prediction
     test_ds <- image_folder_dataset(
@@ -203,17 +203,17 @@ print('Training AlexNet')
 
     test_dl <- dataloader(test_ds, batch_size = 32, shuffle = F)
 
-    # Predict using AlexNet
-    AlexNetPred <- predict(modelAlexNetGibbon, test_dl)
-    AlexNetProb <- torch_sigmoid(AlexNetPred)
-    AlexNetProb <- as_array(torch_tensor(AlexNetProb, device = 'cpu'))
-    AlexNetClass <- ifelse((AlexNetProb) < 0.5, positive.class, negative.class)
+    # Predict using alexNet
+    alexNetPred <- predict(modelalexNetGibbon, test_dl)
+    alexNetProb <- torch_sigmoid(alexNetPred)
+    alexNetProb <- as_array(torch_tensor(alexNetProb, device = 'cpu'))
+    alexNetClass <- ifelse((alexNetProb) < 0.5, positive.class, negative.class)
 
     # Add the results to output tables
-    outputTableAlexNet <- rbind(outputTableAlexNet, data.frame(Label = Folder, Probability = AlexNetProb, PredictedClass = AlexNetClass, ActualClass = Folder))
+    outputTablealexNet <- rbind(outputTablealexNet, data.frame(Label = Folder, Probability = alexNetProb, PredictedClass = alexNetClass, ActualClass = Folder))
 
     # Save the output table as CSV file
-    write.csv(outputTableAlexNet, paste(output.data.path, trainingfolder, n.epoch, "output_AlexNet.csv", sep = '_'), row.names = FALSE)
+    write.csv(outputTablealexNet, paste(output.data.path, trainingfolder, n.epoch, "output_alexNet.csv", sep = '_'), row.names = FALSE)
 
     # Initialize data frames
     CombinedTempRow <- data.frame()
@@ -221,24 +221,24 @@ print('Training AlexNet')
     thresholds <- seq(0.1,1,0.1)
 
     for (threshold in thresholds) {
-      # AlexNet
-      AlexNetPredictedClass <- ifelse((outputTableAlexNet$Probability) < threshold, positive.class, negative.class)
+      # alexNet
+      alexNetPredictedClass <- ifelse((outputTablealexNet$Probability) < threshold, positive.class, negative.class)
 
-      AlexNetPerf <- caret::confusionMatrix(
-        as.factor(AlexNetPredictedClass),
-        as.factor(outputTableAlexNet$ActualClass),
+      alexNetPerf <- caret::confusionMatrix(
+        as.factor(alexNetPredictedClass),
+        as.factor(outputTablealexNet$ActualClass),
         mode = 'everything'
       )$byClass
 
-      TempRowAlexNet <- cbind.data.frame(
-        t(AlexNetPerf),
-        AlexNet.loss,
+      TempRowalexNet <- cbind.data.frame(
+        t(alexNetPerf),
+        alexNet.loss,
         trainingfolder,
         n.epoch,
-        'AlexNet'
+        'alexNet'
       )
 
-      colnames(TempRowAlexNet) <- c(
+      colnames(TempRowalexNet) <- c(
         "Sensitivity", "Specificity", "Pos Pred Value", "Neg Pred Value",
         "Precision", "Recall", "F1", "Prevalence", "Detection Rate",
         "Detection Prevalence", "Balanced Accuracy",
@@ -248,21 +248,21 @@ print('Training AlexNet')
         "CNN Architecture"
       )
 
-      TempRowAlexNet$Threshold <- as.character(threshold)
-      CombinedTempRow <- rbind.data.frame(CombinedTempRow, TempRowAlexNet)
+      TempRowalexNet$Threshold <- as.character(threshold)
+      CombinedTempRow <- rbind.data.frame(CombinedTempRow, TempRowalexNet)
     }
 
-   ROCRpred <-  ROCR::prediction(predictions = outputTableAlexNet$Probability,
-                     labels = outputTableAlexNet$ActualClass)
+   ROCRpred <-  ROCR::prediction(predictions = outputTablealexNet$Probability,
+                     labels = outputTablealexNet$ActualClass)
    AUCval <- ROCR::performance(ROCRpred,'auc')
    CombinedTempRow$AUC <- AUCval@y.values[[1]]
 
 
     TransferLearningCNNDF <- rbind.data.frame(TransferLearningCNNDF, CombinedTempRow)
     TransferLearningCNNDF$Frozen <- unfreeze.param
-    filename <- paste(output.data.path,'performance_tables/', trainingfolder, '_', n.epoch, '_', '_TransferLearningCNNDFAlexNET.csv', sep = '')
+    filename <- paste(output.data.path,'performance_tables/', trainingfolder, '_', n.epoch, '_', '_TransferLearningCNNDFalexNet.csv', sep = '')
     write.csv(TransferLearningCNNDF, filename, row.names = FALSE)
 
-    rm(modelAlexNetGibbon)
+    rm(modelalexNetGibbon)
 }
 }
