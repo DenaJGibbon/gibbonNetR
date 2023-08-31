@@ -33,6 +33,47 @@ United States \\
   \texttt{} \\
   }
 
+% Pandoc syntax highlighting
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
 
 % tightlist command for lists without linebreak
 \providecommand{\tightlist}{%
@@ -71,6 +112,7 @@ United States \\
 
 \usepackage[left]{lineno}
 \linenumbers
+\usepackage{float}
 \begin{document}
 \maketitle
 
@@ -195,27 +237,45 @@ This package provides functions
 \hypertarget{usage}{%
 \section{Usage}\label{usage}}
 
-First we create spectrogram images
+\hypertarget{first-we-create-spectrogram-images}{%
+\subsection{First we create spectrogram
+images}\label{first-we-create-spectrogram-images}}
 
-\begin{figure}[ht]
+\begin{figure}[H]
 
-{\centering \includegraphics[width=0.75\linewidth]{../README_files/spectro} 
+{\centering \includegraphics[width=0.75\linewidth]{../../README_files/spectro} 
 
 }
 
 \caption{Spectrograms of training clips for CNNs}\label{fig:unnamed-chunk-1}
 \end{figure}
 
-\hypertarget{results}{%
-\section{Results}\label{results}}
+\hypertarget{then-we-train-the-model}{%
+\subsection{Then we train the model}\label{then-we-train-the-model}}
 
-We can compare the performance of different CNN architectures
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{gibbonNetR}\SpecialCharTok{::}\FunctionTok{train\_alexNet}\NormalTok{(}\AttributeTok{input.data.path=}\NormalTok{input.data.path,}
+                          \AttributeTok{test.data=}\NormalTok{test.data.path,}
+                          \AttributeTok{unfreeze =}\NormalTok{ unfreeze.param,}
+                          \AttributeTok{epoch.iterations=}\NormalTok{epoch.iterations,}
+                          \AttributeTok{early.stop =} \StringTok{"yes"}\NormalTok{,}
+                          \AttributeTok{output.base.path =} \StringTok{"data/"}\NormalTok{,}
+                          \AttributeTok{trainingfolder=}\NormalTok{trainingfolder.short,}
+                          \AttributeTok{positive.class=}\StringTok{"Gibbons"}\NormalTok{,}
+                          \AttributeTok{negative.class=}\StringTok{"Noise"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-\begin{figure}[h]
+\hypertarget{we-can-compare-the-performance-of-different-cnn-architectures}{%
+\subsection{We can compare the performance of different CNN
+architectures}\label{we-can-compare-the-performance-of-different-cnn-architectures}}
 
-\includegraphics{gibbonNetRMSarxiv_files/figure-latex/unnamed-chunk-2-1} \hfill{}
+\begin{figure}[H]
 
-\caption{Evaluating performance of pretrained CNNs}\label{fig:unnamed-chunk-2}
+\includegraphics{gibbonNetRMSarxiv_files/figure-latex/unnamed-chunk-3-1} \hfill{}
+
+\caption{Evaluating performance of pretrained CNNs}\label{fig:unnamed-chunk-3}
 \end{figure}
 
 \hypertarget{discussion}{%

@@ -17,9 +17,11 @@ abstract: >
   Automated detection of acoustic signals is crucial for effective monitoring of vocal animals and their habitats across large spatial and temporal scales. Recent advances in deep learning have made high performing automated detection approaches more accessible two more practitioners. However, there are few deep learning approaches that can be implemented natively in R. The 'torch for R' ecosystem has made the use of transfer learning with convolutional neural networks accessible for R users. Here we provide an R package and workflow to use transfer learning for the automated detection of acoustics signals from passive acoustic monitoring (PAM) data collected in Sabah, Malaysia. The package provides functions to create spectogram images from PAM data, compare the performance of different pre-trained CNN architectures, and deploy trained models over directories of sound files. 
 bibliography: references.bib
 output:
-  rticles::arxiv_article: default
+  rticles::peerj_article: default
   bookdown::pdf_book:
-    base_format: rticles::arxiv_article # for using bookdown features like \@ref()
+    base_format: rticles::peerj_article # for using bookdown features like \@ref()
+header-includes:
+  - \usepackage{float}
 ---
 
 # Introduction
@@ -44,17 +46,30 @@ This package provides functions
 
 # Usage
 
-First we create spectrogram images
+## First we create spectrogram images
 
-```{r, echo=FALSE, out.width="50%",fig.cap='Spectrograms of training clips for CNNs',fig.align='center',fig.pos='ht'}
+```{r, echo=FALSE, out.width="75%",fig.cap='Spectrograms of training clips for CNNs',fig.pos = "H"}
 knitr::include_graphics("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/README_files/spectro.png")
 ```
 
-# Results
+## Then we train the model
 
-We can compare the performance of different CNN architectures
+```{r, eval=FALSE}
+gibbonNetR::train_alexNet(input.data.path=input.data.path,
+                          test.data=test.data.path,
+                          unfreeze = unfreeze.param,
+                          epoch.iterations=epoch.iterations,
+                          early.stop = "yes",
+                          output.base.path = "data/",
+                          trainingfolder=trainingfolder.short,
+                          positive.class="Gibbons",
+                          negative.class="Noise")
+```
 
-```{r, fig.align='left',fig.cap='Evaluating performance of pretrained CNNs', echo=FALSE, warning=FALSE, message=FALSE, fig.pos='h', results='hide', fig.width=6.5}
+
+## We can compare the performance of different CNN architectures
+
+```{r, fig.cap='Evaluating performance of pretrained CNNs', echo=FALSE, warning=FALSE, message=FALSE, fig.pos = "H", results='hide',  fig.width=6.5}
 devtools::load_all("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
 
 performancetables.dir <- '/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/_output_unfrozen_TRUE_imagesmalaysia_/performance_tables/'
@@ -62,6 +77,8 @@ PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=perf
 
 PerformanceOutput$f1_plot
 ```
+
+
 
 # Discussion
 

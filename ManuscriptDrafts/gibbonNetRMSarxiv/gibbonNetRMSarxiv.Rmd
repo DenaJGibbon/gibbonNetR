@@ -21,6 +21,7 @@ output: rticles::arxiv_article
 header-includes:
   - \usepackage[left]{lineno}
   - \linenumbers
+  - \usepackage{float}
 ---
 
 # Introduction
@@ -45,17 +46,30 @@ This package provides functions
 
 # Usage
 
-First we create spectrogram images
+## First we create spectrogram images
 
-```{r, echo=FALSE, out.width="75%",fig.cap='Spectrograms of training clips for CNNs',fig.align='center',fig.pos='ht'}
+```{r, echo=FALSE, out.width="75%",fig.cap='Spectrograms of training clips for CNNs',fig.align='center',fig.pos = "H"}
 knitr::include_graphics("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/README_files/spectro.png")
 ```
 
-# Results
+## Then we train the model
 
-We can compare the performance of different CNN architectures
+```{r, eval=FALSE}
+gibbonNetR::train_alexNet(input.data.path=input.data.path,
+                          test.data=test.data.path,
+                          unfreeze = unfreeze.param,
+                          epoch.iterations=epoch.iterations,
+                          early.stop = "yes",
+                          output.base.path = "data/",
+                          trainingfolder=trainingfolder.short,
+                          positive.class="Gibbons",
+                          negative.class="Noise")
+```
 
-```{r, fig.align='left',fig.cap='Evaluating performance of pretrained CNNs', echo=FALSE, warning=FALSE, message=FALSE, fig.pos='h', results='hide', fig.width=6.5}
+
+## We can compare the performance of different CNN architectures
+
+```{r, fig.align='left',fig.cap='Evaluating performance of pretrained CNNs', echo=FALSE, warning=FALSE, message=FALSE, fig.pos = "H", results='hide',  fig.width=6.5}
 devtools::load_all("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
 
 performancetables.dir <- '/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/_output_unfrozen_TRUE_imagesmalaysia_/performance_tables/'
@@ -63,6 +77,8 @@ PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=perf
 
 PerformanceOutput$f1_plot
 ```
+
+
 
 # Discussion
 
