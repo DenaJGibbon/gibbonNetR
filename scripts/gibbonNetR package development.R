@@ -1,7 +1,7 @@
 library(dplyr)
 setwd("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
 devtools::document()
-devtools::load_all()
+devtools::load_all("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
 
 
 # Process spectrogram images for testing data:-------------------------------------------------------------------------
@@ -156,10 +156,10 @@ test.data.path <- 'data/imagesmalaysia/'
 trainingfolder.short <- 'imagesmalaysia'
 
 # Whether to unfreeze the layers
-unfreeze.param <- TRUE # FALSE means the features are frozen; TRUE unfrozen
+unfreeze.param <- FALSE # FALSE means the features are frozen; TRUE unfrozen
 
 # Number of epochs to include
-epoch.iterations <- c(1,2,3,4)
+epoch.iterations <- c(1,2,3,4,5)
 
 # Location to save the out
 output.data.path <-paste('data/','output','unfrozen',unfreeze.param,trainingfolder.short,'/', sep='_')
@@ -172,7 +172,7 @@ early.stop <- 'yes' # NOTE: Must comment out if don't want early stopping
 
 gibbonNetR::train_alexNet(input.data.path=input.data.path,
                           test.data=test.data.path,
-                          unfreeze = TRUE,
+                          unfreeze = unfreeze.param,
                           epoch.iterations=epoch.iterations,
                           early.stop = "yes",
                           output.base.path = "data/",
@@ -183,7 +183,7 @@ gibbonNetR::train_alexNet(input.data.path=input.data.path,
 
 gibbonNetR::train_VGG16(input.data.path=input.data.path,
                           test.data=test.data.path,
-                          unfreeze = TRUE,
+                          unfreeze = unfreeze.param,
                           epoch.iterations=epoch.iterations,
                           early.stop = "yes",
                           output.base.path = "data/",
@@ -193,7 +193,7 @@ gibbonNetR::train_VGG16(input.data.path=input.data.path,
 
 gibbonNetR::train_VGG19(input.data.path=input.data.path,
                         test.data=test.data.path,
-                        unfreeze = TRUE,
+                        unfreeze = unfreeze.param,
                         epoch.iterations=epoch.iterations,
                         early.stop = "yes",
                         output.base.path = "data/",
@@ -203,7 +203,7 @@ gibbonNetR::train_VGG19(input.data.path=input.data.path,
 
 gibbonNetR::train_ResNet18(input.data.path=input.data.path,
                             test.data=test.data.path,
-                            unfreeze = TRUE,
+                            unfreeze = unfreeze.param,
                             epoch.iterations=epoch.iterations,
                             early.stop = "yes",
                             output.base.path = "data/",
@@ -213,7 +213,7 @@ gibbonNetR::train_ResNet18(input.data.path=input.data.path,
 
 gibbonNetR::train_ResNet50(input.data.path=input.data.path,
                             test.data=test.data.path,
-                            unfreeze = TRUE,
+                            unfreeze = unfreeze.param,
                             epoch.iterations=epoch.iterations,
                             early.stop = "yes",
                             output.base.path = "data/",
@@ -223,7 +223,7 @@ gibbonNetR::train_ResNet50(input.data.path=input.data.path,
 
 gibbonNetR::train_ResNet152(input.data.path=input.data.path,
                             test.data=test.data.path,
-                            unfreeze = TRUE,
+                            unfreeze = unfreeze.param,
                             epoch.iterations=epoch.iterations,
                             early.stop = "yes",
                             output.base.path = "data/",
@@ -236,7 +236,7 @@ PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=perf
 
 PerformanceOutput$f1_plot
 PerformanceOutput$pr_plot
-#PerformanceOutput$FPRTPR_plot
+PerformanceOutput$FPRTPR_plot
 PerformanceOutput$best_f1$F1
 
 
