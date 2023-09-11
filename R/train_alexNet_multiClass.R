@@ -97,6 +97,10 @@ train_alexNet_multiClass <- function(input.data.path, test.data, unfreeze = TRUE
   num_classes <- length(class_names)
   print(paste('Detected classes:', paste(class_names, collapse = ', ')))
 
+  for(a in 1:length(epoch.iterations )){
+    print('Training alexNet')
+    n.epoch <- epoch.iterations [a]
+
   # Define the model
   net <- nn_module(
     "AlexNet",
@@ -123,8 +127,6 @@ train_alexNet_multiClass <- function(input.data.path, test.data, unfreeze = TRUE
     }
   )
 
-  net <- net()
-  net <- to_device(net, device)
 
   # Define the optimizer, loss function, and metrics
   fitted <- net %>%
@@ -226,38 +228,48 @@ train_alexNet_multiClass <- function(input.data.path, test.data, unfreeze = TRUE
   # Find the index of the maximum value in each row
   max_prob_idx <- apply(Probability, 1, which.max)
 
-  # Map the index to class names
-  predicted_class_probability <- Probability[max_prob_idx]
+  # Map the index to actual probability
+  predicted_class_probability <- sapply(1:nrow(Probability), function(i) Probability[i, max_prob_idx[i]])
 
   # Convert the integer predictions to factor and then to character based on the levels
   modelResnetGibbonNames <- factor(modelResnetGibbonPred, levels = 1:length(class_names), labels = class_names)
 
-  cbind.data.frame(modelResnetGibbonNames,predicted_class_probability)
-
-
-  alexNetProb <- as_array(torch_tensor(alexNetProb, device = 'cpu'))
-  alexNetClass <- ifelse((alexNetProb) < 0.5, positive.class, negative.class)
-
-  # Add the results to output tables
-  outputTablealexNet <- rbind(outputTablealexNet, data.frame(Label = Folder, Probability = alexNetProb, PredictedClass = alexNetClass, ActualClass = Folder))
+  outputTablealexNet <- cbind.data.frame(modelResnetGibbonNames,predicted_class_probability)
+  colnames(outputTablealexNet) <- c('PredictedClass','Probability')
+  outputTablealexNet$ActualClass <- Folder
 
   # Save the output table as CSV file
   write.csv(outputTablealexNet, paste(output.data.path, trainingfolder, n.epoch, "output_alexNet.csv", sep = '_'), row.names = FALSE)
 
+     alexNetPerf <- caret::confusionMatrix(
+      as.factor(outputTablealexNet$PredictedClass),
+      as.factor(outputTablealexNet$ActualClass),
+      mode = 'everything'
+    )$byClass
 
-  # Prediction
-  Folder <- list.files(test.data, full.names = FALSE, recursive = FALSE)
-  Image <- list.files(test.data, full.names = TRUE, recursive = FALSE)
-  testImage <- transform_image(Image)
-  alexNetPred <- net(testImage)
+    TempRowalexNet <- cbind.data.frame(
+      (alexNetPerf),
+      alexNet.loss,
+      trainingfolder,
+      n.epoch,
+      'alexNet'
+    )
 
-  class_probabilities <- torch_softmax(alexNetPred, dim = 2)
-  class_probabilities <- as_array(torch_tensor(class_probabilities, device = 'cpu'))
-  predicted_classes <- apply(class_probabilities, 1, which.max) - 1 # zero-based class labels
+    colnames(TempRowalexNet) <- c(
+      "Sensitivity", "Specificity", "Pos Pred Value", "Neg Pred Value",
+      "Precision", "Recall", "F1", "Prevalence", "Detection Rate",
+      "Detection Prevalence", "Balanced Accuracy",
+      "Validation loss",
+      "Training Data",
+      "N epochs",
+      "CNN Architecture"
+    )
 
-  outputTablealexNet <- data.frame(Label = Folder, PredictedClass = predicted_classes, ActualClass = Folder)
 
-  write_csv(outputTablealexNet, paste0(output.data.path, "alexNetmodel_test_predictions.csv"))
+  TempRowalexNet$Frozen <- unfreeze.param
+  filename <- paste(output.data.path,'performance_tables/', trainingfolder, '_', n.epoch, '_', '_TransferLearningCNNDFalexNet.csv', sep = '')
+  write.csv(TempRowalexNet, filename, row.names = FALSE)
 
-  return(test_eval)
+  rm(modelalexNetGibbon)
+}
 }
