@@ -143,7 +143,7 @@ images %>%
   purrr::iwalk(~{plot(.x); title(.y)})
 
 
-# Get setup for training --------------------------------------------------
+# Get setup for binary training --------------------------------------------------
 setwd("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
 devtools::load_all()
 
@@ -388,6 +388,7 @@ gibbonNetR::spectrogram_images(
 )
 
 
+
 # Ensure no data leakage between train, valid, and test sets --------------
 # Load necessary libraries
 library(stringr)
@@ -451,11 +452,8 @@ test.data.path <- 'data/imagesmalaysiamulti/'
 # Training data folder short
 trainingfolder.short <- 'imagesmalaysiamulti'
 
-# Whether to unfreeze the layers
-unfreeze.param <- FALSE # FALSE means the features are frozen; TRUE unfrozen
-
 # Number of epochs to include
-epoch.iterations <- c(1,2,3,4,5)
+epoch.iterations <- c(1,2,3,4,5,20)
 
 # Location to save the out
 output.data.path <-paste('data/multi/','output','unfrozen',unfreeze.param,trainingfolder.short,'/', sep='_')
@@ -469,11 +467,69 @@ early.stop <- 'yes' # NOTE: Must comment out if don't want early stopping
   train_alexNet_multiClass(
     input.data.path = input.data.path,
     test.data = test.data.path,
-    unfreeze = TRUE,
-    epoch.iterations = 1,
-    early.stop = "yes",
+    unfreeze = FALSE,
+    epoch.iterations = epoch.iterations,
+    early.stop = early.stop,
     output.base.path = output.data.path,
     trainingfolder = trainingfolder.short
   )
 
+  train_VGG16_multiClass(
+    input.data.path = input.data.path,
+    test.data = test.data.path,
+    unfreeze = FALSE,
+    epoch.iterations = epoch.iterations,
+    early.stop = early.stop,
+    output.base.path = output.data.path,
+    trainingfolder = trainingfolder.short
+  )
 
+  train_VGG19_multiClass(
+    input.data.path = input.data.path,
+    test.data = test.data.path,
+    unfreeze = FALSE,
+    epoch.iterations = epoch.iterations,
+    early.stop = early.stop,
+    output.base.path = output.data.path,
+    trainingfolder = trainingfolder.short
+  )
+
+  train_ResNet18_multiClass(
+    input.data.path = input.data.path,
+    test.data = test.data.path,
+    unfreeze = FALSE,
+    epoch.iterations = epoch.iterations,
+    early.stop = early.stop,
+    output.base.path = output.data.path,
+    trainingfolder = trainingfolder.short
+  )
+
+  train_ResNet50_multiClass(
+    input.data.path = input.data.path,
+    test.data = test.data.path,
+    unfreeze = FALSE,
+    epoch.iterations = epoch.iterations,
+    early.stop = early.stop,
+    output.base.path = output.data.path,
+    trainingfolder = trainingfolder.short
+  )
+
+  train_ResNet152_multiClass(
+    input.data.path = input.data.path,
+    test.data = test.data.path,
+    unfreeze = FALSE,
+    epoch.iterations = 1,
+    early.stop = early.stop,
+    output.base.path = output.data.path,
+    trainingfolder = trainingfolder.short
+  )
+
+  performancetables.dir <-"/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/multi/_output_unfrozen_FALSE_imagesmalaysiamulti_/performance_tables/"
+  PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
+                                                        class='hornbill.helmeted')
+
+  PerformanceOutput$f1_plot
+  PerformanceOutput$pr_plot
+  PerformanceOutput$FPRTPR_plot
+  PerformanceOutput$best_f1$F1
+  PerformanceOutput$best_auc

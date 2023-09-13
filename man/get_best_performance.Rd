@@ -4,7 +4,11 @@
 \alias{get_best_performance}
 \title{Extract Best Performance Results from Performance Tables}
 \usage{
-get_best_performance(performancetables.dir)
+get_best_performance(
+  performancetables.dir,
+  model.type = "multi",
+  class = "hornbill.helmeted"
+)
 }
 \arguments{
 \item{performancetables.dir}{Path to the directory containing the performance tables.}
