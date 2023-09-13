@@ -173,7 +173,7 @@ early.stop <- 'yes' # NOTE: Must comment out if don't want early stopping
 
 gibbonNetR::train_alexNet(input.data.path=input.data.path,
                           test.data=test.data.path,
-                          unfreeze = unfreeze.param,
+                          unfreeze = TRUE,
                           epoch.iterations=epoch.iterations,
                           early.stop = "yes",
                           output.base.path = "data/",
@@ -184,7 +184,7 @@ gibbonNetR::train_alexNet(input.data.path=input.data.path,
 
 gibbonNetR::train_VGG16(input.data.path=input.data.path,
                           test.data=test.data.path,
-                          unfreeze = unfreeze.param,
+                          unfreeze = TRUE,
                           epoch.iterations=epoch.iterations,
                           early.stop = "yes",
                           output.base.path = "data/",
@@ -194,7 +194,7 @@ gibbonNetR::train_VGG16(input.data.path=input.data.path,
 
 gibbonNetR::train_VGG19(input.data.path=input.data.path,
                         test.data=test.data.path,
-                        unfreeze = unfreeze.param,
+                        unfreeze = TRUE,
                         epoch.iterations=epoch.iterations,
                         early.stop = "yes",
                         output.base.path = "data/",
@@ -204,7 +204,7 @@ gibbonNetR::train_VGG19(input.data.path=input.data.path,
 
 gibbonNetR::train_ResNet18(input.data.path=input.data.path,
                             test.data=test.data.path,
-                            unfreeze = unfreeze.param,
+                            unfreeze = TRUE,
                             epoch.iterations=epoch.iterations,
                             early.stop = "yes",
                             output.base.path = "data/",
@@ -214,7 +214,7 @@ gibbonNetR::train_ResNet18(input.data.path=input.data.path,
 
 gibbonNetR::train_ResNet50(input.data.path=input.data.path,
                             test.data=test.data.path,
-                            unfreeze = unfreeze.param,
+                            unfreeze = TRUE,
                             epoch.iterations=epoch.iterations,
                             early.stop = "yes",
                             output.base.path = "data/",
@@ -224,7 +224,7 @@ gibbonNetR::train_ResNet50(input.data.path=input.data.path,
 
 gibbonNetR::train_ResNet152(input.data.path=input.data.path,
                             test.data=test.data.path,
-                            unfreeze = unfreeze.param,
+                            unfreeze = TRUE,
                             epoch.iterations=epoch.iterations,
                             early.stop = "yes",
                             output.base.path = "data/",
@@ -456,7 +456,7 @@ trainingfolder.short <- 'imagesmalaysiamulti'
 epoch.iterations <- c(1,2,3,4,5,20)
 
 # Location to save the out
-output.data.path <-paste('data/multi/','output','unfrozen',unfreeze.param,trainingfolder.short,'/', sep='_')
+output.data.path <-paste('data/multi/','output','unfrozen',TRUE,trainingfolder.short,'/', sep='_')
 
 # Create if doesn't exist
 dir.create(output.data.path)
@@ -467,69 +467,128 @@ early.stop <- 'yes' # NOTE: Must comment out if don't want early stopping
   train_alexNet_multiClass(
     input.data.path = input.data.path,
     test.data = test.data.path,
-    unfreeze = FALSE,
+    unfreeze = TRUE,
     epoch.iterations = epoch.iterations,
     early.stop = early.stop,
     output.base.path = output.data.path,
     trainingfolder = trainingfolder.short
   )
+
+  performancetables.dir <-"/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/multi/_output_unfrozen_TRUE_imagesmalaysiamulti_/performance_tables/"
+  PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
+                                                        class='hornbill.helmeted')
+
+  PerformanceOutput$f1_plot
 
   train_VGG16_multiClass(
     input.data.path = input.data.path,
     test.data = test.data.path,
-    unfreeze = FALSE,
+    unfreeze = TRUE,
     epoch.iterations = epoch.iterations,
     early.stop = early.stop,
     output.base.path = output.data.path,
     trainingfolder = trainingfolder.short
   )
+
+  performancetables.dir <-"/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/multi/_output_unfrozen_TRUE_imagesmalaysiamulti_/performance_tables/"
+  PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
+                                                        class='hornbill.helmeted')
+
+  PerformanceOutput$f1_plot
 
   train_VGG19_multiClass(
     input.data.path = input.data.path,
     test.data = test.data.path,
-    unfreeze = FALSE,
+    unfreeze = TRUE,
     epoch.iterations = epoch.iterations,
     early.stop = early.stop,
     output.base.path = output.data.path,
     trainingfolder = trainingfolder.short
   )
+
+  performancetables.dir <-"/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/multi/_output_unfrozen_TRUE_imagesmalaysiamulti_/performance_tables/"
+  PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
+                                                        class='hornbill.helmeted')
+
+  PerformanceOutput$f1_plot
 
   train_ResNet18_multiClass(
     input.data.path = input.data.path,
     test.data = test.data.path,
-    unfreeze = FALSE,
+    unfreeze = TRUE,
     epoch.iterations = epoch.iterations,
     early.stop = early.stop,
     output.base.path = output.data.path,
     trainingfolder = trainingfolder.short
   )
+
+  performancetables.dir <-"/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/multi/_output_unfrozen_TRUE_imagesmalaysiamulti_/performance_tables/"
+  PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
+                                                        class='hornbill.helmeted')
+
+  PerformanceOutput$f1_plot
 
   train_ResNet50_multiClass(
     input.data.path = input.data.path,
     test.data = test.data.path,
-    unfreeze = FALSE,
+    unfreeze = TRUE,
     epoch.iterations = epoch.iterations,
     early.stop = early.stop,
     output.base.path = output.data.path,
     trainingfolder = trainingfolder.short
   )
 
+  performancetables.dir <-"/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/multi/_output_unfrozen_TRUE_imagesmalaysiamulti_/performance_tables/"
+  PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
+                                                        class='hornbill.helmeted')
+
+  PerformanceOutput$f1_plot
+
   train_ResNet152_multiClass(
     input.data.path = input.data.path,
     test.data = test.data.path,
-    unfreeze = FALSE,
+    unfreeze = TRUE,
     epoch.iterations = 1,
     early.stop = early.stop,
     output.base.path = output.data.path,
     trainingfolder = trainingfolder.short
   )
 
-  performancetables.dir <-"/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/multi/_output_unfrozen_FALSE_imagesmalaysiamulti_/performance_tables/"
+  performancetables.dir <-"/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/multi/_output_unfrozen_TRUE_imagesmalaysiamulti_/performance_tables/"
   PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
-                                                        class='hornbill.helmeted')
+                                                        class='long.argus')
 
   PerformanceOutput$f1_plot
   PerformanceOutput$pr_plot
   PerformanceOutput$FPRTPR_plot
   PerformanceOutput$best_f1$F1
   PerformanceOutput$best_auc
+
+
+# Multi Maliau Test -------------------------------------------------------
+
+  # note had to manually move some incorrectly classified images
+  # The splits are set to ensure all data (100%) goes into the relevant folder.
+  gibbonNetR::spectrogram_images(
+    trainingBasePath = '/Volumes/DJC Files/Danum Deep Learning/MultiSpeciesAnalysis/ValidationClipsMaliau/', #'/Volumes/DJC Files/Danum Deep Learning/TestClips', #
+    outputBasePath   = 'data/imagesmalaysiamaliaumulti/',
+    splits           = c(0, 0, 1)  # 0% training, 0% validation, 100% testing
+  )
+
+
+  trained_models_dir <- "data/multi/_output_unfrozen_TRUE_imagesmalaysiamulti_/"
+
+  #image_data_dir <- '/Volumes/DJC 1TB/VocalIndividualityClips/RandomSelectionImages/'
+  image_data_dir <- 'data/imagesmalaysiamaliaumulti/test/'
+
+  evaluate_trainedmodel_performance_multi(trained_models_dir=trained_models_dir,
+                                    image_data_dir=image_data_dir,
+                                    output_dir='data/')
+
+
+  PerformanceOutPutTrained <- gibbonNetR::get_best_performance(performancetables.dir='data/performance_tables_multi_trained/',
+                                                               class='duet')
+
+  PerformanceOutPutTrained$f1_plot
+  PerformanceOutPutTrained$best_f1$F1
+  PerformanceOutPutTrained$pr_plot

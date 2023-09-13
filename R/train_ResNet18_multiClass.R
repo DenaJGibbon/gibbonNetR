@@ -102,7 +102,7 @@ train_ResNet18_multiClass <- function(
       initialize = function() {
         self$model <- model_resnet18(pretrained = TRUE)
         for (par in self$parameters) {
-          par$requires_grad_(unfreeze.param)
+          par$requires_grad_(unfreeze)
         }
         self$model$fc <- nn_sequential(
           nn_linear(self$model$fc$in_features, 1024),
