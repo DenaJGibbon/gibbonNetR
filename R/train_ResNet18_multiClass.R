@@ -1,11 +1,11 @@
-#' Train a Multi-Class AlexNet Model
+#' Train a Multi-Class ResNet18 Model
 #'
-#' This function trains an AlexNet model on a given dataset for multi-class image classification.
+#' This function trains an ResNet18 model on a given dataset for multi-class image classification.
 #' The trained model, along with performance metrics and other metadata, are saved to disk.
 #'
 #' @param input.data.path Character. The path to the input training data folder. Sub-folders should correspond to class labels.
 #' @param test.data Character. The path to the input test data folder. Sub-folders should correspond to class labels.
-#' @param unfreeze Logical. If TRUE, all layers of the pretrained AlexNet will be unfrozen for retraining. Default is TRUE.
+#' @param unfreeze Logical. If TRUE, all layers of the pretrained ResNet18 will be unfrozen for retraining. Default is TRUE.
 #' @param epoch.iterations Integer. The number of epochs to train the model for. Default is 1.
 #' @param early.stop Character. If "yes", early stopping will be applied during training. Default is "yes".
 #' @param output.base.path Character. The base path where output files will be saved. Default is 'data/'.
@@ -21,7 +21,7 @@
 #' @seealso \code{\link[torch]{nn_module}}, \code{\link[torch]{dataloader}}, \code{\link[torch]{nn_bce_with_logits_loss}}
 #' @examples
 #' \dontrun{
-#'   train_alexNet_multiClass(
+#'   train_ResNet18_multiClass(
 #'     input.data.path = "path/to/training/data",
 #'     test.data = "path/to/test/data",
 #'     unfreeze = TRUE,
@@ -44,7 +44,7 @@
 #' @importFrom torchvision transform_to_tensor transform_resize transform_normalize transform_color_jitter
 #'
 
-train_alexNet_multiClass <- function(
+train_ResNet18_multiClass <- function(
     input.data.path,
     test.data,
     unfreeze = TRUE,
@@ -62,7 +62,7 @@ train_alexNet_multiClass <- function(
   }
 
   metadata <- tibble(
-    Model_Name = "alexNet",
+    Model_Name = "ResNet18",
     Training_Data_Path = input.data.path,
     Test_Data_Path = test.data,
     Output_Path = output.base.path,
@@ -72,12 +72,13 @@ train_alexNet_multiClass <- function(
     Epochs = epoch.iterations
   )
 
-  write_csv(metadata, paste0(output.base.path, "alexNetmodel_metadata.csv"))
+  write_csv(metadata, paste0(output.base.path, "ResNet18model_metadata.csv"))
 
   # Data loaders setup
   transform_func <- . %>%
     torchvision::transform_to_tensor() %>%
-    torchvision::transform_resize(size = c(224, 224)) %>%
+    transform_resize(256) %>%
+    transform_center_crop(224) %>%
     torchvision::transform_color_jitter() %>%
     torchvision::transform_normalize(mean = c(0.485, 0.456, 0.406), std = c(0.229, 0.224, 0.225))
 
@@ -93,26 +94,22 @@ train_alexNet_multiClass <- function(
   cat('Detected classes:', paste(class_names, collapse = ', '), '\n')
 
   for (a in 1:length(epoch.iterations)) {
-    cat('Training alexNet\n')
+    cat('Training ResNet18\n')
     n.epoch <- epoch.iterations[a]
 
     # Define the model
-    net <- torch::nn_module(
-
+    net <- nn_module(
       initialize = function() {
-        self$model <- model_alexnet(pretrained = TRUE)
-
+        self$model <- model_resnet18(pretrained = TRUE)
         for (par in self$parameters) {
-          par$requires_grad_(unfreeze)
+          par$requires_grad_(unfreeze.param)
         }
-
-        self$model$classifier <- nn_sequential(
-          nn_dropout(0.5),
-          nn_linear(9216, 512),
+        self$model$fc <- nn_sequential(
+          nn_linear(self$model$fc$in_features, 1024),
           nn_relu(),
-          nn_linear(512, 256),
+          nn_linear(1024, 1024),
           nn_relu(),
-          nn_linear(256, num_classes)
+          nn_linear(1024, num_classes)
         )
       },
       forward = function(x) {
@@ -133,7 +130,7 @@ train_alexNet_multiClass <- function(
 
     # Training the model
     if (early.stop == 'yes') {
-      modelalexNetGibbon <- fitted %>%
+      modelResNet18Gibbon <- fitted %>%
         fit(train_dl, epochs = n.epoch, valid_data = valid_dl,
             callbacks = list(
               luz_callback_early_stopping(patience = 2),
@@ -144,12 +141,12 @@ train_alexNet_multiClass <- function(
                 steps_per_epoch = length(train_dl),
                 call_on = "on_batch_end"
               ),
-              luz_callback_csv_logger(paste(output.base.path, trainingfolder, n.epoch, "logs_alexNet.csv", sep = '_'))
+              luz_callback_csv_logger(paste(output.base.path, trainingfolder, n.epoch, "logs_ResNet18.csv", sep = '_'))
             ),
             verbose = TRUE
         )
     } else {
-      modelalexNetGibbon <- fitted %>%
+      modelResNet18Gibbon <- fitted %>%
         fit(train_dl, epochs = n.epoch, valid_data = valid_dl,
             callbacks = list(
               luz_callback_lr_scheduler(
@@ -159,23 +156,23 @@ train_alexNet_multiClass <- function(
                 steps_per_epoch = length(train_dl),
                 call_on = "on_batch_end"
               ),
-              luz_callback_csv_logger(paste(output.base.path, trainingfolder, n.epoch, "logs_alexNet.csv", sep = '_'))
+              luz_callback_csv_logger(paste(output.base.path, trainingfolder, n.epoch, "logs_ResNet18.csv", sep = '_'))
             ),
             verbose = TRUE
         )
     }
 
-    luz_save(modelalexNetGibbon, paste(output.base.path, trainingfolder, n.epoch, "modelalexNet.pt", sep = '_'))
+    luz_save(modelResNet18Gibbon, paste(output.base.path, trainingfolder, n.epoch, "modelResNet18.pt", sep = '_'))
 
-    TempCSV.alexNet <- read.csv(paste(output.base.path, trainingfolder, n.epoch, "logs_alexNet.csv", sep = '_'))
-    alexNet.loss <- TempCSV.alexNet[nrow(TempCSV.alexNet), ]$loss
+    TempCSV.ResNet18 <- read.csv(paste(output.base.path, trainingfolder, n.epoch, "logs_ResNet18.csv", sep = '_'))
+    ResNet18.loss <- TempCSV.ResNet18[nrow(TempCSV.ResNet18), ]$loss
 
-    LossPlot <- ggline(data = TempCSV.alexNet, x = 'epoch', y = 'loss', color = 'set')
-    AUCPlot <- ggline(data = TempCSV.alexNet, x = 'epoch', y = 'auc', color = 'set')
+    LossPlot <- ggline(data = TempCSV.ResNet18, x = 'epoch', y = 'loss', color = 'set')
+    AUCPlot <- ggline(data = TempCSV.ResNet18, x = 'epoch', y = 'auc', color = 'set')
 
     print(cowplot::plot_grid(LossPlot,AUCPlot))
 
-    # Calculate performance metrics for alexNet -------------------------------------
+    # Calculate performance metrics for ResNet18 -------------------------------------
     dir.create(paste(output.base.path, 'performance_tables', sep = ''))
     dir.create(paste(output.base.path, 'performance_tables_multi', sep = ''))
 
@@ -193,13 +190,13 @@ train_alexNet_multiClass <- function(
     imageFileShort <- str_split_fixed(imageFileShort, pattern = '/', n = 2)[, 2]
 
     # Prepare output tables
-    outputTablealexNet <- data.frame()
+    outputTableResNet18 <- data.frame()
 
-    # Predict using alexNet
-    alexNetPred <- predict(modelalexNetGibbon, test_dl)
+    # Predict using ResNet18
+    ResNet18Pred <- predict(modelResNet18Gibbon, test_dl)
 
     # Return the index of the max values (i.e. which class)
-    PredMPS <- torch_argmax(alexNetPred, dim = 2)
+    PredMPS <- torch_argmax(ResNet18Pred, dim = 2)
 
     # Save to cpu
     PredMPS <- as_array(torch_tensor(PredMPS, device = 'cpu'))
@@ -209,7 +206,7 @@ train_alexNet_multiClass <- function(
     print(modelResnetGibbonPred)
 
     # Calculate the probability associated with each class
-    Probability <- as_array(torch_tensor(nnf_softmax(alexNetPred, dim = 2), device = 'cpu'))
+    Probability <- as_array(torch_tensor(nnf_softmax(ResNet18Pred, dim = 2), device = 'cpu'))
 
     # Find the index of the maximum value in each row
     max_prob_idx <- apply(Probability, 1, which.max)
@@ -220,14 +217,14 @@ train_alexNet_multiClass <- function(
     # Convert the integer predictions to factor and then to character based on the levels
     modelResnetGibbonNames <- factor(modelResnetGibbonPred, levels = 1:length(class_names), labels = class_names)
 
-    outputTablealexNet <- cbind.data.frame(modelResnetGibbonNames, predicted_class_probability)
-    colnames(outputTablealexNet) <- c('PredictedClass', 'Probability')
-    outputTablealexNet$ActualClass <- Folder
+    outputTableResNet18 <- cbind.data.frame(modelResnetGibbonNames, predicted_class_probability)
+    colnames(outputTableResNet18) <- c('PredictedClass', 'Probability')
+    outputTableResNet18$ActualClass <- Folder
 
     # Save the output table as CSV file
-    write.csv(outputTablealexNet, paste(output.base.path, trainingfolder, n.epoch, "output_alexNet.csv", sep = '_'), row.names = FALSE)
+    write.csv(outputTableResNet18, paste(output.base.path, trainingfolder, n.epoch, "output_ResNet18.csv", sep = '_'), row.names = FALSE)
 
-    UniqueClasses <- unique(outputTablealexNet$ActualClass)
+    UniqueClasses <- unique(outputTableResNet18$ActualClass)
     Probability <- as.data.frame(Probability)
     colnames(Probability) <- UniqueClasses
     UniqueClasses <- UniqueClasses[-which(UniqueClasses == noise.category)]
@@ -240,30 +237,30 @@ train_alexNet_multiClass <- function(
     for (b in 1:length(UniqueClasses)) {
 
 
-      outputTablealexNetSub <-outputTablealexNet
-      outputTablealexNetSub$Probability <- Probability[,c(UniqueClasses[b] )]
+      outputTableResNet18Sub <-outputTableResNet18
+      outputTableResNet18Sub$Probability <- Probability[,c(UniqueClasses[b] )]
 
-      outputTablealexNetSub$ActualClass <-
-        ifelse(outputTablealexNetSub$ActualClass==UniqueClasses[b],UniqueClasses[b],noise.category)
+      outputTableResNet18Sub$ActualClass <-
+        ifelse(outputTableResNet18Sub$ActualClass==UniqueClasses[b],UniqueClasses[b],noise.category)
 
       for (threshold in thresholds) {
-        alexNetPredictedClass <- ifelse((outputTablealexNetSub$Probability > threshold ), UniqueClasses[b], noise.category)
+        ResNet18PredictedClass <- ifelse((outputTableResNet18Sub$Probability > threshold ), UniqueClasses[b], noise.category)
 
-        alexNetPerf <- caret::confusionMatrix(
-          as.factor(alexNetPredictedClass),
-          as.factor(outputTablealexNetSub$ActualClass),
+        ResNet18Perf <- caret::confusionMatrix(
+          as.factor(ResNet18PredictedClass),
+          as.factor(outputTableResNet18Sub$ActualClass),
           mode = 'everything'
         )$byClass
 
-        TempRowalexNet <- cbind.data.frame(
-          t(alexNetPerf),
-          alexNet.loss,
+        TempRowResNet18 <- cbind.data.frame(
+          t(ResNet18Perf),
+          ResNet18.loss,
           trainingfolder,
           n.epoch,
-          'alexNet'
+          'ResNet18'
         )
 
-        colnames(TempRowalexNet) <- c(
+        colnames(TempRowResNet18) <- c(
           "Sensitivity", "Specificity", "Pos Pred Value", "Neg Pred Value",
           "Precision", "Recall", "F1", "Prevalence", "Detection Rate",
           "Detection Prevalence", "Balanced Accuracy",
@@ -273,37 +270,37 @@ train_alexNet_multiClass <- function(
           "CNN Architecture"
         )
 
-        ROCRpred <- ROCR::prediction(predictions = outputTablealexNetSub$Probability, labels = outputTablealexNetSub$ActualClass)
+        ROCRpred <- ROCR::prediction(predictions = outputTableResNet18Sub$Probability, labels = outputTableResNet18Sub$ActualClass)
         AUCval <- ROCR::performance(ROCRpred, 'auc')
-        TempRowalexNet$AUC <- AUCval@y.values[[1]]
-        TempRowalexNet$Threshold <- as.character(threshold)
-        TempRowalexNet$Frozen <- unfreeze
-        TempRowalexNet$Class <- UniqueClasses[b]
-        TempRowalexNet$Class <- as.factor(TempRowalexNet$Class)
-        CombinedTempRow <- rbind.data.frame(CombinedTempRow, TempRowalexNet)
+        TempRowResNet18$AUC <- AUCval@y.values[[1]]
+        TempRowResNet18$Threshold <- as.character(threshold)
+        TempRowResNet18$Frozen <- unfreeze
+        TempRowResNet18$Class <- UniqueClasses[b]
+        TempRowResNet18$Class <- as.factor(TempRowResNet18$Class)
+        CombinedTempRow <- rbind.data.frame(CombinedTempRow, TempRowResNet18)
       }
     }
 
-    filename <- paste(output.base.path, 'performance_tables/', trainingfolder, '_', n.epoch, '_', '_TransferLearningCNNDFalexNet.csv', sep = '')
+    filename <- paste(output.base.path, 'performance_tables/', trainingfolder, '_', n.epoch, '_', '_TransferLearningCNNDFResNet18.csv', sep = '')
     write.csv(CombinedTempRow, filename, row.names = FALSE)
 
-    filename_multi <- paste(output.base.path, 'performance_tables_multi/', trainingfolder, '_', n.epoch, '_', '_TransferLearningCNNDFalexNetmulti.csv', sep = '')
+    filename_multi <- paste(output.base.path, 'performance_tables_multi/', trainingfolder, '_', n.epoch, '_', '_TransferLearningCNNDFResNet18multi.csv', sep = '')
 
-    alexNetPerf <- caret::confusionMatrix(
-      as.factor(outputTablealexNet$PredictedClass),
-      as.factor(outputTablealexNet$ActualClass),
+    ResNet18Perf <- caret::confusionMatrix(
+      as.factor(outputTableResNet18$PredictedClass),
+      as.factor(outputTableResNet18$ActualClass),
       mode = 'everything'
     )$byClass
 
-    TempRowalexNet <- cbind.data.frame(
-      (alexNetPerf),
-      alexNet.loss,
+    TempRowResNet18 <- cbind.data.frame(
+      (ResNet18Perf),
+      ResNet18.loss,
       trainingfolder,
       n.epoch,
-      'alexNet'
+      'ResNet18'
     )
 
-    colnames(TempRowalexNet) <- c(
+    colnames(TempRowResNet18) <- c(
       "Sensitivity", "Specificity", "Pos Pred Value", "Neg Pred Value",
       "Precision", "Recall", "F1", "Prevalence", "Detection Rate",
       "Detection Prevalence", "Balanced Accuracy",
@@ -313,10 +310,10 @@ train_alexNet_multiClass <- function(
       "CNN Architecture"
     )
 
-    TempRowalexNet$Class <- str_split_fixed(rownames(TempRowalexNet), pattern = ': ', n = 2)[, 2]
+    TempRowResNet18$Class <- str_split_fixed(rownames(TempRowResNet18), pattern = ': ', n = 2)[, 2]
 
-    write.csv(TempRowalexNet, filename_multi, row.names = FALSE)
+    write.csv(TempRowResNet18, filename_multi, row.names = FALSE)
 
-    rm(modelalexNetGibbon)
+    rm(modelResNet18Gibbon)
   }
 }

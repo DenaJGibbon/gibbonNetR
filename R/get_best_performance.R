@@ -12,11 +12,23 @@
 #' @importFrom ggpubr ggline ggscatter
 #' @importFrom magrittr %>%
 #' @export
-get_best_performance <- function(performancetables.dir) {
+get_best_performance <- function(performancetables.dir, model.type='multi',class='hornbill.helmeted') {
 
   # Read all CSV files from the directory
   FrozenFiles <- list.files(performancetables.dir, full.names = TRUE)
   FrozenCombined <- suppressMessages(map_dfr(FrozenFiles, read_csv))
+
+  if( class %in% FrozenCombined$Class == FALSE){
+    print(paste('Not detected', class, 'Here are the present classes:',unique(FrozenCombined$Class)))
+    break
+  }
+
+  if(model.type=='multi'){
+
+    print(paste('Evaluating performance for', class, 'Here are the present classes:', paste(unique(FrozenCombined$Class))))
+
+    FrozenCombined <-  droplevels(subset(FrozenCombined,Class==class))
+    }
 
   unique_training_data <- unique(FrozenCombined$`Training Data`)
 
@@ -42,17 +54,20 @@ get_best_performance <- function(performancetables.dir) {
     best_auc_results <- rbind(best_auc_results, max_auc_row)
   }
 
+
   # Create visualizations
-  f1_plot <- ggpubr::ggline(data = FrozenCombined, x = 'Threshold', y = 'F1', color = 'CNN Architecture', facet.by = 'N epochs')
+  f1_plot <- ggpubr::ggline(data = FrozenCombined, x = 'Threshold', y = 'F1',
+                            color = 'CNN Architecture', facet.by = 'N epochs')+ ggtitle(paste('Results for', class, 'class'))
   FrozenCombined$Recall <- round(FrozenCombined$Recall,1)
-  pr_plot <- ggpubr::ggline(data = FrozenCombined, x = 'Recall', y = 'Precision', color = 'CNN Architecture', facet.by = 'N epochs')
+  pr_plot <- ggpubr::ggline(data = FrozenCombined, x = 'Recall', y = 'Precision',
+                            color = 'CNN Architecture', facet.by = 'N epochs')+ ggtitle(paste('Results for', class, 'class'))
 
 
   FrozenCombined$TPR <- FrozenCombined$Sensitivity
   FrozenCombined$FPR <- 1-FrozenCombined$Specificity
   FPRTPR_plot <-ggpubr::ggline(data = FrozenCombined,  x = 'FPR', y = 'TPR',
                                color = 'CNN Architecture', facet.by = 'N epochs',numeric.x.axis = TRUE)+
-    geom_abline(slope=1,intercept=0,lty='dashed')+ coord_cartesian(xlim = c(0, 1), ylim = c(0, 1))
+    geom_abline(slope=1,intercept=0,lty='dashed')+ coord_cartesian(xlim = c(0, 1), ylim = c(0, 1))+ ggtitle(paste('Results for', class, 'class'))
 
 
   print('Best F1 results')
