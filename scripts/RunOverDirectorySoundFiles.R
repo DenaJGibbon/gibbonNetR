@@ -44,34 +44,32 @@ nslash <- str_count(SoundFilePathShort[1], '/') + 1
 SoundFilePathShort <- str_split_fixed(SoundFilePathShort,
                                       pattern = '/', n = nslash)[, nslash]
 
-# Extract the times from the file names
-times <- as.numeric(substr(str_split_fixed(SoundFilePathShort, pattern = '_', n = 3)[, 3], 1, 2))
+# Define the range of times you want to select
+selected_times <- 6:18
 
-# Select the indices of times that are between 6 and 10
-times.index <- which(times == 6 | times == 7 | times == 8 | times == 9 | times == 10 |
-                       times == 11| times == 12 | times == 13 | times == 14 | times == 15 |
-                       times == 16 | times == 17 | times == 18)
-
-# Filter the full file paths and file names based on the selected indices
+# Filter the full file paths and file names based on the selected times
+times.index <- which(times %in% selected_times)
 SoundFilePathFull <- SoundFilePathFull[times.index]
 SoundFilePathShort <- SoundFilePathShort[times.index]
+
 
 # Set parameters for processing sound clips
 clip.duration <- 12       # Duration of each sound clip
 hop.size <- 6             # Hop size for splitting the sound clips
 downsample.rate <- 'NA'   # Downsample rate for audio in Hz, otherwise NA
-threshold <- 0.85         # Threshold for audio detection
+threshold <- 0.97         # Threshold for audio detection
 sav.wav <- T              # Save the extracted sound clips as WAV files?
 UniqueClassesTraining <- c('duet','hornbill.helmeted','hornbill.rhino','long.argus','noise')
 noise.category <- 'noise'
+MaxFreq.khz <- 2
 
 # Create output folders if they don't exist
 dir.create(OutputFolder, recursive = TRUE, showWarnings = FALSE)
 dir.create(OutputFolderSelections, recursive = TRUE, showWarnings = FALSE)
 dir.create(OutputFolderWav, recursive = TRUE, showWarnings = FALSE)
 
-for(x in (1:length(SoundFilePathFull)) ){ tryCatch({
-  RavenSelectionTableDFAlexNet <- data.frame()
+for(x in rev(1:length(SoundFilePathFull)) ){ tryCatch({
+  RavenSelectionTableDFalexNet <- data.frame()
 
   start.time.detection <- Sys.time()
   print(paste(x, 'out of', length(SoundFilePathFull)))
@@ -159,12 +157,12 @@ for(x in (1:length(SoundFilePathFull)) ){ tryCatch({
       jpeg(paste('/Users/denaclink/Desktop/datacopy/Temp/Images/Images','/', SoundFilePathShort[x],'_',start.time[e],'.jpg',sep=''),res = 50)
       short.wav <- short.sound.files[[e]]
 
-      seewave::spectro(short.wav,tlab='',flab='',axisX=F,axisY = F,scale=F,grid=F,flim=c(0.4,3),fastdisp=TRUE,noisereduction=1)
+      seewave::spectro(short.wav,tlab='',flab='',axisX=F,axisY = F,scale=F,grid=F,flim=c(0.4,MaxFreq.khz),fastdisp=TRUE,noisereduction=1)
 
       graphics.off()
     }
 
-    # Predict using AlexNet ----------------------------------------------------
+    # Predict using alexNet ----------------------------------------------------
     print('Classifying images using Top Model')
 
     test.input <- '/Users/denaclink/Desktop/datacopy/Temp/Images/'
@@ -177,7 +175,7 @@ for(x in (1:length(SoundFilePathFull)) ){ tryCatch({
         torchvision::transform_resize(size = c(224, 224)) %>%
         torchvision::transform_normalize(mean = c(0.485, 0.456, 0.406), std = c(0.229, 0.224, 0.225)))
 
-    # AlexNet and VGG19
+    # alexNet and VGG19
     # test_ds <- image_folder_dataset(
     #    file.path(test.input ),
     #    transform = . %>%
@@ -257,8 +255,8 @@ for(x in (1:length(SoundFilePathFull)) ){ tryCatch({
               to= paste(OutputFolder, DetectionClass,'_',
                         image.files.short[DetectionIndices],
                         '_',
-                        round(Probability[DetectionIndices],2),
-                        '_AlexNet_.jpg', sep=''))
+                        round(predicted_class_probability[DetectionIndices],2),
+                        '_alexNet_.jpg', sep=''))
 
     if(sav.wav ==T){
       wav.file.paths <- list.files('/Users/denaclink/Desktop/datacopy/Temp/WavFiles',full.names = T)
@@ -266,8 +264,8 @@ for(x in (1:length(SoundFilePathFull)) ){ tryCatch({
                 to= paste(OutputFolderWav,  DetectionClass,'_',
                           image.files.short[DetectionIndices],
                           '_',
-                          round(Probability[DetectionIndices],2),
-                          '_AlexNet_.wav', sep=''))
+                          round(predicted_class_probability[DetectionIndices],2),
+                          '_alexNet_.wav', sep=''))
     }
 
     Detections <- image.files.short[DetectionIndices]
@@ -281,9 +279,9 @@ for(x in (1:length(SoundFilePathFull)) ){ tryCatch({
       MaxFreq <- rep(2000, length(Detections))
       start.time.new <- as.numeric(str_split_fixed(Detections,pattern = '_',n=4)[,4])
       end.time.new <- start.time.new + clip.duration
-      Probability <- round(Probability[DetectionIndices],2)
+      Probability <- round(predicted_class_probability[DetectionIndices],2)
 
-      RavenSelectionTableDFAlexNetTemp <-
+      RavenSelectionTableDFalexNetTemp <-
         cbind.data.frame(Selection,
                          View,
                          Channel,
@@ -291,8 +289,8 @@ for(x in (1:length(SoundFilePathFull)) ){ tryCatch({
                          MaxFreq,start.time.new,end.time.new,Probability,
                          Detections)
 
-      RavenSelectionTableDFAlexNetTemp <-
-        RavenSelectionTableDFAlexNetTemp[, c(
+      RavenSelectionTableDFalexNetTemp <-
+        RavenSelectionTableDFalexNetTemp[, c(
           "Selection",
           "View",
           "Channel",
@@ -303,7 +301,7 @@ for(x in (1:length(SoundFilePathFull)) ){ tryCatch({
           'Probability',"Detections"
         )]
 
-      colnames(RavenSelectionTableDFAlexNetTemp) <-
+      colnames(RavenSelectionTableDFalexNetTemp) <-
         c(
           "Selection",
           "View",
@@ -316,18 +314,20 @@ for(x in (1:length(SoundFilePathFull)) ){ tryCatch({
           "Detections"
         )
 
-      RavenSelectionTableDFAlexNet <- rbind.data.frame(RavenSelectionTableDFAlexNet,
-                                                       RavenSelectionTableDFAlexNetTemp)
+      RavenSelectionTableDFalexNet <- rbind.data.frame(RavenSelectionTableDFalexNet,
+                                                       RavenSelectionTableDFalexNetTemp)
 
-      if(nrow(RavenSelectionTableDFAlexNet) > 0){
+      if(nrow(RavenSelectionTableDFalexNet) > 0){
         csv.file.name <-
-          paste(OutputFolderSelections, DetectionClass,'_',
+          paste(OutputFolderSelections, paste(unique(DetectionClass),'_',sep='-'),'_',
                 SoundFilePathShort[x],
-                'GibbonAlexNetAllFilesMalaysia.txt',
+                'GibbonalexNetAllFilesMalaysia.txt',
                 sep = '')
 
+        RavenSelectionTableDFalexNet$Class <- DetectionClass
+
         write.table(
-          x = RavenSelectionTableDFAlexNet,
+          x = RavenSelectionTableDFalexNet,
           sep = "\t",
           file = csv.file.name,
           row.names = FALSE,
@@ -342,11 +342,11 @@ for(x in (1:length(SoundFilePathFull)) ){ tryCatch({
     }
   }
 
-  if(nrow(RavenSelectionTableDFAlexNet) == 0){
+  if(nrow(RavenSelectionTableDFalexNet) == 0){
     csv.file.name <-
-      paste(OutputFolderSelections, DetectionClass,'_',
+      paste(OutputFolderSelections, paste(unique(DetectionClass),'_',sep='-'),'_',
             SoundFilePathShort[x],
-            'GibbonAlexNetAllFilesMalaysia.txt',
+            'GibbonalexNetAllFilesMalaysia.txt',
             sep = '')
 
 
