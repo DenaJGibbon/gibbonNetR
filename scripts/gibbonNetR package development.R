@@ -556,7 +556,7 @@ early.stop <- 'yes' # NOTE: Must comment out if don't want early stopping
 
   performancetables.dir <-"/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/multi/_output_unfrozen_TRUE_imagesmalaysiamulti_/performance_tables/"
   PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
-                                                        class='long.argus')
+                                                        class='hornbill.helmeted')
 
   PerformanceOutput$f1_plot
   PerformanceOutput$pr_plot
@@ -587,7 +587,7 @@ early.stop <- 'yes' # NOTE: Must comment out if don't want early stopping
 
 
   PerformanceOutPutTrained <- gibbonNetR::get_best_performance(performancetables.dir='data/performance_tables_multi_trained/',
-                                                               class='duet')
+                                                               class='hornbill.rhino')
 
   PerformanceOutPutTrained$f1_plot
   PerformanceOutPutTrained$best_f1$F1
