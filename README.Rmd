@@ -23,7 +23,7 @@ devtools::install_github("https://github.com/DenaJGibbon/gibbonNetR")
 ```
 
 
-```{r, message=FALSE}
+```{r, message=FALSE, echo=FALSE}
 devtools::load_all("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
 ```
 
@@ -70,7 +70,7 @@ library(torch)
 library(torchvision)
 library(purrr)
 
-input.data.path <-  'data/imagesmalaysia/'
+input.data.path <-  'data/imagesmalaysiamulti/'
 
 # Define transformation pipeline for the images
 transforms <- function(.) {
@@ -134,7 +134,7 @@ images %>%
 
 ```
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, fig.cap='Figure 1. Spectrograms of training clips for CNNs'}
 knitr::include_graphics("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/README_files/spectro.png")
 ```
 
@@ -165,7 +165,7 @@ dir.create(output.data.path)
 # Allow early stopping?
 early.stop <- 'yes' # NOTE: Must comment out if don't want early stopping
 
-gibbonNetR::train_alexnet(input.data.path=input.data.path,
+gibbonNetR::train_alexNet(input.data.path=input.data.path,
                           test.data=test.data.path,
                           unfreeze = TRUE,
                           epoch.iterations=epoch.iterations,
@@ -232,8 +232,9 @@ gibbonNetR::train_ResNet152(input.data.path=input.data.path,
 ## Extracting Performance Data
 
 ```{r}
-performancetables.dir <- '/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/_output_unfrozen_TRUE_imagesmalaysia_/performance_tables/'
-PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir)
+PerformanceOutput <-gibbonNetR::get_best_performance(performancetables.dir='data/performance_tables_multi_trained/',
+                                                               class='duet')
+
 
 ```
 
@@ -246,5 +247,6 @@ PerformanceOutput$FPRTPR_plot
 ```
 
 
-
+## Extracting Performance Data
+Now we can run the trained models over a different dataset to determine generalizability.
 

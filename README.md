@@ -2,7 +2,7 @@ gibbonNetR: R Package for the Use of CNNs and Transfer Learning on
 Acoustic Data
 ================
 Dena J. Clink
-2023-08-20
+2023-09-20
 
 ## Overview
 
@@ -20,10 +20,6 @@ install.packages("devtools")
 
 # Install gibbonNetR
 devtools::install_github("https://github.com/DenaJGibbon/gibbonNetR")
-```
-
-``` r
-devtools::load_all("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
 ```
 
 ## Create spectrogram images
@@ -70,7 +66,7 @@ library(torch)
 library(torchvision)
 library(purrr)
 
-input.data.path <-  'data/imagesmalaysia/'
+input.data.path <-  'data/imagesmalaysiamulti/'
 
 # Define transformation pipeline for the images
 transforms <- function(.) {
@@ -133,7 +129,14 @@ images %>%
   purrr::iwalk(~{plot(.x); title(.y)})
 ```
 
-<img src="README_files/spectro.png" width="2132" />
+<div class="figure">
+
+<img src="README_files/spectro.png" alt="Figure 1. Spectrograms of training clips for CNNs" width="2132" />
+<p class="caption">
+Figure 1. Spectrograms of training clips for CNNs
+</p>
+
+</div>
 
 ## Training the models using gibbonNetR and evaluating on a test set
 
@@ -162,7 +165,7 @@ dir.create(output.data.path)
 # Allow early stopping?
 early.stop <- 'yes' # NOTE: Must comment out if don't want early stopping
 
-gibbonNetR::train_alexnet(input.data.path=input.data.path,
+gibbonNetR::train_alexNet(input.data.path=input.data.path,
                           test.data=test.data.path,
                           unfreeze = TRUE,
                           epoch.iterations=epoch.iterations,
@@ -227,30 +230,30 @@ gibbonNetR::train_ResNet152(input.data.path=input.data.path,
 ## Extracting Performance Data
 
 ``` r
-performancetables.dir <- '/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/_output_unfrozen_TRUE_imagesmalaysia_/performance_tables/'
-PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir)
+PerformanceOutput <-gibbonNetR::get_best_performance(performancetables.dir='data/performance_tables_multi_trained/',
+                                                               class='duet')
 ```
 
+    ## [1] "Evaluating performance for duet Here are the present classes: duet"          
+    ## [2] "Evaluating performance for duet Here are the present classes: hornbill.rhino"
     ## [1] "Best F1 results"
-    ##   Precision    Recall        F1  Training Data N epochs CNN Architecture
-    ## 1 0.9265033 0.9327354 0.9296089 imagesmalaysia        3            VGG19
-    ##   Threshold       AUC
-    ## 1       0.9 0.9031619
+    ##   Precision    Recall        F1 N epochs CNN Architecture        AUC Threshold
+    ## 1 0.8962963 0.9527559 0.9236641        5       modelVGG19 0.06145573       0.1
+    ##   Frozen
+    ## 1  FALSE
     ## [1] "Best Precision results"
-    ##   Precision    Recall        F1  Training Data N epochs CNN Architecture
-    ## 1         1 0.4977578 0.6646707 imagesmalaysia        1         ResNet50
-    ##   Threshold       AUC
-    ## 1       0.1 0.8403089
+    ##   Precision    Recall        F1 N epochs CNN Architecture       AUC Threshold
+    ## 1         1 0.4173228 0.5888889        1       modelVGG16 0.1263684       0.7
+    ##   Frozen
+    ## 1  FALSE
     ## [1] "Best Recall results"
-    ##   Precision Recall        F1  Training Data N epochs CNN Architecture Threshold
-    ## 1 0.8065099      1 0.8928929 imagesmalaysia        1          AlexNet         1
-    ##         AUC
-    ## 1 0.8458416
+    ##   Precision    Recall        F1 N epochs CNN Architecture        AUC Threshold
+    ## 1 0.8962963 0.9527559 0.9236641        5       modelVGG19 0.06145573       0.1
+    ##   Frozen
+    ## 1  FALSE
     ## [1] "Best AUC results"
-    ##   Precision    Recall       F1  Training Data N epochs CNN Architecture
-    ## 1 0.9958333 0.5358744 0.696793 imagesmalaysia        1        ResNet152
-    ##         AUC
-    ## 1 0.9316663
+    ##   Precision    Recall        F1 N epochs CNN Architecture       AUC Frozen
+    ## 1 0.7878788 0.4094488 0.5388601       20       modelVGG16 0.3510659  FALSE
 
 Displaying Performance Plots
 
@@ -258,11 +261,18 @@ Displaying Performance Plots
 PerformanceOutput$f1_plot
 ```
 
+    ## Warning: Removed 6 rows containing missing values (`geom_line()`).
+
+    ## Warning: Removed 31 rows containing missing values (`geom_point()`).
+
 ![](README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ``` r
 PerformanceOutput$pr_plot
 ```
+
+    ## Warning: Removed 6 rows containing missing values (`geom_line()`).
+    ## Removed 31 rows containing missing values (`geom_point()`).
 
 ![](README_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->
 
@@ -271,3 +281,8 @@ PerformanceOutput$FPRTPR_plot
 ```
 
 ![](README_files/figure-gfm/unnamed-chunk-8-3.png)<!-- -->
+
+## Extracting Performance Data
+
+Now we can run the trained models over a different dataset to determine
+generalizability.
