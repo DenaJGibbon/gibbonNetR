@@ -66,7 +66,7 @@ train_CNN_binary <- function(input.data.path, test.data, architecture,
   }
 
   # Location to save the output
-  output.data.path <- paste(output.base.path, trainingfolder, 'unfrozen', unfreeze,  '/', sep='_')
+  output.data.path <- paste(output.base.path, trainingfolder, 'binary', 'unfrozen', unfreeze,  '/', sep='_')
 
   # Create if doesn't exist
   dir.create(output.data.path, showWarnings = FALSE)
@@ -411,7 +411,7 @@ train_CNN_binary <- function(input.data.path, test.data, architecture,
         TrainedModel.loss,
         trainingfolder,
         n.epoch,
-        'TrainedModel'
+        architecture
       )
 
       colnames(TempRowTrainedModel) <- c(
@@ -428,10 +428,9 @@ train_CNN_binary <- function(input.data.path, test.data, architecture,
       CombinedTempRow <- rbind.data.frame(CombinedTempRow, TempRowTrainedModel)
     }
 
-    ROCRpred <-  ROCR::prediction(predictions = outputTableTrainedModel$Probability,
-                                  labels = outputTableTrainedModel$ActualClass)
-    AUCval <- ROCR::performance(ROCRpred,'auc')
-    CombinedTempRow$AUC <- AUCval@y.values[[1]]
+   ROCCurve <- roc(outputTableTrainedModel$ActualClass, outputTableTrainedModel$Probability)
+
+    CombinedTempRow$AUC <- as.numeric(ROCCurve$auc )
 
 
     TransferLearningCNNDF <- rbind.data.frame(TransferLearningCNNDF, CombinedTempRow)

@@ -15,11 +15,14 @@ test.data.path <- 'data/imagesmalaysiamulti/test/'
 # Training data folder short
 trainingfolder.short <- 'imagesmalaysiamulti'
 
+# Whether to unfreeze the layers
+unfreeze.param <- TRUE # FALSE means the features are frozen; TRUE unfrozen
+
 # Number of epochs to include
 epoch.iterations <- c(1)
 
 # Allow early stopping?
-early.stop <- 'yes' # NOTE: Must comment out if don't want early stopping
+early.stop <- 'yes'
 
 gibbonNetR::train_CNN_multi(input.data.path=input.data.path,
                              architecture ='alexnet',
@@ -93,6 +96,19 @@ gibbonNetR::train_CNN_multi(input.data.path=input.data.path,
                             trainingfolder=trainingfolder.short,
                             noise.category = "noise")
 
+
+performancetables.dir.multi <- '/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/test/_imagesmalaysiamulti_multi_unfrozen_TRUE_/performance_tables_multi'
+
+PerformanceOutputMulti <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir.multi,
+                                                      class='duet',
+                                                      model.type = "multi")
+
+PerformanceOutputMulti$f1_plot
+PerformanceOutputMulti$pr_plot
+PerformanceOutputMulti$FPRTPR_plot
+PerformanceOutputMulti$best_f1$F1
+as.data.frame(PerformanceOutputMulti$best_auc)
+
 # Binary Models using 'train_CNN_binary' ----------------------------------
 
 # Location of spectrogram images for training
@@ -111,7 +127,7 @@ unfreeze.param <- TRUE # FALSE means the features are frozen; TRUE unfrozen
 epoch.iterations <- c(1)
 
 # Allow early stopping?
-early.stop <- 'yes' # NOTE: Must comment out if don't want early stopping
+early.stop <- 'yes'
 
 gibbonNetR::train_CNN_binary(input.data.path=input.data.path,
                           architecture ='alexnet',
@@ -186,8 +202,16 @@ gibbonNetR::train_CNN_binary(input.data.path=input.data.path,
                              negative.class="Noise")
 
 
+performancetables.dir <- '/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/test/_imagesmalaysia_binary_unfrozen_TRUE_/performance_tables/'
+PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
+                                                      class='Gibbons',
+                                                      model.type = "binary")
 
-
+PerformanceOutput$f1_plot
+PerformanceOutput$pr_plot
+PerformanceOutput$FPRTPR_plot
+PerformanceOutput$best_f1$F1
+as.data.frame(PerformanceOutput$best_auc)
 # Process spectrogram images for testing data:-------------------------------------------------------------------------
 # The splits are set to ensure all data (100%) goes into the relevant folder.
 gibbonNetR::spectrogram_images(
