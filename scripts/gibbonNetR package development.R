@@ -84,7 +84,7 @@ if (length(trainValidationOverlap) == 0 & length(trainTestOverlap) == 0 & length
 library(dplyr)
 
 # Location of spectrogram images for training
-input.data.path <-  'data/imagesmalaysia/'
+input.data.path <-  'data/imagesmalaysiamulti/'
 
 # Create a dataset of images:
 # - The images are sourced from the 'train' subdirectory within the specified path `input.data.path`.
@@ -114,7 +114,7 @@ batch <- train_dl$.iter()$.next()
 
 # Extract the labels for the batch and determine class names
 classes <- batch[[2]]
-class_names <- ifelse(batch$y, 'Noise','Gibbons')
+#class_names <- ifelse(batch$y, 'Noise','Gibbons')
 
 # Convert the batch tensor of images to an array and process them:
 # - The image tensor is permuted to change the dimension order.
@@ -138,7 +138,7 @@ par(mfcol = c(4,6), mar = rep(1, 4))
 # - Finally, iterate over each image, plotting it and setting its title.
 images %>%
   purrr::array_tree(1) %>%
-  purrr::set_names(class_names) %>%
+  #purrr::set_names(class_names) %>%
   purrr::map(as.raster, max = 255) %>%
   purrr::iwalk(~{plot(.x); title(.y)})
 
@@ -232,8 +232,10 @@ gibbonNetR::train_ResNet152(input.data.path=input.data.path,
                             positive.class="Gibbons",
                             negative.class="Noise")
 
-performancetables.dir <- '/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/_output_unfrozen_TRUE_imagesmalaysia_/performance_tables/'
-PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir)
+performancetables.dir <- '/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/_output_unfrozen_FALSE_imagesmalaysia_/performance_tables/'
+PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
+                                                      class='Gibbon',
+                                                      model.type = "binary")
 
 PerformanceOutput$f1_plot
 PerformanceOutput$pr_plot
@@ -548,7 +550,7 @@ early.stop <- 'yes' # NOTE: Must comment out if don't want early stopping
     input.data.path = input.data.path,
     test.data = test.data.path,
     unfreeze = TRUE,
-    epoch.iterations = 1,
+    epoch.iterations = epoch.iterations,
     early.stop = early.stop,
     output.base.path = output.data.path,
     trainingfolder = trainingfolder.short
@@ -556,7 +558,7 @@ early.stop <- 'yes' # NOTE: Must comment out if don't want early stopping
 
   performancetables.dir <-"/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/multi/_output_unfrozen_TRUE_imagesmalaysiamulti_/performance_tables/"
   PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
-                                                        class='long.argus')
+                                                        class='hornbill.helmeted')
 
   PerformanceOutput$f1_plot
   PerformanceOutput$pr_plot
@@ -586,8 +588,8 @@ early.stop <- 'yes' # NOTE: Must comment out if don't want early stopping
                                     output_dir='data/')
 
 
-  PerformanceOutPutTrained <- gibbonNetR::get_best_performance(performancetables.dir='data/performance_tables_multi_trained/',
-                                                               class='hornbill.rhino')
+  PerformanceOutPutTrained <- gibbonNetR::get_best_performance(performancetables.dir='/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/multi/_output_unfrozen_TRUE_imagesmalaysiamulti_/performance_tables/',
+                                                               class='hornbill.helmeted')
 
   PerformanceOutPutTrained$f1_plot
   PerformanceOutPutTrained$best_f1$F1

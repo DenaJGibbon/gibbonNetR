@@ -8,6 +8,7 @@ train_ResNet152(
   input.data.path,
   test.data,
   unfreeze = TRUE,
+  learning_rate,
   epoch.iterations = 1,
   early.stop = "yes",
   output.base.path = "data/",

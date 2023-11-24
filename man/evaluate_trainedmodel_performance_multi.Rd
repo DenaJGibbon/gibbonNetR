@@ -8,7 +8,10 @@ evaluate_trainedmodel_performance_multi(
   trained_models_dir,
   image_data_dir,
   output_dir = "data/",
-  noise.category = "noise"
+  trainingfolder,
+  class_names,
+  noise.category = "noise",
+  unfreeze = "TRUE"
 )
 }
 \arguments{
