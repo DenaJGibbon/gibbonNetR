@@ -18,17 +18,19 @@ get_best_performance <- function(performancetables.dir, model.type='multi',class
   FrozenFiles <- list.files(performancetables.dir, full.names = TRUE)
   FrozenCombined <- suppressMessages(map_dfr(FrozenFiles, read_csv))
 
-  if( class %in% FrozenCombined$Class == FALSE){
-    print(paste('Not detected', class, 'Here are the present classes:',unique(FrozenCombined$Class)))
-    break
-  }
-
   if(model.type=='multi'){
+
+    if( class %in% FrozenCombined$Class == FALSE){
+      print(paste('Not detected', class, 'Here are the present classes:',unique(FrozenCombined$Class)))
+      break
+    }
+
+
 
     print(paste('Evaluating performance for', class, 'Here are the present classes:', paste(unique(FrozenCombined$Class))))
 
     FrozenCombined <-  droplevels(subset(FrozenCombined,Class==class))
-    }
+  }
 
   unique_training_data <- unique(FrozenCombined$`Training Data`)
 
@@ -40,14 +42,16 @@ get_best_performance <- function(performancetables.dir, model.type='multi',class
   # Loop through each 'TrainingData' type and extract best performance metrics
   for (td in unique_training_data) {
     subset_data <- subset(FrozenCombined, `Training Data` == td)
-
-    max_f1_row <- subset_data[which.max(subset_data$F1), ]
+    MaxF1 <- max(subset_data$F1,na.rm = TRUE)
+    max_f1_row <- subset(subset_data, F1 == MaxF1)
     best_f1_results <- rbind(best_f1_results, max_f1_row)
 
-    max_precision_row <- subset_data[which.max(subset_data$Precision), ]
+    MaxPrecision <- max(subset_data$Precision,na.rm = TRUE)
+    max_precision_row <- subset(subset_data, Precision == MaxPrecision)
     best_precision_results <- rbind(best_precision_results, max_precision_row[which.max(max_precision_row$F1), ])
 
-    max_recall_row <- subset_data[which.max(subset_data$Recall), ]
+    MaxRecall <-  max(subset_data$Recall,na.rm = TRUE)
+    max_recall_row <- subset(subset_data, Recall == MaxRecall)
     best_recall_results <- rbind(best_recall_results, max_recall_row[which.max(max_recall_row$F1), ])
 
     max_auc_row <- subset_data[which.max(subset_data$AUC), ]
@@ -71,6 +75,7 @@ get_best_performance <- function(performancetables.dir, model.type='multi',class
 
 
   print('Best F1 results')
+  print(best_f1_results$Class)
   print(as.data.frame(best_f1_results[,c(5:7,13:17)]))
 
   print('Best Precision results')

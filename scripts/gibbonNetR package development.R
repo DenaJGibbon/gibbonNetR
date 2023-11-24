@@ -4,6 +4,189 @@ devtools::document()
 devtools::load_all("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
 
 
+# Multi-class models using 'train_CNN_multi' ------------------------------
+
+# Location of spectrogram images for training
+input.data.path <-  'data/imagesmalaysiamulti/'
+
+# Location of spectrogram images for testing
+test.data.path <- 'data/imagesmalaysiamulti/test/'
+
+# Training data folder short
+trainingfolder.short <- 'imagesmalaysiamulti'
+
+# Number of epochs to include
+epoch.iterations <- c(1)
+
+# Allow early stopping?
+early.stop <- 'yes' # NOTE: Must comment out if don't want early stopping
+
+gibbonNetR::train_CNN_multi(input.data.path=input.data.path,
+                             architecture ='alexnet',
+                             learning_rate = 0.001,
+                             test.data=test.data.path,
+                             unfreeze = TRUE,
+                             epoch.iterations=epoch.iterations,
+                             save.model= TRUE,
+                             early.stop = "yes",
+                             output.base.path = "data/test/",
+                             trainingfolder=trainingfolder.short,
+                             noise.category = "noise")
+
+gibbonNetR::train_CNN_multi(input.data.path=input.data.path,
+                            architecture ='vgg16',
+                            learning_rate = 0.001,
+                            test.data=test.data.path,
+                            unfreeze = TRUE,
+                            epoch.iterations=epoch.iterations,
+                            save.model= TRUE,
+                            early.stop = "yes",
+                            output.base.path = "data/test/",
+                            trainingfolder=trainingfolder.short,
+                            noise.category = "noise")
+
+gibbonNetR::train_CNN_multi(input.data.path=input.data.path,
+                            architecture ='vgg19',
+                            learning_rate = 0.001,
+                            test.data=test.data.path,
+                            unfreeze = TRUE,
+                            epoch.iterations=epoch.iterations,
+                            save.model= TRUE,
+                            early.stop = "yes",
+                            output.base.path = "data/test/",
+                            trainingfolder=trainingfolder.short,
+                            noise.category = "noise")
+
+gibbonNetR::train_CNN_multi(input.data.path=input.data.path,
+                            architecture ='resnet18',
+                            learning_rate = 0.001,
+                            test.data=test.data.path,
+                            unfreeze = TRUE,
+                            epoch.iterations=epoch.iterations,
+                            save.model= TRUE,
+                            early.stop = "yes",
+                            output.base.path = "data/test/",
+                            trainingfolder=trainingfolder.short,
+                            noise.category = "noise")
+
+gibbonNetR::train_CNN_multi(input.data.path=input.data.path,
+                            architecture ='resnet50',
+                            learning_rate = 0.001,
+                            test.data=test.data.path,
+                            unfreeze = TRUE,
+                            epoch.iterations=epoch.iterations,
+                            save.model= TRUE,
+                            early.stop = "yes",
+                            output.base.path = "data/test/",
+                            trainingfolder=trainingfolder.short,
+                            noise.category = "noise")
+
+gibbonNetR::train_CNN_multi(input.data.path=input.data.path,
+                            architecture ='resnet152',
+                            learning_rate = 0.001,
+                            test.data=test.data.path,
+                            unfreeze = TRUE,
+                            epoch.iterations=epoch.iterations,
+                            save.model= TRUE,
+                            early.stop = "yes",
+                            output.base.path = "data/test/",
+                            trainingfolder=trainingfolder.short,
+                            noise.category = "noise")
+
+# Binary Models using 'train_CNN_binary' ----------------------------------
+
+# Location of spectrogram images for training
+input.data.path <-  'data/imagesmalaysia/'
+
+# Location of spectrogram images for testing
+test.data.path <- 'data/imagesmalaysia/test/'
+
+# Training data folder short
+trainingfolder.short <- 'imagesmalaysia'
+
+# Whether to unfreeze the layers
+unfreeze.param <- TRUE # FALSE means the features are frozen; TRUE unfrozen
+
+# Number of epochs to include
+epoch.iterations <- c(1)
+
+# Allow early stopping?
+early.stop <- 'yes' # NOTE: Must comment out if don't want early stopping
+
+gibbonNetR::train_CNN_binary(input.data.path=input.data.path,
+                          architecture ='alexnet',
+                          learning_rate = 0.001,
+                          test.data=test.data.path,
+                          unfreeze = TRUE,
+                          epoch.iterations=epoch.iterations,
+                          early.stop = "yes",
+                          output.base.path = "data/test/",
+                          trainingfolder=trainingfolder.short,
+                          positive.class="Gibbons",
+                          negative.class="Noise")
+
+gibbonNetR::train_CNN_binary(input.data.path=input.data.path,
+                             architecture ='vgg16',
+                             learning_rate = 0.001,
+                             test.data=test.data.path,
+                             unfreeze = TRUE,
+                             epoch.iterations=epoch.iterations,
+                             early.stop = "yes",
+                             output.base.path = "data/test/",
+                             trainingfolder=trainingfolder.short,
+                             positive.class="Gibbons",
+                             negative.class="Noise")
+
+gibbonNetR::train_CNN_binary(input.data.path=input.data.path,
+                             architecture ='vgg19',
+                             learning_rate = 0.001,
+                             test.data=test.data.path,
+                             unfreeze = TRUE,
+                             epoch.iterations=epoch.iterations,
+                             early.stop = "yes",
+                             output.base.path = "data/test/",
+                             trainingfolder=trainingfolder.short,
+                             positive.class="Gibbons",
+                             negative.class="Noise")
+
+gibbonNetR::train_CNN_binary(input.data.path=input.data.path,
+                             architecture ='resnet18',
+                             learning_rate = 0.001,
+                             test.data=test.data.path,
+                             unfreeze = TRUE,
+                             epoch.iterations=epoch.iterations,
+                             early.stop = "yes",
+                             output.base.path = "data/test/",
+                             trainingfolder=trainingfolder.short,
+                             positive.class="Gibbons",
+                             negative.class="Noise")
+
+gibbonNetR::train_CNN_binary(input.data.path=input.data.path,
+                             architecture ='resnet50',
+                             learning_rate = 0.001,
+                             test.data=test.data.path,
+                             unfreeze = TRUE,
+                             epoch.iterations=epoch.iterations,
+                             early.stop = "yes",
+                             output.base.path = "data/test/",
+                             trainingfolder=trainingfolder.short,
+                             positive.class="Gibbons",
+                             negative.class="Noise")
+
+gibbonNetR::train_CNN_binary(input.data.path=input.data.path,
+                             architecture ='resnet152',
+                             learning_rate = 0.001,
+                             test.data=test.data.path,
+                             unfreeze = TRUE,
+                             epoch.iterations=epoch.iterations,
+                             early.stop = "yes",
+                             output.base.path = "data/test/",
+                             trainingfolder=trainingfolder.short,
+                             positive.class="Gibbons",
+                             negative.class="Noise")
+
+
+
 
 # Process spectrogram images for testing data:-------------------------------------------------------------------------
 # The splits are set to ensure all data (100%) goes into the relevant folder.

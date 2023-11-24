@@ -11,6 +11,7 @@ train_CNN_binary(
   unfreeze = TRUE,
   batch_size = 32,
   learning_rate,
+  save.model = FALSE,
   epoch.iterations = 1,
   early.stop = "yes",
   output.base.path = "data/",
@@ -32,6 +33,8 @@ Default is TRUE.}
 \item{batch_size}{Numeric. Batch size for training model.}
 
 \item{learning_rate}{Numeric. The learning rate for training the model.}
+
+\item{save.model}{Logical. Whether to save model for future use.}
 
 \item{epoch.iterations}{List of integers. The number of epochs for training the model. Default is 1.}
 

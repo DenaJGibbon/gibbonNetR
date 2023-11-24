@@ -10,10 +10,10 @@
 #' @importFrom stringr str_split_fixed str_detect
 #' @importFrom purrr %>%
 #' @export
-evaluate_trainedmodel_performance_multi <- function(trained_models_dir, image_data_dir, output_dir='data/',
-                                                    noise.category='noise') {
+evaluate_trainedmodel_performance_multi <- function(trained_models_dir, image_data_dir, output_dir='data/',trainingfolder,
+                                                    class_names,
+                                                    noise.category='noise',unfreeze='TRUE') {
 
-  tryCatch({
   # List trained models
   trained_models <- list.files(trained_models_dir, pattern = '.pt', full.names = TRUE)
 
@@ -51,8 +51,9 @@ evaluate_trainedmodel_performance_multi <- function(trained_models_dir, image_da
         torchvision::transform_normalize(mean = c(0.485, 0.456, 0.406), std = c(0.229, 0.224, 0.225))
     }
 
-    test_ds <- image_folder_dataset(image_data_dir, transform = transform_list, target_transform = function(x) as.double(x) - 1)
+    test_ds <- image_folder_dataset(image_data_dir, transform = transform_list)
     test_dl <- dataloader(test_ds, batch_size = 32, shuffle =FALSE)
+
 
     # Predict using
     Pred <- predict(model, test_dl)
@@ -86,7 +87,7 @@ evaluate_trainedmodel_performance_multi <- function(trained_models_dir, image_da
 
     UniqueClasses <- unique(outputTable$ActualClass)
     Probability <- as.data.frame(Probability)
-    colnames(Probability) <- UniqueClasses
+    colnames(Probability) <- class_names
     UniqueClasses <- UniqueClasses[-which(UniqueClasses == noise.category)]
 
     # Initialize data frames
@@ -95,7 +96,7 @@ evaluate_trainedmodel_performance_multi <- function(trained_models_dir, image_da
     thresholds <- seq(0.1, 1, 0.1)
 
     for (b in 1:length(UniqueClasses)) {
-
+      print(b)
       outputTableSub <-outputTable
       outputTableSub$Probability <- Probability[,c(UniqueClasses[b] )]
 
@@ -103,6 +104,7 @@ evaluate_trainedmodel_performance_multi <- function(trained_models_dir, image_da
         ifelse(outputTableSub$ActualClass==UniqueClasses[b],UniqueClasses[b],noise.category)
 
       for (threshold in thresholds) {
+        print(threshold)
         PredictedClass <- ifelse((outputTableSub$Probability > threshold ), UniqueClasses[b], noise.category)
 
         Perf <- caret::confusionMatrix(
@@ -136,50 +138,45 @@ evaluate_trainedmodel_performance_multi <- function(trained_models_dir, image_da
         TempRow$Class <- as.factor(TempRow$Class)
         CombinedTempRow <- rbind.data.frame(CombinedTempRow, TempRow)
       }
+
+      filename <- paste(output_dir,'performance_tables_multi_trained/', training_data, '_', n_epochs, '_', model_type, '_TransferLearningTrainedModel.csv', sep = '')
+
+      filename_multi <- paste(output_dir, '/performance_tables_multi_trained_combined/', trainingfolder, '_', n_epochs, '_', model_type,'_TransferLearningCNNDFmulti.csv', sep = '')
+
+      dir.create(paste(output_dir, '/performance_tables_multi_trained/', sep = ''))
+      dir.create(paste(output_dir, '/performance_tables_multi_trained_combined/', sep = ''))
+
+      write.csv(CombinedTempRow, filename, row.names = FALSE)
+
+      Indexout <- which(outputTable$PredictedClass %in% outputTable$ActualClass==FALSE)
+      outputTable$PredictedClass[Indexout] <- noise.category
+      Perf <- caret::confusionMatrix(
+        as.factor( droplevels(outputTable$PredictedClass)),
+        as.factor(outputTable$ActualClass),
+        mode = 'everything'
+      )$byClass
+
+      TempRow <- cbind.data.frame(
+        t(Perf),
+        trainingfolder,
+        n_epochs,
+        model_type
+      )
+
+      colnames(TempRow) <- c(
+        "Sensitivity", "Specificity", "Pos Pred Value", "Neg Pred Value",
+        "Precision", "Recall", "F1", "Prevalence", "Detection Rate",
+        "Detection Prevalence", "Balanced Accuracy",
+        "Training Data",
+        "N epochs",
+        "CNN Architecture"
+      )
+
+      TempRow$Class <- UniqueClasses[b]
+
+      write.csv(TempRow, filename_multi, row.names = FALSE)
+
+      rm(model)
     }
-
-    filename <- paste(output_dir,'performance_tables_multi_trained/', training_data, '_', n_epochs, '_', model_type, '_TransferLearningTrainedModel.csv', sep = '')
-
-    filename_multi <- paste(output_dir, '/performance_tables_multi_trained_combined/', trainingfolder, '_', n_epochs, '_', model_type,'_TransferLearningCNNDFmulti.csv', sep = '')
-
-    dir.create(paste(output_dir, '/performance_tables_multi_trained/', sep = ''))
-    dir.create(paste(output_dir, '/performance_tables_multi_trained_combined/', sep = ''))
-
-    write.csv(CombinedTempRow, filename, row.names = FALSE)
-
-    Indexout <- which(outputTable$PredictedClass %in% outputTable$ActualClass==FALSE)
-    outputTable$PredictedClass[Indexout] <- noise.category
-    Perf <- caret::confusionMatrix(
-      as.factor( droplevels(outputTable$PredictedClass)),
-      as.factor(outputTable$ActualClass),
-      mode = 'everything'
-    )$byClass
-
-    TempRow <- cbind.data.frame(
-      (Perf),
-      trainingfolder,
-      n_epochs,
-      model_type
-    )
-
-    colnames(TempRow) <- c(
-      "Sensitivity", "Specificity", "Pos Pred Value", "Neg Pred Value",
-      "Precision", "Recall", "F1", "Prevalence", "Detection Rate",
-      "Detection Prevalence", "Balanced Accuracy",
-      "Training Data",
-      "N epochs",
-      "CNN Architecture"
-    )
-
-    TempRow$Class <- str_split_fixed(rownames(TempRow), pattern = ': ', n = 2)[, 2]
-
-    write.csv(TempRow, filename_multi, row.names = FALSE)
-
-    rm(model)
   }
-  }, error = function(e) {
-    # Handle the error here (e.g., print an error message)
-    cat("Error occurred:", conditionMessage(e), "\n")
-    # Optionally, you can log the error, save relevant information, or take other actions.
-  })
 }
