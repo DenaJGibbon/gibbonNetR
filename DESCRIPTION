@@ -19,7 +19,8 @@ Depends:
     tuneR,
     dbscan,
     caret,
-    aricode
+    aricode,
+    pROC
 Imports:
     tibble
 Suggests: 
