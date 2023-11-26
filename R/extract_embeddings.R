@@ -42,6 +42,7 @@ extract_embeddings <- function(test_input, model_path, target_class) {
   # Load the fine-tuned model
   fine_tuned_model <- luz_load(model_path)
 
+
   # Create a dataset from the test images
   test_ds <- image_folder_dataset(
     file.path(test_input),
@@ -97,8 +98,7 @@ extract_embeddings <- function(test_input, model_path, target_class) {
 
   TempName <- list.files(test_input, recursive = TRUE)
 
-  Embeddings$Label <- str_split_fixed(TempName, pattern = '/', n = 2)[, 2]
-  Embeddings$Label <- paste(str_split_fixed(Embeddings$Label, pattern = '_', n = 3)[, 1])
+  Embeddings$Label <- dirname(TempName)
 
   EmbeddingsM2.umap <- umap::umap(Embeddings[, -c(1025)], controlscale = TRUE, scale = 3, n_neighbors = 5)
 
@@ -138,6 +138,12 @@ extract_embeddings <- function(test_input, model_path, target_class) {
   # Find the cluster with the most observations of the target class
   class_counts <- table(Embeddings$Label, TempCluster$cluster)
 
+  if( target_class %in% Embeddings$Label == FALSE){
+    print('target_class not included in test_input folder names' )
+    break
+
+  }
+
   cluster_with_most_class <- colnames(class_counts)[which.max(class_counts[target_class, ])]
 
   Binary <- ifelse(TempCluster$cluster == cluster_with_most_class, target_class, 'Noise')
@@ -156,7 +162,7 @@ extract_embeddings <- function(test_input, model_path, target_class) {
   return(list(
     EmbeddingsCombined = EmbeddingsCombined,
     NMI = NMI(Binary, BinaryLabels),
-    ConfusionMatrix = ConfMat$byClass
+    ConfusionMatrixUnsupervisedAssigment = ConfMat$byClass
   ))
 }
 
