@@ -226,7 +226,7 @@ as.data.frame(PerformanceOutput$best_auc)
 ModelPath <- "/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/test/_imagesmalaysia_binary_unfrozen_TRUE_/_imagesmalaysia_5_alexnet_model.pt"
 result <- extract_embeddings(test_input="/Users/denaclink/Desktop/JahooArray/AlexNet27_09_22/Detections/",
                                       model_path=ModelPath,
-                                     target_class = "duet")
+                                     target_class = "FemaleDetectionsTP")
 
 result$EmbeddingsCombined
 result$NMI
@@ -416,5 +416,30 @@ if (length(trainValidationOverlap) == 0 & length(trainTestOverlap) == 0 & length
     cat("Overlap between validation and test datasets:\n", validationTestOverlap, "\n")
   }
 }
+
+
+# Run trained model over sound directory -------------------------------------------------------------------------
+# Predict the test files
+ModelPath <- "/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/test/_imagesmalaysiamulti_multi_unfrozen_TRUE_/_imagesmalaysiamulti_1_vgg19_model.pt"
+#TopModel <- luz_load(ModelPath)
+
+devtools::load_all("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
+
+# Example
+deploy_CNN_multi(
+  clip_duration = 12,
+  architecture='vgg19',
+  output_folder = '/Volumes/Clink Data Backup/DanumLocArray/gibbonNetRMulti/',
+  output_folder_selections = '/Volumes/Clink Data Backup/DanumLocArray/gibbonNetRMulti/',
+  output_folder_wav = '/Volumes/Clink Data Backup/DanumLocArray/gibbonNetRMulti/',
+  detect_pattern= c('_070','_080'),
+  top_model_path = ModelPath,
+  path_to_files = "/Volumes/Clink Data Backup/DanumLocArray/LocalArray/",
+  class_names = c('duet','hornbill.helmeted','hornbill.rhino','long.argus','noise'),
+  noise_category = 'noise',
+  single_class = FALSE,
+  save_wav = FALSE,
+  threshold = .75
+)
 
 

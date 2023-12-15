@@ -31,7 +31,7 @@ evaluate_trainedmodel_performance_multi <- function(trained_models_dir, image_da
     n_epochs <- str_split_fixed(model_name, pattern = '_', n = 4)[,3]
     model_type <- str_split_fixed(str_split_fixed(model_name, pattern = '_', n = 4)[,4], pattern = '.pt', n = 2)[,1]
 
-    print(paste('Training', model_type, 'N epochs=',n_epochs))
+    print(paste('Evaluating performance of', model_type, 'N epochs=',n_epochs))
     # Evaluate model on each image file
 
     Folder <- sapply(image_files_short, function(x) dirname(x))
@@ -96,7 +96,7 @@ evaluate_trainedmodel_performance_multi <- function(trained_models_dir, image_da
     thresholds <- seq(0.1, 1, 0.1)
 
     for (b in 1:length(UniqueClasses)) {
-      print(b)
+      print(UniqueClasses[b])
       outputTableSub <-outputTable
       outputTableSub$Probability <- Probability[,c(UniqueClasses[b] )]
 
@@ -157,7 +157,7 @@ evaluate_trainedmodel_performance_multi <- function(trained_models_dir, image_da
       )$byClass
 
       TempRow <- cbind.data.frame(
-        t(Perf),
+        (Perf),
         trainingfolder,
         n_epochs,
         model_type

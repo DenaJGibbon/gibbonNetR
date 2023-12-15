@@ -19,7 +19,7 @@
 #' @param trainingfolder Character. A shortened descriptor of the training data, used for naming output files.
 #' @param positive.class Character. The name of the positive class label. Default is 'Gibbons'.
 #' @param negative.class Character. The name of the negative class label. Default is 'Noise'.
-#'
+#' @param list.thresholds Numerical list indicating thresholds. Default is seq(0.1,1,.1).
 #' @return A list containing two elements:
 #' \itemize{
 #'   \item \strong{Output_Path}: The path where the model and metadata are saved.
@@ -55,6 +55,7 @@ train_CNN_binary <- function(input.data.path, test.data, architecture,
                             epoch.iterations=1, early.stop = 'yes',
                             output.base.path = 'data/',
                             trainingfolder,
+                            list.thresholds= seq(0.1,1,.1),
                             positive.class="Gibbons",
                             negative.class="Noise") {
 
@@ -391,14 +392,17 @@ train_CNN_binary <- function(input.data.path, test.data, architecture,
     # Save the output table as CSV file
     write.csv(outputTableTrainedModel, paste(output.data.path, trainingfolder, n.epoch, "output_TrainedModel.csv", sep = '_'), row.names = FALSE)
 
+    print(paste( 'Here are actual class labels, if they do not contain the positive or negative class cannot evaluate model performance:', unique(outputTableTrainedModel$ActualClass)))
+
     # Initialize data frames
     CombinedTempRow <- data.frame()
     TransferLearningCNNDF <- data.frame()
-    thresholds <- seq(0.1,1,0.1)
+    thresholds <- list.thresholds
 
     for (threshold in thresholds) {
       # TrainedModel
       TrainedModelPredictedClass <- ifelse((outputTableTrainedModel$Probability) < threshold, positive.class, negative.class)
+
 
       TrainedModelPerf <- caret::confusionMatrix(
         as.factor(TrainedModelPredictedClass),

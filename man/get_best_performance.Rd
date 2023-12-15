@@ -7,7 +7,8 @@
 get_best_performance(
   performancetables.dir,
   model.type = "multi",
-  class = "hornbill.helmeted"
+  class = "hornbill.helmeted",
+  Thresh.val = 0.5
 )
 }
 \arguments{

@@ -16,6 +16,7 @@ train_CNN_binary(
   early.stop = "yes",
   output.base.path = "data/",
   trainingfolder,
+  list.thresholds = seq(0.1, 1, 0.1),
   positive.class = "Gibbons",
   negative.class = "Noise"
 )
@@ -45,6 +46,8 @@ Default is TRUE.}
 Default is 'data/'.}
 
 \item{trainingfolder}{Character. A shortened descriptor of the training data, used for naming output files.}
+
+\item{list.thresholds}{Numerical list indicating thresholds. Default is seq(0.1,1,.1).}
 
 \item{positive.class}{Character. The name of the positive class label. Default is 'Gibbons'.}
 

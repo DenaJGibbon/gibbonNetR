@@ -90,7 +90,9 @@ evaluate_trainedmodel_performance <- function(trained_models_dir, image_data_dir
           "CNN Architecture"
         )
 
+        TempRowTrainedModel$Class <- positive.class
         TempRowTrainedModel$Threshold <- as.character(threshold)
+
         CombinedTempRow <- rbind.data.frame(CombinedTempRow, TempRowTrainedModel)
       }
 

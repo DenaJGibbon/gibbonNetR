@@ -12,7 +12,7 @@
 #' @importFrom ggpubr ggline ggscatter
 #' @importFrom magrittr %>%
 #' @export
-get_best_performance <- function(performancetables.dir, model.type='multi',class='hornbill.helmeted') {
+get_best_performance <- function(performancetables.dir, model.type='multi',class='hornbill.helmeted',Thresh.val=0.5) {
 
   # Read all CSV files from the directory
   FrozenFiles <- list.files(performancetables.dir, full.names = TRUE)
@@ -38,6 +38,8 @@ get_best_performance <- function(performancetables.dir, model.type='multi',class
   best_precision_results <- data.frame()
   best_recall_results <- data.frame()
   best_auc_results <- data.frame()
+
+  FrozenCombined <- subset(FrozenCombined, Threshold >= Thresh.val)
 
   # Loop through each 'TrainingData' type and extract best performance metrics
   for (td in unique_training_data) {
