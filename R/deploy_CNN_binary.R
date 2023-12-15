@@ -15,9 +15,6 @@
 #' @param class_names A character vector containing the unique classes for training the model.
 #' @param noise_category A character string specifying the noise category for exclusion.
 #' @param max_freq_khz The maximum frequency in kHz for spectrogram visualization.
-#' @param single_class A logical value indicating whether to process only a single class.
-#' @param single_class_category A character string specifying the single class category when 'single_class' is set to TRUE.
-#'
 #' @details This function processes sound data from a directory, extracts sound clips, converts them to images, performs image classification using a pre-trained deep learning model, and saves the results including selection tables and image and audio files.
 #'
 #' @examples
@@ -33,7 +30,7 @@
 #'
 
 
-deploy_CNN_multi <- function(
+deploy_CNN_binary <- function(
     output_folder,
     output_folder_selections,
     output_folder_wav,
@@ -46,11 +43,9 @@ deploy_CNN_multi <- function(
     downsample_rate = 16000,
     threshold = 0.5,
     save_wav = TRUE,
-    class_names = c('duet','hornbill.helmeted','hornbill.rhino','long.argus','noise'),
-    noise_category = 'noise',
-    max_freq_khz = 2,
-    single_class = TRUE,
-    single_class_category = 'duet'
+    positive.class = 'Gibbons',
+    negative.class = 'Noise',
+    max_freq_khz = 2
 ) {
 
 
@@ -63,14 +58,14 @@ deploy_CNN_multi <- function(
 
   if( any(is.na(detect_pattern))==FALSE ){
 
-  path_to_files_long <- list()
+    path_to_files_long <- list()
 
-  for(a in 1:length(detect_pattern)){
-  print(paste('identifying sound files with the following pattern', detect_pattern[a]))
-  path_to_files_long[[a]] <- path_to_files[ str_detect(path_to_files,c(detect_pattern[a])) ]
-  }
+    for(a in 1:length(detect_pattern)){
+      print(paste('identifying sound files with the following pattern', detect_pattern[a]))
+      path_to_files_long[[a]] <- path_to_files[ str_detect(path_to_files,c(detect_pattern[a])) ]
+    }
 
-  path_to_files_long <- unlist(path_to_files_long)
+    path_to_files_long <- unlist(path_to_files_long)
   } else {
 
     path_to_files_long <- path_to_files
@@ -200,32 +195,14 @@ deploy_CNN_multi <- function(
 
       # Predict using TrainedModel
       TrainedModelPred <- predict(TopModel, test_dl)
+      TrainedModelProb <- torch_sigmoid(TrainedModelPred)
+      TrainedModelProb <- as_array(torch_tensor(TrainedModelProb, device = 'cpu'))
+      TrainedModelClass <- ifelse((TrainedModelProb) < 0.5, positive.class, negative.class)
 
-      # Return the index of the max values (i.e. which class)
-      PredMPS <- torch_argmax(TrainedModelPred, dim = 2)
+      # Add the results to output tables
+      outputTableTrainedModel <- cbind.data.frame( TrainedModelClass,TrainedModelProb)
 
-      # Save to cpu
-      PredMPS <- as_array(torch_tensor(PredMPS, device = 'cpu'))
-
-      # Convert to a factor
-      modelMultiPred <- as.factor(PredMPS)
-      print(modelMultiPred)
-
-      # Calculate the probability associated with each class
-      Probability <- as_array(torch_tensor(nnf_softmax(TrainedModelPred, dim = 2), device = 'cpu'))
-
-      # Find the index of the maximum value in each row
-      max_prob_idx <- apply(Probability, 1, which.max)
-
-      # Map the index to actual probability
-      predicted_class_probability <- sapply(1:nrow(Probability), function(i) Probability[i, max_prob_idx[i]])
-
-      # Convert the integer predictions to factor and then to character based on the levels
-      modelMultiNames <- factor(modelMultiPred, levels = 1:length(class_names), labels = class_names)
-
-      outputTableTopModel <- cbind.data.frame(modelMultiNames, predicted_class_probability)
-
-      colnames(outputTableTopModel) <- c('PredictedClass', 'Probability')
+      colnames(outputTableTrainedModel) <- c('PredictedClass', 'Probability')
 
       image.files <- list.files(file.path(test.input),recursive = T,
                                 full.names = T)
@@ -236,15 +213,7 @@ deploy_CNN_multi <- function(
 
       print('Saving output')
 
-      Detections <-  which(outputTableTopModel$Probability >= threshold &
-                             outputTableTopModel$PredictedClass != noise_category )
-
-      if(single_class =='TRUE'){
-        Detections <-  which(outputTableTopModel$Probability >= threshold &
-                               outputTableTopModel$PredictedClass == single_class_category )
-
-
-      }
+      Detections <-  which(outputTableTrainedModel$Probability <= threshold )
 
       Detections <-  split(Detections, cumsum(c(
         1, diff(Detections)) != 1))
@@ -265,8 +234,7 @@ deploy_CNN_multi <- function(
 
       DetectionIndices <- unname(unlist(Detections))
 
-      DetectionClass <-  outputTableTopModel$PredictedClass[DetectionIndices]
-
+      DetectionClass <-  positive.class
 
       print('Saving output')
       file.copy(image.files[DetectionIndices],
@@ -333,13 +301,13 @@ deploy_CNN_multi <- function(
           )
 
         RavenSelectionTableDFTopModel <- rbind.data.frame(RavenSelectionTableDFTopModel,
-                                                         RavenSelectionTableDFTopModelTemp)
+                                                          RavenSelectionTableDFTopModelTemp)
 
         if(nrow(RavenSelectionTableDFTopModel) > 0){
           csv.file.name <-
             paste(output_folder_selections, paste(unique(DetectionClass),'_',sep='-'),'_',
                   path_to_files_short[x],
-                  'TopModelAllFiles.txt',
+                  'TopModelBinary.txt',
                   sep = '')
 
           RavenSelectionTableDFTopModel$Class <- DetectionClass
@@ -364,7 +332,7 @@ deploy_CNN_multi <- function(
       csv.file.name <-
         paste(output_folder_selections, paste(unique(DetectionClass),'_',sep='-'),'_',
               path_to_files_short[x],
-              'TopModelAllFiles.txt',
+              'TopModelBinary.txt',
               sep = '')
 
 
