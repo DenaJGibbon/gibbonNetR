@@ -50,12 +50,12 @@
 #'
 
 train_CNN_multi <- function(input.data.path, test.data, architecture,
-                             unfreeze = TRUE, batch_size=32, learning_rate,
-                             save.model= FALSE,
-                             epoch.iterations=1, early.stop = 'yes',
-                             output.base.path = 'data/',
-                             trainingfolder,
-                             noise.category = "Noise") {
+                            unfreeze = TRUE, batch_size=32, learning_rate,
+                            save.model= FALSE,
+                            epoch.iterations=1, early.stop = 'yes',
+                            output.base.path = 'data/',
+                            trainingfolder,
+                            noise.category = "Noise") {
 
   # Device
   device <- if(cuda_is_available()) "cuda" else "cpu"
@@ -342,7 +342,7 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
     imageFileShort <- str_split_fixed(imageFileShort,pattern = '/',n=2)[,2]
 
     # Prepare output tables
-    outputTableMultiSub <- data.frame()
+    outputTableTrainedModel <- data.frame()
 
     # Define transforms based on model type
     if (str_detect(architecture, pattern = 'resnet')) {
@@ -413,7 +413,6 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
       outputTableMultiSub$ActualClass <-
         ifelse(outputTableMultiSub$ActualClass==UniqueClasses[b],UniqueClasses[b],noise.category)
 
-
       for (threshold in thresholds) {
         MultiPredictedClass <- ifelse((outputTableMultiSub$Probability > threshold ), UniqueClasses[b], noise.category)
 
@@ -426,7 +425,7 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
 
         TempRowMulti <- cbind.data.frame(
           t(MultiPerf),
-           TrainedModel.loss ,
+          TrainedModel.loss ,
           trainingfolder,
           n.epoch,
           architecture
@@ -442,8 +441,9 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
           "CNN Architecture"
         )
 
-        ROCCurve <- roc(outputTableMultiSub$ActualClass, outputTableMultiSub$Probability)
-        TempRowMulti$AUC <-  as.numeric(ROCCurve$auc )
+        ROCRpred <- ROCR::prediction(predictions = outputTableMultiSub$Probability, labels = outputTableMultiSub$ActualClass)
+        AUCval <- ROCR::performance(ROCRpred, 'auc')
+        TempRowMulti$AUC <- AUCval@y.values[[1]]
         TempRowMulti$Threshold <- as.character(threshold)
         TempRowMulti$Frozen <- unfreeze
         TempRowMulti$Class <- UniqueClasses[b]
@@ -456,11 +456,48 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
     output.data.performance <- paste(output.data.path,'performance_tables_multi/',sep='')
 
     print(output.data.performance)
+
+    output.data.performance <- paste(output.data.path,'performance_tables_multi/',sep='')
+    output.data.performance.maxprob <- paste(output.data.path,'performance_tables_multi/',sep='')
+
     # Create if doesn't exist
     dir.create(output.data.performance, showWarnings = FALSE,recursive = T)
 
+    # Create if doesn't exist
+    dir.create(output.data.performance.maxprob, showWarnings = FALSE,recursive = T)
+
     filename <- paste(output.data.performance, trainingfolder, '_', n.epoch, '_', architecture, '_TransferLearningCNNDFMultiThreshold.csv', sep = '')
     write.csv(CombinedTempRow, filename, row.names = FALSE)
+
+    filename_multi <- paste(output.data.performance.maxprob, trainingfolder, '_', n.epoch, '_', architecture,'_TransferLearningCNNDFMaxProb.csv', sep = '')
+
+    MultiPerf <- caret::confusionMatrix(
+      as.factor(outputTableMulti$PredictedClass),
+      as.factor(outputTableMulti$ActualClass),
+      mode = 'everything'
+    )$byClass
+
+    TempRowMulti <- cbind.data.frame(
+      (MultiPerf),
+      TrainedModel.loss ,
+      trainingfolder,
+      n.epoch,
+      architecture
+    )
+
+    colnames(TempRowMulti) <- c(
+      "Sensitivity", "Specificity", "Pos Pred Value", "Neg Pred Value",
+      "Precision", "Recall", "F1", "Prevalence", "Detection Rate",
+      "Detection Prevalence", "Balanced Accuracy",
+      "Validation loss",
+      "Training Data",
+      "N epochs",
+      "CNN Architecture"
+    )
+
+    TempRowMulti$Class <- str_split_fixed(rownames(TempRowMulti), pattern = ': ', n = 2)[, 2]
+
+    write.csv(TempRowMulti, filename_multi, row.names = FALSE)
 
     rm(multiModel)
   }

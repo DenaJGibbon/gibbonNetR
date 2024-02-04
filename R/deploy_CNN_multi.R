@@ -6,7 +6,7 @@
 #' @param output_folder_selections A character string specifying the path to the folder where selection tables will be saved.
 #' @param output_folder_wav A character string specifying the path to the folder where extracted WAV files will be saved.
 #' @param top_model_path A character string specifying the path to the pre-trained top model for classification.
-#' @param path_to_files A character string specifying the path to the directory containing sound files to process.
+#' @param path_to_files A character string specifying the path to the directory or list containing sound files to process.
 #' @param clip_duration The duration of each sound clip in seconds.
 #' @param hop_size The hop size for splitting the sound clips.
 #' @param downsample_rate The downsample rate for audio in Hz, set to 'NA' if no downsampling is required.
@@ -33,7 +33,7 @@
 #'
 
 
-deploy_CNN_multi <- function(
+deploy_CNN_multi1 <- function(
     output_folder,
     output_folder_selections,
     output_folder_wav,
@@ -63,18 +63,19 @@ deploy_CNN_multi <- function(
 
   if( any(is.na(detect_pattern))==FALSE ){
 
-  path_to_files_long <- list()
+    path_to_files_long <- list()
 
-  for(a in 1:length(detect_pattern)){
-  print(paste('identifying sound files with the following pattern', detect_pattern[a]))
-  path_to_files_long[[a]] <- path_to_files[ str_detect(path_to_files,c(detect_pattern[a])) ]
-  }
+    for(a in 1:length(detect_pattern)){
+      print(paste('identifying sound files with the following pattern', detect_pattern[a]))
+      path_to_files_long[[a]] <- path_to_files[ str_detect(path_to_files,c(detect_pattern[a])) ]
+    }
 
-  path_to_files_long <- unlist(path_to_files_long)
+    path_to_files_long <- unlist(path_to_files_long)
   } else {
 
     path_to_files_long <- path_to_files
   }
+
 
   path_to_files_short <- basename((path_to_files_long))
   TopModel <- luz_load(top_model_path)
@@ -84,6 +85,7 @@ deploy_CNN_multi <- function(
 
     start.time.detection <- Sys.time()
     print(paste(x, 'out of', length(path_to_files_long)))
+    print(path_to_files_short[x])
     TempWav <- readWave(path_to_files_long[x])
     WavDur <- duration(TempWav)
 
@@ -268,8 +270,13 @@ deploy_CNN_multi <- function(
       DetectionClass <-  outputTableTopModel$PredictedClass[DetectionIndices]
 
 
-      print('Saving output')
-      file.copy(image.files[DetectionIndices],
+      print(paste('Saving output to',paste(output_folder, DetectionClass,'_',
+                                           image.files.short[DetectionIndices],
+                                           '_',
+                                           round(predicted_class_probability[DetectionIndices],2),
+                                           '_TopModel_.jpg', sep='')))
+
+            file.copy(image.files[DetectionIndices],
                 to= paste(output_folder, DetectionClass,'_',
                           image.files.short[DetectionIndices],
                           '_',
@@ -288,14 +295,15 @@ deploy_CNN_multi <- function(
 
       Detections <- image.files.short[DetectionIndices]
 
+      print(Detections)
 
       if (length(Detections) > 0) {
         Selection <- seq(1, length(Detections))
         View <- rep('Spectrogram 1', length(Detections))
         Channel <- rep(1, length(Detections))
         MinFreq <- rep(100, length(Detections))
-        MaxFreq <- rep(max_freq_khz, length(Detections))
-        start.time.new <- as.numeric(str_split_fixed(Detections,pattern = '_',n=4)[,4])
+        MaxFreq <- rep(max_freq_khz*1000, length(Detections))
+        start.time.new <- as.numeric(str_split_fixed(Detections,pattern = '.wav_',n=2)[,2])
         end.time.new <- start.time.new + clip_duration
         Probability <- round(predicted_class_probability[DetectionIndices],2)
 
@@ -331,10 +339,13 @@ deploy_CNN_multi <- function(
             'Probability',
             "Detections"
           )
+        RavenSelectionTableDFTopModelTemp$Class <- DetectionClass
+
 
         RavenSelectionTableDFTopModel <- rbind.data.frame(RavenSelectionTableDFTopModel,
                                                          RavenSelectionTableDFTopModelTemp)
 
+        print(RavenSelectionTableDFTopModel)
         if(nrow(RavenSelectionTableDFTopModel) > 0){
           csv.file.name <-
             paste(output_folder_selections, paste(unique(DetectionClass),'_',sep='-'),'_',
@@ -342,7 +353,7 @@ deploy_CNN_multi <- function(
                   'TopModelAllFiles.txt',
                   sep = '')
 
-          RavenSelectionTableDFTopModel$Class <- DetectionClass
+
 
           write.table(
             x = RavenSelectionTableDFTopModel,
@@ -352,7 +363,7 @@ deploy_CNN_multi <- function(
             quote = FALSE
           )
           print(paste(
-            "Saving Selection Table"
+            "Saving Selection Table With Detections"
           ))
         }
 
@@ -377,13 +388,14 @@ deploy_CNN_multi <- function(
         "Low Freq (Hz)",
         "High Freq (Hz)",
         'Probability',
-        "Detections"
+        "Detections", "Class"
       )
 
       TempNARow <- t(as.data.frame(rep(NA,length(ColNames))))
 
       colnames(TempNARow) <- ColNames
 
+      print(TempNARow)
       write.table(
         x = TempNARow,
         sep = "\t",
@@ -392,7 +404,7 @@ deploy_CNN_multi <- function(
         quote = FALSE
       )
       print(paste(
-        "Saving Selection Table"
+        "Saving Selection Table No Detections "
       ))
     }
 

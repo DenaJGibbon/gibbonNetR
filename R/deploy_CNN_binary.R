@@ -50,13 +50,16 @@ deploy_CNN_binary <- function(
 
 
   # Create output folders if they don't exist
-  dir.create(output_folder, recursive = TRUE, showWarnings = FALSE)
+  dir.create(output_folder, recursive = TRUE, showWarnings = TRUE)
   dir.create(output_folder_selections, recursive = TRUE, showWarnings = FALSE)
   dir.create(output_folder_wav, recursive = TRUE, showWarnings = FALSE)
 
-  path_to_files <- list.files(path_to_files,recursive = T,full.names = T)
 
-  if( any(is.na(detect_pattern))==FALSE ){
+  if(is.list(path_to_files)==FALSE){
+    path_to_files <- list.files(path_to_files,recursive = T,full.names = T)
+  }
+
+  if( any(is.na(detect_pattern))==FALSE  ){
 
     path_to_files_long <- list()
 
@@ -68,7 +71,7 @@ deploy_CNN_binary <- function(
     path_to_files_long <- unlist(path_to_files_long)
   } else {
 
-    path_to_files_long <- path_to_files
+    path_to_files_long <- unlist(path_to_files)
   }
 
   path_to_files_short <- basename((path_to_files_long))
@@ -79,6 +82,7 @@ deploy_CNN_binary <- function(
 
     start.time.detection <- Sys.time()
     print(paste(x, 'out of', length(path_to_files_long)))
+    print(path_to_files_short[x])
     TempWav <- readWave(path_to_files_long[x])
     WavDur <- duration(TempWav)
 
@@ -215,6 +219,8 @@ deploy_CNN_binary <- function(
 
       Detections <-  which(outputTableTrainedModel$Probability <= threshold )
 
+      outputTableTrainedModel$Probability <- 1- outputTableTrainedModel$Probability
+
       Detections <-  split(Detections, cumsum(c(
         1, diff(Detections)) != 1))
 
@@ -241,7 +247,7 @@ deploy_CNN_binary <- function(
                 to= paste(output_folder, DetectionClass,'_',
                           image.files.short[DetectionIndices],
                           '_',
-                          round(predicted_class_probability[DetectionIndices],2),
+                          round(outputTableTrainedModel$Probability[DetectionIndices],2),
                           '_TopModel_.jpg', sep=''))
 
       if(save_wav ==T){
@@ -250,7 +256,7 @@ deploy_CNN_binary <- function(
                   to= paste(output_folder_wav,  DetectionClass,'_',
                             image.files.short[DetectionIndices],
                             '_',
-                            round(predicted_class_probability[DetectionIndices],2),
+                            round(outputTableTrainedModel$Probability[DetectionIndices],2),
                             '_TopModel_.wav', sep=''))
       }
 
@@ -263,9 +269,10 @@ deploy_CNN_binary <- function(
         Channel <- rep(1, length(Detections))
         MinFreq <- rep(100, length(Detections))
         MaxFreq <- rep(max_freq_khz, length(Detections))
-        start.time.new <- as.numeric(str_split_fixed(Detections,pattern = '_',n=4)[,4])
+        ndash <- str_count(Detections[1],pattern = '_')+1
+        start.time.new <- as.numeric(str_split_fixed(Detections,pattern = '_',n=ndash)[,ndash])
         end.time.new <- start.time.new + clip_duration
-        Probability <- round(predicted_class_probability[DetectionIndices],2)
+        Probability <- round(outputTableTrainedModel$Probability[DetectionIndices],2)
 
         RavenSelectionTableDFTopModelTemp <-
           cbind.data.frame(Selection,
@@ -299,9 +306,12 @@ deploy_CNN_binary <- function(
             'Probability',
             "Detections"
           )
+        RavenSelectionTableDFTopModelTemp$Class <- DetectionClass
 
         RavenSelectionTableDFTopModel <- rbind.data.frame(RavenSelectionTableDFTopModel,
                                                           RavenSelectionTableDFTopModelTemp)
+
+
 
         if(nrow(RavenSelectionTableDFTopModel) > 0){
           csv.file.name <-
@@ -310,7 +320,7 @@ deploy_CNN_binary <- function(
                   'TopModelBinary.txt',
                   sep = '')
 
-          RavenSelectionTableDFTopModel$Class <- DetectionClass
+
 
           write.table(
             x = RavenSelectionTableDFTopModel,
@@ -320,7 +330,7 @@ deploy_CNN_binary <- function(
             quote = FALSE
           )
           print(paste(
-            "Saving Selection Table"
+            "Saving Selection Table", csv.file.name
           ))
         }
 
@@ -371,7 +381,7 @@ deploy_CNN_binary <- function(
     rm(short.wav)
     end.time.detection <- Sys.time()
     print(end.time.detection-start.time.detection)
-
+    gc()
   }, error = function(e) { cat("ERROR :", conditionMessage(e), "\n") })
   }
 
