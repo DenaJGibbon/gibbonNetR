@@ -1,25 +1,23 @@
 #' Train Binary CNN Models
 #'
-#' This function is designed to train CNN models (alexnet, VGG16, VGG19, ResNet18, ResNet50, or ResNet152) on a given dataset.
-#' The model is saved, and other metadata is stored for further usage.
+#' This function trains CNN models (AlexNet, VGG16, VGG19, ResNet18, ResNet50, or ResNet152) on a given dataset.
+#' The trained model is saved along with metadata for further usage.
 #'
-#' @param input.data.path Character. The path to the input data folder.
-#' @param test.data Character. The path to the test data folder.
+#' @param input.data.path Character. The path to the folder containing training data.
+#' @param test.data Character. The path to the folder containing test data.
 #' @param architecture Character. The CNN architecture to use ('alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152').
-#' @param unfreeze Logical. Determines if all layers of the pretrained CNN should be unfrozen for retraining.
-#'                 Default is TRUE.
+#' @param unfreeze Logical. Determines whether to unfreeze all layers of the pretrained CNN for retraining. Default is TRUE.
+#' @param batch_size Numeric. Batch size for training the model. Default is 32.
 #' @param learning_rate Numeric. The learning rate for training the model.
-#' @param batch_size Numeric. Batch size for training model.
-#' @param epoch.iterations List of integers. The number of epochs for training the model. Default is 1.
-#' @param early.stop Character. Determines whether early stopping should be applied or not.
-#'                   "yes" to apply and "no" to skip. Default is 'yes'.
-#' @param output.base.path Character. The base path where the output files should be saved.
-#'                          Default is 'data/'.
-#' @param save.model Logical. Whether to save model for future use.
-#' @param trainingfolder Character. A shortened descriptor of the training data, used for naming output files.
+#' @param epoch.iterations Numeric. The number of epochs for training the model. Default is 1.
+#' @param early.stop Character. Determines whether early stopping should be applied or not. Options: "yes" or "no". Default is 'yes'.
+#' @param output.base.path Character. The base path where the output files should be saved. Default is 'data/'.
+#' @param save.model Logical. Whether to save the trained model for future use. Default is FALSE.
+#' @param trainingfolder Character. A descriptor of the training data used for naming output files.
 #' @param positive.class Character. The name of the positive class label. Default is 'Gibbons'.
 #' @param negative.class Character. The name of the negative class label. Default is 'Noise'.
 #' @param list.thresholds Numerical list indicating thresholds. Default is seq(0.1,1,.1).
+#' @param noise.weight Assigned weight for the noise class.
 #' @return A list containing two elements:
 #' \itemize{
 #'   \item \strong{Output_Path}: The path where the model and metadata are saved.
@@ -33,6 +31,7 @@
 #'     test.data = "path_to_test_data",
 #'     architecture = "alexnet",  # Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
 #'     unfreeze = TRUE,
+#'     batch_size = 32,
 #'     learning_rate = 0.001,
 #'     epoch.iterations = 1,  # Or any other list of integer epochs
 #'     early.stop = "yes",
@@ -50,14 +49,15 @@
 #'
 
 train_CNN_binary <- function(input.data.path, test.data, architecture,
-                            unfreeze = TRUE, batch_size=32, learning_rate,
-                            save.model= FALSE,
-                            epoch.iterations=1, early.stop = 'yes',
-                            output.base.path = 'data/',
-                            trainingfolder,
-                            list.thresholds= seq(0.1,1,.1),
-                            positive.class="Gibbons",
-                            negative.class="Noise") {
+                             noise.weight=0.5,
+                             unfreeze = TRUE, batch_size=32, learning_rate,
+                             save.model= FALSE,
+                             epoch.iterations=1, early.stop = 'yes',
+                             output.base.path = 'data/',
+                             trainingfolder,
+                             list.thresholds= seq(0.1,1,.1),
+                             positive.class="Gibbons",
+                             negative.class="Noise") {
 
   # Device
   device <- if(cuda_is_available()) "cuda" else "cpu"
@@ -172,12 +172,11 @@ train_CNN_binary <- function(input.data.path, test.data, architecture,
             nn_relu(),
             nn_linear(512, 256),
             nn_relu(),
-            nn_linear(256, 1)
+            nn_linear(256, 2)
           )
         },
         forward = function(x) {
-          output <- self$model(x)
-          torch_squeeze(output, dim=2)
+          self$model(x)[,1]
         }
       )
 
@@ -197,12 +196,11 @@ train_CNN_binary <- function(input.data.path, test.data, architecture,
             nn_dropout(0.5),
             nn_linear(4096, 4096),
             nn_relu(),
-            nn_linear(4096, 1)
+            nn_linear(4096, 2)
           )
         },
         forward = function(x) {
-          output <- self$model(x)
-          torch_squeeze(output, dim=2)
+          self$model(x)[,1]
         }
       )
     } else if (architecture == "vgg19") {
@@ -221,12 +219,11 @@ train_CNN_binary <- function(input.data.path, test.data, architecture,
             nn_dropout(0.5),
             nn_linear(4096, 4096),
             nn_relu(),
-            nn_linear(4096, 1)
+            nn_linear(4096, 2)
           )
         },
         forward = function(x) {
-          output <- self$model(x)
-          torch_squeeze(output, dim=2)
+          self$model(x)[,1]
         }
       )
     } else if (architecture == "resnet18") {
@@ -241,12 +238,11 @@ train_CNN_binary <- function(input.data.path, test.data, architecture,
             nn_relu(),
             nn_linear(1024, 1024),
             nn_relu(),
-            nn_linear(1024, 1)
+            nn_linear(1024, 2)
           )
         },
         forward = function(x) {
-          output <- self$model(x)
-          torch_squeeze(output, dim=2)
+          self$model(x)[,1]
         }
       )
     } else if (architecture == "resnet50") {
@@ -261,12 +257,11 @@ train_CNN_binary <- function(input.data.path, test.data, architecture,
             nn_relu(),
             nn_linear(1024, 1024),
             nn_relu(),
-            nn_linear(1024, 1)
+            nn_linear(1024, 2)
           )
         },
         forward = function(x) {
-          output <- self$model(x)
-          torch_squeeze(output, dim=2)
+          self$model(x)[,1]
         }
       )
     } else if (architecture == "resnet152") {
@@ -281,22 +276,22 @@ train_CNN_binary <- function(input.data.path, test.data, architecture,
             nn_relu(),
             nn_linear(1024, 1024),
             nn_relu(),
-            nn_linear(1024, 1)
+            nn_linear(1024, 2)
           )
         },
         forward = function(x) {
-          output <- self$model(x)
-          torch_squeeze(output, dim=2)
+          self$model(x)[,1]
         }
       )
     } else {
       stop("Invalid architecture specified. Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'.")
     }
 
+    pos_weight <- torch_tensor( rep(noise.weight,batch_size),device = 'mps' )
 
     fitted <- net %>%
       luz::setup(
-        loss = nn_bce_with_logits_loss(),
+        loss = nn_bce_with_logits_loss(pos_weight = pos_weight),
         optimizer = optim_adam,
         metrics = list(
           luz_metric_binary_accuracy_with_logits()
@@ -389,6 +384,7 @@ train_CNN_binary <- function(input.data.path, test.data, architecture,
     # Add the results to output tables
     outputTableTrainedModel <- rbind(outputTableTrainedModel, data.frame(Label = Folder, Probability = TrainedModelProb, PredictedClass = TrainedModelClass, ActualClass = Folder))
 
+    outputTableTrainedModel$Probability <- 1- outputTableTrainedModel$Probability
     # Save the output table as CSV file
     write.csv(outputTableTrainedModel, paste(output.data.path, trainingfolder, n.epoch, "output_TrainedModel.csv", sep = '_'), row.names = FALSE)
 
@@ -401,7 +397,7 @@ train_CNN_binary <- function(input.data.path, test.data, architecture,
 
     for (threshold in thresholds) {
       # TrainedModel
-      TrainedModelPredictedClass <- ifelse((outputTableTrainedModel$Probability) < threshold, positive.class, negative.class)
+      TrainedModelPredictedClass <- ifelse((outputTableTrainedModel$Probability) >= threshold, positive.class, negative.class)
 
 
       TrainedModelPerf <- caret::confusionMatrix(

@@ -10,12 +10,13 @@
 #' @return Invisible NULL
 #'
 #' @examples
+#' \dontrun{
 #' spectrogram_images(
 #'   trainingBasePath = "data/Clips",
 #'   outputBasePath = "data/TrainingImages",
 #'   splits = c(0.7, 0.2, 0.1)
 #' )
-#'
+#'}
 #' @importFrom tuneR readWave
 #' @importFrom seewave spectro
 #' @importFrom tools file_path_sans_ext

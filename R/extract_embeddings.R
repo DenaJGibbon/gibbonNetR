@@ -29,13 +29,14 @@
 #' @import cowplot
 #' @import caret
 #'
-#' @examples
+#' @examples {
 #' # Example usage:
-#' result <- extract_embeddings_and_plot("data/imagesmalaysiamulti/test",
-#'                                       "data/multi/_output_unfrozen_TRUE_imagesmalaysiamulti_/_imagesmalaysiamulti_2_modelVGG16.pt",
-#'                                       target_class = "Gibbon")
+#' result <- extract_embeddings("data/imagesmalaysiamulti/test",
+#'   "/Users/denaclink/Desktop/RStudioProjects/Gibbon-transfer-learning-multispecies/model_output/_imagesmulti_multi_unfrozen_TRUE_/_imagesmulti_5_resnet18_model.pt",
+#'   target_class = "duet"
+#' )
 #' print(result)
-#'
+#'}
 #' @export
 # Define the function
 extract_embeddings <- function(test_input, model_path, target_class) {
@@ -79,7 +80,7 @@ extract_embeddings <- function(test_input, model_path, target_class) {
   # Create a new instance of the module
   net <- net()
 
-  print('processing embeddings')
+  print("processing embeddings")
   # Extract features
   features <- list()
 
@@ -105,9 +106,9 @@ extract_embeddings <- function(test_input, model_path, target_class) {
   plot.for.EmbeddingsM2 <- cbind.data.frame(EmbeddingsM2.umap$layout[, 1:2], Embeddings$Label)
   colnames(plot.for.EmbeddingsM2) <- c("Dim.1", "Dim.2", "Class")
 
-  EmbeddingsM2Scatter <- ggpubr::ggscatter(data = plot.for.EmbeddingsM2, x = "Dim.1", y = "Dim.2", color = 'Class') +
+  EmbeddingsM2Scatter <- ggpubr::ggscatter(data = plot.for.EmbeddingsM2, x = "Dim.1", y = "Dim.2", color = "Class") +
     scale_color_manual(values = viridis::viridis(length(unique(plot.for.EmbeddingsM2$Class)))) +
-    ggtitle(paste('True labels')) +
+    ggtitle(paste("True labels")) +
     theme(
       axis.text.x = element_blank(),
       axis.ticks.x = element_blank(),
@@ -121,9 +122,9 @@ extract_embeddings <- function(test_input, model_path, target_class) {
 
   plot.for.EmbeddingsM2$cluster <- as.factor(TempCluster$cluster)
 
-  EmbeddingsM2ScatterUnsuper <- ggpubr::ggscatter(data = plot.for.EmbeddingsM2, x = "Dim.1", y = "Dim.2", color = 'cluster') +
+  EmbeddingsM2ScatterUnsuper <- ggpubr::ggscatter(data = plot.for.EmbeddingsM2, x = "Dim.1", y = "Dim.2", color = "cluster") +
     scale_color_manual(values = viridis::viridis(length(unique(plot.for.EmbeddingsM2$cluster)))) +
-    ggtitle(paste('Unsupervised clustering')) +
+    ggtitle(paste("Unsupervised clustering")) +
     theme(
       axis.text.x = element_blank(),
       axis.ticks.x = element_blank(),
@@ -138,25 +139,24 @@ extract_embeddings <- function(test_input, model_path, target_class) {
   # Find the cluster with the most observations of the target class
   class_counts <- table(Embeddings$Label, TempCluster$cluster)
 
-  if( target_class %in% Embeddings$Label == FALSE){
-    print('target_class not included in test_input folder names' )
+  if (target_class %in% Embeddings$Label == FALSE) {
+    print("target_class not included in test_input folder names")
     break
-
   }
 
   cluster_with_most_class <- colnames(class_counts)[which.max(class_counts[target_class, ])]
 
-  Binary <- ifelse(TempCluster$cluster == cluster_with_most_class, target_class, 'Noise')
-  BinaryLabels <- ifelse(Embeddings$Label == target_class, target_class, 'Noise')
+  Binary <- ifelse(TempCluster$cluster == cluster_with_most_class, target_class, "Noise")
+  BinaryLabels <- ifelse(Embeddings$Label == target_class, target_class, "Noise")
 
 
   ConfMat <- caret::confusionMatrix(
     as.factor(Binary),
     as.factor(BinaryLabels),
-    mode = 'everything'
+    mode = "everything"
   )
 
-  print(paste('Unupervised clustering for', target_class))
+  print(paste("Unupervised clustering for", target_class))
   print(ConfMat$byClass)
 
   return(list(
@@ -165,4 +165,3 @@ extract_embeddings <- function(test_input, model_path, target_class) {
     ConfusionMatrixUnsupervisedAssigment = ConfMat$byClass
   ))
 }
-

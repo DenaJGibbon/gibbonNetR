@@ -163,14 +163,14 @@ evaluate_trainedmodel_performance_multi <- function(trained_models_dir, image_da
         model_type
       )
 
-      colnames(TempRow) <- c(
-        "Sensitivity", "Specificity", "Pos Pred Value", "Neg Pred Value",
-        "Precision", "Recall", "F1", "Prevalence", "Detection Rate",
-        "Detection Prevalence", "Balanced Accuracy",
-        "Training Data",
-        "N epochs",
-        "CNN Architecture"
-      )
+      # colnames(TempRow) <- c(
+      #   "Sensitivity", "Specificity", "Pos Pred Value", "Neg Pred Value",
+      #   "Precision", "Recall", "F1", "Prevalence", "Detection Rate",
+      #   "Detection Prevalence", "Balanced Accuracy",
+      #   "Training Data",
+      #   "N epochs",
+      #   "CNN Architecture"
+      # )
 
       TempRow$Class <- UniqueClasses[b]
 

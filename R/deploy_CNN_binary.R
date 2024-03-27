@@ -217,7 +217,7 @@ deploy_CNN_binary <- function(
 
       print('Saving output')
 
-      Detections <-  which(outputTableTrainedModel$Probability <= threshold )
+      Detections <-  which(outputTableTrainedModel$Probability <= (1-threshold) )
 
       outputTableTrainedModel$Probability <- 1- outputTableTrainedModel$Probability
 
@@ -268,7 +268,7 @@ deploy_CNN_binary <- function(
         View <- rep('Spectrogram 1', length(Detections))
         Channel <- rep(1, length(Detections))
         MinFreq <- rep(100, length(Detections))
-        MaxFreq <- rep(max_freq_khz, length(Detections))
+        MaxFreq <- rep(max_freq_khz*1000, length(Detections))
         ndash <- str_count(Detections[1],pattern = '_')+1
         start.time.new <- as.numeric(str_split_fixed(Detections,pattern = '_',n=ndash)[,ndash])
         end.time.new <- start.time.new + clip_duration
@@ -279,7 +279,8 @@ deploy_CNN_binary <- function(
                            View,
                            Channel,
                            MinFreq,
-                           MaxFreq,start.time.new,end.time.new,Probability,
+                           MaxFreq,
+                           start.time.new,end.time.new,Probability,
                            Detections)
 
         RavenSelectionTableDFTopModelTemp <-

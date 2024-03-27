@@ -56,6 +56,8 @@ evaluate_trainedmodel_performance <- function(trained_models_dir, image_data_dir
 
       probs <- as_array(torch_tensor(torch_sigmoid(preds), device = 'cpu'))
 
+      # Switch positive/negative probs
+      probs <- 1- probs
 
       # Initialize data frames
       CombinedTempRow <- data.frame()
@@ -64,7 +66,7 @@ evaluate_trainedmodel_performance <- function(trained_models_dir, image_data_dir
 
       for (threshold in thresholds) {
         # TrainedModel
-        TrainedModelPredictedClass <- ifelse((probs) < threshold, positive.class, negative.class)
+        TrainedModelPredictedClass <- ifelse(probs >= (threshold), positive.class, negative.class)
 
         TrainedModelPerf <- caret::confusionMatrix(
           as.factor(TrainedModelPredictedClass),

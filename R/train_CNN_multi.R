@@ -1,45 +1,45 @@
-#' Train multi CNN Models
+#' Train Multi-class pretrained CNN Models
 #'
-#' This function is designed to train CNN models (alexnet, VGG16, VGG19, ResNet18, ResNet50, or ResNet152) on a given dataset.
-#' The model is saved, and other metadata is stored for further usage.
+#' This function facilitates training of convolutional neural network (CNN) models using various transfer learning architectures such as AlexNet, VGG16, VGG19, ResNet18, ResNet50, or ResNet152, on a given dataset. The trained model is saved along with metadata for further usage.
 #'
-#' @param input.data.path Character. The path to the input data folder.
-#' @param test.data Character. The path to the test data folder.
-#' @param architecture Character. The CNN architecture to use ('alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152').
-#' @param unfreeze Logical. Determines if all layers of the pretrained CNN should be unfrozen for retraining.
-#'                 Default is TRUE.
-#' @param learning_rate Numeric. The learning rate for training the model.
-#' @param batch_size Numeric. Batch size for training model.
-#' @param epoch.iterations List of integers. The number of epochs for training the model. Default is 1.
-#' @param early.stop Character. Determines whether early stopping should be applied or not.
-#'                   "yes" to apply and "no" to skip. Default is 'yes'.
-#' @param output.base.path Character. The base path where the output files should be saved.
-#'                          Default is 'data/'.
-#' @param save.model Logical. Whether to save model for future use.
-#' @param trainingfolder Character. A shortened descriptor of the training data, used for naming output files.
-#' @param positive.class Character. The name of the positive class label. Default is 'Gibbons'.
-#' @param negative.class Character. The name of the negative class label. Default is 'Noise'.
+#' @param input.data.path Character. Path to the input data folder.
+#' @param test.data Character. Path to the test data folder.
+#' @param architecture Character. Specifies the CNN architecture to use ('alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152').
+#' @param unfreeze Logical. Indicates whether all layers of the pretrained CNN should be unfrozen for retraining. Default is TRUE.
+#' @param batch_size Numeric. Batch size for training the model. Default is 32.
+#' @param learning_rate Numeric. Learning rate for training the model.
+#' @param save.model Logical. Specifies whether to save the trained model for future use. Default is FALSE.
+#' @param class_weights Numeric vector. Weights assigned to different classes for handling class imbalance. Default is c(0.49, 0.49, 0.02).
+#' @param epoch.iterations List of integers. Number of epochs for training the model. Default is 1.
+#' @param early.stop Character. Indicates whether early stopping should be applied or not. Use "yes" to apply and "no" to skip. Default is 'yes'.
+#' @param output.base.path Character. Base path where the output files should be saved. Default is 'data/'.
+#' @param trainingfolder Character. A descriptive name for the training data, used for naming output files.
+#' @param noise.category Character. Label for the noise category. Default is "Noise".
 #'
 #' @return A list containing two elements:
 #' \itemize{
-#'   \item \strong{Output_Path}: The path where the model and metadata are saved.
+#'   \item \strong{Output_Path}: Path where the trained model and metadata are saved.
 #'   \item \strong{Metadata}: A dataframe containing metadata about the training session.
 #' }
 #'
-#' @examples
-#' \dontrun{
-#'   train_CNN_multi(
-#'     input.data.path = "path_to_input_data",
-#'     test.data = "path_to_test_data",
-#'     architecture = "alexnet",  # Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
-#'     unfreeze = TRUE,
-#'     learning_rate = 0.001,
-#'     epoch.iterations = 1,  # Or any other list of integer epochs
-#'     early.stop = "yes",
-#'     output.base.path = "data/",
-#'     trainingfolder = "example_folder_name"
-#'   )
+#' @examples {
+#' result <- train_CNN_multi(
+#'   input.data.path = "inst/extdata/multiclass/",
+#'   test.data = "inst/extdata/multiclass/test/",
+#'   architecture = "alexnet",  # Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
+#'   unfreeze = TRUE,
+#'   class_weights = rep( (1/5), 5),
+#'   batch_size = 6,
+#'   learning_rate = 0.001,
+#'   epoch.iterations = 1,  #'' Or any other list of integer epochs
+#'   early.stop = "yes",
+#'   output.base.path = paste(tempdir(),'/',sep=''),
+#'   trainingfolder = "test",
+#'   noise.category = 'noise'
+#' )
+#' print(result)
 #' }
+
 #' @seealso \code{\link[torch]{nn_module}} and other torch functions.
 #' @export
 #' @importFrom stringr str_replace str_split_fixed
@@ -50,10 +50,11 @@
 #'
 
 train_CNN_multi <- function(input.data.path, test.data, architecture,
-                            unfreeze = TRUE, batch_size=32, learning_rate,
-                            save.model= FALSE,
-                            epoch.iterations=1, early.stop = 'yes',
-                            output.base.path = 'data/',
+                            unfreeze = TRUE, batch_size = 32, learning_rate,
+                            save.model = FALSE,
+                            class_weights = c(0.49, 0.49, 0.02),
+                            epoch.iterations = 1, early.stop = 'yes',
+                            output.base.path = tempdir(),
                             trainingfolder,
                             noise.category = "Noise") {
 
@@ -278,10 +279,11 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
       stop("Invalid architecture specified. Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'.")
     }
 
+    weight <- torch_tensor( class_weights, device = 'mps' )
 
     fitted <- net %>%
       luz::setup(
-        loss = nn_cross_entropy_loss(),
+        loss = nn_cross_entropy_loss(weight=weight),
         optimizer = optim_adam,
         metrics = list(
           luz_metric_accuracy()
@@ -416,7 +418,6 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
       for (threshold in thresholds) {
         MultiPredictedClass <- ifelse((outputTableMultiSub$Probability > threshold ), UniqueClasses[b], noise.category)
 
-
         MultiPerf <- caret::confusionMatrix(
           as.factor(MultiPredictedClass),
           as.factor(outputTableMultiSub$ActualClass),
@@ -458,46 +459,12 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
     print(output.data.performance)
 
     output.data.performance <- paste(output.data.path,'performance_tables_multi/',sep='')
-    output.data.performance.maxprob <- paste(output.data.path,'performance_tables_multi/',sep='')
 
     # Create if doesn't exist
     dir.create(output.data.performance, showWarnings = FALSE,recursive = T)
 
-    # Create if doesn't exist
-    dir.create(output.data.performance.maxprob, showWarnings = FALSE,recursive = T)
-
     filename <- paste(output.data.performance, trainingfolder, '_', n.epoch, '_', architecture, '_TransferLearningCNNDFMultiThreshold.csv', sep = '')
     write.csv(CombinedTempRow, filename, row.names = FALSE)
-
-    filename_multi <- paste(output.data.performance.maxprob, trainingfolder, '_', n.epoch, '_', architecture,'_TransferLearningCNNDFMaxProb.csv', sep = '')
-
-    MultiPerf <- caret::confusionMatrix(
-      as.factor(outputTableMulti$PredictedClass),
-      as.factor(outputTableMulti$ActualClass),
-      mode = 'everything'
-    )$byClass
-
-    TempRowMulti <- cbind.data.frame(
-      (MultiPerf),
-      TrainedModel.loss ,
-      trainingfolder,
-      n.epoch,
-      architecture
-    )
-
-    colnames(TempRowMulti) <- c(
-      "Sensitivity", "Specificity", "Pos Pred Value", "Neg Pred Value",
-      "Precision", "Recall", "F1", "Prevalence", "Detection Rate",
-      "Detection Prevalence", "Balanced Accuracy",
-      "Validation loss",
-      "Training Data",
-      "N epochs",
-      "CNN Architecture"
-    )
-
-    TempRowMulti$Class <- str_split_fixed(rownames(TempRowMulti), pattern = ': ', n = 2)[, 2]
-
-    write.csv(TempRowMulti, filename_multi, row.names = FALSE)
 
     rm(multiModel)
   }
