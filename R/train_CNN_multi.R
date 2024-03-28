@@ -5,7 +5,7 @@
 #' @param input.data.path Character. Path to the input data folder.
 #' @param test.data Character. Path to the test data folder.
 #' @param architecture Character. Specifies the CNN architecture to use ('alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152').
-#' @param unfreeze Logical. Indicates whether all layers of the pretrained CNN should be unfrozen for retraining. Default is TRUE.
+#' @param unfreeze.param Logical. Indicates whether all layers of the pretrained CNN should be unfrozen for retraining. Default is TRUE.
 #' @param batch_size Numeric. Batch size for training the model. Default is 32.
 #' @param learning_rate Numeric. Learning rate for training the model.
 #' @param save.model Logical. Specifies whether to save the trained model for future use. Default is FALSE.
@@ -27,11 +27,11 @@
 #'   input.data.path = "inst/extdata/multiclass/",
 #'   test.data = "inst/extdata/multiclass/test/",
 #'   architecture = "alexnet",  # Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
-#'   unfreeze = TRUE,
+#'   unfreeze.param = TRUE,
 #'   class_weights = rep( (1/5), 5),
 #'   batch_size = 6,
 #'   learning_rate = 0.001,
-#'   epoch.iterations = 1,  #'' Or any other list of integer epochs
+#'   epoch.iterations = 1,  # Or any other list of integer epochs
 #'   early.stop = "yes",
 #'   output.base.path = paste(tempdir(),'/',sep=''),
 #'   trainingfolder = "test",
@@ -50,7 +50,7 @@
 #'
 
 train_CNN_multi <- function(input.data.path, test.data, architecture,
-                            unfreeze = TRUE, batch_size = 32, learning_rate,
+                            unfreeze.param = TRUE, batch_size = 32, learning_rate,
                             save.model = FALSE,
                             class_weights = c(0.49, 0.49, 0.02),
                             epoch.iterations = 1, early.stop = 'yes',
@@ -66,7 +66,7 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
   }
 
   # Location to save the output
-  output.data.path <- paste(output.base.path, trainingfolder, 'multi', 'unfrozen', unfreeze,  '/', sep='_')
+  output.data.path <- paste(output.base.path, trainingfolder, 'multi', 'unfrozen', unfreeze.param,  '/', sep='_')
 
   # Create if doesn't exist
   dir.create(output.data.path, showWarnings = FALSE)
@@ -79,7 +79,7 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
     Output_Path = output.data.path,
     Device_Used = device,
     EarlyStop = early.stop,
-    Layers_Unfrozen = unfreeze,
+    Layers_Unfrozen = unfreeze.param,
     Epochs = epoch.iterations,
     Learning_rate=learning_rate,
     Noise.class=noise.category
@@ -149,7 +149,7 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
         initialize = function() {
           self$model <- model_alexnet(pretrained = TRUE)
           for (par in self$parameters) {
-            par$requires_grad_(unfreeze)
+            par$requires_grad_(unfreeze.param)
           }
 
           self$model$classifier <- nn_sequential(
@@ -446,7 +446,7 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
         AUCval <- ROCR::performance(ROCRpred, 'auc')
         TempRowMulti$AUC <- AUCval@y.values[[1]]
         TempRowMulti$Threshold <- as.character(threshold)
-        TempRowMulti$Frozen <- unfreeze
+        TempRowMulti$Frozen <- unfreeze.param
         TempRowMulti$Class <- UniqueClasses[b]
         TempRowMulti$Class <- as.factor(TempRowMulti$Class)
         CombinedTempRow <- rbind.data.frame(CombinedTempRow, TempRowMulti)

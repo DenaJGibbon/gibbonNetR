@@ -18,17 +18,52 @@
 #' @details This function processes sound data from a directory, extracts sound clips, converts them to images, performs image classification using a pre-trained deep learning model, and saves the results including selection tables and image and audio files.
 #'
 #' @examples
-#' \dontrun{
-#' deploy_CNN_multi(
-#'   output_folder = "output_results",
-#'   output_folder_selections = "selection_tables",
-#'   output_folder_wav = "extracted_audio",
-#'   top_model_path = "pretrained_model.pth",
-#'   path_to_files = "sound_data_directory"
+#' {
+#' #' Load data
+#' data("TempBinWav")
+#'
+#' dir.create(paste(tempdir(),'/BinaryDir/Wav/'),recursive = T)
+#'
+#' #' Write to temp directory
+#' writeWave(TempBinWav,filename = paste(tempdir(),'/BinaryDir/Wav/','TempBinWav.wav'))
+#'
+#' train_CNN_binary(
+#'   input.data.path = "inst/extdata/binary/",
+#'   test.data = "inst/extdata/binary/test/",
+#'   architecture = "alexnet",  #' Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
+#'   unfreeze.param = TRUE,
+#'   batch_size = 6,
+#'   learning_rate = 0.001,
+#'   epoch.iterations = 1,  #' Or any other list of integer epochs
+#'   early.stop = "yes",
+#'   save.model= TRUE,
+#'   output.base.path = paste(tempdir(),'/BinaryDir/',sep=''),
+#'   trainingfolder = "test_binary"
+#' )
+#'
+#' TempFileList <- list.files(paste(tempdir(),'/BinaryDir/',sep=''),full.names = T,recursive = T)
+#' ModelPath <- TempFileList[which(str_detect(TempFileList,'.pt'))]
+#'
+#'
+#' deploy_CNN_binary (
+#'   clip_duration = 12,
+#'   architecture='alexnet',
+#'   output_folder = paste(tempdir(),'/BinaryDir/Results/Images/',sep=''),
+#'   output_folder_selections = paste(tempdir(),'/BinaryDir/Results/Selections/',sep=''),
+#'   output_folder_wav = paste(tempdir(),'/BinaryDir/Results/Wavs/',sep=''),
+#'   detect_pattern=NA,
+#'   top_model_path = ModelPath,
+#'   path_to_files = paste(tempdir(),'/BinaryDir/Wav/'),
+#'   downsample_rate = 'NA',
+#'   threshold = 0.5,
+#'   save_wav = F,
+#'   positive.class = 'Gibbons',
+#'   negative.class = 'Noise',
+#'   max_freq_khz = 2
 #' )
 #' }
-#'
 
+#' @export
 
 deploy_CNN_binary <- function(
     output_folder,

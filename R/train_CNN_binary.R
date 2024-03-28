@@ -1,12 +1,12 @@
 #' Train Binary CNN Models
 #'
-#' This function trains CNN models (AlexNet, VGG16, VGG19, ResNet18, ResNet50, or ResNet152) on a given dataset.
-#' The trained model is saved along with metadata for further usage.
+#' This function trains Convolutional Neural Network (CNN) models, such as AlexNet, VGG16, VGG19, ResNet18, ResNet50, or ResNet152, on a given dataset. The trained model is saved along with metadata for further usage.
 #'
-#' @param input.data.path Character. The path to the folder containing training data.
-#' @param test.data Character. The path to the folder containing test data.
+#' @param input.data.path Character. The path to the folder containing the training data.
+#' @param test.data Character. The path to the folder containing the test data.
 #' @param architecture Character. The CNN architecture to use ('alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152').
-#' @param unfreeze Logical. Determines whether to unfreeze all layers of the pretrained CNN for retraining. Default is TRUE.
+#' @param noise.weight Numeric. Assigned weight for the noise class. Default is 0.5.
+#' @param unfreeze.param Logical. Determines whether to unfreeze.param all layers of the pretrained CNN for retraining. Default is TRUE.
 #' @param batch_size Numeric. Batch size for training the model. Default is 32.
 #' @param learning_rate Numeric. The learning rate for training the model.
 #' @param epoch.iterations Numeric. The number of epochs for training the model. Default is 1.
@@ -17,7 +17,7 @@
 #' @param positive.class Character. The name of the positive class label. Default is 'Gibbons'.
 #' @param negative.class Character. The name of the negative class label. Default is 'Noise'.
 #' @param list.thresholds Numerical list indicating thresholds. Default is seq(0.1,1,.1).
-#' @param noise.weight Assigned weight for the noise class.
+#'
 #' @return A list containing two elements:
 #' \itemize{
 #'   \item \strong{Output_Path}: The path where the model and metadata are saved.
@@ -25,21 +25,23 @@
 #' }
 #'
 #' @examples
-#' \dontrun{
+#' {
 #'   train_CNN_binary(
-#'     input.data.path = "path_to_input_data",
-#'     test.data = "path_to_test_data",
+#'     input.data.path = "inst/extdata/binary/",
+#'     test.data = "inst/extdata/binary/test/",
 #'     architecture = "alexnet",  # Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
-#'     unfreeze = TRUE,
-#'     batch_size = 32,
+#'     unfreeze.param = TRUE,
+#'     batch_size = 6,
 #'     learning_rate = 0.001,
 #'     epoch.iterations = 1,  # Or any other list of integer epochs
 #'     early.stop = "yes",
-#'     output.base.path = "data/",
-#'     trainingfolder = "example_folder_name"
+#'     output.base.path = paste(tempdir(),'/',sep=''),
+#'     trainingfolder = "test_binary"
 #'   )
 #' }
+#'
 #' @seealso \code{\link[torch]{nn_module}} and other torch functions.
+#'
 #' @export
 #' @importFrom stringr str_replace str_split_fixed
 #' @importFrom tibble tibble
@@ -47,17 +49,16 @@
 #' @importFrom magrittr %>%
 #' @importFrom ggpubr ggline
 #'
-
 train_CNN_binary <- function(input.data.path, test.data, architecture,
                              noise.weight=0.5,
-                             unfreeze = TRUE, batch_size=32, learning_rate,
+                             unfreeze.param = TRUE, batch_size=32, learning_rate,
                              save.model= FALSE,
                              epoch.iterations=1, early.stop = 'yes',
                              output.base.path = 'data/',
                              trainingfolder,
                              list.thresholds= seq(0.1,1,.1),
                              positive.class="Gibbons",
-                             negative.class="Noise") {
+                             negative.class="Noise"){
 
   # Device
   device <- if(cuda_is_available()) "cuda" else "cpu"
@@ -67,10 +68,10 @@ train_CNN_binary <- function(input.data.path, test.data, architecture,
   }
 
   # Location to save the output
-  output.data.path <- paste(output.base.path, trainingfolder, 'binary', 'unfrozen', unfreeze,  '/', sep='_')
+  output.data.path <- paste(output.base.path, trainingfolder, 'binary', 'unfrozen', unfreeze.param,  '/', sep='_')
 
   # Create if doesn't exist
-  dir.create(output.data.path, showWarnings = FALSE)
+  dir.create(output.data.path, showWarnings = FALSE, recursive = T)
 
   # Metadata
   metadata <- tibble(
@@ -80,7 +81,7 @@ train_CNN_binary <- function(input.data.path, test.data, architecture,
     Output_Path = output.data.path,
     Device_Used = device,
     EarlyStop = early.stop,
-    Layers_Unfrozen = unfreeze,
+    Layers_Unfrozen = unfreeze.param,
     Epochs = epoch.iterations,
     Learning_rate=learning_rate,
     Positive.class=positive.class,
@@ -163,7 +164,7 @@ train_CNN_binary <- function(input.data.path, test.data, architecture,
         initialize = function() {
           self$model <- model_alexnet(pretrained = TRUE)
           for (par in self$parameters) {
-            par$requires_grad_(unfreeze)
+            par$requires_grad_(unfreeze.param)
           }
 
           self$model$classifier <- nn_sequential(
