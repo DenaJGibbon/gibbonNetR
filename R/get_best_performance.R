@@ -60,6 +60,7 @@ get_best_performance <- function(performancetables.dir, model.type='multi',class
     best_auc_results <- rbind(best_auc_results, max_auc_row)
   }
 
+  FrozenCombined$Threshold <- as.numeric(round(FrozenCombined$Threshold,1))
 
   # Create visualizations
   f1_plot <- ggpubr::ggline(data = FrozenCombined, x = 'Threshold', y = 'F1',
@@ -69,25 +70,23 @@ get_best_performance <- function(performancetables.dir, model.type='multi',class
                             color = 'CNN Architecture', facet.by = 'N epochs')+ ggtitle(paste('Results for', class, 'class'))
 
 
-  FrozenCombined$TPR <- FrozenCombined$Sensitivity
-  FrozenCombined$FPR <- 1-FrozenCombined$Specificity
-  FPRTPR_plot <-ggpubr::ggline(data = FrozenCombined,  x = 'FPR', y = 'TPR',
+  FPRTPR_plot <-ggpubr::ggline(data = FrozenCombined,  x = 'FPR', y = 'Threshold',
                                color = 'CNN Architecture', facet.by = 'N epochs',numeric.x.axis = TRUE)+
     geom_abline(slope=1,intercept=0,lty='dashed')+ coord_cartesian(xlim = c(0, 1), ylim = c(0, 1))+ ggtitle(paste('Results for', class, 'class'))
 
 
   print('Best F1 results')
   print(best_f1_results$Class)
-  print(as.data.frame(best_f1_results[,c(5:7,13:17)]))
+  print(as.data.frame(best_f1_results))
 
   print('Best Precision results')
-  print(as.data.frame(best_precision_results[,c(5:7,13:17)]))
+  print(as.data.frame(best_precision_results))
 
   print('Best Recall results')
-  print(as.data.frame(best_recall_results[,c(5:7,13:17)]))
+  print(as.data.frame(best_recall_results))
 
   print('Best AUC results')
-  print(as.data.frame(best_auc_results[c(5:7,13:15,17)]))
+  print(as.data.frame(best_auc_results))
 
   return(list(
     best_f1 = best_f1_results,

@@ -69,7 +69,7 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
   output.data.path <- paste(output.base.path, trainingfolder, 'multi', 'unfrozen', unfreeze.param,  '/', sep='_')
 
   # Create if doesn't exist
-  dir.create(output.data.path, showWarnings = FALSE)
+  dir.create(output.data.path, showWarnings = FALSE, recursive = T)
 
   # Metadata
   metadata <- tibble(

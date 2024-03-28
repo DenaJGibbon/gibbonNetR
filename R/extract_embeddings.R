@@ -30,14 +30,40 @@
 #' @import caret
 #'
 #' @examples {
-#' # Example usage:
-#' result <- extract_embeddings("data/imagesmalaysiamulti/test",
-#'   "/Users/denaclink/Desktop/RStudioProjects/Gibbon-transfer-learning-multispecies/model_output/_imagesmulti_multi_unfrozen_TRUE_/_imagesmulti_5_resnet18_model.pt",
-#'   target_class = "duet"
+# # Train simple CNN model
+#' train_CNN_binary(
+#'   input.data.path = "inst/extdata/binary/",
+#'   test.data = "inst/extdata/binary/test/",
+#'   architecture = "alexnet",  #' Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
+#'   unfreeze.param = TRUE,
+#'   batch_size = 6,
+#'   learning_rate = 0.001,
+#'   epoch.iterations = 1,  #' Or any other list of integer epochs
+#'   early.stop = "yes",
+#'   save.model= TRUE,
+#'   output.base.path = paste(tempdir(),'/BinaryDir/',sep=''),
+#'   trainingfolder = "test_binary"
 #' )
+
+#' # Create list of files in temp directory
+#' TempFileList <- list.files(paste(tempdir(),'/BinaryDir/',sep=''),full.names = T,recursive = T)
+#'
+#' # Find model path
+#' ModelPath <- TempFileList[which(str_detect(TempFileList,'model.pt'))]
+#'
+#' # Specify model path
+#' ImageFile <- "inst/extdata/multiclass/test/"
+#'
+#' # Function to extract and plot embeddings
+#' result <- extract_embeddings(test_input=ImageFile,
+#'                              model_path =ModelPath,
+#'                              target_class = "duet"
+#' )
+#'
 #' print(result)
 #'}
 #' @export
+
 # Define the function
 extract_embeddings <- function(test_input, model_path, target_class) {
   # Load the fine-tuned model
