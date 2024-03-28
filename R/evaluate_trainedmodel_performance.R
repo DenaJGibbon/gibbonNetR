@@ -84,12 +84,11 @@ evaluate_trainedmodel_performance <- function(trained_models_dir, image_data_dir
       #probs <- 1- probs
 
       ROCRpred <-  ROCR::prediction(predictions = probs,
-                                    labels = actual_labels,
-                                    label.ordering =)
+                                    labels = actual_labels)
       AUCval <- ROCR::performance(ROCRpred,'aucpr')
       F1val <- ROCR::performance(ROCRpred,'f')
       F1 <- F1val@y.values[[1]]
-      Rec <- ROCR::performance(ROCRpred, "rec",window.size=50)
+      Rec <- ROCR::performance(ROCRpred, "rec")
       Recall <-Rec@y.values[[1]]
       Prec <- ROCR::performance(ROCRpred, "prec")
       Precision <- Prec@y.values[[1]]
