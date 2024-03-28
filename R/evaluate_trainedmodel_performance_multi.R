@@ -10,18 +10,18 @@
 #' @importFrom stringr str_split_fixed str_detect
 #' @importFrom purrr %>%
 #' @export
-evaluate_trainedmodel_performance_multi <- function(trained_models_dir, image_data_dir, output_dir='data/',trainingfolder,
-                                                    batch_size=32,
-                                                    class_names = c('duet','hornbill.helmeted','hornbill.rhino','long.argus','noise'),
+evaluate_trainedmodel_performance_multi <- function(trained_models_dir, image_data_dir, output_dir='data/',training_data,
+                                                    class_names,
                                                     noise.category='noise',unfreeze='TRUE') {
 
   # List trained models
-  trained_models <- list.files(trained_models_dir, pattern = '.pt', full.names = TRUE,recursive = T)
+  trained_models <- list.files(trained_models_dir, pattern = '.pt', full.names = TRUE, recursive = T)
 
   if(length(trained_models)==0){
     print('No models in specified directory')
     break
   }
+
   # List image files
   image_files <- list.files(image_data_dir, recursive = TRUE, full.names = TRUE)
   image_files_short <- list.files(image_data_dir, recursive = TRUE, full.names = FALSE)
@@ -42,7 +42,7 @@ evaluate_trainedmodel_performance_multi <- function(trained_models_dir, image_da
     Folder <- sapply(image_files_short, function(x) dirname(x))
 
     # Define transforms based on model type
-    if (str_detect(model_type, pattern = 'resnet')) {
+    if (str_detect(model_type, pattern = 'ResNet')) {
       transform_list <- . %>%
         torchvision::transform_to_tensor() %>%
         torchvision::transform_color_jitter() %>%
@@ -57,10 +57,9 @@ evaluate_trainedmodel_performance_multi <- function(trained_models_dir, image_da
     }
 
     test_ds <- image_folder_dataset(image_data_dir, transform = transform_list)
-    test_dl <- dataloader(test_ds, batch_size = batch_size, shuffle =FALSE)
+    test_dl <- dataloader(test_ds, batch_size = 32, shuffle =FALSE)
 
-
-    # Predict using trained model
+    #Predict using trained model
     Pred <- predict(model, test_dl)
 
     # Calculate the probability associated with each class
@@ -86,68 +85,71 @@ evaluate_trainedmodel_performance_multi <- function(trained_models_dir, image_da
       outputTableSub$ActualClass <-
         ifelse(outputTableSub$ActualClass==UniqueClasses[b],UniqueClasses[b],noise.category)
 
-        ROCRpred <- ROCR::prediction(predictions = outputTableSub$Probability, labels = as.factor(outputTableSub$ActualClass),
-                                     label.ordering =c(UniqueClasses[b],noise.category) )
+    thresholds <- seq(0.1, 1, 0.1)
 
-        AUCval <- ROCR::performance(ROCRpred,'aucpr')
-        F1val <- ROCR::performance(ROCRpred,'f')
-        F1 <- F1val@y.values[[1]]
-        Rec <- ROCR::performance(ROCRpred, "rec")
-        Recall <-Rec@y.values[[1]]
-        Prec <- ROCR::performance(ROCRpred, "prec")
-        Precision <- Prec@y.values[[1]]
+    for (threshold in thresholds) {
+        print(threshold)
+        PredictedClass <- ifelse((outputTableSub$Probability > threshold ), UniqueClasses[b], noise.category)
 
-        perf <- ROCR::performance(ROCRpred,"fpr")
-        FPR <- perf@y.values[[1]]
+        Perf <- caret::confusionMatrix(
+          as.factor(PredictedClass),
+          as.factor(outputTableSub$ActualClass),
+          mode = 'everything',positive =UniqueClasses[b]
+        )$byClass
 
-        AUC <- AUCval@y.values[[1]]
-
-        Threshold <- ROCRpred@cutoffs[[1]] # unique prediction scores (sorted in descending order) at which the true positive and false positive counts change
-
-        TempRow <- cbind.data.frame(F1,Recall,Precision,FPR,AUC,Threshold,
-                                    training_data,
-                                    n_epochs,
-                                    model_type)
+        TempRow <- cbind.data.frame(
+          t(Perf),
+          training_data,
+          n_epochs,
+          model_type
+        )
 
         colnames(TempRow) <- c(
-          "F1","Precision", "Recall", "FPR", "AUC","Threshold",
+          "Sensitivity", "Specificity", "Pos Pred Value", "Neg Pred Value",
+          "Precision", "Recall", "F1", "Prevalence", "Detection Rate",
+          "Detection Prevalence", "Balanced Accuracy",
           "Training Data",
           "N epochs",
           "CNN Architecture"
         )
 
-        InfIndex <-  which(is.infinite(TempRow$Threshold))
-
-        if(is.numeric(InfIndex)  ==T){
-          TempRow <- TempRow[-InfIndex,]
-        }
-
+        ROCRpred <- ROCR::prediction(predictions = outputTableSub$Probability, labels = outputTableSub$ActualClass)
+        AUCval <- ROCR::performance(ROCRpred, 'auc')
+        TempRow$AUC <- AUCval@y.values[[1]]
+        TempRow$Threshold <- as.character(threshold)
+        TempRow$Frozen <- unfreeze
         TempRow$Class <- UniqueClasses[b]
-        TempRow$TestData <- str_replace_all(image_data_dir,pattern = '/',replacement ='_')
-
+        TempRow$Class <- as.factor(TempRow$Class)
         CombinedTempRow <- rbind.data.frame(CombinedTempRow, TempRow)
       }
+    }
 
-    # Return the index of the max values (i.e. which class)
-    PredictTop1 <- torch_argmax(Pred, dim = 2)
 
-    # Save to cpu
-    PredictTop1 <- as_array(torch_tensor(PredictTop1, device = 'cpu'))
+      filename <- paste(output_dir,'performance_tables_multi_trained/', training_data, '_', n_epochs, '_', model_type, '_TransferLearningTrainedModel.csv', sep = '')
 
-    # Convert to a factor
-    PredictTop1<- as.factor(PredictTop1)
-    print(PredictTop1)
+      filename_multi <- paste(output_dir, '/performance_tables_multi_trained_combined/', training_data, '_', n_epochs, '_', model_type,'_TransferLearningCNNDFmulti.csv', sep = '')
 
-    PredictTop1Names <- droplevels(factor(PredictTop1, levels = 1:length(class_names), labels = class_names))
+      dir.create(paste(output_dir, '/performance_tables_multi_trained/', sep = ''))
 
-    ConfMatrix <- caret::confusionMatrix(data=PredictTop1Names,
-                           reference=as.factor(as.character(Folder)))
+      # Return the index of the max values (i.e. which class)
+      PredictTop1 <- torch_argmax(Pred, dim = 2)
 
-    CombinedTempRow$Top1Accuracy <-  as.numeric(ConfMatrix$overall[1])
+      # Save to cpu
+      PredictTop1 <- as_array(torch_tensor(PredictTop1, device = 'cpu'))
 
-    filename <- paste(output_dir,'performance_tables_multi_trained/', training_data, '_', n_epochs, '_', model_type, '_TransferLearningTrainedModel.csv', sep = '')
+      # Convert to a factor
+      PredictTop1<- as.factor(PredictTop1)
 
-      dir.create(paste(output_dir, '/performance_tables_multi_trained/', sep = ''),recursive = T)
+      PredictTop1Names <- droplevels(factor(PredictTop1, levels = 1:length(class_names), labels = class_names))
+      Folder <- factor(Folder, levels = c(levels(Folder), class_names))
+      PredictTop1NamesFiltered <- PredictTop1Names[PredictTop1Names %in% levels(as.factor(Folder))]
+
+      # Create confusion matrix with filtered predictions
+      ConfMatrix <- caret::confusionMatrix(data = PredictTop1NamesFiltered,
+                                           reference = as.factor(Folder))
+
+
+      CombinedTempRow$Top1Accuracy <-  as.numeric(ConfMatrix$overall[1])
 
       write.csv(CombinedTempRow, filename, row.names = FALSE)
 
