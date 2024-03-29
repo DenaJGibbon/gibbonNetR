@@ -346,7 +346,7 @@ train_CNN_binary <- function(input.data.path, test.data, architecture,
     print(LossPlot)
 
     # Calculate performance metrics for TrainedModel -------------------------------------
-    dir.create(paste(output.data.path,'performance_tables',sep=''))
+    dir.create(paste(output.data.path,'performance_tables',sep=''),showWarnings = FALSE)
 
     # Get the list of image files
     imageFiles <- list.files(paste(test.data,sep=''), recursive = TRUE, full.names = TRUE)
@@ -399,7 +399,7 @@ train_CNN_binary <- function(input.data.path, test.data, architecture,
     for (threshold in thresholds) {
       # TrainedModel
       TrainedModelPredictedClass <- ifelse((outputTableTrainedModel$Probability) >= threshold, positive.class, negative.class)
-
+      TrainedModelPredictedClass <- factor(TrainedModelPredictedClass, levels =levels( as.factor(outputTableTrainedModel$ActualClass)))
 
       TrainedModelPerf <- caret::confusionMatrix(
         as.factor(TrainedModelPredictedClass),
@@ -429,10 +429,12 @@ train_CNN_binary <- function(input.data.path, test.data, architecture,
       CombinedTempRow <- rbind.data.frame(CombinedTempRow, TempRowTrainedModel)
     }
 
-   ROCCurve <- roc(outputTableTrainedModel$ActualClass, outputTableTrainedModel$Probability)
+    ROCRpred <-  ROCR::prediction(predictions = outputTableTrainedModel$Probability,
+                                  labels = outputTableTrainedModel$ActualClass)
 
-    CombinedTempRow$AUC <- as.numeric(ROCCurve$auc )
+    AUCval <- ROCR::performance(ROCRpred,'aucpr')
 
+    CombinedTempRow$AUC <- as.numeric(AUCval@y.values[[1]] )
 
     TransferLearningCNNDF <- rbind.data.frame(TransferLearningCNNDF, CombinedTempRow)
     TransferLearningCNNDF$Frozen <- unfreeze.param

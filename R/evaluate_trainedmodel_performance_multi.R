@@ -91,6 +91,8 @@ evaluate_trainedmodel_performance_multi <- function(trained_models_dir, image_da
         print(threshold)
         PredictedClass <- ifelse((outputTableSub$Probability > threshold ), UniqueClasses[b], noise.category)
 
+        PredictedClass <- factor(PredictedClass, levels =levels( as.factor(outputTableSub$ActualClass)))
+
         Perf <- caret::confusionMatrix(
           as.factor(PredictedClass),
           as.factor(outputTableSub$ActualClass),
@@ -129,7 +131,7 @@ evaluate_trainedmodel_performance_multi <- function(trained_models_dir, image_da
 
       filename_multi <- paste(output_dir, '/performance_tables_multi_trained_combined/', training_data, '_', n_epochs, '_', model_type,'_TransferLearningCNNDFmulti.csv', sep = '')
 
-      dir.create(paste(output_dir, '/performance_tables_multi_trained/', sep = ''))
+      dir.create(paste(output_dir, '/performance_tables_multi_trained/', sep = ''),showWarnings = FALSE)
 
       # Return the index of the max values (i.e. which class)
       PredictTop1 <- torch_argmax(Pred, dim = 2)

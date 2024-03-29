@@ -93,6 +93,8 @@ evaluate_trainedmodel_performance <- function(trained_models_dir, image_data_dir
       # TrainedModel
       TrainedModelPredictedClass <- ifelse(probs >= (threshold), positive.class, negative.class)
 
+      TrainedModelPredictedClass <- factor(TrainedModelPredictedClass, levels =levels( as.factor(actual_labels)))
+
       TrainedModelPerf <- caret::confusionMatrix(
         as.factor(TrainedModelPredictedClass),
         as.factor(actual_labels),

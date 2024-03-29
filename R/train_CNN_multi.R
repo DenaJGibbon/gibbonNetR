@@ -418,6 +418,8 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
       for (threshold in thresholds) {
         MultiPredictedClass <- ifelse((outputTableMultiSub$Probability > threshold ), UniqueClasses[b], noise.category)
 
+        MultiPredictedClass <- factor(MultiPredictedClass, levels =levels(  as.factor(outputTableMultiSub$ActualClass)))
+
         MultiPerf <- caret::confusionMatrix(
           as.factor(MultiPredictedClass),
           as.factor(outputTableMultiSub$ActualClass),

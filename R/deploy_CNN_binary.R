@@ -85,7 +85,7 @@ deploy_CNN_binary <- function(
 
 
   # Create output folders if they don't exist
-  dir.create(output_folder, recursive = TRUE, showWarnings = TRUE)
+  dir.create(output_folder, recursive = TRUE, showWarnings = FALSE)
   dir.create(output_folder_selections, recursive = TRUE, showWarnings = FALSE)
   dir.create(output_folder_wav, recursive = TRUE, showWarnings = FALSE)
 
