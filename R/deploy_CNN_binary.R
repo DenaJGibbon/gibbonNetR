@@ -22,7 +22,7 @@
 #' #' Load data
 #' data("TempBinWav")
 #'
-#' dir.create(paste(tempdir(),'/BinaryDir/Wav/'),recursive = T)
+#' dir.create(paste(tempdir(),'/BinaryDir/Wav/'),recursive = T, showWarnings = FALSE)
 #'
 #' #' Write to temp directory
 #' writeWave(TempBinWav,filename = paste(tempdir(),'/BinaryDir/Wav/','TempBinWav.wav'))

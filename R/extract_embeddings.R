@@ -175,6 +175,7 @@ extract_embeddings <- function(test_input, model_path, target_class) {
   Binary <- ifelse(TempCluster$cluster == cluster_with_most_class, target_class, "Noise")
   BinaryLabels <- ifelse(Embeddings$Label == target_class, target_class, "Noise")
 
+  Binary <- factor(Binary, levels =levels(  as.factor(BinaryLabels)))
 
   ConfMat <- caret::confusionMatrix(
     as.factor(Binary),
