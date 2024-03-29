@@ -15,13 +15,14 @@ deploy_CNN_multi(
   clip_duration = 12,
   hop_size = 6,
   downsample_rate = 16000,
-  threshold = 0.5,
+  threshold = 0.1,
   save_wav = TRUE,
   class_names = c("duet", "hornbill.helmeted", "hornbill.rhino", "long.argus", "noise"),
   noise_category = "noise",
   max_freq_khz = 2,
   single_class = TRUE,
-  single_class_category = "duet"
+  single_class_category = "duet",
+  for_prrec = TRUE
 )
 }
 \arguments{
@@ -33,7 +34,7 @@ deploy_CNN_multi(
 
 \item{top_model_path}{A character string specifying the path to the pre-trained top model for classification.}
 
-\item{path_to_files}{A character string specifying the path to the directory containing sound files to process.}
+\item{path_to_files}{A character string specifying the path to the directory or list containing sound files to process.}
 
 \item{clip_duration}{The duration of each sound clip in seconds.}
 
@@ -62,13 +63,55 @@ This function processes sound data from a specified directory, performs transfer
 This function processes sound data from a directory, extracts sound clips, converts them to images, performs image classification using a pre-trained deep learning model, and saves the results including selection tables and image and audio files.
 }
 \examples{
-\dontrun{
+{
+# Load data
+data("TempBinWav")
+
+dir.create(paste(tempdir(),'/MultiDir/Wav/'),recursive = T, showWarnings = FALSE)
+
+# Write to temp directory
+writeWave(TempBinWav,filename = paste(tempdir(),'/MultiDir/Wav/','TempBinWav.wav'))
+
+# Train the model
+train_CNN_multi(
+  input.data.path = "inst/extdata/multiclass/",
+  test.data = "inst/extdata/multiclass/test/",
+  architecture = "resnet18",  #' Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
+  unfreeze.param = TRUE,
+  batch_size = 6,
+  class_weights = rep( (1/5), 5),
+  learning_rate = 0.001,
+  epoch.iterations = 3,  #' Or any other list of integer epochs
+  early.stop = "yes",
+  save.model= TRUE,
+  output.base.path = paste(tempdir(),'/MultiDir/',sep=''),
+  trainingfolder = "test_multi",
+  noise.category = 'noise'
+)
+
+# Find model path
+TempFileList <- list.files(paste(tempdir(),'/MultiDir/',sep=''),full.names = T,recursive = T)
+
+# Specify model path
+ModelPath <- TempFileList[which(str_detect(TempFileList,'model.pt'))]
+
+# Deploy trained model over sound files
 deploy_CNN_multi(
-  output_folder = "output_results",
-  output_folder_selections = "selection_tables",
-  output_folder_wav = "extracted_audio",
-  top_model_path = "pretrained_model.pth",
-  path_to_files = "sound_data_directory"
+  clip_duration = 12,
+  architecture='resnet18',
+  output_folder = paste(tempdir(),'/MultiDir/Results/Images/',sep=''),
+  output_folder_selections = paste(tempdir(),'/MultiDir/Results/Selections/',sep=''),
+  output_folder_wav = paste(tempdir(),'/MultiDir/Results/Wavs/',sep=''),
+  detect_pattern=NA,
+  top_model_path = ModelPath,
+  path_to_files = paste(tempdir(),'/MultiDir/Wav/'),
+  downsample_rate = 'NA',
+  save_wav = F,
+  class_names = c('duet','hornbill.helmeted','hornbill.rhino','long.argus','noise'),
+  noise_category = 'noise',
+  single_class = FALSE,
+  threshold = .25,
+  max_freq_khz = 2
 )
 }
 

@@ -33,10 +33,11 @@ Invisible NULL
 Process and Save Spectrogram Images from Sound Files
 }
 \examples{
+\dontrun{
 spectrogram_images(
   trainingBasePath = "data/Clips",
   outputBasePath = "data/TrainingImages",
   splits = c(0.7, 0.2, 0.1)
 )
-
+}
 }

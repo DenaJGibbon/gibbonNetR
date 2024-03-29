@@ -8,7 +8,7 @@ evaluate_trainedmodel_performance_multi(
   trained_models_dir,
   image_data_dir,
   output_dir = "data/",
-  trainingfolder,
+  training_data,
   class_names,
   noise.category = "noise",
   unfreeze = "TRUE"

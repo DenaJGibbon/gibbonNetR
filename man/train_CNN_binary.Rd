@@ -8,7 +8,8 @@ train_CNN_binary(
   input.data.path,
   test.data,
   architecture,
-  unfreeze = TRUE,
+  noise.weight = 0.5,
+  unfreeze.param = TRUE,
   batch_size = 32,
   learning_rate,
   save.model = FALSE,
@@ -22,30 +23,29 @@ train_CNN_binary(
 )
 }
 \arguments{
-\item{input.data.path}{Character. The path to the input data folder.}
+\item{input.data.path}{Character. The path to the folder containing the training data.}
 
-\item{test.data}{Character. The path to the test data folder.}
+\item{test.data}{Character. The path to the folder containing the test data.}
 
 \item{architecture}{Character. The CNN architecture to use ('alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152').}
 
-\item{unfreeze}{Logical. Determines if all layers of the pretrained CNN should be unfrozen for retraining.
-Default is TRUE.}
+\item{noise.weight}{Numeric. Assigned weight for the noise class. Default is 0.5.}
 
-\item{batch_size}{Numeric. Batch size for training model.}
+\item{unfreeze.param}{Logical. Determines whether to unfreeze.param all layers of the pretrained CNN for retraining. Default is TRUE.}
+
+\item{batch_size}{Numeric. Batch size for training the model. Default is 32.}
 
 \item{learning_rate}{Numeric. The learning rate for training the model.}
 
-\item{save.model}{Logical. Whether to save model for future use.}
+\item{save.model}{Logical. Whether to save the trained model for future use. Default is FALSE.}
 
-\item{epoch.iterations}{List of integers. The number of epochs for training the model. Default is 1.}
+\item{epoch.iterations}{Numeric. The number of epochs for training the model. Default is 1.}
 
-\item{early.stop}{Character. Determines whether early stopping should be applied or not.
-"yes" to apply and "no" to skip. Default is 'yes'.}
+\item{early.stop}{Character. Determines whether early stopping should be applied or not. Options: "yes" or "no". Default is 'yes'.}
 
-\item{output.base.path}{Character. The base path where the output files should be saved.
-Default is 'data/'.}
+\item{output.base.path}{Character. The base path where the output files should be saved. Default is 'data/'.}
 
-\item{trainingfolder}{Character. A shortened descriptor of the training data, used for naming output files.}
+\item{trainingfolder}{Character. A descriptor of the training data used for naming output files.}
 
 \item{list.thresholds}{Numerical list indicating thresholds. Default is seq(0.1,1,.1).}
 
@@ -61,23 +61,24 @@ A list containing two elements:
 }
 }
 \description{
-This function is designed to train CNN models (alexnet, VGG16, VGG19, ResNet18, ResNet50, or ResNet152) on a given dataset.
-The model is saved, and other metadata is stored for further usage.
+This function trains Convolutional Neural Network (CNN) models, such as AlexNet, VGG16, VGG19, ResNet18, ResNet50, or ResNet152, on a given dataset. The trained model is saved along with metadata for further usage.
 }
 \examples{
-\dontrun{
+{
   train_CNN_binary(
-    input.data.path = "path_to_input_data",
-    test.data = "path_to_test_data",
+    input.data.path = "inst/extdata/binary/",
+    test.data = "inst/extdata/binary/test/",
     architecture = "alexnet",  # Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
-    unfreeze = TRUE,
+    unfreeze.param = TRUE,
+    batch_size = 6,
     learning_rate = 0.001,
     epoch.iterations = 1,  # Or any other list of integer epochs
     early.stop = "yes",
-    output.base.path = "data/",
-    trainingfolder = "example_folder_name"
+    output.base.path = paste(tempdir(),'/',sep=''),
+    trainingfolder = "test_binary"
   )
 }
+
 }
 \seealso{
 \code{\link[torch]{nn_module}} and other torch functions.

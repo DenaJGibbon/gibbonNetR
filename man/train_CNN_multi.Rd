@@ -2,77 +2,78 @@
 % Please edit documentation in R/train_CNN_multi.R
 \name{train_CNN_multi}
 \alias{train_CNN_multi}
-\title{Train multi CNN Models}
+\title{Train Multi-class pretrained CNN Models}
 \usage{
 train_CNN_multi(
   input.data.path,
   test.data,
   architecture,
-  unfreeze = TRUE,
+  unfreeze.param = TRUE,
   batch_size = 32,
   learning_rate,
   save.model = FALSE,
+  class_weights = c(0.49, 0.49, 0.02),
   epoch.iterations = 1,
   early.stop = "yes",
-  output.base.path = "data/",
+  output.base.path = tempdir(),
   trainingfolder,
   noise.category = "Noise"
 )
 }
 \arguments{
-\item{input.data.path}{Character. The path to the input data folder.}
+\item{input.data.path}{Character. Path to the input data folder.}
 
-\item{test.data}{Character. The path to the test data folder.}
+\item{test.data}{Character. Path to the test data folder.}
 
-\item{architecture}{Character. The CNN architecture to use ('alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152').}
+\item{architecture}{Character. Specifies the CNN architecture to use ('alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152').}
 
-\item{unfreeze}{Logical. Determines if all layers of the pretrained CNN should be unfrozen for retraining.
-Default is TRUE.}
+\item{unfreeze.param}{Logical. Indicates whether all layers of the pretrained CNN should be unfrozen for retraining. Default is TRUE.}
 
-\item{batch_size}{Numeric. Batch size for training model.}
+\item{batch_size}{Numeric. Batch size for training the model. Default is 32.}
 
-\item{learning_rate}{Numeric. The learning rate for training the model.}
+\item{learning_rate}{Numeric. Learning rate for training the model.}
 
-\item{save.model}{Logical. Whether to save model for future use.}
+\item{save.model}{Logical. Specifies whether to save the trained model for future use. Default is FALSE.}
 
-\item{epoch.iterations}{List of integers. The number of epochs for training the model. Default is 1.}
+\item{class_weights}{Numeric vector. Weights assigned to different classes for handling class imbalance. Default is c(0.49, 0.49, 0.02).}
 
-\item{early.stop}{Character. Determines whether early stopping should be applied or not.
-"yes" to apply and "no" to skip. Default is 'yes'.}
+\item{epoch.iterations}{List of integers. Number of epochs for training the model. Default is 1.}
 
-\item{output.base.path}{Character. The base path where the output files should be saved.
-Default is 'data/'.}
+\item{early.stop}{Character. Indicates whether early stopping should be applied or not. Use "yes" to apply and "no" to skip. Default is 'yes'.}
 
-\item{trainingfolder}{Character. A shortened descriptor of the training data, used for naming output files.}
+\item{output.base.path}{Character. Base path where the output files should be saved. Default is 'data/'.}
 
-\item{positive.class}{Character. The name of the positive class label. Default is 'Gibbons'.}
+\item{trainingfolder}{Character. A descriptive name for the training data, used for naming output files.}
 
-\item{negative.class}{Character. The name of the negative class label. Default is 'Noise'.}
+\item{noise.category}{Character. Label for the noise category. Default is "Noise".}
 }
 \value{
 A list containing two elements:
 \itemize{
-\item \strong{Output_Path}: The path where the model and metadata are saved.
+\item \strong{Output_Path}: Path where the trained model and metadata are saved.
 \item \strong{Metadata}: A dataframe containing metadata about the training session.
 }
 }
 \description{
-This function is designed to train CNN models (alexnet, VGG16, VGG19, ResNet18, ResNet50, or ResNet152) on a given dataset.
-The model is saved, and other metadata is stored for further usage.
+This function facilitates training of convolutional neural network (CNN) models using various transfer learning architectures such as AlexNet, VGG16, VGG19, ResNet18, ResNet50, or ResNet152, on a given dataset. The trained model is saved along with metadata for further usage.
 }
 \examples{
-\dontrun{
-  train_CNN_multi(
-    input.data.path = "path_to_input_data",
-    test.data = "path_to_test_data",
-    architecture = "alexnet",  # Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
-    unfreeze = TRUE,
-    learning_rate = 0.001,
-    epoch.iterations = 1,  # Or any other list of integer epochs
-    early.stop = "yes",
-    output.base.path = "data/",
-    trainingfolder = "example_folder_name"
-  )
+{
+result <- train_CNN_multi(
+  input.data.path = "inst/extdata/multiclass/",
+  test.data = "inst/extdata/multiclass/test/",
+  architecture = "alexnet",  # Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
+  unfreeze.param = TRUE,
+  class_weights = rep( (1/5), 5),
+  batch_size = 6,
+  learning_rate = 0.001,
+  epoch.iterations = 1,  # Or any other list of integer epochs
+  early.stop = "yes",
+  output.base.path = paste(tempdir(),'/',sep=''),
+  trainingfolder = "test",
+  noise.category = 'noise'
+)
+print(result)
 }
 }
 \seealso{

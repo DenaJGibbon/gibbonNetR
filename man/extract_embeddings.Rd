@@ -26,10 +26,35 @@ This function loads a fine-tuned PyTorch model, extracts embeddings from a set o
 performs dimensionality reduction using UMAP, and creates scatter plots to visualize the embeddings.
 }
 \examples{
-# Example usage:
-result <- extract_embeddings_and_plot("data/imagesmalaysiamulti/test",
-                                      "data/multi/_output_unfrozen_TRUE_imagesmalaysiamulti_/_imagesmalaysiamulti_2_modelVGG16.pt",
-                                      target_class = "Gibbon")
-print(result)
+{
+train_CNN_binary(
+  input.data.path = "inst/extdata/binary/",
+  test.data = "inst/extdata/binary/test/",
+  architecture = "alexnet",  #' Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
+  unfreeze.param = TRUE,
+  batch_size = 6,
+  learning_rate = 0.001,
+  epoch.iterations = 1,  #' Or any other list of integer epochs
+  early.stop = "yes",
+  save.model= TRUE,
+  output.base.path = paste(tempdir(),'/BinaryDir/',sep=''),
+  trainingfolder = "test_binary"
+)
+# Create list of files in temp directory
+TempFileList <- list.files(paste(tempdir(),'/BinaryDir/',sep=''),full.names = T,recursive = T)
 
+# Find model path
+ModelPath <- TempFileList[which(str_detect(TempFileList,'model.pt'))]
+
+# Specify model path
+ImageFile <- "inst/extdata/multiclass/test/"
+
+# Function to extract and plot embeddings
+result <- extract_embeddings(test_input=ImageFile,
+                             model_path =ModelPath,
+                             target_class = "duet"
+)
+
+print(result)
+}
 }

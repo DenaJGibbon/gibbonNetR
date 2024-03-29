@@ -2,6 +2,7 @@ library(dplyr)
 setwd("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
 devtools::document()
 devtools::load_all("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
+devtools::run_examples("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
 
 
 # Multi-class models using 'train_CNN_multi' ------------------------------
@@ -15,7 +16,7 @@ test.data.path <- '/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/imag
 # Training data folder short
 trainingfolder.short <- 'imagesmalaysiamulti'
 
-# Whether to unfreeze the layers
+# Whether to unfreeze.param the layers
 unfreeze.param <- TRUE # FALSE means the features are frozen; TRUE unfrozen
 
 # Number of epochs to include
@@ -28,7 +29,7 @@ gibbonNetR::train_CNN_multi(input.data.path=input.data.path,
                              architecture ='alexnet',
                              learning_rate = 0.001,
                              test.data=test.data.path,
-                             unfreeze = TRUE,
+                             unfreeze.param = TRUE,
                              epoch.iterations=1,
                              save.model= TRUE,
                              early.stop = "yes",
@@ -40,7 +41,7 @@ gibbonNetR::train_CNN_multi(input.data.path=input.data.path,
                             architecture ='vgg16',
                             learning_rate = 0.001,
                             test.data=test.data.path,
-                            unfreeze = TRUE,
+                            unfreeze.param = TRUE,
                             epoch.iterations=epoch.iterations,
                             save.model= TRUE,
                             early.stop = "yes",
@@ -52,7 +53,7 @@ gibbonNetR::train_CNN_multi(input.data.path=input.data.path,
                             architecture ='vgg19',
                             learning_rate = 0.001,
                             test.data=test.data.path,
-                            unfreeze = TRUE,
+                            unfreeze.param = TRUE,
                             epoch.iterations=epoch.iterations,
                             save.model= TRUE,
                             early.stop = "yes",
@@ -64,7 +65,7 @@ gibbonNetR::train_CNN_multi(input.data.path=input.data.path,
                             architecture ='resnet18',
                             learning_rate = 0.001,
                             test.data=test.data.path,
-                            unfreeze = TRUE,
+                            unfreeze.param = TRUE,
                             epoch.iterations=epoch.iterations,
                             save.model= TRUE,
                             early.stop = "yes",
@@ -76,7 +77,7 @@ gibbonNetR::train_CNN_multi(input.data.path=input.data.path,
                             architecture ='resnet50',
                             learning_rate = 0.001,
                             test.data=test.data.path,
-                            unfreeze = TRUE,
+                            unfreeze.param = TRUE,
                             epoch.iterations=epoch.iterations,
                             save.model= TRUE,
                             early.stop = "yes",
@@ -88,7 +89,7 @@ gibbonNetR::train_CNN_multi(input.data.path=input.data.path,
                             architecture ='resnet152',
                             learning_rate = 0.001,
                             test.data=test.data.path,
-                            unfreeze = TRUE,
+                            unfreeze.param = TRUE,
                             epoch.iterations=epoch.iterations,
                             save.model= TRUE,
                             early.stop = "yes",
@@ -120,7 +121,7 @@ test.data.path <- 'data/imagesmalaysiamaliau/test/'
 # Training data folder short
 trainingfolder.short <- 'imagesmalaysia'
 
-# Whether to unfreeze the layers
+# Whether to unfreeze.param the layers
 unfreeze.param <- TRUE # FALSE means the features are frozen; TRUE unfrozen
 
 # Number of epochs to include
@@ -134,7 +135,7 @@ gibbonNetR::train_CNN_binary(input.data.path=input.data.path,
                           learning_rate = 0.001,
                           save.model= TRUE,
                           test.data=test.data.path,
-                          unfreeze = TRUE,
+                          unfreeze.param = TRUE,
                           epoch.iterations=epoch.iterations,
                           early.stop = "yes",
                           output.base.path = "data/test/",
@@ -147,7 +148,7 @@ gibbonNetR::train_CNN_binary(input.data.path=input.data.path,
                              learning_rate = 0.001,
                              save.model= TRUE,
                              test.data=test.data.path,
-                             unfreeze = TRUE,
+                             unfreeze.param = TRUE,
                              epoch.iterations=epoch.iterations,
                              early.stop = "yes",
                              output.base.path = "data/test/",
@@ -160,7 +161,7 @@ gibbonNetR::train_CNN_binary(input.data.path=input.data.path,
                              learning_rate = 0.001,
                              test.data=test.data.path,
                              save.model= TRUE,
-                             unfreeze = TRUE,
+                             unfreeze.param = TRUE,
                              epoch.iterations=epoch.iterations,
                              early.stop = "yes",
                              output.base.path = "data/test/",
@@ -173,7 +174,7 @@ gibbonNetR::train_CNN_binary(input.data.path=input.data.path,
                              learning_rate = 0.001,
                              test.data=test.data.path,
                              save.model= TRUE,
-                             unfreeze = TRUE,
+                             unfreeze.param = TRUE,
                              epoch.iterations=epoch.iterations,
                              early.stop = "yes",
                              output.base.path = "data/test/",
@@ -186,7 +187,7 @@ gibbonNetR::train_CNN_binary(input.data.path=input.data.path,
                              learning_rate = 0.001,
                              test.data=test.data.path,
                              save.model= TRUE,
-                             unfreeze = TRUE,
+                             unfreeze.param = TRUE,
                              epoch.iterations=epoch.iterations,
                              early.stop = "yes",
                              output.base.path = "data/test/",
@@ -199,7 +200,7 @@ gibbonNetR::train_CNN_binary(input.data.path=input.data.path,
                              save.model= TRUE,
                              learning_rate = 0.001,
                              test.data=test.data.path,
-                             unfreeze = TRUE,
+                             unfreeze.param = TRUE,
                              epoch.iterations=epoch.iterations,
                              early.stop = "yes",
                              output.base.path = "data/test/",
@@ -223,10 +224,10 @@ as.data.frame(PerformanceOutput$best_auc)
 
 # Extract embeddings ------------------------------------------------------
 
-ModelPath <- "/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/test/_imagesmalaysia_binary_unfrozen_TRUE_/_imagesmalaysia_5_alexnet_model.pt"
-result <- extract_embeddings(test_input="/Users/denaclink/Desktop/JahooArray/AlexNet27_09_22/Detections/",
+ModelPath <- "/Users/denaclink/Desktop/RStudioProjects/Gibbon-transfer-learning-multispecies/model_output/_imagesmulti_multi_unfrozen_TRUE_/_imagesmulti_5_vgg19_model.pt"
+result <- extract_embeddings(test_input="/Users/denaclink/Desktop/RStudioProjects/Gibbon-transfer-learning-multispecies/data/training_images_sorted/Jahoo/train/",
                                       model_path=ModelPath,
-                                     target_class = "FemaleDetectionsTP")
+                                     target_class = "Gibbons")
 
 result$EmbeddingsCombined
 result$NMI
