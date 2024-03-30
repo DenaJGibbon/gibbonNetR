@@ -99,5 +99,8 @@ deploy_CNN_binary (
   negative.class = 'Noise',
   max_freq_khz = 2
 )
+ jj <- readJPEG(list.files(paste(tempdir(),'/BinaryDir/Results/Images/',sep=''),full.names = T)[1],native=TRUE)
+ plot(0:1,0:1,type="n",ann=FALSE,axes=FALSE,main='Binary detection')
+ print(rasterImage(jj,0,0,1,1))
 }
 }

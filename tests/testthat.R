@@ -7,6 +7,7 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(gibbonNetR)
+#library(gibbonNetR)
+devtools::load_all("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
 
 test_check("gibbonNetR")
