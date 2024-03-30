@@ -28,8 +28,8 @@ Given trained models and a set of images, this function evaluates the performanc
 \examples{
 {
 # Set directory paths for trained models and test images
-trained_models_dir <- '/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/inst/extdata/trainedresnetbinary/'
-image_data_dir <- "inst/extdata/binary/test/"
+trained_models_dir <- 'inst/extdata/trainedresnetbinary/'
+image_data_dir <- 'inst/extdata/binary/test/'
 
 # Evaluate the performance of the trained models using the test images
 evaluate_trainedmodel_performance(trained_models_dir = trained_models_dir,

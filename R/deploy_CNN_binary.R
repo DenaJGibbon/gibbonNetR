@@ -27,22 +27,11 @@
 #' #' Write to temp directory
 #' writeWave(TempBinWav,filename = paste(tempdir(),'/BinaryDir/Wav/','TempBinWav.wav'))
 #'
-#' train_CNN_binary(
-#'   input.data.path = "inst/extdata/binary/",
-#'   test.data = "inst/extdata/binary/test/",
-#'   architecture = "alexnet",  #' Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
-#'   unfreeze.param = TRUE,
-#'   batch_size = 6,
-#'   learning_rate = 0.001,
-#'   epoch.iterations = 1,  #' Or any other list of integer epochs
-#'   early.stop = "yes",
-#'   save.model= TRUE,
-#'   output.base.path = paste(tempdir(),'/BinaryDir/',sep=''),
-#'   trainingfolder = "test_binary"
-#' )
+#' #' Set model directory
+#' trained_models_dir <- system.file("extdata", "trainedresnetbinary/", package = "gibbonNetR")
 #'
-#' TempFileList <- list.files(paste(tempdir(),'/BinaryDir/',sep=''),full.names = T,recursive = T)
-#' ModelPath <- TempFileList[which(str_detect(TempFileList,'.pt'))]
+#' #' Specify model path
+#' ModelPath <- list.files(trained_models_dir,full.names = T)
 #'
 #'
 #' deploy_CNN_binary (
@@ -61,8 +50,11 @@
 #'   negative.class = 'Noise',
 #'   max_freq_khz = 2
 #' )
+#'  jj <- readJPEG(list.files(paste(tempdir(),'/BinaryDir/Results/Images/',sep=''),full.names = T)[1],native=TRUE)
+#'  plot(0:1,0:1,type="n",axes=FALSE,main='Binary detection')
+#'  print(rasterImage(jj,0,0,1,1))
 #' }
-
+#' @importFrom jpeg readJPEG
 #' @export
 
 deploy_CNN_binary <- function(

@@ -4,7 +4,7 @@
 \alias{extract_embeddings}
 \title{Extract Embeddings and Create Scatter Plots}
 \usage{
-extract_embeddings(test_input, model_path, target_class)
+extract_embeddings(test_input, model_path, target_class, unsupervised = "TRUE")
 }
 \arguments{
 \item{test_input}{A character string specifying the path to the directory containing the test images.}
@@ -12,6 +12,8 @@ extract_embeddings(test_input, model_path, target_class)
 \item{model_path}{A character string specifying the path to the pre-trained PyTorch model file.}
 
 \item{target_class}{A character string specifying the class of interest for cluster analysis.}
+
+\item{unsupervised}{Logical, indicates whether to assign 'target_class' to a cluster and calculate NMI and corresponding confusion matrix}
 }
 \value{
 A list containing the following components:
@@ -27,24 +29,11 @@ performs dimensionality reduction using UMAP, and creates scatter plots to visua
 }
 \examples{
 {
-train_CNN_binary(
-  input.data.path = "inst/extdata/binary/",
-  test.data = "inst/extdata/binary/test/",
-  architecture = "alexnet",  #' Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
-  unfreeze.param = TRUE,
-  batch_size = 6,
-  learning_rate = 0.001,
-  epoch.iterations = 1,  #' Or any other list of integer epochs
-  early.stop = "yes",
-  save.model= TRUE,
-  output.base.path = paste(tempdir(),'/BinaryDir/',sep=''),
-  trainingfolder = "test_binary"
-)
-# Create list of files in temp directory
-TempFileList <- list.files(paste(tempdir(),'/BinaryDir/',sep=''),full.names = T,recursive = T)
+#' Set model directory
+trained_models_dir <- system.file("extdata", "trainedresnetmulti/", package = "gibbonNetR")
 
-# Find model path
-ModelPath <- TempFileList[which(str_detect(TempFileList,'model.pt'))]
+#' Specify model path
+ModelPath <- list.files(trained_models_dir,full.names = T)
 
 # Specify model path
 ImageFile <- "inst/extdata/multiclass/test/"
@@ -52,7 +41,8 @@ ImageFile <- "inst/extdata/multiclass/test/"
 # Function to extract and plot embeddings
 result <- extract_embeddings(test_input=ImageFile,
                              model_path =ModelPath,
-                             target_class = "duet"
+                             target_class = "duet",
+                             unsupervised='TRUE'
 )
 
 print(result)

@@ -10,7 +10,9 @@
 #' @importFrom stringr str_split_fixed str_detect
 #' @importFrom purrr %>%
 #' @export
-evaluate_trainedmodel_performance_multi <- function(trained_models_dir, image_data_dir, output_dir='data/',training_data,
+evaluate_trainedmodel_performance_multi <- function(trained_models_dir, image_data_dir,
+                                                    output_dir='data/',
+                                                    training_data,
                                                     class_names,
                                                     noise.category='noise',unfreeze='TRUE') {
 
@@ -131,7 +133,7 @@ evaluate_trainedmodel_performance_multi <- function(trained_models_dir, image_da
 
       filename_multi <- paste(output_dir, '/performance_tables_multi_trained_combined/', training_data, '_', n_epochs, '_', model_type,'_TransferLearningCNNDFmulti.csv', sep = '')
 
-      dir.create(paste(output_dir, '/performance_tables_multi_trained/', sep = ''),showWarnings = FALSE)
+      dir.create(paste(output_dir, '/performance_tables_multi_trained/', sep = ''),showWarnings = FALSE, recursive = T)
 
       # Return the index of the max values (i.e. which class)
       PredictTop1 <- torch_argmax(Pred, dim = 2)
@@ -144,10 +146,11 @@ evaluate_trainedmodel_performance_multi <- function(trained_models_dir, image_da
 
       PredictTop1Names <- droplevels(factor(PredictTop1, levels = 1:length(class_names), labels = class_names))
       Folder <- factor(Folder, levels = c(levels(Folder), class_names))
-      PredictTop1NamesFiltered <- PredictTop1Names[PredictTop1Names %in% levels(as.factor(Folder))]
+
+      PredictTop1Names <- factor(PredictTop1Names, levels =levels( as.factor(Folder)))
 
       # Create confusion matrix with filtered predictions
-      ConfMatrix <- caret::confusionMatrix(data = PredictTop1NamesFiltered,
+      ConfMatrix <- caret::confusionMatrix(data = PredictTop1Names,
                                            reference = as.factor(Folder))
 
 

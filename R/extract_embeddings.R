@@ -6,7 +6,7 @@
 #' @param test_input A character string specifying the path to the directory containing the test images.
 #' @param model_path A character string specifying the path to the pre-trained PyTorch model file.
 #' @param target_class A character string specifying the class of interest for cluster analysis.
-#'
+#' @param unsupervised Logical, indicates whether to assign 'target_class' to a cluster and calculate NMI and corresponding confusion matrix
 #' @return A list containing the following components:
 #' \describe{
 #'   \item{EmbeddingsCombined}{A combined scatter plot of embeddings, showing class and cluster colors.}
@@ -30,26 +30,11 @@
 #' @import caret
 #'
 #' @examples {
-# # Train simple CNN model
-#' train_CNN_binary(
-#'   input.data.path = "inst/extdata/binary/",
-#'   test.data = "inst/extdata/binary/test/",
-#'   architecture = "alexnet",  #' Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
-#'   unfreeze.param = TRUE,
-#'   batch_size = 6,
-#'   learning_rate = 0.001,
-#'   epoch.iterations = 1,  #' Or any other list of integer epochs
-#'   early.stop = "yes",
-#'   save.model= TRUE,
-#'   output.base.path = paste(tempdir(),'/BinaryDir/',sep=''),
-#'   trainingfolder = "test_binary"
-#' )
-
-#' # Create list of files in temp directory
-#' TempFileList <- list.files(paste(tempdir(),'/BinaryDir/',sep=''),full.names = T,recursive = T)
+#' #' Set model directory
+#' trained_models_dir <- system.file("extdata", "trainedresnetmulti/", package = "gibbonNetR")
 #'
-#' # Find model path
-#' ModelPath <- TempFileList[which(str_detect(TempFileList,'model.pt'))]
+#' #' Specify model path
+#' ModelPath <- list.files(trained_models_dir,full.names = T)
 #'
 #' # Specify model path
 #' ImageFile <- "inst/extdata/multiclass/test/"
@@ -57,7 +42,8 @@
 #' # Function to extract and plot embeddings
 #' result <- extract_embeddings(test_input=ImageFile,
 #'                              model_path =ModelPath,
-#'                              target_class = "duet"
+#'                              target_class = "duet",
+#'                              unsupervised='TRUE'
 #' )
 #'
 #' print(result)
@@ -65,7 +51,8 @@
 #' @export
 
 # Define the function
-extract_embeddings <- function(test_input, model_path, target_class) {
+extract_embeddings <- function(test_input, model_path, target_class,
+                               unsupervised='TRUE') {
   # Load the fine-tuned model
   fine_tuned_model <- luz_load(model_path)
 
@@ -162,6 +149,7 @@ extract_embeddings <- function(test_input, model_path, target_class) {
 
   EmbeddingsCombined <- cowplot::plot_grid(EmbeddingsM2Scatter, EmbeddingsM2ScatterUnsuper)
 
+  if(unsupervised=='TRUE'){
   # Find the cluster with the most observations of the target class
   class_counts <- table(Embeddings$Label, TempCluster$cluster)
 
@@ -191,4 +179,9 @@ extract_embeddings <- function(test_input, model_path, target_class) {
     NMI = NMI(Binary, BinaryLabels),
     ConfusionMatrixUnsupervisedAssigment = ConfMat$byClass
   ))
+  } else {
+    return(list(
+      EmbeddingsCombined = EmbeddingsCombined
+    ))
+  }
 }

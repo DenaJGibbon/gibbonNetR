@@ -12,8 +12,8 @@
 #' @examples
 #' {
 #' # Set directory paths for trained models and test images
-#' trained_models_dir <- '/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/inst/extdata/trainedresnetbinary/'
-#' image_data_dir <- "inst/extdata/binary/test/"
+#' trained_models_dir <- 'inst/extdata/trainedresnetbinary/'
+#' image_data_dir <- 'inst/extdata/binary/test/'
 #'
 #' # Evaluate the performance of the trained models using the test images
 #' evaluate_trainedmodel_performance(trained_models_dir = trained_models_dir,
@@ -133,7 +133,7 @@ evaluate_trainedmodel_performance <- function(trained_models_dir, image_data_dir
     CombinedTempRow$TestData <- str_replace_all(image_data_dir,pattern = '/',replacement ='_')
     TransferLearningCNNDF <- rbind.data.frame(TransferLearningCNNDF, CombinedTempRow)
     filename <- paste(output_dir,'performance_tables_trained/', training_data, '_', n_epochs, '_', model_type, '_TransferLearningTrainedModel.csv', sep = '')
-    dir.create(dirname(filename), showWarnings = FALSE)
+    dir.create(dirname(filename), showWarnings = FALSE, recursive = T)
     write.csv(TransferLearningCNNDF, filename, row.names = FALSE)
 
   }

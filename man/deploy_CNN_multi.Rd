@@ -72,30 +72,13 @@ dir.create(paste(tempdir(),'/MultiDir/Wav/'),recursive = T, showWarnings = FALSE
 # Write to temp directory
 writeWave(TempBinWav,filename = paste(tempdir(),'/MultiDir/Wav/','TempBinWav.wav'))
 
-# Train the model
-train_CNN_multi(
-  input.data.path = "inst/extdata/multiclass/",
-  test.data = "inst/extdata/multiclass/test/",
-  architecture = "resnet18",  #' Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
-  unfreeze.param = TRUE,
-  batch_size = 6,
-  class_weights = rep( (1/5), 5),
-  learning_rate = 0.001,
-  epoch.iterations = 3,  #' Or any other list of integer epochs
-  early.stop = "yes",
-  save.model= TRUE,
-  output.base.path = paste(tempdir(),'/MultiDir/',sep=''),
-  trainingfolder = "test_multi",
-  noise.category = 'noise'
-)
+#' Set model directory
+trained_models_dir <- system.file("extdata", "trainedresnetmulti/", package = "gibbonNetR")
 
-# Find model path
-TempFileList <- list.files(paste(tempdir(),'/MultiDir/',sep=''),full.names = T,recursive = T)
+#' Specify model path
+ModelPath <- list.files(trained_models_dir,full.names = T)
 
-# Specify model path
-ModelPath <- TempFileList[which(str_detect(TempFileList,'model.pt'))]
-
-# Deploy trained model over sound files
+#' Deploy trained model over sound files
 deploy_CNN_multi(
   clip_duration = 12,
   architecture='resnet18',
@@ -113,6 +96,8 @@ deploy_CNN_multi(
   threshold = .25,
   max_freq_khz = 2
 )
+ jj <- readJPEG(list.files(paste(tempdir(),'/MultiDir/Results/Images/',sep=''),full.names = T)[1],native=TRUE)
+ plot(0:1,0:1,type="n", axes=FALSE,main='Multiclass detection')
+ print(rasterImage(jj,0,0,1,1))
 }
-
 }
