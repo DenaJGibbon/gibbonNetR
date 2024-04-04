@@ -4,13 +4,13 @@ Acoustic Data
 Dena J. Clink and Abdul Hamid Ahmad
 2024-04-04
 
-## Overview
+# Overview
 
 This readme provides instructions and code for training and testing the
 performance of different convolutional neural network model
 architectures on spectrogram images.
 
-## Installation
+# Installation
 
 You can install the `gibbonNetR` package from its repository using
 `devtools`:
@@ -22,6 +22,8 @@ install.packages("devtools")
 # Install gibbonNetR
 devtools::install_github("https://github.com/DenaJGibbon/gibbonNetR")
 ```
+
+# Preparing the data
 
 ## Download example training files on Zenodo and convert to spectrogram images
 
@@ -96,6 +98,8 @@ Figure 1. Spectrograms of training clips for CNNs
 
 </div>
 
+# Train the models
+
 ## Training the models using gibbonNetR and evaluating on a test set
 
 ``` r
@@ -126,7 +130,9 @@ gibbonNetR::train_CNN_multi(input.data.path=input.data.path,
                             noise.category = "noise")
 ```
 
-## Extracting Performance Data
+# Evaluating model performance
+
+## Specify for the ‘female.gibbon’ class
 
 ``` r
 # Evaluate model performance
@@ -137,59 +143,21 @@ PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=perf
                                                       model.type = "multi",Thresh.val=0)
 ```
 
-    ## [1] "Evaluating performance for female.gibbon Here are the present classes: female.gibbon"    
-    ## [2] "Evaluating performance for female.gibbon Here are the present classes: hornbill.helmeted"
-    ## [3] "Evaluating performance for female.gibbon Here are the present classes: hornbill.rhino"   
-    ## [4] "Evaluating performance for female.gibbon Here are the present classes: long.argus"       
-    ## [1] "Best F1 results"
-    ## [1] "female.gibbon"
-    ##   Sensitivity Specificity Pos Pred Value Neg Pred Value Precision    Recall
-    ## 1   0.9980276   0.8135819      0.5464363      0.9994547 0.5464363 0.9980276
-    ##          F1 Prevalence Detection Rate Detection Prevalence Balanced Accuracy
-    ## 1 0.7062107  0.1836957      0.1833333            0.3355072         0.9058048
-    ##   Validation loss          Training Data N epochs CNN Architecture         AUC
-    ## 1    0.0003838354 danummulticlassexample       20         resnet50 0.005914096
-    ##   Threshold Frozen         Class
-    ## 1       0.9   TRUE female.gibbon
-    ## [1] "Best Precision results"
-    ##   Sensitivity Specificity Pos Pred Value Neg Pred Value Precision    Recall
-    ## 1   0.9980276   0.8135819      0.5464363      0.9994547 0.5464363 0.9980276
-    ##          F1 Prevalence Detection Rate Detection Prevalence Balanced Accuracy
-    ## 1 0.7062107  0.1836957      0.1833333            0.3355072         0.9058048
-    ##   Validation loss          Training Data N epochs CNN Architecture         AUC
-    ## 1    0.0003838354 danummulticlassexample       20         resnet50 0.005914096
-    ##   Threshold Frozen         Class
-    ## 1       0.9   TRUE female.gibbon
-    ## [1] "Best Recall results"
-    ##   Sensitivity Specificity Pos Pred Value Neg Pred Value Precision Recall
-    ## 1           1   0.7394585      0.4634369              1 0.4634369      1
-    ##          F1 Prevalence Detection Rate Detection Prevalence Balanced Accuracy
-    ## 1 0.6333542  0.1836957      0.1836957            0.3963768         0.8697292
-    ##   Validation loss          Training Data N epochs CNN Architecture         AUC
-    ## 1    0.0003838354 danummulticlassexample       20         resnet50 0.005914096
-    ##   Threshold Frozen         Class
-    ## 1       0.7   TRUE female.gibbon
-    ## [1] "Best AUC results"
-    ##   Sensitivity Specificity Pos Pred Value Neg Pred Value Precision Recall
-    ## 1           1   0.3266755      0.2504941              1 0.2504941      1
-    ##          F1 Prevalence Detection Rate Detection Prevalence Balanced Accuracy
-    ## 1 0.4006322  0.1836957      0.1836957            0.7333333         0.6633378
-    ##   Validation loss          Training Data N epochs CNN Architecture         AUC
-    ## 1    0.0003838354 danummulticlassexample       20         resnet50 0.005914096
-    ##   Threshold Frozen         Class
-    ## 1       0.1   TRUE female.gibbon
+## Examine the results
 
 ``` r
 PerformanceOutput$f1_plot
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ``` r
 PerformanceOutput$best_f1$F1
 ```
 
     ## [1] 0.7062107
+
+## Specify for the ‘hornbill.helmeted’ class
 
 ``` r
 # Evaluate model performance
@@ -200,59 +168,21 @@ PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=perf
                                                       model.type = "multi",Thresh.val=0)
 ```
 
-    ## [1] "Evaluating performance for hornbill.helmeted Here are the present classes: female.gibbon"    
-    ## [2] "Evaluating performance for hornbill.helmeted Here are the present classes: hornbill.helmeted"
-    ## [3] "Evaluating performance for hornbill.helmeted Here are the present classes: hornbill.rhino"   
-    ## [4] "Evaluating performance for hornbill.helmeted Here are the present classes: long.argus"       
-    ## [1] "Best F1 results"
-    ## [1] "hornbill.helmeted"
-    ##   Sensitivity Specificity Pos Pred Value Neg Pred Value Precision    Recall
-    ## 1   0.9130435           1              1      0.9992698         1 0.9130435
-    ##          F1  Prevalence Detection Rate Detection Prevalence Balanced Accuracy
-    ## 1 0.9545455 0.008333333    0.007608696          0.007608696         0.9565217
-    ##   Validation loss          Training Data N epochs CNN Architecture         AUC
-    ## 1    0.0003838354 danummulticlassexample       20         resnet50 0.002700513
-    ##   Threshold Frozen             Class
-    ## 1       0.9   TRUE hornbill.helmeted
-    ## [1] "Best Precision results"
-    ##   Sensitivity Specificity Pos Pred Value Neg Pred Value Precision    Recall
-    ## 1   0.9130435           1              1      0.9992698         1 0.9130435
-    ##          F1  Prevalence Detection Rate Detection Prevalence Balanced Accuracy
-    ## 1 0.9545455 0.008333333    0.007608696          0.007608696         0.9565217
-    ##   Validation loss          Training Data N epochs CNN Architecture         AUC
-    ## 1    0.0003838354 danummulticlassexample       20         resnet50 0.002700513
-    ##   Threshold Frozen             Class
-    ## 1       0.9   TRUE hornbill.helmeted
-    ## [1] "Best Recall results"
-    ##   Sensitivity Specificity Pos Pred Value Neg Pred Value Precision Recall
-    ## 1           1   0.9305809      0.1079812              1 0.1079812      1
-    ##          F1  Prevalence Detection Rate Detection Prevalence Balanced Accuracy
-    ## 1 0.1949153 0.008333333    0.008333333           0.07717391         0.9652905
-    ##   Validation loss          Training Data N epochs CNN Architecture         AUC
-    ## 1    0.0003838354 danummulticlassexample       20         resnet50 0.002700513
-    ##   Threshold Frozen             Class
-    ## 1       0.2   TRUE hornbill.helmeted
-    ## [1] "Best AUC results"
-    ##   Sensitivity Specificity Pos Pred Value Neg Pred Value  Precision Recall
-    ## 1           1   0.6287906     0.02213667              1 0.02213667      1
-    ##          F1  Prevalence Detection Rate Detection Prevalence Balanced Accuracy
-    ## 1 0.0433145 0.008333333    0.008333333            0.3764493         0.8143953
-    ##   Validation loss          Training Data N epochs CNN Architecture         AUC
-    ## 1    0.0003838354 danummulticlassexample       20         resnet50 0.002700513
-    ##   Threshold Frozen             Class
-    ## 1       0.1   TRUE hornbill.helmeted
+## Examine the results
 
 ``` r
 PerformanceOutput$f1_plot
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
 
 ``` r
 PerformanceOutput$best_f1$F1
 ```
 
     ## [1] 0.9545455
+
+# Use the pre-trained model to extract embeddings and use unsupervised clustering to identify signals
 
 ## Extract embeddings
 
@@ -263,38 +193,31 @@ result <- extract_embeddings(test_input="data/examples/test/",
                                      target_class = "female.gibbon")
 ```
 
-    ## [1] "processing embeddings"
-    ## [1] "Unupervised clustering for female.gibbon"
-    ##          Sensitivity          Specificity       Pos Pred Value 
-    ##            0.9112426            0.9844652            0.9295775 
-    ##       Neg Pred Value            Precision               Recall 
-    ##            0.9801149            0.9295775            0.9112426 
-    ##                   F1           Prevalence       Detection Rate 
-    ##            0.9203187            0.1836957            0.1673913 
-    ## Detection Prevalence    Balanced Accuracy 
-    ##            0.1800725            0.9478539
+## We can plot the unsupervised clustering results
 
 ``` r
 result$EmbeddingsCombined
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+![](README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+### We can output the NMI results, and the confusion matrix results when we use ‘hdbscan’ to match the target class to the cluster with the largest number of observations
 
 ``` r
 result$NMI
 ```
 
-    ## [1] 0.7360569
+    ## [1] 0.7351531
 
 ``` r
 result$ConfusionMatrix
 ```
 
     ##          Sensitivity          Specificity       Pos Pred Value 
-    ##            0.9112426            0.9844652            0.9295775 
+    ##            0.9092702            0.9849090            0.9313131 
     ##       Neg Pred Value            Precision               Recall 
-    ##            0.9801149            0.9295775            0.9112426 
+    ##            0.9796909            0.9313131            0.9092702 
     ##                   F1           Prevalence       Detection Rate 
-    ##            0.9203187            0.1836957            0.1673913 
+    ##            0.9201597            0.1836957            0.1670290 
     ## Detection Prevalence    Balanced Accuracy 
-    ##            0.1800725            0.9478539
+    ##            0.1793478            0.9470896

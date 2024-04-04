@@ -145,9 +145,10 @@ extract_embeddings <- function(test_input, model_path, target_class,
       axis.ticks.y = element_blank()
     ) +
     theme(plot.title = element_text(hjust = 1)) +
-    theme(plot.title = element_text(hjust = 1))
+    theme(plot.title = element_text(hjust = 1))+guides(color=F)
 
-  EmbeddingsCombined <- cowplot::plot_grid(EmbeddingsM2Scatter, EmbeddingsM2ScatterUnsuper)
+  EmbeddingsCombined <- cowplot::plot_grid(EmbeddingsM2Scatter, EmbeddingsM2ScatterUnsuper,
+                                           nrow = 2)
 
   if(unsupervised=='TRUE'){
   # Find the cluster with the most observations of the target class
