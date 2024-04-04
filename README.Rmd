@@ -5,6 +5,15 @@ date: "`r Sys.Date()`"
 output: github_document
 ---
 
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  out.width="400px", dpi=120
+)
+
+```
+
 # Overview
 
 This readme provides instructions and code for training and testing the performance of different convolutional neural network model architectures on spectrogram images.

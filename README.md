@@ -91,7 +91,7 @@ gibbonNetR::spectrogram_images(
 
 <div class="figure">
 
-<img src="README_files/spectro.png" alt="Figure 1. Spectrograms of training clips for CNNs" width="1995" />
+<img src="README_files/spectro.png" alt="Figure 1. Spectrograms of training clips for CNNs" width="400px" />
 <p class="caption">
 Figure 1. Spectrograms of training clips for CNNs
 </p>
@@ -149,17 +149,17 @@ PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=perf
 PerformanceOutput$f1_plot
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+<img src="README_files/figure-gfm/unnamed-chunk-8-1.png" width="400px" />
 
 ``` r
 PerformanceOutput$best_f1$F1
+#> [1] 0.7062107
 ```
-
-    ## [1] 0.7062107
 
 ## Specify for the ‘hornbill.helmeted’ class
 
 ``` r
+
 # Evaluate model performance
 performancetables.dir <- "model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi"
 
@@ -174,19 +174,19 @@ PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=perf
 PerformanceOutput$f1_plot
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+<img src="README_files/figure-gfm/unnamed-chunk-10-1.png" width="400px" />
 
 ``` r
 PerformanceOutput$best_f1$F1
+#> [1] 0.9545455
 ```
-
-    ## [1] 0.9545455
 
 # Use the pre-trained model to extract embeddings and use unsupervised clustering to identify signals
 
 ## Extract embeddings
 
 ``` r
+
 ModelPath <- "model_output/_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_20_resnet50_model.pt"
 result <- extract_embeddings(test_input="data/examples/test/",
                                       model_path=ModelPath,
@@ -199,25 +199,20 @@ result <- extract_embeddings(test_input="data/examples/test/",
 result$EmbeddingsCombined
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+<img src="README_files/figure-gfm/unnamed-chunk-12-1.png" width="400px" />
 
 ### We can output the NMI results, and the confusion matrix results when we use ‘hdbscan’ to match the target class to the cluster with the largest number of observations
 
 ``` r
 result$NMI
-```
-
-    ## [1] 0.7351531
-
-``` r
+#> [1] 0.7505927
 result$ConfusionMatrix
+#>          Sensitivity          Specificity       Pos Pred Value 
+#>            0.9112426            0.9875721            0.9428571 
+#>       Neg Pred Value            Precision               Recall 
+#>            0.9801762            0.9428571            0.9112426 
+#>                   F1           Prevalence       Detection Rate 
+#>            0.9267803            0.1836957            0.1673913 
+#> Detection Prevalence    Balanced Accuracy 
+#>            0.1775362            0.9494074
 ```
-
-    ##          Sensitivity          Specificity       Pos Pred Value 
-    ##            0.9092702            0.9849090            0.9313131 
-    ##       Neg Pred Value            Precision               Recall 
-    ##            0.9796909            0.9313131            0.9092702 
-    ##                   F1           Prevalence       Detection Rate 
-    ##            0.9201597            0.1836957            0.1670290 
-    ## Detection Prevalence    Balanced Accuracy 
-    ##            0.1793478            0.9470896
