@@ -1,10 +1,10 @@
 ---
-title: "Vignette Title"
-author: "Vignette Author"
+title: "gibbonNetR"
+author: "Dena J. Clink and Abdul Hamid Ahmad"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: rmarkdown::pdf_document
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{gibbonNetR}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -12,8 +12,10 @@ vignette: >
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  out.width="400px", dpi=120
 )
+
 ```
 
 # Overview
@@ -32,7 +34,7 @@ install.packages("devtools")
 devtools::install_github("https://github.com/DenaJGibbon/gibbonNetR")
 ```
 
-```{r, message=FALSE, echo=FALSE}
+```{r, tidy=TRUE, message=FALSE, echo=FALSE}
 devtools::load_all("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
 setwd("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
 # Load other required libraries
@@ -60,7 +62,7 @@ exdir <- 'data/trainingclips/'
 utils::unzip(zipfile = 'data/data.zip', exdir = exdir )
 
 # Check folder composition
-TrainingDatapath <- paste(exdir,"TrainingClipsMulti",sep='')
+TrainingDatapath <- paste(exdir, tidy=TRUE,"TrainingClipsMulti",sep='')
 
 # Check folder names
 list.files(TrainingDatapath)
@@ -91,7 +93,7 @@ exdir <- 'data/testclips/'
 utils::unzip(zipfile = 'data/data.zip', exdir = exdir )
 
 # Check folder composition
-TestDatapath <- paste(exdir,"TestFilesMulti",sep='')
+TestDatapath <- paste(exdir, tidy=TRUE,"TestFilesMulti",sep='')
 
 # Check folder names
 list.files(TestDatapath)
@@ -111,14 +113,14 @@ gibbonNetR::spectrogram_images(
 
 ## Here are a few spectrogram images
 
-```{r, echo=FALSE, fig.cap='Figure 1. Spectrograms of training clips for CNNs'}
+```{r, tidy=TRUE, echo=FALSE, fig.cap='Figure 1. Spectrograms of training clips for CNNs',fig.show='hold'}
 knitr::include_graphics("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/README_files/spectro.png")
 ```
 
 # Train the models
 ## Training the models using gibbonNetR and evaluating on a test set
 
-```{r,eval = FALSE}
+```{r, tidy=TRUE,eval = FALSE}
 # Location of spectrogram images for training
 input.data.path <-  'data/examples/'
 
@@ -149,36 +151,36 @@ gibbonNetR::train_CNN_multi(input.data.path=input.data.path,
 
 # Evaluating model performance
 ## Specify for the 'female.gibbon' class
-```{r, eval=FALSE, warning=FALSE, results='hide'}
+```{r, tidy=TRUE, eval=FALSE, warning=FALSE, results='hide'}
 # Evaluate model performance
 performancetables.dir <- "model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi"
 
-PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
+PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir, tidy=TRUE,
                                                       class='female.gibbon',
                                                       model.type = "multi",Thresh.val=0)
 
 ```
 
 ## Examine the results
-```{r,  eval=FALSE, warning=FALSE}
+```{r, tidy=TRUE,  eval=FALSE, warning=FALSE}
 PerformanceOutput$f1_plot
 PerformanceOutput$best_f1$F1
 ```
 
 ## Specify for the 'hornbill.helmeted' class
-```{r, eval=FALSE, warning=FALSE, results='hide'}
+```{r, tidy=TRUE, eval=FALSE, warning=FALSE, results='hide'}
 
 # Evaluate model performance
 performancetables.dir <- "model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi"
 
-PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
+PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir, tidy=TRUE,
                                                       class='hornbill.helmeted',
                                                       model.type = "multi",Thresh.val=0)
 
 ```
 
 ## Examine the results
-```{r,eval=FALSE,  warning=FALSE}
+```{r, tidy=TRUE,eval=FALSE,  warning=FALSE}
 PerformanceOutput$f1_plot
 PerformanceOutput$best_f1$F1
 ```
@@ -188,7 +190,7 @@ PerformanceOutput$best_f1$F1
 
 ## Extract embeddings
 
-```{r, eval=FALSE, warning=FALSE, results='hide'}
+```{r, tidy=TRUE, eval=FALSE, warning=FALSE, results='hide'}
 
 ModelPath <- "model_output/_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_20_resnet50_model.pt"
 result <- extract_embeddings(test_input="data/examples/test/",
@@ -197,12 +199,12 @@ result <- extract_embeddings(test_input="data/examples/test/",
 ```
 
 ## We can plot the unsupervised clustering results
-```{r,eval=FALSE}
+```{r, tidy=TRUE,eval=FALSE}
 result$EmbeddingsCombined
 ```
 
 ### We can output the NMI results, and the confusion matrix results when we use 'hdbscan' to match the target class to the cluster with the largest number of observations
-```{r, eval=FALSE }
+```{r, tidy=TRUE, eval=FALSE }
 result$NMI
 result$ConfusionMatrix
 ```
