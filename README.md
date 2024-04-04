@@ -1,13 +1,14 @@
 gibbonNetR: R Package for the Use of CNNs and Transfer Learning on
 Acoustic Data
 ================
-Dena J. Clink
-2023-09-20
+Dena J. Clink and Abdul Hamid Ahmad
+2024-04-04
 
 ## Overview
 
-This readme provides instructions and code for training and testing a
-deep learning model on spectrogram images.
+This readme provides instructions and code for training and testing the
+performance of different convolutional neural network model
+architectures on spectrogram images.
 
 ## Installation
 
@@ -22,116 +23,73 @@ install.packages("devtools")
 devtools::install_github("https://github.com/DenaJGibbon/gibbonNetR")
 ```
 
-## Create spectrogram images
-
-Load the package and then utilize the `spectrogram_images` function:
+## Download example training files on Zenodo and convert to spectrogram images
 
 ``` r
 library(gibbonNetR)
 
-# Prepare the spectrogram images ------------------------------------------
-# Process spectrogram images for training data:
-# The splits are set to ensure all data (100%) goes into the training folder.
-gibbonNetR::spectrogram_images(
-  trainingBasePath = '/Volumes/DJC Files/Danum Deep Learning/TrainingClips/',
-  outputBasePath   = 'data/imagesmalaysia/',
-  splits           = c(1, 0, 0)  # 100% training, 0% validation, 0% testing
-)
+# Link to training clips on Zenodo
+ZenodoLink <- 'https://zenodo.org/records/10927637/files/TrainingClipsMulti.zip?download=1'
 
-# Process spectrogram images for validation data:
-# The splits are set to ensure all data (100%) goes into the validation folder.
-gibbonNetR::spectrogram_images(
-  trainingBasePath = '/Volumes/DJC Files/Clink et al Zenodo Data/ValidationClipsDanum',
-  outputBasePath   = 'data/imagesmalaysia/',
-  splits           = c(0, 1, 0)  # 0% training, 100% validation, 0% testing
-)
+# Download into specified zip file location
+download.file(url = ZenodoLink, destfile = 'data/data.zip')
 
-# Process spectrogram images for testing data:
-# The splits are set to ensure all data (100%) goes into the testing folder.
+# Unzip folder
+exdir <- 'data/trainingclips/'
+utils::unzip(zipfile = 'data/data.zip', exdir = exdir )
+
+# Check folder composition
+TrainingDatapath <- paste(exdir,"TrainingClipsMulti",sep='')
+
+# Check folder names
+list.files(TrainingDatapath)
+
+# Create spectrogram images
 gibbonNetR::spectrogram_images(
-  trainingBasePath = '/Volumes/DJC Files/Clink et al Zenodo Data/TestClipsDanum/', #'/Volumes/DJC Files/Danum Deep Learning/TestClips', #
-  outputBasePath   = 'data/imagesmalaysia/',
-  splits           = c(0, 0, 1)  # 0% training, 0% validation, 100% testing
+  trainingBasePath = TrainingDatapath,
+  outputBasePath   = 'data/examples/',
+  splits           = c(0.7, 0.3, 0),  # 70% training, 30% validation
+  minfreq.khz = 0.4,
+  maxfreq.khz = 2,
+  new.sampleratehz= 'NA'
 )
 ```
 
-The function will process the audio files from the `trainingBasePath`,
-create spectrogram images and then save these images into the respective
-train, valid, and test folders inside the `outputBasePath`.
+## Download example test files from Zenodo and convert to spectrogram images
 
 ``` r
-# Load required libraries
-library(dplyr)
-library(torch)
-library(torchvision)
-library(purrr)
+# Link to test clips on Zenodo
+ZenodoLink <- 'https://zenodo.org/records/10927637/files/TestFilesMulti.zip?download=1'
 
-input.data.path <-  'data/imagesmalaysiamulti/'
+# Download into specified zip file location
+download.file(url = ZenodoLink, destfile = 'data/data.zip')
 
-# Define transformation pipeline for the images
-transforms <- function(.) {
-  . %>%
-    # Convert the images into tensors
-    torchvision::transform_to_tensor() %>%
-    # Resize the images to the specified dimensions (224x224)
-    torchvision::transform_resize(size = c(224, 224)) %>%
-    # Normalize the images with given mean and standard deviation
-    torchvision::transform_normalize(
-      mean = c(0.485, 0.456, 0.406), 
-      std = c(0.229, 0.224, 0.225)
-    )
-}
+# Unzip folder
+exdir <- 'data/testclips/'
+utils::unzip(zipfile = 'data/data.zip', exdir = exdir )
 
-# Create a dataset using the image_folder_dataset function. The images will be loaded and transformed.
-train_ds <- image_folder_dataset(
-  file.path(input.data.path, 'train'),
-  transform = transforms,
-  # Convert labels into double and subtract 1
-  target_transform = function(x) as.double(x) - 1
+# Check folder composition
+TestDatapath <- paste(exdir,"TestFilesMulti",sep='')
+
+# Check folder names
+list.files(TestDatapath)
+
+# Create spectrogram images
+gibbonNetR::spectrogram_images(
+  trainingBasePath = TestDatapath,
+  outputBasePath   = 'data/examples/',
+  splits           = c(0, 0, 1),  # 100% in test folder
+  minfreq.khz = 0.4,
+  maxfreq.khz = 2,
+  new.sampleratehz= 'NA'
 )
-
-# Create a dataloader to manage batches of the dataset
-train_dl <- dataloader(train_ds, batch_size = 24, shuffle = TRUE, drop_last = TRUE)
-
-# Extract the next batch of images and labels from the dataloader
-batch <- train_dl$.iter()$.next()
-# Retrieve the class labels from the batch
-classes <- batch[[2]]
-# Convert numerical labels to class names ('Noise' or 'Gibbons')
-class_names <- ifelse(batch$y, 'Noise', 'Gibbons')
-
-# Define a function to process images: Convert tensor to array and denormalize
-process_images <- function(images) {
-  images <- as_array(images) %>% aperm(perm = c(1, 3, 4, 2))
-  # Define the normalization parameters
-  mean <- c(0.485, 0.456, 0.406)
-  std <- c(0.229, 0.224, 0.225)
-  # Denormalize the images
-  images <- std * images + mean
-  images <- images * 255
-  # Clip image values to the range [0, 255]
-  pmin(255, pmax(0, images))
-}
-
-# Process the batch of images
-images <- process_images(batch[[1]])
-
-# Set plotting parameters and visualize the batch of images with their class names
-par(mfcol = c(4, 6), mar = rep(1, 4))
-images %>%
-  # Convert the image array to a list of matrices
-  purrr::array_tree(1) %>%
-  # Set names to the images based on their classes
-  purrr::set_names(class_names) %>%
-  # Convert the image matrices to raster objects for plotting
-  purrr::map(as.raster, max = 255) %>%
-  # Plot each image with its class name as title
-  purrr::iwalk(~{plot(.x); title(.y)})
 ```
+
+## Here are a few spectrogram images
 
 <div class="figure">
 
-<img src="README_files/spectro.png" alt="Figure 1. Spectrograms of training clips for CNNs" width="2132" />
+<img src="README_files/spectro.png" alt="Figure 1. Spectrograms of training clips for CNNs" width="1995" />
 <p class="caption">
 Figure 1. Spectrograms of training clips for CNNs
 </p>
@@ -142,147 +100,201 @@ Figure 1. Spectrograms of training clips for CNNs
 
 ``` r
 # Location of spectrogram images for training
-input.data.path <-  'data/imagesmalaysia/'
+input.data.path <-  'data/examples/'
 
 # Location of spectrogram images for testing
-test.data.path <- 'data/imagesmalaysia/'
+test.data.path <- 'data/examples/test/'
 
-# Training data folder short
-trainingfolder.short <- 'imagesmalaysia'
+# User specified training data label for metadata
+trainingfolder.short <- 'danummulticlassexample'
 
-# Whether to unfreeze the layers
-unfreeze.param <- TRUE # FALSE means the features are frozen; TRUE unfrozen
+# We can specify the number of epochs to train here
+epoch.iterations <- c(20)
 
-# Number of epochs to include
-epoch.iterations <- c(1,2,3,4,5,20)
-
-# Location to save the out
-output.data.path <-paste('data/','output','unfrozen',unfreeze.param,trainingfolder.short,'/', sep='_')
-
-# Create if doesn't exist
-dir.create(output.data.path)
-
-# Allow early stopping?
-early.stop <- 'yes' # NOTE: Must comment out if don't want early stopping
-
-gibbonNetR::train_alexNet(input.data.path=input.data.path,
-                          test.data=test.data.path,
-                          unfreeze = TRUE,
-                          epoch.iterations=epoch.iterations,
-                          early.stop = "yes",
-                          output.base.path = "data/",
-                          trainingfolder=trainingfolder.short,
-                          positive.class="Gibbons",
-                          negative.class="Noise")
-
-
-gibbonNetR::train_VGG16(input.data.path=input.data.path,
-                          test.data=test.data.path,
-                          unfreeze = TRUE,
-                          epoch.iterations=epoch.iterations,
-                          early.stop = "yes",
-                          output.base.path = "data/",
-                          trainingfolder=trainingfolder.short,
-                          positive.class="Gibbons",
-                          negative.class="Noise")
-
-gibbonNetR::train_VGG19(input.data.path=input.data.path,
-                        test.data=test.data.path,
-                        unfreeze = TRUE,
-                        epoch.iterations=epoch.iterations,
-                        early.stop = "yes",
-                        output.base.path = "data/",
-                        trainingfolder=trainingfolder.short,
-                        positive.class="Gibbons",
-                        negative.class="Noise")
-
-gibbonNetR::train_ResNet18(input.data.path=input.data.path,
+# Function to train a multi-class CNN
+gibbonNetR::train_CNN_multi(input.data.path=input.data.path,
+                            architecture ='resnet50',
+                            learning_rate = 0.001,
+                            class_weights = c(0.3, 0.3, 0.2, 0.2, 0),
                             test.data=test.data.path,
-                            unfreeze = TRUE,
+                            unfreeze.param = TRUE,
                             epoch.iterations=epoch.iterations,
+                            save.model= TRUE,
                             early.stop = "yes",
-                            output.base.path = "data/",
+                            output.base.path = "model_output/",
                             trainingfolder=trainingfolder.short,
-                            positive.class="Gibbons",
-                            negative.class="Noise")
-
-gibbonNetR::train_ResNet50(input.data.path=input.data.path,
-                            test.data=test.data.path,
-                            unfreeze = TRUE,
-                            epoch.iterations=epoch.iterations,
-                            early.stop = "yes",
-                            output.base.path = "data/",
-                            trainingfolder=trainingfolder.short,
-                            positive.class="Gibbons",
-                            negative.class="Noise")
-
-gibbonNetR::train_ResNet152(input.data.path=input.data.path,
-                            test.data=test.data.path,
-                            unfreeze = TRUE,
-                            epoch.iterations=epoch.iterations,
-                            early.stop = "yes",
-                            output.base.path = "data/",
-                            trainingfolder=trainingfolder.short,
-                            positive.class="Gibbons",
-                            negative.class="Noise")
+                            noise.category = "noise")
 ```
 
 ## Extracting Performance Data
 
 ``` r
-PerformanceOutput <-gibbonNetR::get_best_performance(performancetables.dir='data/performance_tables_multi_trained/',
-                                                               class='duet')
+# Evaluate model performance
+performancetables.dir <- "model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi"
+
+PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
+                                                      class='female.gibbon',
+                                                      model.type = "multi",Thresh.val=0)
 ```
 
-    ## [1] "Evaluating performance for duet Here are the present classes: duet"          
-    ## [2] "Evaluating performance for duet Here are the present classes: hornbill.rhino"
+    ## [1] "Evaluating performance for female.gibbon Here are the present classes: female.gibbon"    
+    ## [2] "Evaluating performance for female.gibbon Here are the present classes: hornbill.helmeted"
+    ## [3] "Evaluating performance for female.gibbon Here are the present classes: hornbill.rhino"   
+    ## [4] "Evaluating performance for female.gibbon Here are the present classes: long.argus"       
     ## [1] "Best F1 results"
-    ##   Precision    Recall        F1 N epochs CNN Architecture        AUC Threshold
-    ## 1 0.8962963 0.9527559 0.9236641        5       modelVGG19 0.06145573       0.1
-    ##   Frozen
-    ## 1  FALSE
+    ## [1] "female.gibbon"
+    ##   Sensitivity Specificity Pos Pred Value Neg Pred Value Precision    Recall
+    ## 1   0.9980276   0.8135819      0.5464363      0.9994547 0.5464363 0.9980276
+    ##          F1 Prevalence Detection Rate Detection Prevalence Balanced Accuracy
+    ## 1 0.7062107  0.1836957      0.1833333            0.3355072         0.9058048
+    ##   Validation loss          Training Data N epochs CNN Architecture         AUC
+    ## 1    0.0003838354 danummulticlassexample       20         resnet50 0.005914096
+    ##   Threshold Frozen         Class
+    ## 1       0.9   TRUE female.gibbon
     ## [1] "Best Precision results"
-    ##   Precision    Recall        F1 N epochs CNN Architecture       AUC Threshold
-    ## 1         1 0.4173228 0.5888889        1       modelVGG16 0.1263684       0.7
-    ##   Frozen
-    ## 1  FALSE
+    ##   Sensitivity Specificity Pos Pred Value Neg Pred Value Precision    Recall
+    ## 1   0.9980276   0.8135819      0.5464363      0.9994547 0.5464363 0.9980276
+    ##          F1 Prevalence Detection Rate Detection Prevalence Balanced Accuracy
+    ## 1 0.7062107  0.1836957      0.1833333            0.3355072         0.9058048
+    ##   Validation loss          Training Data N epochs CNN Architecture         AUC
+    ## 1    0.0003838354 danummulticlassexample       20         resnet50 0.005914096
+    ##   Threshold Frozen         Class
+    ## 1       0.9   TRUE female.gibbon
     ## [1] "Best Recall results"
-    ##   Precision    Recall        F1 N epochs CNN Architecture        AUC Threshold
-    ## 1 0.8962963 0.9527559 0.9236641        5       modelVGG19 0.06145573       0.1
-    ##   Frozen
-    ## 1  FALSE
+    ##   Sensitivity Specificity Pos Pred Value Neg Pred Value Precision Recall
+    ## 1           1   0.7394585      0.4634369              1 0.4634369      1
+    ##          F1 Prevalence Detection Rate Detection Prevalence Balanced Accuracy
+    ## 1 0.6333542  0.1836957      0.1836957            0.3963768         0.8697292
+    ##   Validation loss          Training Data N epochs CNN Architecture         AUC
+    ## 1    0.0003838354 danummulticlassexample       20         resnet50 0.005914096
+    ##   Threshold Frozen         Class
+    ## 1       0.7   TRUE female.gibbon
     ## [1] "Best AUC results"
-    ##   Precision    Recall        F1 N epochs CNN Architecture       AUC Frozen
-    ## 1 0.7878788 0.4094488 0.5388601       20       modelVGG16 0.3510659  FALSE
-
-Displaying Performance Plots
+    ##   Sensitivity Specificity Pos Pred Value Neg Pred Value Precision Recall
+    ## 1           1   0.3266755      0.2504941              1 0.2504941      1
+    ##          F1 Prevalence Detection Rate Detection Prevalence Balanced Accuracy
+    ## 1 0.4006322  0.1836957      0.1836957            0.7333333         0.6633378
+    ##   Validation loss          Training Data N epochs CNN Architecture         AUC
+    ## 1    0.0003838354 danummulticlassexample       20         resnet50 0.005914096
+    ##   Threshold Frozen         Class
+    ## 1       0.1   TRUE female.gibbon
 
 ``` r
 PerformanceOutput$f1_plot
 ```
 
-    ## Warning: Removed 6 rows containing missing values (`geom_line()`).
+![](README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
-    ## Warning: Removed 31 rows containing missing values (`geom_point()`).
+``` r
+PerformanceOutput$best_f1$F1
+```
+
+    ## [1] 0.7062107
+
+``` r
+# Evaluate model performance
+performancetables.dir <- "model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi"
+
+PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
+                                                      class='hornbill.helmeted',
+                                                      model.type = "multi",Thresh.val=0)
+```
+
+    ## [1] "Evaluating performance for hornbill.helmeted Here are the present classes: female.gibbon"    
+    ## [2] "Evaluating performance for hornbill.helmeted Here are the present classes: hornbill.helmeted"
+    ## [3] "Evaluating performance for hornbill.helmeted Here are the present classes: hornbill.rhino"   
+    ## [4] "Evaluating performance for hornbill.helmeted Here are the present classes: long.argus"       
+    ## [1] "Best F1 results"
+    ## [1] "hornbill.helmeted"
+    ##   Sensitivity Specificity Pos Pred Value Neg Pred Value Precision    Recall
+    ## 1   0.9130435           1              1      0.9992698         1 0.9130435
+    ##          F1  Prevalence Detection Rate Detection Prevalence Balanced Accuracy
+    ## 1 0.9545455 0.008333333    0.007608696          0.007608696         0.9565217
+    ##   Validation loss          Training Data N epochs CNN Architecture         AUC
+    ## 1    0.0003838354 danummulticlassexample       20         resnet50 0.002700513
+    ##   Threshold Frozen             Class
+    ## 1       0.9   TRUE hornbill.helmeted
+    ## [1] "Best Precision results"
+    ##   Sensitivity Specificity Pos Pred Value Neg Pred Value Precision    Recall
+    ## 1   0.9130435           1              1      0.9992698         1 0.9130435
+    ##          F1  Prevalence Detection Rate Detection Prevalence Balanced Accuracy
+    ## 1 0.9545455 0.008333333    0.007608696          0.007608696         0.9565217
+    ##   Validation loss          Training Data N epochs CNN Architecture         AUC
+    ## 1    0.0003838354 danummulticlassexample       20         resnet50 0.002700513
+    ##   Threshold Frozen             Class
+    ## 1       0.9   TRUE hornbill.helmeted
+    ## [1] "Best Recall results"
+    ##   Sensitivity Specificity Pos Pred Value Neg Pred Value Precision Recall
+    ## 1           1   0.9305809      0.1079812              1 0.1079812      1
+    ##          F1  Prevalence Detection Rate Detection Prevalence Balanced Accuracy
+    ## 1 0.1949153 0.008333333    0.008333333           0.07717391         0.9652905
+    ##   Validation loss          Training Data N epochs CNN Architecture         AUC
+    ## 1    0.0003838354 danummulticlassexample       20         resnet50 0.002700513
+    ##   Threshold Frozen             Class
+    ## 1       0.2   TRUE hornbill.helmeted
+    ## [1] "Best AUC results"
+    ##   Sensitivity Specificity Pos Pred Value Neg Pred Value  Precision Recall
+    ## 1           1   0.6287906     0.02213667              1 0.02213667      1
+    ##          F1  Prevalence Detection Rate Detection Prevalence Balanced Accuracy
+    ## 1 0.0433145 0.008333333    0.008333333            0.3764493         0.8143953
+    ##   Validation loss          Training Data N epochs CNN Architecture         AUC
+    ## 1    0.0003838354 danummulticlassexample       20         resnet50 0.002700513
+    ##   Threshold Frozen             Class
+    ## 1       0.1   TRUE hornbill.helmeted
+
+``` r
+PerformanceOutput$f1_plot
+```
+
+![](README_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
+
+``` r
+PerformanceOutput$best_f1$F1
+```
+
+    ## [1] 0.9545455
+
+## Extract embeddings
+
+``` r
+ModelPath <- "model_output/_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_20_resnet50_model.pt"
+result <- extract_embeddings(test_input="data/examples/test/",
+                                      model_path=ModelPath,
+                                     target_class = "female.gibbon")
+```
+
+    ## [1] "processing embeddings"
+    ## [1] "Unupervised clustering for female.gibbon"
+    ##          Sensitivity          Specificity       Pos Pred Value 
+    ##            0.9112426            0.9844652            0.9295775 
+    ##       Neg Pred Value            Precision               Recall 
+    ##            0.9801149            0.9295775            0.9112426 
+    ##                   F1           Prevalence       Detection Rate 
+    ##            0.9203187            0.1836957            0.1673913 
+    ## Detection Prevalence    Balanced Accuracy 
+    ##            0.1800725            0.9478539
+
+``` r
+result$EmbeddingsCombined
+```
 
 ![](README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ``` r
-PerformanceOutput$pr_plot
+result$NMI
 ```
 
-    ## Warning: Removed 6 rows containing missing values (`geom_line()`).
-    ## Removed 31 rows containing missing values (`geom_point()`).
-
-![](README_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->
+    ## [1] 0.7360569
 
 ``` r
-PerformanceOutput$FPRTPR_plot
+result$ConfusionMatrix
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-8-3.png)<!-- -->
-
-## Extracting Performance Data
-
-Now we can run the trained models over a different dataset to determine
-generalizability.
+    ##          Sensitivity          Specificity       Pos Pred Value 
+    ##            0.9112426            0.9844652            0.9295775 
+    ##       Neg Pred Value            Precision               Recall 
+    ##            0.9801149            0.9295775            0.9112426 
+    ##                   F1           Prevalence       Detection Rate 
+    ##            0.9203187            0.1836957            0.1673913 
+    ## Detection Prevalence    Balanced Accuracy 
+    ##            0.1800725            0.9478539

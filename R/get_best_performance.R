@@ -65,14 +65,10 @@ get_best_performance <- function(performancetables.dir, model.type='multi',class
   # Create visualizations
   f1_plot <- ggpubr::ggline(data = FrozenCombined, x = 'Threshold', y = 'F1',
                             color = 'CNN Architecture', facet.by = 'N epochs')+ ggtitle(paste('Results for', class, 'class'))
+
   FrozenCombined$Recall <- round(FrozenCombined$Recall,1)
   pr_plot <- ggpubr::ggline(data = FrozenCombined, x = 'Recall', y = 'Precision',
                             color = 'CNN Architecture', facet.by = 'N epochs')+ ggtitle(paste('Results for', class, 'class'))
-
-
-  FPRTPR_plot <-ggpubr::ggline(data = FrozenCombined,  x = 'FPR', y = 'Threshold',
-                               color = 'CNN Architecture', facet.by = 'N epochs',numeric.x.axis = TRUE)+
-    geom_abline(slope=1,intercept=0,lty='dashed')+ coord_cartesian(xlim = c(0, 1), ylim = c(0, 1))+ ggtitle(paste('Results for', class, 'class'))
 
 
   print('Best F1 results')
@@ -94,7 +90,6 @@ get_best_performance <- function(performancetables.dir, model.type='multi',class
     best_recall = best_recall_results,
     best_auc = best_auc_results,
     f1_plot = f1_plot,
-    pr_plot = pr_plot,
-    FPRTPR_plot =FPRTPR_plot
+    pr_plot = pr_plot
   ))
 }

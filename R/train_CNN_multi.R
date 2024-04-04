@@ -375,7 +375,6 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
 
     # Convert to a factor
     modelMultiPred <- as.factor(PredMPS)
-    print(modelMultiPred)
 
     # Calculate the probability associated with each class
     Probability <- as_array(torch_tensor(nnf_softmax(TrainedModelPred, dim = 2), device = 'cpu'))

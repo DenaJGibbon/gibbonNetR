@@ -1,13 +1,13 @@
 ---
 title: "gibbonNetR: R Package for the Use of CNNs and Transfer Learning on Acoustic Data"
-author: "Dena J. Clink"
+author: "Dena J. Clink and Abdul Hamid Ahmad"
 date: "`r Sys.Date()`"
 output: github_document
 ---
 
 ## Overview
 
-This readme provides instructions and code for training and testing a deep learning model on spectrogram images. 
+This readme provides instructions and code for training and testing the performance of different convolutional neural network model architectures on spectrogram images. 
 
 
 ## Installation
@@ -25,114 +25,80 @@ devtools::install_github("https://github.com/DenaJGibbon/gibbonNetR")
 
 ```{r, message=FALSE, echo=FALSE}
 devtools::load_all("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
-```
 
-## Create spectrogram images
-
-Load the package and then utilize the `spectrogram_images` function:
-
-``` {r eval = FALSE}
-library(gibbonNetR)
-
-# Prepare the spectrogram images ------------------------------------------
-# Process spectrogram images for training data:
-# The splits are set to ensure all data (100%) goes into the training folder.
-gibbonNetR::spectrogram_images(
-  trainingBasePath = '/Volumes/DJC Files/Danum Deep Learning/TrainingClips/',
-  outputBasePath   = 'data/imagesmalaysia/',
-  splits           = c(1, 0, 0)  # 100% training, 0% validation, 0% testing
-)
-
-# Process spectrogram images for validation data:
-# The splits are set to ensure all data (100%) goes into the validation folder.
-gibbonNetR::spectrogram_images(
-  trainingBasePath = '/Volumes/DJC Files/Clink et al Zenodo Data/ValidationClipsDanum',
-  outputBasePath   = 'data/imagesmalaysia/',
-  splits           = c(0, 1, 0)  # 0% training, 100% validation, 0% testing
-)
-
-# Process spectrogram images for testing data:
-# The splits are set to ensure all data (100%) goes into the testing folder.
-gibbonNetR::spectrogram_images(
-  trainingBasePath = '/Volumes/DJC Files/Clink et al Zenodo Data/TestClipsDanum/', #'/Volumes/DJC Files/Danum Deep Learning/TestClips', #
-  outputBasePath   = 'data/imagesmalaysia/',
-  splits           = c(0, 0, 1)  # 0% training, 0% validation, 100% testing
-)
-
-```
-
-The function will process the audio files from the `trainingBasePath`, create spectrogram images and then save these images into the respective train, valid, and test folders inside the `outputBasePath`.
-
-```{r eval = FALSE}
-# Load required libraries
+# Load other required libraries
 library(dplyr)
 library(torch)
 library(torchvision)
 library(purrr)
+```
 
-input.data.path <-  'data/imagesmalaysiamulti/'
+## Download example training files on Zenodo and convert to spectrogram images
 
-# Define transformation pipeline for the images
-transforms <- function(.) {
-  . %>%
-    # Convert the images into tensors
-    torchvision::transform_to_tensor() %>%
-    # Resize the images to the specified dimensions (224x224)
-    torchvision::transform_resize(size = c(224, 224)) %>%
-    # Normalize the images with given mean and standard deviation
-    torchvision::transform_normalize(
-      mean = c(0.485, 0.456, 0.406), 
-      std = c(0.229, 0.224, 0.225)
-    )
-}
+``` {r eval = FALSE}
+library(gibbonNetR)
 
-# Create a dataset using the image_folder_dataset function. The images will be loaded and transformed.
-train_ds <- image_folder_dataset(
-  file.path(input.data.path, 'train'),
-  transform = transforms,
-  # Convert labels into double and subtract 1
-  target_transform = function(x) as.double(x) - 1
+# Link to training clips on Zenodo
+ZenodoLink <- 'https://zenodo.org/records/10927637/files/TrainingClipsMulti.zip?download=1'
+
+# Download into specified zip file location
+download.file(url = ZenodoLink, destfile = 'data/data.zip')
+
+# Unzip folder
+exdir <- 'data/trainingclips/'
+utils::unzip(zipfile = 'data/data.zip', exdir = exdir )
+
+# Check folder composition
+TrainingDatapath <- paste(exdir,"TrainingClipsMulti",sep='')
+
+# Check folder names
+list.files(TrainingDatapath)
+
+# Create spectrogram images
+gibbonNetR::spectrogram_images(
+  trainingBasePath = TrainingDatapath,
+  outputBasePath   = 'data/examples/',
+  splits           = c(0.7, 0.3, 0),  # 70% training, 30% validation
+  minfreq.khz = 0.4,
+  maxfreq.khz = 2,
+  new.sampleratehz= 'NA'
 )
 
-# Create a dataloader to manage batches of the dataset
-train_dl <- dataloader(train_ds, batch_size = 24, shuffle = TRUE, drop_last = TRUE)
+```
 
-# Extract the next batch of images and labels from the dataloader
-batch <- train_dl$.iter()$.next()
-# Retrieve the class labels from the batch
-classes <- batch[[2]]
-# Convert numerical labels to class names ('Noise' or 'Gibbons')
-class_names <- ifelse(batch$y, 'Noise', 'Gibbons')
+## Download example test files from Zenodo and convert to spectrogram images
 
-# Define a function to process images: Convert tensor to array and denormalize
-process_images <- function(images) {
-  images <- as_array(images) %>% aperm(perm = c(1, 3, 4, 2))
-  # Define the normalization parameters
-  mean <- c(0.485, 0.456, 0.406)
-  std <- c(0.229, 0.224, 0.225)
-  # Denormalize the images
-  images <- std * images + mean
-  images <- images * 255
-  # Clip image values to the range [0, 255]
-  pmin(255, pmax(0, images))
-}
+``` {r eval = FALSE}
+# Link to test clips on Zenodo
+ZenodoLink <- 'https://zenodo.org/records/10927637/files/TestFilesMulti.zip?download=1'
 
-# Process the batch of images
-images <- process_images(batch[[1]])
+# Download into specified zip file location
+download.file(url = ZenodoLink, destfile = 'data/data.zip')
 
-# Set plotting parameters and visualize the batch of images with their class names
-par(mfcol = c(4, 6), mar = rep(1, 4))
-images %>%
-  # Convert the image array to a list of matrices
-  purrr::array_tree(1) %>%
-  # Set names to the images based on their classes
-  purrr::set_names(class_names) %>%
-  # Convert the image matrices to raster objects for plotting
-  purrr::map(as.raster, max = 255) %>%
-  # Plot each image with its class name as title
-  purrr::iwalk(~{plot(.x); title(.y)})
+# Unzip folder
+exdir <- 'data/testclips/'
+utils::unzip(zipfile = 'data/data.zip', exdir = exdir )
+
+# Check folder composition
+TestDatapath <- paste(exdir,"TestFilesMulti",sep='')
+
+# Check folder names
+list.files(TestDatapath)
+
+# Create spectrogram images
+gibbonNetR::spectrogram_images(
+  trainingBasePath = TestDatapath,
+  outputBasePath   = 'data/examples/',
+  splits           = c(0, 0, 1),  # 100% in test folder
+  minfreq.khz = 0.4,
+  maxfreq.khz = 2,
+  new.sampleratehz= 'NA'
+)
+
 
 ```
+
+## Here are a few spectrogram images
 
 ```{r, echo=FALSE, fig.cap='Figure 1. Spectrograms of training clips for CNNs'}
 knitr::include_graphics("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/README_files/spectro.png")
@@ -142,111 +108,200 @@ knitr::include_graphics("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/REA
 
 ```{r,eval = FALSE}
 # Location of spectrogram images for training
-input.data.path <-  'data/imagesmalaysia/'
+input.data.path <-  'data/examples/'
 
 # Location of spectrogram images for testing
-test.data.path <- 'data/imagesmalaysia/'
+test.data.path <- 'data/examples/test/'
 
-# Training data folder short
-trainingfolder.short <- 'imagesmalaysia'
+# User specified training data label for metadata
+trainingfolder.short <- 'danummulticlassexample'
 
-# Whether to unfreeze the layers
-unfreeze.param <- TRUE # FALSE means the features are frozen; TRUE unfrozen
+# We can specify the number of epochs to train here
+epoch.iterations <- c(20)
 
-# Number of epochs to include
-epoch.iterations <- c(1,2,3,4,5,20)
-
-# Location to save the out
-output.data.path <-paste('data/','output','unfrozen',unfreeze.param,trainingfolder.short,'/', sep='_')
-
-# Create if doesn't exist
-dir.create(output.data.path)
-
-# Allow early stopping?
-early.stop <- 'yes' # NOTE: Must comment out if don't want early stopping
-
-gibbonNetR::train_alexNet(input.data.path=input.data.path,
-                          test.data=test.data.path,
-                          unfreeze = TRUE,
-                          epoch.iterations=epoch.iterations,
-                          early.stop = "yes",
-                          output.base.path = "data/",
-                          trainingfolder=trainingfolder.short,
-                          positive.class="Gibbons",
-                          negative.class="Noise")
-
-
-gibbonNetR::train_VGG16(input.data.path=input.data.path,
-                          test.data=test.data.path,
-                          unfreeze = TRUE,
-                          epoch.iterations=epoch.iterations,
-                          early.stop = "yes",
-                          output.base.path = "data/",
-                          trainingfolder=trainingfolder.short,
-                          positive.class="Gibbons",
-                          negative.class="Noise")
-
-gibbonNetR::train_VGG19(input.data.path=input.data.path,
-                        test.data=test.data.path,
-                        unfreeze = TRUE,
-                        epoch.iterations=epoch.iterations,
-                        early.stop = "yes",
-                        output.base.path = "data/",
-                        trainingfolder=trainingfolder.short,
-                        positive.class="Gibbons",
-                        negative.class="Noise")
-
-gibbonNetR::train_ResNet18(input.data.path=input.data.path,
+# Function to train a multi-class CNN
+gibbonNetR::train_CNN_multi(input.data.path=input.data.path,
+                            architecture ='resnet50',
+                            learning_rate = 0.001,
+                            class_weights = c(0.3, 0.3, 0.2, 0.2, 0),
                             test.data=test.data.path,
-                            unfreeze = TRUE,
+                            unfreeze.param = TRUE,
                             epoch.iterations=epoch.iterations,
+                            save.model= TRUE,
                             early.stop = "yes",
-                            output.base.path = "data/",
+                            output.base.path = "model_output/",
                             trainingfolder=trainingfolder.short,
-                            positive.class="Gibbons",
-                            negative.class="Noise")
-
-gibbonNetR::train_ResNet50(input.data.path=input.data.path,
-                            test.data=test.data.path,
-                            unfreeze = TRUE,
-                            epoch.iterations=epoch.iterations,
-                            early.stop = "yes",
-                            output.base.path = "data/",
-                            trainingfolder=trainingfolder.short,
-                            positive.class="Gibbons",
-                            negative.class="Noise")
-
-gibbonNetR::train_ResNet152(input.data.path=input.data.path,
-                            test.data=test.data.path,
-                            unfreeze = TRUE,
-                            epoch.iterations=epoch.iterations,
-                            early.stop = "yes",
-                            output.base.path = "data/",
-                            trainingfolder=trainingfolder.short,
-                            positive.class="Gibbons",
-                            negative.class="Noise")
+                            noise.category = "noise")
 
 ```
 
 
 ## Extracting Performance Data
 
-```{r}
-PerformanceOutput <-gibbonNetR::get_best_performance(performancetables.dir='data/performance_tables_multi_trained/',
-                                                               class='duet')
+```{r, warning=FALSE}
+# Evaluate model performance
+performancetables.dir <- "model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi"
 
+PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
+                                                      class='female.gibbon',
+                                                      model.type = "multi",Thresh.val=0)
 
-```
-
-Displaying Performance Plots
-
-```{r}
 PerformanceOutput$f1_plot
-PerformanceOutput$pr_plot
-PerformanceOutput$FPRTPR_plot
+PerformanceOutput$best_f1$F1
+
+# Evaluate model performance
+performancetables.dir <- "model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi"
+
+PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
+                                                      class='hornbill.helmeted',
+                                                      model.type = "multi",Thresh.val=0)
+
+PerformanceOutput$f1_plot
+PerformanceOutput$best_f1$F1
+
+
 ```
 
 
-## Extracting Performance Data
-Now we can run the trained models over a different dataset to determine generalizability.
+## Extract embeddings
+```{r}
 
+ModelPath <- "model_output/_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_20_resnet50_model.pt"
+result <- extract_embeddings(test_input="data/examples/test/",
+                                      model_path=ModelPath,
+                                     target_class = "female.gibbon")
+
+result$EmbeddingsCombined
+result$NMI
+result$ConfusionMatrix
+```
+
+
+```{r, eval=F, echo=FALSE}
+# Load data
+data("TempBinWav")
+
+dir.create(paste(tempdir(),'/BinaryDir/Wav/'),recursive = T)
+
+# Write to temp directory
+writeWave(TempBinWav,filename = paste(tempdir(),'/BinaryDir/Wav/','TempBinWav.wav'))
+
+train_CNN_binary(
+    input.data.path = "inst/extdata/binary/",
+    test.data = "inst/extdata/binary/test/",
+    architecture = "alexnet",  # Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
+    unfreeze.param = TRUE,
+    batch_size = 6,
+    learning_rate = 0.001,
+    epoch.iterations = 1,  # Or any other list of integer epochs
+    early.stop = "yes",
+    save.model= TRUE,
+    output.base.path = paste(tempdir(),'/BinaryDir/',sep=''),
+    trainingfolder = "test_binary"
+  )
+
+TempFileList <- list.files(paste(tempdir(),'/BinaryDir/',sep=''),full.names = T,recursive = T)
+
+ModelPath <- TempFileList[which(str_detect(TempFileList,'.pt'))]
+
+
+deploy_CNN_binary(
+  clip_duration = 12,
+  architecture='alexnet',
+  output_folder = paste(tempdir(),'/BinaryDir/Results/Images/',sep=''),
+  output_folder_selections = paste(tempdir(),'/BinaryDir/Results/Selections/',sep=''),
+  output_folder_wav = paste(tempdir(),'/BinaryDir/Results/Wavs/',sep=''),
+  detect_pattern=NA,
+  top_model_path = ModelPath,
+  path_to_files = paste(tempdir(),'/BinaryDir/Wav/'),
+  downsample_rate = 'NA',
+  threshold = 0.5,
+  save_wav = F,
+  positive.class = 'Gibbons',
+  negative.class = 'Noise',
+  max_freq_khz = 2
+)
+
+
+# Deploy multiclass model example -----------------------------------------
+# Load data
+data("TempBinWav")
+
+dir.create(paste(tempdir(),'/MultiDir/Wav/'),recursive = T)
+
+# Write to temp directory
+writeWave(TempBinWav,filename = paste(tempdir(),'/MultiDir/Wav/','TempBinWav.wav'))
+
+train_CNN_multi(
+  input.data.path = "inst/extdata/multiclass/",
+  test.data = "inst/extdata/multiclass/test/",
+  architecture = "resnet18",  # Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
+  unfreeze.param = TRUE,
+  batch_size = 6,
+  class_weights = rep( (1/5), 5),
+  learning_rate = 0.001,
+  epoch.iterations = 3,  # Or any other list of integer epochs
+  early.stop = "yes",
+  save.model= TRUE,
+  output.base.path = paste(tempdir(),'/MultiDir/',sep=''),
+  trainingfolder = "test_multi",
+  noise.category = 'noise'
+)
+
+TempFileList <- list.files(paste(tempdir(),'/MultiDir/',sep=''),full.names = T,recursive = T)
+
+ModelPath <- TempFileList[which(str_detect(TempFileList,'model.pt'))]
+
+
+deploy_CNN_multi(
+  clip_duration = 12,
+  architecture='resnet18',
+  output_folder = paste(tempdir(),'/MultiDir/Results/Images/',sep=''),
+  output_folder_selections = paste(tempdir(),'/MultiDir/Results/Selections/',sep=''),
+  output_folder_wav = paste(tempdir(),'/MultiDir/Results/Wavs/',sep=''),
+  detect_pattern=NA,
+  top_model_path = ModelPath,
+  path_to_files = paste(tempdir(),'/MultiDir/Wav/'),
+  downsample_rate = 'NA',
+  save_wav = F,
+  class_names = c('duet','hornbill.helmeted','hornbill.rhino','long.argus','noise'),
+  noise_category = 'noise',
+  single_class = FALSE,
+  threshold = .25,
+  max_freq_khz = 2
+)
+
+# Embeddings
+# Train simple CNN model
+ train_CNN_binary(
+   input.data.path = "inst/extdata/binary/",
+   test.data = "inst/extdata/binary/test/",
+   architecture = "alexnet",  # Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
+   unfreeze.param = TRUE,
+   batch_size = 6,
+   learning_rate = 0.001,
+   epoch.iterations = 1,  # Or any other list of integer epochs
+   early.stop = "yes",
+   save.model= TRUE,
+   output.base.path = paste(tempdir(),'/BinaryDir/',sep=''),
+   trainingfolder = "test_binary"
+ )
+
+# Create list of files in temp directory
+TempFileList <- list.files(paste(tempdir(),'/BinaryDir/',sep=''),full.names = T,recursive = T)
+
+# Find model path
+ModelPath <- TempFileList[which(str_detect(TempFileList,'model.pt'))]
+
+# Specify model path
+ImageFile <- "inst/extdata/multiclass/test/"
+
+# Function to extract and plot embeddings
+result <- extract_embeddings(test_input=ImageFile,
+                              model_path =ModelPath,
+   target_class = "duet"
+ )
+
+print(result)
+
+```
