@@ -11,6 +11,74 @@
 #' @importFrom readr read_csv
 #' @importFrom ggpubr ggline ggscatter
 #' @importFrom magrittr %>%
+#'
+
+#' @examples
+#' {
+#' # Simulate data for performance tables
+#' set.seed(123)
+#'
+#' #' Set directory
+#' performance_tables_dir <- paste(tempdir(),"/example_performance_tables/", sep='')
+#'
+#' #' Create directory for performance tables (NOTE THIS IS FOR TESTING ONLY)
+#' dir.create(performance_tables_dir, showWarnings = FALSE, recursive = T)
+#'
+#' #' Define list of model architectures
+#' architectures <- c("alexnet", "vgg16", "vgg19")
+#'
+#' #' Define list of training datasets
+#' training_datasets <- c("Dataset1", "Dataset2", "Dataset3")
+#'
+#' #' Create performance tables
+#' for (arch in architectures) {
+#'   for (td in training_datasets) {
+#'     #' Generate random performance metrics
+#'     metrics <- data.frame(
+#'       Class = rep(c("hornbill.helmeted", "other.class"), each = 5),
+#'       `Training Data` = rep(td, 10),
+#'       `CNN Architecture` = rep(arch, 10),
+#'       Threshold = runif(10, 0, 1),
+#'       F1 = runif(10, 0, 1),
+#'       Precision = runif(10, 0, 1),
+#'       Recall = runif(10, 0, 1),
+#'       AUC = runif(10, 0, 1),
+#'       `N epochs` = rep(c(10, 20, 30), each = 10)
+#'     )
+#'
+#'     #' Write data to CSV file
+#'     filename <- paste0(performance_tables_dir, arch, "_", td, ".csv")
+#'     write.csv(metrics, filename, row.names = FALSE)
+#'   }
+#' }
+#'
+#'
+#' #' Call the function with default parameters
+#' results <- get_best_performance(performancetables.dir = performance_tables_dir, )
+#'
+#' #' Print the best F1 scores
+#' print("Best F1 scores:")
+#' print(results$best_f1)
+#'
+#' #' Print the best precision results
+#' print("Best precision results:")
+#' print(results$best_precision)
+#'
+#' #' Print the best recall results
+#' print("Best recall results:")
+#' print(results$best_recall)
+#'
+#' #' Print the best AUC results
+#' print("Best AUC results:")
+#' print(results$best_auc)
+#'
+#' #' Plot F1 scores
+#' print(results$f1_plot)
+#'
+#' #' Plot precision-recall curve
+#' print(results$pr_plot)
+#' }
+
 #' @export
 get_best_performance <- function(performancetables.dir, model.type='multi',class='hornbill.helmeted',Thresh.val=0.5) {
 
@@ -93,3 +161,5 @@ get_best_performance <- function(performancetables.dir, model.type='multi',class
     pr_plot = pr_plot
   ))
 }
+
+
