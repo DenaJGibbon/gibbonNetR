@@ -2,7 +2,7 @@ gibbonNetR: R Package for the Use of CNNs and Transfer Learning on
 Acoustic Data
 ================
 Dena J. Clink and Abdul Hamid Ahmad
-2024-04-04
+2024-04-05
 
 # Overview
 
@@ -201,18 +201,21 @@ result$EmbeddingsCombined
 
 <img src="README_files/figure-gfm/unnamed-chunk-12-1.png" width="400px" />
 
-### We can output the NMI results, and the confusion matrix results when we use ‘hdbscan’ to match the target class to the cluster with the largest number of observations
+### We can explore the unsupervised clustering results
+
+the confusion matrix results when we use ‘hdbscan’ to match the target
+class to the cluster with the largest number of observations
 
 ``` r
 result$NMI
-#> [1] 0.7505927
+#> [1] 0.7302483
 result$ConfusionMatrix
 #>          Sensitivity          Specificity       Pos Pred Value 
-#>            0.9112426            0.9875721            0.9428571 
+#>            0.9072978            0.9844652            0.9292929 
 #>       Neg Pred Value            Precision               Recall 
-#>            0.9801762            0.9428571            0.9112426 
+#>            0.9792494            0.9292929            0.9072978 
 #>                   F1           Prevalence       Detection Rate 
-#>            0.9267803            0.1836957            0.1673913 
+#>            0.9181637            0.1836957            0.1666667 
 #> Detection Prevalence    Balanced Accuracy 
-#>            0.1775362            0.9494074
+#>            0.1793478            0.9458815
 ```

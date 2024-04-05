@@ -93,7 +93,7 @@ gibbonNetR::train_CNN_multi(input.data.path=input.data.path,
 
 ```
 # Evaluate model performance
-performancetables.dir <- "/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi"
+performancetables.dir <- "model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi"
 
 PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
                                                       class='female.gibbon',
@@ -108,27 +108,8 @@ PerformanceOutput$f1_plot
 PerformanceOutput$best_f1$F1
 ```
 
-## Specify for the 'hornbill.helmeted' class
-
-```
-
-# Evaluate model performance
-performancetables.dir <- "/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi"
-
-PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
-                                                      class='hornbill.helmeted',
-                                                      model.type = "multi",Thresh.val=0)
-
-```
-
-## Examine the results
-
-```
-PerformanceOutput$f1_plot
-PerformanceOutput$best_f1$F1
-```
-
 # Use the pre-trained model to extract embeddings and use unsupervised clustering to identify signals
+The use of embeddings has been shown to be an effective way to represent acoustic signals [@lakdari2024mel ;@sethi2020characterizing].
 
 ## Extract embeddings
 
@@ -142,13 +123,13 @@ result <- extract_embeddings(test_input="/Users/denaclink/Desktop/RStudioProject
 
 ## We can plot the unsupervised clustering results
 
-```{r, eval = FALSE}
+```
 result$EmbeddingsCombined
 ```
 
 ### We can output the NMI results, and the confusion matrix results when we use 'hdbscan' to match the target class to the cluster with the largest number of observations
 
-```{r,eval = FALSE}
+```
 result$NMI
 result$ConfusionMatrix
 ```

@@ -31,8 +31,8 @@ devtools::install_github("https://github.com/DenaJGibbon/gibbonNetR")
 ```
 
 ```{r, message=FALSE, echo=FALSE}
-devtools::load_all("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
-
+#devtools::load_all("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
+library(gibbonNetR)
 # Load other required libraries
 library(dplyr)
 library(torch)
@@ -199,7 +199,8 @@ result <- extract_embeddings(test_input="data/examples/test/",
 result$EmbeddingsCombined
 ```
 
-### We can output the NMI results, and the confusion matrix results when we use 'hdbscan' to match the target class to the cluster with the largest number of observations
+### We can explore the unsupervised clustering results
+the confusion matrix results when we use 'hdbscan' to match the target class to the cluster with the largest number of observations
 ```{r}
 result$NMI
 result$ConfusionMatrix

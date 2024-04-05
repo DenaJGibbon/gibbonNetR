@@ -145,7 +145,7 @@ extract_embeddings <- function(test_input, model_path, target_class,
       axis.ticks.y = element_blank()
     ) +
     theme(plot.title = element_text(hjust = 1)) +
-    theme(plot.title = element_text(hjust = 1))+guides(color=F)
+    theme(plot.title = element_text(hjust = 1))+guides(color='none')
 
   EmbeddingsCombined <- cowplot::plot_grid(EmbeddingsM2Scatter, EmbeddingsM2ScatterUnsuper,
                                            nrow = 2)
@@ -169,7 +169,7 @@ extract_embeddings <- function(test_input, model_path, target_class,
   ConfMat <- caret::confusionMatrix(
     as.factor(Binary),
     as.factor(BinaryLabels),
-    mode = "everything"
+    mode = "everything",positive = target_class
   )
 
   print(paste("Unupervised clustering for", target_class))
