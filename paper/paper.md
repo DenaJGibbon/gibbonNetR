@@ -48,16 +48,11 @@ This package provides functions to create spectrogram images, use transfer learn
 
 # Usage
 
-```{r,echo=FALSE, message=FALSE, warning=FALSE}
-devtools::load_all("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
-
-```
-
 ## First we create spectrogram images
 
-```{r, echo=FALSE, out.width="75%",fig.cap='Spectrograms of training clips for CNNs',fig.align='center',fig.pos = "H"}
-knitr::include_graphics("README_files/spectro.png")
-```
+![Spectrograms.\label{fig:fig1}](figures/spectro.png)
+
+
 
 ## Then we train the model
 
@@ -159,6 +154,9 @@ result$EmbeddingsCombined
 result$NMI
 result$ConfusionMatrix
 ```
+
+![Unsupervised clustering.\label{fig:fig2}](figures/embeddings.png)
+
 # References 
 
 
