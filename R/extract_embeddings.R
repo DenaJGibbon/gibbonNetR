@@ -37,7 +37,7 @@
 #' ModelPath <- list.files(trained_models_dir,full.names = T)
 #'
 #' # Specify model path
-#' ImageFile <- "inst/extdata/multiclass/test/"
+#' ImageFile <- system.file("extdata", "multiclass/test/", package = "gibbonNetR")
 #'
 #' # Function to extract and plot embeddings
 #' result <- extract_embeddings(test_input=ImageFile,
@@ -46,7 +46,7 @@
 #'                              unsupervised='TRUE'
 #' )
 #'
-#' print(result)
+#' print(result$EmbeddingsCombined)
 #'}
 #' @export
 
