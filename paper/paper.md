@@ -18,12 +18,11 @@ affiliations:
 
 date: 2024
 bibliography: references.bib
-
 ---
 
 # Summary
 
-Automated detection of acoustic signals is crucial for effective monitoring of vocal animals and their habitats across large spatial and temporal scales. Recent advances in deep learning have made high performing automated detection approaches more accessible two more practitioners. However, there are few deep learning approaches that can be implemented natively in R. The 'torch for R' ecosystem has made the use of transfer learning with convolutional neural networks accessible for R users. Here we provide an R package and workflow to use transfer learning for the automated detection of acoustics signals from passive acoustic monitoring (PAM) data collected in Sabah, Malaysia. The package provides functions to create spectogram images from PAM data, compare the performance of different pre-trained CNN architectures, and deploy trained models over directories of sound files. The R programming language remains one of the most commonly used languages among ecologists, and we hope that this package makes deep learning approaches more accessible to this audience.  
+Automated detection of acoustic signals is crucial for effective monitoring of vocal animals and their habitats across large spatial and temporal scales. Recent advances in deep learning have made high performing automated detection approaches more accessible two more practitioners. However, there are few deep learning approaches that can be implemented natively in R. The 'torch for R' ecosystem has made the use of transfer learning with convolutional neural networks accessible for R users. Here we provide an R package and workflow to use transfer learning for the automated detection of acoustics signals from passive acoustic monitoring (PAM) data collected in Sabah, Malaysia. The package provides functions to create spectogram images from PAM data, compare the performance of different pre-trained CNN architectures, and deploy trained models over directories of sound files. The R programming language remains one of the most commonly used languages among ecologists, and we hope that this package makes deep learning approaches more accessible to this audience.
 
 # Statement of need
 
@@ -36,6 +35,7 @@ We are in a biodiversity crisis, and there is a great need for the ability to ra
 Some commonly used non-deep learning approaches for the automated detection of acoustic signals in terrestrial PAM data include binary point matching [@katz2016], spectrogram cross-correlation [@balantic2020], or the use of a band- limited energy detector and subsequent classifier, such as support vector machine [@clink2023; @kalan2015]. Recent advances in deep learning have revolutionized image and speech recognition [@lecun2015 ], with important cross-over for the analysis of PAM data. Traditional approaches to machine learning relied heavily on feature engineering, as early machine learning algorithms required a reduced set of representative features, such as features estimated from the spectrogram. Deep learning does not require feature engineering [@stevens2020] . Convolutional neural networks (CNNs) --- one of the most effective deep learning algorithms---are useful for processing data that have a 'grid-like topology', such as image data that can be considered a 2-dimensional grid of pixels [@goodfellow2016]. The 'convolutional' layer learns the feature representations of the inputs; these convolutional layers consist of a set of filters which are basically two-dimensional matrices of numbers and the primary parameter is the number of filters [@gu2018]. Therefore, with CNN's there is no feature engineering required. However, if training data are scarce, overfitting may occur as representations of images tend to be large with many variables [@lecun1995].
 
 # *Transfer learning?*
+
 Transfer learning is an approach wherein the architecture of a pretrained CNN (which is generally trained on a very large dataset) is applied to a new classification problem. For example, CNNs trained on the ImageNet dataset of \> 1 million images [@deng2009]such as ResNet have been applied to automated detection/classification of primate and bird species from PAM data [@dufourq2022; @ruan2022]. At the most basic level, transfer learning in computer vision applications retains the feature extraction or embedding layers, and modifies the last few classification layers to be trained for a new classification task [@dufourq2022].
 
 ## *'torch for R' ecosystem*
@@ -52,15 +52,13 @@ This package provides functions to create spectrogram images, use transfer learn
 
 ![Spectrograms.\label{fig:fig1}](figures/spectro.png)
 
-
-
 ## Then we train the model
 
 # Train the models
 
 ## Training the models using gibbonNetR and evaluating on a test set
 
-```{r,eval = FALSE}
+```
 # Location of spectrogram images for training
 input.data.path <-  'data/examples/'
 
@@ -93,7 +91,7 @@ gibbonNetR::train_CNN_multi(input.data.path=input.data.path,
 
 ## Specify for the 'female.gibbon' class
 
-```{r, eval = FALSE, warning=FALSE, results='hide'}
+```
 # Evaluate model performance
 performancetables.dir <- "/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi"
 
@@ -105,14 +103,14 @@ PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=perf
 
 ## Examine the results
 
-```{r, eval = FALSE, warning=FALSE}
+```
 PerformanceOutput$f1_plot
 PerformanceOutput$best_f1$F1
 ```
 
 ## Specify for the 'hornbill.helmeted' class
 
-```{r, eval = FALSE, warning=FALSE, results='hide'}
+```
 
 # Evaluate model performance
 performancetables.dir <- "/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi"
@@ -125,7 +123,7 @@ PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=perf
 
 ## Examine the results
 
-```{r,eval = FALSE, warning=FALSE}
+```
 PerformanceOutput$f1_plot
 PerformanceOutput$best_f1$F1
 ```
@@ -134,7 +132,7 @@ PerformanceOutput$best_f1$F1
 
 ## Extract embeddings
 
-```{r, eval = FALSE, warning=FALSE, results='hide'}
+```
 
 ModelPath <- "/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_20_resnet50_model.pt"
 result <- extract_embeddings(test_input="/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/examples/test/",
@@ -157,8 +155,4 @@ result$ConfusionMatrix
 
 ![Unsupervised clustering.\label{fig:fig2}](figures/embeddings.png)
 
-# References 
-
-
-
-
+# References
