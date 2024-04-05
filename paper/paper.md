@@ -56,7 +56,7 @@ devtools::load_all("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
 ## First we create spectrogram images
 
 ```{r, echo=FALSE, out.width="75%",fig.cap='Spectrograms of training clips for CNNs',fig.align='center',fig.pos = "H"}
-knitr::include_graphics("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/README_files/spectro.png")
+knitr::include_graphics("README_files/spectro.png")
 ```
 
 ## Then we train the model
@@ -98,7 +98,7 @@ gibbonNetR::train_CNN_multi(input.data.path=input.data.path,
 
 ## Specify for the 'female.gibbon' class
 
-```{r, warning=FALSE, results='hide'}
+```{r, eval = FALSE, warning=FALSE, results='hide'}
 # Evaluate model performance
 performancetables.dir <- "/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi"
 
@@ -110,14 +110,14 @@ PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=perf
 
 ## Examine the results
 
-```{r, warning=FALSE}
+```{r, eval = FALSE, warning=FALSE}
 PerformanceOutput$f1_plot
 PerformanceOutput$best_f1$F1
 ```
 
 ## Specify for the 'hornbill.helmeted' class
 
-```{r, warning=FALSE, results='hide'}
+```{r, eval = FALSE, warning=FALSE, results='hide'}
 
 # Evaluate model performance
 performancetables.dir <- "/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi"
@@ -130,7 +130,7 @@ PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=perf
 
 ## Examine the results
 
-```{r, warning=FALSE}
+```{r,eval = FALSE, warning=FALSE}
 PerformanceOutput$f1_plot
 PerformanceOutput$best_f1$F1
 ```
@@ -139,7 +139,7 @@ PerformanceOutput$best_f1$F1
 
 ## Extract embeddings
 
-```{r, warning=FALSE, results='hide'}
+```{r, eval = FALSE, warning=FALSE, results='hide'}
 
 ModelPath <- "/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_20_resnet50_model.pt"
 result <- extract_embeddings(test_input="/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/examples/test/",
@@ -149,14 +149,16 @@ result <- extract_embeddings(test_input="/Users/denaclink/Desktop/RStudioProject
 
 ## We can plot the unsupervised clustering results
 
-```{r}
+```{r, eval = FALSE}
 result$EmbeddingsCombined
 ```
 
 ### We can output the NMI results, and the confusion matrix results when we use 'hdbscan' to match the target class to the cluster with the largest number of observations
 
-```{r}
+```{r,eval = FALSE}
 result$NMI
 result$ConfusionMatrix
 ```
-# References
+# References 
+
+

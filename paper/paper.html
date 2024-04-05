@@ -497,7 +497,7 @@ devtools::load_all(“/Users/denaclink/Desktop/RStudioProjects/gibbonNetR”)</p
 ## First we create spectrogram images
 
 ```{r, echo=FALSE, out.width=&quot;75%&quot;,fig.cap=&#39;Spectrograms of training clips for CNNs&#39;,fig.align=&#39;center&#39;,fig.pos = &quot;H&quot;}
-knitr::include_graphics(&quot;/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/README_files/spectro.png&quot;)</code></pre>
+knitr::include_graphics(&quot;README_files/spectro.png&quot;)</code></pre>
 <div id="then-we-train-the-model" class="section level2">
 <h2>Then we train the model</h2>
 </div>
@@ -536,7 +536,7 @@ noise.category = “noise”)</p>
 
 ## Specify for the &#39;female.gibbon&#39; class
 
-```{r, warning=FALSE, results=&#39;hide&#39;}
+```{r, eval = FALSE, warning=FALSE, results=&#39;hide&#39;}
 # Evaluate model performance
 performancetables.dir &lt;- &quot;/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi&quot;
 
@@ -546,11 +546,11 @@ PerformanceOutput &lt;- gibbonNetR::get_best_performance(performancetables.dir=p
 </code></pre>
 <div id="examine-the-results" class="section level2">
 <h2>Examine the results</h2>
-<p><code>{r, warning=FALSE} PerformanceOutput$f1_plot PerformanceOutput$best_f1$F1</code></p>
+<p><code>{r, eval = FALSE, warning=FALSE} PerformanceOutput$f1_plot PerformanceOutput$best_f1$F1</code></p>
 </div>
 <div id="specify-for-the-hornbill.helmeted-class" class="section level2">
 <h2>Specify for the ‘hornbill.helmeted’ class</h2>
-<p>```{r, warning=FALSE, results=‘hide’}</p>
+<p>```{r, eval = FALSE, warning=FALSE, results=‘hide’}</p>
 </div>
 </div>
 <div id="evaluate-model-performance" class="section level1">
@@ -563,7 +563,7 @@ class=‘hornbill.helmeted’, model.type = “multi”,Thresh.val=0)</p>
 <pre><code>
 ## Examine the results
 
-```{r, warning=FALSE}
+```{r,eval = FALSE, warning=FALSE}
 PerformanceOutput$f1_plot
 PerformanceOutput$best_f1$F1</code></pre>
 </div>
@@ -572,7 +572,7 @@ PerformanceOutput$best_f1$F1</code></pre>
 clustering to identify signals</h1>
 <div id="extract-embeddings" class="section level2">
 <h2>Extract embeddings</h2>
-<p>```{r, warning=FALSE, results=‘hide’}</p>
+<p>```{r, eval = FALSE, warning=FALSE, results=‘hide’}</p>
 <p>ModelPath &lt;-
 “/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/model_output/<em>danummulticlassexample_multi_unfrozen_TRUE</em>/_danummulticlassexample_20_resnet50_model.pt”
 result &lt;-
@@ -581,13 +581,14 @@ model_path=ModelPath, target_class = “female.gibbon”)</p>
 <pre><code>
 ## We can plot the unsupervised clustering results
 
-```{r}
+```{r, eval = FALSE}
 result$EmbeddingsCombined</code></pre>
 <div id="we-can-output-the-nmi-results-and-the-confusion-matrix-results-when-we-use-hdbscan-to-match-the-target-class-to-the-cluster-with-the-largest-number-of-observations" class="section level3">
 <h3>We can output the NMI results, and the confusion matrix results when
 we use ‘hdbscan’ to match the target class to the cluster with the
 largest number of observations</h3>
-<p><code>{r} result$NMI result$ConfusionMatrix</code> # References</p>
+<p><code>{r,eval = FALSE} result$NMI result$ConfusionMatrix</code> #
+References</p>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-balantic2020" class="csl-entry">
 Balantic, Cathleen, and Therese Donovan. 2020. <span>“AMMonitor: Remote
