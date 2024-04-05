@@ -147,7 +147,7 @@ result <- extract_embeddings(test_input="/Users/denaclink/Desktop/RStudioProject
                                      target_class = "female.gibbon")
 ```
 
-## We can plot the unsupervised clustering results
+## We can plot the unsupervised clustering results. 
 
 ```{r, eval = FALSE}
 result$EmbeddingsCombined
