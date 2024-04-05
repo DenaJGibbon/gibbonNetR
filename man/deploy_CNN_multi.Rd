@@ -96,8 +96,5 @@ deploy_CNN_multi(
   threshold = .25,
   max_freq_khz = 2
 )
- jj <- readJPEG(list.files(paste(tempdir(),'/MultiDir/Results/Images/',sep=''),full.names = T)[1],native=TRUE)
- plot(0:1,0:1,type="n", axes=FALSE,main='Multiclass detection')
- print(rasterImage(jj,0,0,1,1))
 }
 }
