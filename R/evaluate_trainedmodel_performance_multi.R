@@ -16,7 +16,7 @@
 #' image_data_dir <- system.file("extdata", "multiclass/test/", package = "gibbonNetR")
 #' class_names <-  c('female.gibbon','hornbill.helmeted','hornbill.rhino','long.argus','noise')
 #' # Evaluate the performance of the trained models using the test images
-#' #' evaluate_trainedmodel_performance_multi(trained_models_dir=trained_models_dir,
+#' evaluate_trainedmodel_performance_multi(trained_models_dir=trained_models_dir,
 #'                                         class_names=class_names,
 #'                                         image_data_dir=image_data_dir,
 #'                                         output_dir= paste(tempdir(), '/data/'),  #' Output directory for evaluation results
