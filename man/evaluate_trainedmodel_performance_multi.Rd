@@ -27,3 +27,23 @@ Invisible NULL. The performance scores are written to the specified output direc
 \description{
 Given trained models and a set of images, this function evaluates the performance of the models.
 }
+\examples{
+{
+# Set directory paths for trained models and test images
+
+trained_models_dir <- system.file("extdata", "trainedresnetbinary/", package = "gibbonNetR")
+image_data_dir <- system.file("extdata", "binary/test/", package = "gibbonNetR")
+class_names <-  c('female.gibbon','hornbill.helmeted','hornbill.rhino','long.argus','noise'),
+# Evaluate the performance of the trained models using the test images
+#' evaluate_trainedmodel_performance_multi(trained_models_dir=trained_models_dir,
+                                        class_names=class_names,
+                                        image_data_dir=image_data_dir,
+                                        output_dir= paste(tempdir(), '/data/'),  #' Output directory for evaluation results
+                                        noise.category = "noise")
+# Find the location of saved evaluation files
+CSVName <- list.files(paste(tempdir(), '/data/'), recursive = TRUE, full.names = TRUE)
+
+# Check the output of the first file
+head(read.csv(CSVName[1]))
+}
+}
