@@ -41,7 +41,7 @@ ImageFile <- system.file("extdata", "multiclass/test/", package = "gibbonNetR")
 # Function to extract and plot embeddings
 result <- extract_embeddings(test_input=ImageFile,
                              model_path =ModelPath,
-                             target_class = "duet",
+                             target_class = "female.gibbon",
                              unsupervised='TRUE'
 )
 
