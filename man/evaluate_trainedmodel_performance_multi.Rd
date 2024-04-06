@@ -33,7 +33,7 @@ Given trained models and a set of images, this function evaluates the performanc
 
 trained_models_dir <- system.file("extdata", "trainedresnetbinary/", package = "gibbonNetR")
 image_data_dir <- system.file("extdata", "binary/test/", package = "gibbonNetR")
-class_names <-  c('female.gibbon','hornbill.helmeted','hornbill.rhino','long.argus','noise'),
+class_names <-  c('female.gibbon','hornbill.helmeted','hornbill.rhino','long.argus','noise')
 # Evaluate the performance of the trained models using the test images
 #' evaluate_trainedmodel_performance_multi(trained_models_dir=trained_models_dir,
                                         class_names=class_names,
