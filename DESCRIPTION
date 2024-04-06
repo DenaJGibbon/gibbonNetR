@@ -35,7 +35,8 @@ Imports:
     caret,
     utils,
     grDevices,
-    devtools
+    devtools,
+    coro
 Suggests: 
     knitr,
     rmarkdown,
