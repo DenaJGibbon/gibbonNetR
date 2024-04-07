@@ -112,11 +112,11 @@
 #'   return(normalized_image)
 #' }
 #'
-#' print(images %>%
+#' images %>%
 #'         purrr::array_tree(1) %>%
 #'         purrr::set_names(class_names) %>%
 #'         purrr::map(~ as.raster(normalize_pixel_values(.x))) %>%
-#'         purrr::iwalk(~{plot(.x); title(.y)}) )
+#'         purrr::iwalk(~{plot(.x); title(.y)})
 
 #'}
 #' @importFrom tuneR readWave
