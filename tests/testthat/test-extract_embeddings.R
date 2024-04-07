@@ -15,7 +15,7 @@ test_that("Extract embeddings returns expected objects", {
    # Function to extract and plot embeddings
    result <- extract_embeddings(test_input=ImageFile,
                                 model_path =ModelPath,
-                                target_class = "duet",
+                                target_class = "female.gibbon",
                                 unsupervised='TRUE'
    )
 

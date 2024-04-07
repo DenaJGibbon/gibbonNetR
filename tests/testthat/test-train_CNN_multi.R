@@ -1,4 +1,4 @@
-test_that("multiplication works", {
+test_that("train_CNN_multi works", {
 
   # Set file path
   filepath <- system.file("extdata", "multiclass/", package = "gibbonNetR")

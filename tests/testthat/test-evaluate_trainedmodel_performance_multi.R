@@ -5,7 +5,7 @@ test_that("Outputs expected dataframe", {
 
   evaluate_trainedmodel_performance_multi(trained_models_dir = trained_models_dir,
                                           image_data_dir = image_data_dir,
-                                          class_names=c('duet','hornbill.helmeted','hornbill.rhino','long.argus','noise'),
+                                          class_names=c('female.gibbon','hornbill.helmeted','hornbill.rhino','long.argus','noise'),
                                           output_dir = paste(tempdir(), '/data/',sep=''),  # Output directory for evaluation results
                                           noise.category='noise')    # Label for negative class
 
