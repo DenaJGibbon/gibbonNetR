@@ -45,8 +45,8 @@ for (arch in architectures) {
     #' Generate random performance metrics
     metrics <- data.frame(
       Class = rep(c("hornbill.helmeted", "other.class"), each = 5),
-      `Training Data` = rep(td, 10),
-      `CNN Architecture` = rep(arch, 10),
+      "Training Data" = rep(td, 10),
+      "CNN Architecture" = rep(arch, 10),
       Threshold = runif(10, 0, 1),
       F1 = runif(10, 0, 1),
       Precision = runif(10, 0, 1),
@@ -55,6 +55,8 @@ for (arch in architectures) {
       `N epochs` = rep(c(10, 20, 30), each = 10)
     )
 
+   # Reassign column names
+    colnames(metrics) <- c("Class", "Training Data", "CNN Architecture", "Threshold", "F1", "Precision", "Recall", "AUC", "N epochs")
     #' Write data to CSV file
     filename <- paste0(performance_tables_dir, arch, "_", td, ".csv")
     write.csv(metrics, filename, row.names = FALSE)
@@ -65,6 +67,7 @@ for (arch in architectures) {
 #' Call the function with default parameters
 results <- get_best_performance(performancetables.dir = performance_tables_dir, )
 
+ # NOTE: Results will not make sense as it is random
 #' Print the best F1 scores
 print("Best F1 scores:")
 print(results$best_f1)
