@@ -58,8 +58,9 @@ A list containing two elements:
 This function facilitates training of convolutional neural network (CNN) models using various transfer learning architectures such as AlexNet, VGG16, VGG19, ResNet18, ResNet50, or ResNet152, on a given dataset. The trained model is saved along with metadata for further usage.
 }
 \examples{
-{
-result <- train_CNN_multi(
+{ input.data.path <- system.file("extdata", "multiclass/", package = "gibbonNetR")
+  test.data <- system.file("extdata", "multiclass/test/", package = "gibbonNetR")
+  result <- train_CNN_multi(
   input.data.path = "inst/extdata/multiclass/",
   test.data = "inst/extdata/multiclass/test/",
   architecture = "alexnet",  # Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'

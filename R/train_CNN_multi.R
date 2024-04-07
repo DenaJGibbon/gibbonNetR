@@ -22,8 +22,10 @@
 #'   \item \strong{Metadata}: A dataframe containing metadata about the training session.
 #' }
 #'
-#' @examples {
-#' result <- train_CNN_multi(
+#' @examples
+#' { input.data.path <- system.file("extdata", "multiclass/", package = "gibbonNetR")
+#'   test.data <- system.file("extdata", "multiclass/test/", package = "gibbonNetR")
+#'   result <- train_CNN_multi(
 #'   input.data.path = "inst/extdata/multiclass/",
 #'   test.data = "inst/extdata/multiclass/test/",
 #'   architecture = "alexnet",  # Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
