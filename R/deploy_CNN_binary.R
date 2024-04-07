@@ -7,14 +7,17 @@
 #' @param output_folder_wav A character string specifying the path to the folder where extracted WAV files will be saved.
 #' @param top_model_path A character string specifying the path to the pre-trained top model for classification.
 #' @param path_to_files A character string specifying the path to the directory containing sound files to process.
+#' @param detect_pattern (optional) A character string specifying a pattern to detect in the file names. Default is NA.
+#' @param architecture A character string specifying the architecture of the pre-trained model.
 #' @param clip_duration The duration of each sound clip in seconds.
 #' @param hop_size The hop size for splitting the sound clips.
-#' @param downsample_rate The downsample rate for audio in Hz, set to 'NA' if no downsampling is required.
+#' @param downsample_rate The downsample rate for audio in Hz. Set to 'NA' if no downsampling is required.
 #' @param threshold The threshold for audio detection.
-#' @param save_wav A logical value indicating whether to save the extracted sound clips as WAV files.
-#' @param class_names A character vector containing the unique classes for training the model.
-#' @param noise_category A character string specifying the noise category for exclusion.
-#' @param max_freq_khz The maximum frequency in kHz for spectrogram visualization.
+#' @param save_wav A logical value indicating whether to save the extracted sound clips as WAV files. Default is TRUE.
+#' @param positive.class A character string specifying the positive class label. Default is 'Gibbons'.
+#' @param negative.class A character string specifying the negative class label. Default is 'Noise'.
+#' @param max_freq_khz The maximum frequency in kHz for spectrogram visualization. Default is 2.
+
 #' @details This function processes sound data from a directory, extracts sound clips, converts them to images, performs image classification using a pre-trained deep learning model, and saves the results including selection tables and image and audio files.
 #'
 #' @examples

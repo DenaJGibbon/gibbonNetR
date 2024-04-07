@@ -71,11 +71,11 @@ deploy_CNN_multi <- function(
     downsample_rate = 16000,
     threshold = 0.1,
     save_wav = TRUE,
-    class_names = c('duet','hornbill.helmeted','hornbill.rhino','long.argus','noise'),
+    class_names = c('female.gibbon','hornbill.helmeted','hornbill.rhino','long.argus','noise'),
     noise_category = 'noise',
     max_freq_khz = 2,
     single_class = TRUE,
-    single_class_category = 'duet',for_prrec=TRUE
+    single_class_category = 'female.gibbon'
 ) {
 
 
@@ -273,11 +273,6 @@ deploy_CNN_multi <- function(
 
       }
 
-      if(for_prrec==TRUE){
-
-        Detections <-  unlist(which(Probability[ ,which(class_names==single_class_category) ] >= threshold))
-
-      }
 
       Detections <-  split(Detections, cumsum(c(
         1, diff(Detections)) != 1))
@@ -300,10 +295,6 @@ deploy_CNN_multi <- function(
 
       DetectionClass <-  outputTableTopModel$PredictedClass[DetectionIndices]
 
-      if(for_prrec==TRUE){
-
-        DetectionClass <- rep(single_class_category,length(DetectionIndices))
-      }
 
       print(paste('Saving output to',paste(output_folder, DetectionClass,'_',
                                            image.files.short[DetectionIndices],

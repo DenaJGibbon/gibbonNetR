@@ -18,6 +18,10 @@ evaluate_trainedmodel_performance(
 \item{image_data_dir}{Path to the directory containing image data for evaluation.}
 
 \item{output_dir}{Path to the directory where the performance scores will be saved.}
+
+\item{positive.class}{Label for the positive class.}
+
+\item{negative.class}{Label for the negative class.}
 }
 \value{
 Invisible NULL. The performance scores are written to the specified output directory.

@@ -8,10 +8,9 @@ evaluate_trainedmodel_performance_multi(
   trained_models_dir,
   image_data_dir,
   output_dir = "data/",
-  training_data,
   class_names,
   noise.category = "noise",
-  unfreeze = "TRUE"
+  unfreeze
 )
 }
 \arguments{
@@ -20,6 +19,12 @@ evaluate_trainedmodel_performance_multi(
 \item{image_data_dir}{Path to the directory containing image data for evaluation.}
 
 \item{output_dir}{Path to the directory where the performance scores will be saved.}
+
+\item{class_names}{Character vector specifying class names. User specified from training data folders.}
+
+\item{noise.category}{Category label for noise class. Default is 'noise'.}
+
+\item{unfreeze}{Logical indicating whether to unfreeze model parameters. User specified.}
 }
 \value{
 Invisible NULL. The performance scores are written to the specified output directory.

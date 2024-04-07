@@ -4,6 +4,9 @@
 #' combines them, and extracts the best performance results based on various criteria.
 #'
 #' @param performancetables.dir Path to the directory containing the performance tables.
+#' @param model.type Type of model architecture. If 'multi' then will treat as multiclass, otherwise will treat as binary.
+#' @param class Specific class for evaluation.
+#' @param Thresh.val Threshold value for evaluation.
 #'
 #' @return A list containing best F1 scores, best precision results, best recall results,
 #'         and plots visualizing these metrics.
@@ -83,7 +86,10 @@
 #' }
 
 #' @export
-get_best_performance <- function(performancetables.dir, model.type='multi',class='hornbill.helmeted',Thresh.val=0.5) {
+get_best_performance <- function(performancetables.dir,
+                                 model.type='multi',
+                                 class='hornbill.helmeted',
+                                 Thresh.val=0.5) {
 
   # Read all CSV files from the directory
   FrozenFiles <- list.files(performancetables.dir, full.names = TRUE)

@@ -33,21 +33,25 @@ deploy_CNN_binary(
 
 \item{path_to_files}{A character string specifying the path to the directory containing sound files to process.}
 
+\item{detect_pattern}{(optional) A character string specifying a pattern to detect in the file names. Default is NA.}
+
+\item{architecture}{A character string specifying the architecture of the pre-trained model.}
+
 \item{clip_duration}{The duration of each sound clip in seconds.}
 
 \item{hop_size}{The hop size for splitting the sound clips.}
 
-\item{downsample_rate}{The downsample rate for audio in Hz, set to 'NA' if no downsampling is required.}
+\item{downsample_rate}{The downsample rate for audio in Hz. Set to 'NA' if no downsampling is required.}
 
 \item{threshold}{The threshold for audio detection.}
 
-\item{save_wav}{A logical value indicating whether to save the extracted sound clips as WAV files.}
+\item{save_wav}{A logical value indicating whether to save the extracted sound clips as WAV files. Default is TRUE.}
 
-\item{max_freq_khz}{The maximum frequency in kHz for spectrogram visualization.}
+\item{positive.class}{A character string specifying the positive class label. Default is 'Gibbons'.}
 
-\item{class_names}{A character vector containing the unique classes for training the model.}
+\item{negative.class}{A character string specifying the negative class label. Default is 'Noise'.}
 
-\item{noise_category}{A character string specifying the noise category for exclusion.}
+\item{max_freq_khz}{The maximum frequency in kHz for spectrogram visualization. Default is 2.}
 }
 \description{
 This function processes sound data from a specified directory, performs transfer learning using a pre-trained deep learning model, and saves the results.

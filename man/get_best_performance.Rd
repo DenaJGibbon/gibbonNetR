@@ -13,6 +13,12 @@ get_best_performance(
 }
 \arguments{
 \item{performancetables.dir}{Path to the directory containing the performance tables.}
+
+\item{model.type}{Type of model architecture. If 'multi' then will treat as multiclass, otherwise will treat as binary.}
+
+\item{class}{Specific class for evaluation.}
+
+\item{Thresh.val}{Threshold value for evaluation.}
 }
 \value{
 A list containing best F1 scores, best precision results, best recall results,

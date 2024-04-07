@@ -17,12 +17,12 @@ deploy_CNN_multi(
   downsample_rate = 16000,
   threshold = 0.1,
   save_wav = TRUE,
-  class_names = c("duet", "hornbill.helmeted", "hornbill.rhino", "long.argus", "noise"),
+  class_names = c("female.gibbon", "hornbill.helmeted", "hornbill.rhino", "long.argus",
+    "noise"),
   noise_category = "noise",
   max_freq_khz = 2,
   single_class = TRUE,
-  single_class_category = "duet",
-  for_prrec = TRUE
+  single_class_category = "female.gibbon"
 )
 }
 \arguments{

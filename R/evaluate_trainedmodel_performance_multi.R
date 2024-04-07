@@ -5,6 +5,9 @@
 #' @param trained_models_dir Path to the directory containing trained models (.pt files).
 #' @param image_data_dir Path to the directory containing image data for evaluation.
 #' @param output_dir Path to the directory where the performance scores will be saved.
+#' @param class_names Character vector specifying class names. User specified from training data folders.
+#' @param noise.category Category label for noise class. Default is 'noise'.
+#' @param unfreeze Logical indicating whether to unfreeze model parameters. User specified.
 #'
 #' @return Invisible NULL. The performance scores are written to the specified output directory.
 #' @importFrom stringr str_split_fixed str_detect
@@ -32,9 +35,8 @@
 #'
 evaluate_trainedmodel_performance_multi <- function(trained_models_dir, image_data_dir,
                                                     output_dir='data/',
-                                                    training_data,
                                                     class_names,
-                                                    noise.category='noise',unfreeze='TRUE') {
+                                                    noise.category='noise',unfreeze) {
 
   # List trained models
   trained_models <- list.files(trained_models_dir, pattern = '.pt', full.names = TRUE, recursive = T)

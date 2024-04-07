@@ -5,6 +5,8 @@
 #' @param trained_models_dir Path to the directory containing trained models (.pt files).
 #' @param image_data_dir Path to the directory containing image data for evaluation.
 #' @param output_dir Path to the directory where the performance scores will be saved.
+#' @param positive.class Label for the positive class.
+#' @param negative.class Label for the negative class.
 #'
 #' @return Invisible NULL. The performance scores are written to the specified output directory.
 #' @importFrom stringr str_split_fixed str_detect
