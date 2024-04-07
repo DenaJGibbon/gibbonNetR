@@ -26,11 +26,11 @@ test_that("deploy_CNN_multi returns expected objects", {
      path_to_files = paste(tempdir(),'/MultiDir/Wav/'),
      downsample_rate = 'NA',
      save_wav = F,
-     class_names = c('duet','hornbill.helmeted','hornbill.rhino','long.argus','noise'),
+     class_names = c('female.gibbon','hornbill.helmeted','hornbill.rhino','long.argus','noise'),
      noise_category = 'noise',
      single_class = FALSE,
      threshold = .25,
-     max_freq_khz = 2
+     max_freq_khz = 2,for_prrec==FALSE
    )
 
    ListSelections <-  list.files( paste(tempdir(),'/MultiDir/Results/Selections/',sep=''),full.names = T)

@@ -10,7 +10,7 @@ evaluate_trainedmodel_performance_multi(
   output_dir = "data/",
   class_names,
   noise.category = "noise",
-  unfreeze
+  unfreeze = TRUE
 )
 }
 \arguments{
@@ -24,7 +24,7 @@ evaluate_trainedmodel_performance_multi(
 
 \item{noise.category}{Category label for noise class. Default is 'noise'.}
 
-\item{unfreeze}{Logical indicating whether to unfreeze model parameters. User specified.}
+\item{unfreeze}{Logical indicating whether to unfreeze model parameters. User specified based on trained model.}
 }
 \value{
 Invisible NULL. The performance scores are written to the specified output directory.

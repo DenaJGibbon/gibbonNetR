@@ -48,7 +48,7 @@
 #'   path_to_files = paste(tempdir(),'/MultiDir/Wav/'),
 #'   downsample_rate = 'NA',
 #'   save_wav = F,
-#'   class_names = c('duet','hornbill.helmeted','hornbill.rhino','long.argus','noise'),
+#'   class_names = c('female.gibbon','hornbill.helmeted','hornbill.rhino','long.argus','noise'),
 #'   noise_category = 'noise',
 #'   single_class = FALSE,
 #'   threshold = .25,
@@ -294,6 +294,7 @@ deploy_CNN_multi <- function(
       DetectionIndices <- unname(unlist(Detections))
 
       DetectionClass <-  outputTableTopModel$PredictedClass[DetectionIndices]
+
 
 
       print(paste('Saving output to',paste(output_folder, DetectionClass,'_',
