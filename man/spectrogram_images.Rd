@@ -33,11 +33,71 @@ Invisible NULL
 Process and Save Spectrogram Images from Sound Files
 }
 \examples{
-\dontrun{
-spectrogram_images(
-  trainingBasePath = "data/Clips",
-  outputBasePath = "data/TrainingImages",
-  splits = c(0.7, 0.2, 0.1)
+{
+library(gibbonNetR)
+
+# Load data
+data("TempBinWav")
+
+# Define the output directory
+output.dir <- paste(tempdir(), '/MultiDir/Noise/')
+
+# Create the output directory
+dir.create(output.dir, recursive = TRUE, showWarnings = FALSE)
+
+# Define the intervals for cutting the wave
+cutwave.list <- seq(1, 30, 5)
+
+# Extract subsamples from the waveform
+subsamps <- lapply(1:(length(cutwave.list) - 1),
+                   function(i)
+                     extractWave(
+                       TempBinWav,
+                       from = cutwave.list[i],
+                       to = cutwave.list[i + 1],
+                       xunit = c("time"),
+                       plot = FALSE,
+                       output = "Wave"
+                     ))
+
+# Write the extracted subsamples to .wav files
+lapply(1:length(subsamps),
+       function(i)
+         writeWave(
+           subsamps[[i]],
+           filename = paste(
+             output.dir,
+             'temp_', i, '_', '.wav',
+             sep = ''
+           ),
+           extensible = FALSE
+         )
 )
+
+# List the files in the output directory
+list.files(output.dir)
+
+# Generate spectrogram images
+spectrogram_images(
+  trainingBasePath = paste(tempdir(), '/MultiDir/'),
+  outputBasePath = paste(tempdir(), '/MultiDir/', 'Spectro/', sep = ''),
+  splits = c(1, 0, 0),
+  new.sampleratehz = 'NA'
+)
+
+# List the images generated
+ListImages <- list.files(paste(tempdir(), '/MultiDir/', 'Spectro/', sep = ''), recursive = TRUE)
+
+print(ListImages)
+
+# Get the path of a single image
+Singlepath <- list.files(paste(tempdir(), '/MultiDir/', 'Spectro/', sep = ''), recursive = TRUE, full.names = TRUE)[1]
+
+# Read the image
+img <- jpeg::readJPEG(Singlepath)
+
+# Plot the image with no axis labels
+plot(1:1, type = 'n', xlab = "Time", ylab = "Frequency", xaxt = 'n', yaxt = 'n')
+rasterImage(img, par("usr")[1], par("usr")[3], par("usr")[2], par("usr")[4])
 }
 }
