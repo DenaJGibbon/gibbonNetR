@@ -67,8 +67,8 @@ This function trains Convolutional Neural Network (CNN) models, such as AlexNet,
 { input.data.path <- system.file("extdata", "binary/", package = "gibbonNetR")
   test.data <- system.file("extdata", "binary/test/", package = "gibbonNetR")
   result <- train_CNN_binary(
-    input.data.path = "inst/extdata/binary/",
-    test.data = "inst/extdata/binary/test/",
+    input.data.path = input.data.path,
+    test.data = test.data,
     architecture = "alexnet",  # Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
     unfreeze.param = TRUE,
     batch_size = 6,

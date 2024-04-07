@@ -61,8 +61,8 @@ This function facilitates training of convolutional neural network (CNN) models 
 { input.data.path <- system.file("extdata", "multiclass/", package = "gibbonNetR")
   test.data <- system.file("extdata", "multiclass/test/", package = "gibbonNetR")
   result <- train_CNN_multi(
-  input.data.path = "inst/extdata/multiclass/",
-  test.data = "inst/extdata/multiclass/test/",
+  input.data.path = input.data.path,
+  test.data = test.data,
   architecture = "alexnet",  # Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
   unfreeze.param = TRUE,
   class_weights = rep( (1/5), 5),
