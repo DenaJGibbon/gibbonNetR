@@ -51,8 +51,10 @@
 #' @export
 
 # Define the function
-extract_embeddings <- function(test_input, model_path, target_class,
-                               unsupervised='TRUE') {
+extract_embeddings <- function(test_input,
+                               model_path,
+                               target_class,
+                               unsupervised = 'TRUE') {
   # Load the fine-tuned model
   fine_tuned_model <- luz_load(model_path)
 
@@ -63,8 +65,12 @@ extract_embeddings <- function(test_input, model_path, target_class,
     transform = . %>%
       torchvision::transform_to_tensor() %>%
       torchvision::transform_resize(size = c(224, 224)) %>%
-      torchvision::transform_normalize(mean = c(0.485, 0.456, 0.406), std = c(0.229, 0.224, 0.225)),
-    target_transform = function(x) as.double(x) - 1
+      torchvision::transform_normalize(
+        mean = c(0.485, 0.456, 0.406),
+        std = c(0.229, 0.224, 0.225)
+      ),
+    target_transform = function(x)
+      as.double(x) - 1
   )
 
   # Create a dataloader
@@ -114,13 +120,28 @@ extract_embeddings <- function(test_input, model_path, target_class,
 
   Embeddings$Label <- dirname(TempName)
 
-  EmbeddingsM2.umap <- umap::umap(Embeddings[, -c(1025)], controlscale = TRUE, scale = 3, n_neighbors = 5)
+  EmbeddingsM2.umap <-
+    umap::umap(
+      Embeddings[,-c(1025)],
+      controlscale = TRUE,
+      scale = 3,
+      n_neighbors = 5
+    )
 
-  plot.for.EmbeddingsM2 <- cbind.data.frame(EmbeddingsM2.umap$layout[, 1:2], Embeddings$Label)
+  plot.for.EmbeddingsM2 <-
+    cbind.data.frame(EmbeddingsM2.umap$layout[, 1:2], Embeddings$Label)
   colnames(plot.for.EmbeddingsM2) <- c("Dim.1", "Dim.2", "Class")
 
-  EmbeddingsM2Scatter <- ggpubr::ggscatter(data = plot.for.EmbeddingsM2, x = "Dim.1", y = "Dim.2", color = "Class") +
-    scale_color_manual(values = viridis::viridis(length(unique(plot.for.EmbeddingsM2$Class)))) +
+  EmbeddingsM2Scatter <-
+    ggpubr::ggscatter(
+      data = plot.for.EmbeddingsM2,
+      x = "Dim.1",
+      y = "Dim.2",
+      color = "Class"
+    ) +
+    scale_color_manual(values = viridis::viridis(length(unique(
+      plot.for.EmbeddingsM2$Class
+    )))) +
     ggtitle(paste("True labels")) +
     theme(
       axis.text.x = element_blank(),
@@ -131,12 +152,21 @@ extract_embeddings <- function(test_input, model_path, target_class,
     theme(plot.title = element_text(hjust = 1)) +
     theme(plot.title = element_text(hjust = 1))
 
-  TempCluster <- hdbscan(EmbeddingsM2.umap$layout[, 1:2], minPts = 15)
+  TempCluster <-
+    hdbscan(EmbeddingsM2.umap$layout[, 1:2], minPts = 15)
 
   plot.for.EmbeddingsM2$cluster <- as.factor(TempCluster$cluster)
 
-  EmbeddingsM2ScatterUnsuper <- ggpubr::ggscatter(data = plot.for.EmbeddingsM2, x = "Dim.1", y = "Dim.2", color = "cluster") +
-    scale_color_manual(values = viridis::viridis(length(unique(plot.for.EmbeddingsM2$cluster)))) +
+  EmbeddingsM2ScatterUnsuper <-
+    ggpubr::ggscatter(
+      data = plot.for.EmbeddingsM2,
+      x = "Dim.1",
+      y = "Dim.2",
+      color = "cluster"
+    ) +
+    scale_color_manual(values = viridis::viridis(length(
+      unique(plot.for.EmbeddingsM2$cluster)
+    ))) +
     ggtitle(paste("Unsupervised clustering")) +
     theme(
       axis.text.x = element_blank(),
@@ -145,44 +175,52 @@ extract_embeddings <- function(test_input, model_path, target_class,
       axis.ticks.y = element_blank()
     ) +
     theme(plot.title = element_text(hjust = 1)) +
-    theme(plot.title = element_text(hjust = 1))+guides(color='none')
+    theme(plot.title = element_text(hjust = 1)) + guides(color = 'none')
 
-  EmbeddingsCombined <- cowplot::plot_grid(EmbeddingsM2Scatter, EmbeddingsM2ScatterUnsuper,
-                                           nrow = 2)
+  EmbeddingsCombined <-
+    cowplot::plot_grid(EmbeddingsM2Scatter, EmbeddingsM2ScatterUnsuper,
+                       nrow = 2)
 
-  if(unsupervised=='TRUE'){
-  # Find the cluster with the most observations of the target class
-  class_counts <- table(Embeddings$Label, TempCluster$cluster)
+  if (unsupervised == 'TRUE') {
+    # Find the cluster with the most observations of the target class
+    class_counts <- table(Embeddings$Label, TempCluster$cluster)
 
-  if (target_class %in% Embeddings$Label == FALSE) {
-    print("target_class not included in test_input folder names")
-    break
-  }
+    if (target_class %in% Embeddings$Label == FALSE) {
+      print("target_class not included in test_input folder names")
+      break
+    }
 
-  cluster_with_most_class <- colnames(class_counts)[which.max(class_counts[target_class, ])]
+    cluster_with_most_class <-
+      colnames(class_counts)[which.max(class_counts[target_class,])]
 
-  Binary <- ifelse(TempCluster$cluster == cluster_with_most_class, target_class, "Noise")
-  BinaryLabels <- ifelse(Embeddings$Label == target_class, target_class, "Noise")
+    Binary <-
+      ifelse(TempCluster$cluster == cluster_with_most_class,
+             target_class,
+             "Noise")
+    BinaryLabels <-
+      ifelse(Embeddings$Label == target_class, target_class, "Noise")
 
-  Binary <- factor(Binary, levels =levels(  as.factor(BinaryLabels)))
+    Binary <-
+      factor(Binary, levels = levels(as.factor(BinaryLabels)))
 
-  ConfMat <- caret::confusionMatrix(
-    as.factor(Binary),
-    as.factor(BinaryLabels),
-    mode = "everything",positive = target_class
-  )
+    ConfMat <- caret::confusionMatrix(
+      as.factor(Binary),
+      as.factor(BinaryLabels),
+      mode = "everything",
+      positive = target_class
+    )
 
-  print(paste("Unupervised clustering for", target_class))
-  print(ConfMat$byClass)
+    print(paste("Unupervised clustering for", target_class))
+    print(ConfMat$byClass)
 
-  return(list(
-    EmbeddingsCombined = EmbeddingsCombined,
-    NMI = NMI(Binary, BinaryLabels),
-    ConfusionMatrixUnsupervisedAssigment = ConfMat$byClass
-  ))
+    return(
+      list(
+        EmbeddingsCombined = EmbeddingsCombined,
+        NMI = NMI(Binary, BinaryLabels),
+        ConfusionMatrixUnsupervisedAssigment = ConfMat$byClass
+      )
+    )
   } else {
-    return(list(
-      EmbeddingsCombined = EmbeddingsCombined
-    ))
+    return(list(EmbeddingsCombined = EmbeddingsCombined))
   }
 }

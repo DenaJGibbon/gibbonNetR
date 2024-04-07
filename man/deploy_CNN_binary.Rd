@@ -73,7 +73,7 @@ writeWave(TempBinWav,filename = paste(tempdir(),'/BinaryDir/Wav/','TempBinWav.wa
 trained_models_dir <- system.file("extdata", "trainedresnetbinary/", package = "gibbonNetR")
 
 #' Specify model path
-ModelPath <- list.files(trained_models_dir,full.names = T)
+ModelPath <- list.files(trained_models_dir,full.names =TRUE)
 
 
 deploy_CNN_binary (

@@ -69,7 +69,7 @@ This function trains Convolutional Neural Network (CNN) models, such as AlexNet,
   result <- train_CNN_binary(
     input.data.path = input.data.path,
     test.data = test.data,
-    architecture = "alexnet",  # Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
+    architecture = "alexnet",  # Choose architecture
     unfreeze.param = TRUE,
     batch_size = 6,
     learning_rate = 0.001,

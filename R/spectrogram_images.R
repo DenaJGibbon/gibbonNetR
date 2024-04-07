@@ -71,7 +71,9 @@
 #' print(ListImages)
 #'
 #' # Get the path of a single image
-#' Singlepath <- list.files(paste(tempdir(), '/MultiDir/', 'Spectro/', sep = ''), recursive = TRUE, full.names = TRUE)[1]
+#' Singlepath <- list.files(paste(tempdir(),
+#' '/MultiDir/', 'Spectro/', sep = ''),
+#' recursive = TRUE, full.names = TRUE)[1]
 #'
 #' # Set input data path
 #' input.data.path <- paste(tempdir(), '/MultiDir/', 'Spectro/train/', sep = '')
@@ -125,22 +127,34 @@
 #' @export
 
 spectrogram_images <- function(trainingBasePath,
-                               outputBasePath, splits,
-                               minfreq.khz= 0.4, maxfreq.khz=1.6,new.sampleratehz=16000 ) {
-
+                               outputBasePath,
+                               splits,
+                               minfreq.khz = 0.4,
+                               maxfreq.khz = 1.6,
+                               new.sampleratehz = 16000) {
   # Check if splits are valid
-  if (sum(splits) != 1) stop("The sum of the splits must equal 1.")
-  if (length(splits) != 3) stop("Exactly three split ratios should be provided.")
+  if (sum(splits) != 1)
+    stop("The sum of the splits must equal 1.")
+  if (length(splits) != 3)
+    stop("Exactly three split ratios should be provided.")
 
   # Lists all training folders
   TrainingFolders <- list.files(trainingBasePath, full.names = TRUE)
-  TrainingFoldersShort <- list.files(trainingBasePath, full.names = FALSE)
+  TrainingFoldersShort <-
+    list.files(trainingBasePath, full.names = FALSE)
 
-  FolderVec <- c('train', 'valid', 'test') # Potential folders for classification
+  FolderVec <-
+    c('train', 'valid', 'test') # Potential folders for classification
 
   for (z in seq_along(TrainingFolders)) {
-    SoundFiles <- list.files(TrainingFolders[z], recursive = TRUE, full.names = TRUE)
-    SoundFilesShort <- list.files(TrainingFolders[z], recursive = TRUE, full.names = FALSE)
+    SoundFiles <-
+      list.files(TrainingFolders[z],
+                 recursive = TRUE,
+                 full.names = TRUE)
+    SoundFilesShort <-
+      list.files(TrainingFolders[z],
+                 recursive = TRUE,
+                 full.names = FALSE)
     total_files <- length(SoundFiles)
 
     # Calculate indices for splitting
@@ -153,17 +167,18 @@ spectrogram_images <- function(trainingBasePath,
 
     train_idx <- shuffled_indices[1:train_n]
     valid_idx <- shuffled_indices[(train_n + 1):(train_n + valid_n)]
-    test_idx <- shuffled_indices[(train_n + valid_n + 1):total_files]
+    test_idx <-
+      shuffled_indices[(train_n + valid_n + 1):total_files]
 
-    if(splits[1]==0){
+    if (splits[1] == 0) {
       train_idx <- 0
     }
 
-    if(splits[2]==0){
-      valid_idx <-0
+    if (splits[2] == 0) {
+      valid_idx <- 0
     }
 
-    if(splits[3]==0){
+    if (splits[3] == 0) {
       test_idx <- 0
     }
 
@@ -177,28 +192,39 @@ spectrogram_images <- function(trainingBasePath,
         DataType <- FolderVec[3]
       }
 
-      subset_directory <- file.path(outputBasePath, DataType, TrainingFoldersShort[z])
+      subset_directory <-
+        file.path(outputBasePath, DataType, TrainingFoldersShort[z])
 
       if (!dir.exists(subset_directory)) {
         dir.create(subset_directory, recursive = TRUE)
         message('Created output dir: ', subset_directory)
       } else {
-        message(subset_directory, ' already exists saving spectrogram images')
+        message(subset_directory,
+                ' already exists saving spectrogram images')
       }
 
       wav_rm <- tools::file_path_sans_ext(SoundFilesShort[y])
-      jpeg_filename <- file.path(subset_directory, paste0(wav_rm, '.jpg'))
+      jpeg_filename <-
+        file.path(subset_directory, paste0(wav_rm, '.jpg'))
 
       jpeg(jpeg_filename, res = 50)
 
       short_wav <- tuneR::readWave(SoundFiles[y])
 
-      if(new.sampleratehz != 'NA'){
-      short_wav <- tuneR::downsample(short_wav,new.sampleratehz)
+      if (new.sampleratehz != 'NA') {
+        short_wav <- tuneR::downsample(short_wav, new.sampleratehz)
       }
 
-      seewave::spectro(short_wav, tlab = '', flab = '', axisX = FALSE,
-                       axisY = FALSE, scale = FALSE, flim = c(minfreq.khz, maxfreq.khz), grid = FALSE)
+      seewave::spectro(
+        short_wav,
+        tlab = '',
+        flab = '',
+        axisX = FALSE,
+        axisY = FALSE,
+        scale = FALSE,
+        flim = c(minfreq.khz, maxfreq.khz),
+        grid = FALSE
+      )
       graphics.off()
     }
   }

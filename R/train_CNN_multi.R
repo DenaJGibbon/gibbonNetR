@@ -28,7 +28,7 @@
 #'   result <- train_CNN_multi(
 #'   input.data.path = input.data.path,
 #'   test.data = test.data,
-#'   architecture = "alexnet",  # Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
+#'   architecture = "alexnet",  # Choose architecture
 #'   unfreeze.param = TRUE,
 #'   class_weights = rep( (1/5), 5),
 #'   batch_size = 6,

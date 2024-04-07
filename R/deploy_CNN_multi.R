@@ -56,48 +56,62 @@
 #' )
 #' }
 
+#' @importFrom grDevices jpeg graphics.off
+#' @importFrom stats predict median
+#' @importFrom utils write.table
+#'
 #' @export
 
-deploy_CNN_multi <- function(
-    output_folder,
-    output_folder_selections,
-    output_folder_wav,
-    top_model_path,
-    path_to_files,
-    detect_pattern=NA,
-    architecture,
-    clip_duration = 12,
-    hop_size = 6,
-    downsample_rate = 16000,
-    threshold = 0.1,
-    save_wav = TRUE,
-    class_names = c('female.gibbon','hornbill.helmeted','hornbill.rhino','long.argus','noise'),
-    noise_category = 'noise',
-    max_freq_khz = 2,
-    single_class = TRUE,
-    single_class_category = 'female.gibbon',for_prrec=TRUE
-) {
-
-
+deploy_CNN_multi <- function(output_folder,
+                             output_folder_selections,
+                             output_folder_wav,
+                             top_model_path,
+                             path_to_files,
+                             detect_pattern = NA,
+                             architecture,
+                             clip_duration = 12,
+                             hop_size = 6,
+                             downsample_rate = 16000,
+                             threshold = 0.1,
+                             save_wav = TRUE,
+                             class_names = c('female.gibbon',
+                                             'hornbill.helmeted',
+                                             'hornbill.rhino',
+                                             'long.argus',
+                                             'noise'),
+                             noise_category = 'noise',
+                             max_freq_khz = 2,
+                             single_class = TRUE,
+                             single_class_category = 'female.gibbon',
+                             for_prrec = TRUE) {
   # Create output folders if they don't exist
-  dir.create(output_folder, recursive = TRUE, showWarnings = FALSE)
-  dir.create(output_folder_selections, recursive = TRUE, showWarnings = FALSE)
-  dir.create(output_folder_wav, recursive = TRUE, showWarnings = FALSE)
+  dir.create(output_folder,
+             recursive = TRUE,
+             showWarnings = FALSE)
+  dir.create(output_folder_selections,
+             recursive = TRUE,
+             showWarnings = FALSE)
+  dir.create(output_folder_wav,
+             recursive = TRUE,
+             showWarnings = FALSE)
 
-  path_to_files <- list.files(path_to_files,recursive = T,full.names = T)
+  path_to_files <-
+    list.files(path_to_files, recursive = T, full.names = T)
 
-  if( any(is.na(detect_pattern))==FALSE ){
-
+  if (any(is.na(detect_pattern)) == FALSE) {
     path_to_files_long <- list()
 
-    for(a in 1:length(detect_pattern)){
-      print(paste('identifying sound files with the following pattern', detect_pattern[a]))
-      path_to_files_long[[a]] <- path_to_files[ str_detect(path_to_files,c(detect_pattern[a])) ]
+    for (a in 1:length(detect_pattern)) {
+      print(paste(
+        'identifying sound files with the following pattern',
+        detect_pattern[a]
+      ))
+      path_to_files_long[[a]] <-
+        path_to_files[str_detect(path_to_files, c(detect_pattern[a]))]
     }
 
     path_to_files_long <- unlist(path_to_files_long)
   } else {
-
     path_to_files_long <- path_to_files
   }
 
@@ -105,355 +119,443 @@ deploy_CNN_multi <- function(
   path_to_files_short <- basename((path_to_files_long))
   TopModel <- luz_load(top_model_path)
 
-  for(x in (1:length(path_to_files_long)) ){ tryCatch({ #
-    RavenSelectionTableDFTopModel <- data.frame()
+  for (x in (1:length(path_to_files_long))) {
+    tryCatch({
+      #
+      RavenSelectionTableDFTopModel <- data.frame()
 
-    start.time.detection <- Sys.time()
-    print(paste(x, 'out of', length(path_to_files_long)))
-    print(path_to_files_short[x])
-    TempWav <- readWave(path_to_files_long[x])
-    WavDur <- duration(TempWav)
+      start.time.detection <- Sys.time()
+      print(paste(x, 'out of', length(path_to_files_long)))
+      print(path_to_files_short[x])
+      TempWav <- readWave(path_to_files_long[x])
+      WavDur <- duration(TempWav)
 
-    Seq.start <- list()
-    Seq.end <- list()
+      Seq.start <- list()
+      Seq.end <- list()
 
-    i <- 1
-    while (i + clip_duration < WavDur) {
-      # print(i)
-      Seq.start[[i]] = i
-      Seq.end[[i]] = i+clip_duration
-      i= i+hop_size
-    }
-
-
-    ClipStart <- unlist(Seq.start)
-    ClipEnd <- unlist(Seq.end)
-
-    TempClips <- cbind.data.frame(ClipStart,ClipEnd)
-
-
-    # Subset sound clips for classification -----------------------------------
-    print('saving sound clips')
-    set.seed(13)
-    length <- nrow(TempClips)
-
-    if(length > 100){
-      length.files <- seq(1,length,100)
-    } else {
-      length.files <- c(1,length)
-    }
-
-    for(q in 1: (length(length.files)-1) ){
-      unlink(paste( tempdir(), '/WavFiles', sep=''), recursive = TRUE)
-      unlink(paste( tempdir(), '/Images/Images', sep=''), recursive = TRUE)
-
-      dir.create(paste( tempdir(), '/WavFiles', sep=''))
-      dir.create(paste( tempdir(), '/Images/Images', sep=''), recursive = TRUE)
-
-      WavFileTempDir <- paste( tempdir(), '/WavFiles', sep='')
-      ImageTempDir <- paste( tempdir(), '/Images/Images', sep='')
-
-      RandomSub <-  seq(length.files[q],length.files[q+1],1)
-
-      if(q== (length(length.files)-1) ){
-        RandomSub <-  seq(length.files[q],length,1)
+      i <- 1
+      while (i + clip_duration < WavDur) {
+        # print(i)
+        Seq.start[[i]] = i
+        Seq.end[[i]] = i + clip_duration
+        i = i + hop_size
       }
 
-      start.time <- TempClips$ClipStart[RandomSub]
-      end.time <- TempClips$ClipEnd[RandomSub]
 
-      short.sound.files <- lapply(1:length(start.time),
-                                  function(i)
-                                    extractWave(
-                                      TempWav,
-                                      from = start.time[i],
-                                      to = end.time[i],
-                                      xunit = c("time"),
-                                      plot = F,
-                                      output = "Wave"
-                                    ))
+      ClipStart <- unlist(Seq.start)
+      ClipEnd <- unlist(Seq.end)
 
-      if(downsample_rate != 'NA'){
-        print('downsampling')
-        short.sound.files <- lapply(1:length(short.sound.files),
-                                    function(i)
-                                      downsample(
-                                        short.sound.files[[i]],
-                                        samp.rate=downsample_rate
-                                      ))
-      }
+      TempClips <- cbind.data.frame(ClipStart, ClipEnd)
 
-      for(d in 1:length(short.sound.files)){
-        #print(d)
-        writeWave(short.sound.files[[d]],paste(WavFileTempDir,'/',
-                                               path_to_files_short[x],'_',start.time[d], '.wav', sep=''),
-                  extensible = F)
-      }
 
-      # Save images to a temp folder
-      print(paste('Creating images',start.time[1],'start time clips'))
+      # Subset sound clips for classification -----------------------------------
+      print('saving sound clips')
+      set.seed(13)
+      length <- nrow(TempClips)
 
-      for(e in 1:length(short.sound.files)){
-        jpeg(paste(ImageTempDir,'/', path_to_files_short[x],'_',start.time[e],'.jpg',sep=''),res = 50)
-        short.wav <- short.sound.files[[e]]
-
-        seewave::spectro(short.wav,tlab='',flab='',axisX=F,axisY = F,scale=F,grid=F,flim=c(0.4,max_freq_khz),fastdisp=TRUE,noisereduction=1)
-
-        graphics.off()
-      }
-
-      # Predict using TopModel ----------------------------------------------------
-      print('Classifying images using Top Model')
-
-      test.input <- paste( tempdir(), '/Images/', sep='')
-
-      # Define transforms based on model type
-      if (str_detect(architecture, pattern = 'resnet')) {
-        transform_list <- . %>%
-          torchvision::transform_to_tensor() %>%
-          torchvision::transform_color_jitter() %>%
-          transform_resize(256) %>%
-          transform_center_crop(224) %>%
-          transform_normalize(mean = c(0.485, 0.456, 0.406), std = c(0.229, 0.224, 0.225))
+      if (length > 100) {
+        length.files <- seq(1, length, 100)
       } else {
-        transform_list <- . %>%
-          torchvision::transform_to_tensor() %>%
-          torchvision::transform_resize(size = c(224, 224)) %>%
-          torchvision::transform_normalize(mean = c(0.485, 0.456, 0.406), std = c(0.229, 0.224, 0.225))
+        length.files <- c(1, length)
       }
 
-      test_ds <- image_folder_dataset(test.input, transform = transform_list)
-      test_dl <- dataloader(test_ds, batch_size = 32, shuffle =FALSE)
+      for (q in 1:(length(length.files) - 1)) {
+        unlink(paste(tempdir(), '/WavFiles', sep = ''), recursive = TRUE)
+        unlink(paste(tempdir(), '/Images/Images', sep = ''), recursive = TRUE)
 
-      # Predict using TrainedModel
-      TrainedModelPred <- predict(TopModel, test_dl)
+        dir.create(paste(tempdir(), '/WavFiles', sep = ''))
+        dir.create(paste(tempdir(), '/Images/Images', sep = ''), recursive = TRUE)
 
-      # Return the index of the max values (i.e. which class)
-      PredMPS <- torch_argmax(TrainedModelPred, dim = 2)
+        WavFileTempDir <- paste(tempdir(), '/WavFiles', sep = '')
+        ImageTempDir <- paste(tempdir(), '/Images/Images', sep = '')
 
-      # Save to cpu
-      PredMPS <- as_array(torch_tensor(PredMPS, device = 'cpu'))
+        RandomSub <-  seq(length.files[q], length.files[q + 1], 1)
 
-      # Convert to a factor
-      modelMultiPred <- as.factor(PredMPS)
-      print(modelMultiPred)
-
-      # Calculate the probability associated with each class
-      Probability <- as_array(torch_tensor(nnf_softmax(TrainedModelPred, dim = 2), device = 'cpu'))
-
-      # Find the index of the maximum value in each row
-      max_prob_idx <- apply(Probability, 1, which.max)
-
-      # Map the index to actual probability
-      predicted_class_probability <- sapply(1:nrow(Probability), function(i) Probability[i, max_prob_idx[i]])
-
-      # Convert the integer predictions to factor and then to character based on the levels
-      modelMultiNames <- factor(modelMultiPred, levels = 1:length(class_names), labels = class_names)
-
-      outputTableTopModel <- cbind.data.frame(modelMultiNames, predicted_class_probability)
-
-      colnames(outputTableTopModel) <- c('PredictedClass', 'Probability')
-
-      image.files <- list.files(file.path(test.input),recursive = T,
-                                full.names = T)
-      nslash <- str_count(image.files,'/')+1
-      nslash <- nslash[1]
-      image.files.short <- str_split_fixed(image.files,pattern = '/',n=nslash)[,nslash]
-      image.files.short <- str_split_fixed(image.files.short,pattern = '.jpg',n=2)[,1]
-
-      print('Saving output')
-
-      Detections <-  which(outputTableTopModel$Probability >= threshold &
-                             outputTableTopModel$PredictedClass != noise_category )
-
-      if(single_class =='TRUE'){
-        Detections <-  which(outputTableTopModel$Probability >= threshold &
-                               outputTableTopModel$PredictedClass == single_class_category )
-
-
-      }
-
-      if(for_prrec==TRUE){
-
-        Detections <-  unlist(which(Probability[ ,which(class_names==single_class_category) ] >= threshold))
-
-      }
-
-      Detections <-  split(Detections, cumsum(c(
-        1, diff(Detections)) != 1))
-
-      for(i in 1:length(Detections)){
-        TempList <- Detections[[i]]
-        if(length(TempList)==1){
-          Detections[[i]] <- TempList[1]
-        }
-        if(length(TempList)==2){
-          Detections[[i]] <- TempList[2]
-        }
-        if(length(TempList)> 2){
-          Detections[[i]] <- median(TempList)
+        if (q == (length(length.files) - 1)) {
+          RandomSub <-  seq(length.files[q], length, 1)
         }
 
-      }
+        start.time <- TempClips$ClipStart[RandomSub]
+        end.time <- TempClips$ClipEnd[RandomSub]
 
-      DetectionIndices <- unname(unlist(Detections))
+        short.sound.files <- lapply(1:length(start.time),
+                                    function(i)
+                                      extractWave(
+                                        TempWav,
+                                        from = start.time[i],
+                                        to = end.time[i],
+                                        xunit = c("time"),
+                                        plot = F,
+                                        output = "Wave"
+                                      ))
 
-      DetectionClass <-  outputTableTopModel$PredictedClass[DetectionIndices]
-
-      if(for_prrec==TRUE){
-
-        DetectionClass <- rep(single_class_category,length(DetectionIndices))
-      }
-
-      print(paste('Saving output to',paste(output_folder, DetectionClass,'_',
-                                           image.files.short[DetectionIndices],
-                                           '_',
-                                           round(predicted_class_probability[DetectionIndices],2),
-                                           '_TopModel_.jpg', sep='')))
-
-            file.copy(image.files[DetectionIndices],
-                to= paste(output_folder, DetectionClass,'_',
-                          image.files.short[DetectionIndices],
-                          '_',
-                          round(predicted_class_probability[DetectionIndices],2),
-                          '_TopModel_.jpg', sep=''))
-
-      if(save_wav ==T){
-        wav.file.paths <- list.files(WavFileTempDir,full.names = T)
-        file.copy(wav.file.paths[DetectionIndices],
-                  to= paste(output_folder_wav,  DetectionClass,'_',
-                            image.files.short[DetectionIndices],
-                            '_',
-                            round(predicted_class_probability[DetectionIndices],2),
-                            '_TopModel_.wav', sep=''))
-      }
-
-      Detections <- image.files.short[DetectionIndices]
-
-      print(Detections)
-
-      if (length(Detections) > 0) {
-        Selection <- seq(1, length(Detections))
-        View <- rep('Spectrogram 1', length(Detections))
-        Channel <- rep(1, length(Detections))
-        MinFreq <- rep(100, length(Detections))
-        MaxFreq <- rep(max_freq_khz*1000, length(Detections))
-        start.time.new <- as.numeric(str_split_fixed(Detections,pattern = '.wav_',n=2)[,2])
-        end.time.new <- start.time.new + clip_duration
-        Probability <- round(predicted_class_probability[DetectionIndices],2)
-
-        RavenSelectionTableDFTopModelTemp <-
-          cbind.data.frame(Selection,
-                           View,
-                           Channel,
-                           MinFreq,
-                           MaxFreq,start.time.new,end.time.new,Probability,
-                           Detections)
-
-        RavenSelectionTableDFTopModelTemp <-
-          RavenSelectionTableDFTopModelTemp[, c(
-            "Selection",
-            "View",
-            "Channel",
-            "start.time.new",
-            "end.time.new",
-            "MinFreq",
-            "MaxFreq",
-            'Probability',"Detections"
-          )]
-
-        colnames(RavenSelectionTableDFTopModelTemp) <-
-          c(
-            "Selection",
-            "View",
-            "Channel",
-            "Begin Time (s)",
-            "End Time (s)",
-            "Low Freq (Hz)",
-            "High Freq (Hz)",
-            'Probability',
-            "Detections"
-          )
-        RavenSelectionTableDFTopModelTemp$Class <- DetectionClass
-
-
-        RavenSelectionTableDFTopModel <- rbind.data.frame(RavenSelectionTableDFTopModel,
-                                                         RavenSelectionTableDFTopModelTemp)
-
-        print(RavenSelectionTableDFTopModel)
-        if(nrow(RavenSelectionTableDFTopModel) > 0){
-          csv.file.name <-
-            paste(output_folder_selections, paste(unique(DetectionClass),'_',sep='-'),'_',
-                  path_to_files_short[x],
-                  'TopModelAllFiles.txt',
-                  sep = '')
-
-
-
-          write.table(
-            x = RavenSelectionTableDFTopModel,
-            sep = "\t",
-            file = csv.file.name,
-            row.names = FALSE,
-            quote = FALSE
-          )
-          print(paste(
-            "Saving Selection Table With Detections"
-          ))
+        if (downsample_rate != 'NA') {
+          print('downsampling')
+          short.sound.files <- lapply(1:length(short.sound.files),
+                                      function(i)
+                                        downsample(short.sound.files[[i]],
+                                                   samp.rate = downsample_rate))
         }
 
-
-      }
-    }
-
-    if(nrow(RavenSelectionTableDFTopModel) == 0){
-      csv.file.name <-
-        paste(output_folder_selections, paste(unique(DetectionClass),'_',sep='-'),'_',
+        for (d in 1:length(short.sound.files)) {
+          #print(d)
+          writeWave(
+            short.sound.files[[d]],
+            paste(
+              WavFileTempDir,
+              '/',
               path_to_files_short[x],
-              'TopModelAllFiles.txt',
-              sep = '')
+              '_',
+              start.time[d],
+              '.wav',
+              sep = ''
+            ),
+            extensible = F
+          )
+        }
+
+        # Save images to a temp folder
+        print(paste('Creating images', start.time[1], 'start time clips'))
+
+        for (e in 1:length(short.sound.files)) {
+          jpeg(
+            paste(
+              ImageTempDir,
+              '/',
+              path_to_files_short[x],
+              '_',
+              start.time[e],
+              '.jpg',
+              sep = ''
+            ),
+            res = 50
+          )
+          short.wav <- short.sound.files[[e]]
+
+          seewave::spectro(
+            short.wav,
+            tlab = '',
+            flab = '',
+            axisX = F,
+            axisY = F,
+            scale = F,
+            grid = F,
+            flim = c(0.4, max_freq_khz),
+            fastdisp = TRUE,
+            noisereduction = 1
+          )
+
+          graphics.off()
+        }
+
+        # Predict using TopModel ----------------------------------------------------
+        print('Classifying images using Top Model')
+
+        test.input <- paste(tempdir(), '/Images/', sep = '')
+
+        # Define transforms based on model type
+        if (str_detect(architecture, pattern = 'resnet')) {
+          transform_list <- . %>%
+            torchvision::transform_to_tensor() %>%
+            torchvision::transform_color_jitter() %>%
+            transform_resize(256) %>%
+            transform_center_crop(224) %>%
+            transform_normalize(mean = c(0.485, 0.456, 0.406),
+                                std = c(0.229, 0.224, 0.225))
+        } else {
+          transform_list <- . %>%
+            torchvision::transform_to_tensor() %>%
+            torchvision::transform_resize(size = c(224, 224)) %>%
+            torchvision::transform_normalize(mean = c(0.485, 0.456, 0.406),
+                                             std = c(0.229, 0.224, 0.225))
+        }
+
+        test_ds <-
+          image_folder_dataset(test.input, transform = transform_list)
+        test_dl <-
+          dataloader(test_ds, batch_size = 32, shuffle = FALSE)
+
+        # Predict using TrainedModel
+        TrainedModelPred <- predict(TopModel, test_dl)
+
+        # Return the index of the max values (i.e. which class)
+        PredMPS <- torch_argmax(TrainedModelPred, dim = 2)
+
+        # Save to cpu
+        PredMPS <- as_array(torch_tensor(PredMPS, device = 'cpu'))
+
+        # Convert to a factor
+        modelMultiPred <- as.factor(PredMPS)
+        print(modelMultiPred)
+
+        # Calculate the probability associated with each class
+        Probability <-
+          as_array(torch_tensor(nnf_softmax(TrainedModelPred, dim = 2), device = 'cpu'))
+
+        # Find the index of the maximum value in each row
+        max_prob_idx <- apply(Probability, 1, which.max)
+
+        # Map the index to actual probability
+        predicted_class_probability <-
+          sapply(1:nrow(Probability), function(i)
+            Probability[i, max_prob_idx[i]])
+
+        # Convert the integer predictions to factor and then to character based on the levels
+        modelMultiNames <-
+          factor(modelMultiPred,
+                 levels = 1:length(class_names),
+                 labels = class_names)
+
+        outputTableTopModel <-
+          cbind.data.frame(modelMultiNames, predicted_class_probability)
+
+        colnames(outputTableTopModel) <-
+          c('PredictedClass', 'Probability')
+
+        image.files <- list.files(file.path(test.input),
+                                  recursive = T,
+                                  full.names = T)
+        nslash <- str_count(image.files, '/') + 1
+        nslash <- nslash[1]
+        image.files.short <-
+          str_split_fixed(image.files, pattern = '/', n = nslash)[, nslash]
+        image.files.short <-
+          str_split_fixed(image.files.short, pattern = '.jpg', n = 2)[, 1]
+
+        print('Saving output')
+
+        Detections <-
+          which(
+            outputTableTopModel$Probability >= threshold &
+              outputTableTopModel$PredictedClass != noise_category
+          )
+
+        if (single_class == 'TRUE') {
+          Detections <-  which(
+            outputTableTopModel$Probability >= threshold &
+              outputTableTopModel$PredictedClass == single_class_category
+          )
 
 
-      ColNames <-  c(
-        "Selection",
-        "View",
-        "Channel",
-        "Begin Time (s)",
-        "End Time (s)",
-        "Low Freq (Hz)",
-        "High Freq (Hz)",
-        'Probability',
-        "Detections", "Class"
-      )
+        }
 
-      TempNARow <- t(as.data.frame(rep(NA,length(ColNames))))
+        if (for_prrec == TRUE) {
+          Detections <-
+            unlist(which(Probability[, which(class_names == single_class_category)] >= threshold))
 
-      colnames(TempNARow) <- ColNames
+        }
 
-      print(TempNARow)
-      write.table(
-        x = TempNARow,
-        sep = "\t",
-        file = csv.file.name,
-        row.names = FALSE,
-        quote = FALSE
-      )
-      print(paste(
-        "Saving Selection Table No Detections "
-      ))
-    }
+        Detections <-  split(Detections, cumsum(c(1, diff(Detections)) != 1))
 
-    rm(TempWav)
-    rm(TempClips)
-    rm(short.sound.files)
-    rm( test_ds )
-    rm(short.wav)
-    end.time.detection <- Sys.time()
-    print(end.time.detection-start.time.detection)
+        for (i in 1:length(Detections)) {
+          TempList <- Detections[[i]]
+          if (length(TempList) == 1) {
+            Detections[[i]] <- TempList[1]
+          }
+          if (length(TempList) == 2) {
+            Detections[[i]] <- TempList[2]
+          }
+          if (length(TempList) > 2) {
+            Detections[[i]] <- median(TempList)
+          }
 
-  }, error = function(e) { cat("ERROR :", conditionMessage(e), "\n") })
+        }
+
+        DetectionIndices <- unname(unlist(Detections))
+
+        DetectionClass <-
+          outputTableTopModel$PredictedClass[DetectionIndices]
+
+        if (for_prrec == TRUE) {
+          DetectionClass <-
+            rep(single_class_category, length(DetectionIndices))
+        }
+
+        print(paste(
+          'Saving output to',
+          paste(
+            output_folder,
+            DetectionClass,
+            '_',
+            image.files.short[DetectionIndices],
+            '_',
+            round(predicted_class_probability[DetectionIndices], 2),
+            '_TopModel_.jpg',
+            sep = ''
+          )
+        ))
+
+        file.copy(
+          image.files[DetectionIndices],
+          to = paste(
+            output_folder,
+            DetectionClass,
+            '_',
+            image.files.short[DetectionIndices],
+            '_',
+            round(predicted_class_probability[DetectionIndices], 2),
+            '_TopModel_.jpg',
+            sep = ''
+          )
+        )
+
+        if (save_wav == T) {
+          wav.file.paths <- list.files(WavFileTempDir, full.names = T)
+          file.copy(
+            wav.file.paths[DetectionIndices],
+            to = paste(
+              output_folder_wav,
+              DetectionClass,
+              '_',
+              image.files.short[DetectionIndices],
+              '_',
+              round(predicted_class_probability[DetectionIndices], 2),
+              '_TopModel_.wav',
+              sep = ''
+            )
+          )
+        }
+
+        Detections <- image.files.short[DetectionIndices]
+
+        print(Detections)
+
+        if (length(Detections) > 0) {
+          Selection <- seq(1, length(Detections))
+          View <- rep('Spectrogram 1', length(Detections))
+          Channel <- rep(1, length(Detections))
+          MinFreq <- rep(100, length(Detections))
+          MaxFreq <- rep(max_freq_khz * 1000, length(Detections))
+          start.time.new <-
+            as.numeric(str_split_fixed(Detections, pattern = '.wav_', n = 2)[, 2])
+          end.time.new <- start.time.new + clip_duration
+          Probability <-
+            round(predicted_class_probability[DetectionIndices], 2)
+
+          RavenSelectionTableDFTopModelTemp <-
+            cbind.data.frame(
+              Selection,
+              View,
+              Channel,
+              MinFreq,
+              MaxFreq,
+              start.time.new,
+              end.time.new,
+              Probability,
+              Detections
+            )
+
+          RavenSelectionTableDFTopModelTemp <-
+            RavenSelectionTableDFTopModelTemp[, c(
+              "Selection",
+              "View",
+              "Channel",
+              "start.time.new",
+              "end.time.new",
+              "MinFreq",
+              "MaxFreq",
+              'Probability',
+              "Detections"
+            )]
+
+          colnames(RavenSelectionTableDFTopModelTemp) <-
+            c(
+              "Selection",
+              "View",
+              "Channel",
+              "Begin Time (s)",
+              "End Time (s)",
+              "Low Freq (Hz)",
+              "High Freq (Hz)",
+              'Probability',
+              "Detections"
+            )
+          RavenSelectionTableDFTopModelTemp$Class <- DetectionClass
+
+
+          RavenSelectionTableDFTopModel <-
+            rbind.data.frame(RavenSelectionTableDFTopModel,
+                             RavenSelectionTableDFTopModelTemp)
+
+          print(RavenSelectionTableDFTopModel)
+          if (nrow(RavenSelectionTableDFTopModel) > 0) {
+            csv.file.name <-
+              paste(
+                output_folder_selections,
+                paste(unique(DetectionClass), '_', sep = '-'),
+                '_',
+                path_to_files_short[x],
+                'TopModelAllFiles.txt',
+                sep = ''
+              )
+
+
+
+            write.table(
+              x = RavenSelectionTableDFTopModel,
+              sep = "\t",
+              file = csv.file.name,
+              row.names = FALSE,
+              quote = FALSE
+            )
+            print(paste("Saving Selection Table With Detections"))
+          }
+
+
+        }
+      }
+
+      if (nrow(RavenSelectionTableDFTopModel) == 0) {
+        csv.file.name <-
+          paste(
+            output_folder_selections,
+            paste(unique(DetectionClass), '_', sep = '-'),
+            '_',
+            path_to_files_short[x],
+            'TopModelAllFiles.txt',
+            sep = ''
+          )
+
+
+        ColNames <-  c(
+          "Selection",
+          "View",
+          "Channel",
+          "Begin Time (s)",
+          "End Time (s)",
+          "Low Freq (Hz)",
+          "High Freq (Hz)",
+          'Probability',
+          "Detections",
+          "Class"
+        )
+
+        TempNARow <- t(as.data.frame(rep(NA, length(ColNames))))
+
+        colnames(TempNARow) <- ColNames
+
+        print(TempNARow)
+        write.table(
+          x = TempNARow,
+          sep = "\t",
+          file = csv.file.name,
+          row.names = FALSE,
+          quote = FALSE
+        )
+        print(paste("Saving Selection Table No Detections "))
+      }
+
+      rm(TempWav)
+      rm(TempClips)
+      rm(short.sound.files)
+      rm(test_ds)
+      rm(short.wav)
+      end.time.detection <- Sys.time()
+      print(end.time.detection - start.time.detection)
+
+    }, error = function(e) {
+      cat("ERROR :", conditionMessage(e), "\n")
+    })
   }
 
 }
-
-

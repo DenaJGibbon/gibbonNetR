@@ -21,7 +21,7 @@
 #' # Evaluate the performance of the trained models using the test images
 #' evaluate_trainedmodel_performance(trained_models_dir = trained_models_dir,
 #'                                   image_data_dir = image_data_dir,
-#'                                   output_dir = paste(tempdir(), '/data/'),  #' Output directory for evaluation results
+#'                                   output_dir = paste(tempdir(), '/data/'),
 #'                                   positive.class = 'Gibbons',  #' Label for positive class
 #'                                   negative.class = 'Noise')    #' Label for negative class
 #'
@@ -33,113 +33,171 @@
 #'}
 #'
 #' @export
-evaluate_trainedmodel_performance <- function(trained_models_dir, image_data_dir, output_dir='data/',
-                                              positive.class='Gibbons',negative.class='Noise') {
+evaluate_trainedmodel_performance <-
+  function(trained_models_dir,
+           image_data_dir,
+           output_dir = 'data/',
+           positive.class = 'Gibbons',
+           negative.class = 'Noise') {
+    # List trained models
+    trained_models <-
+      list.files(trained_models_dir,
+                 pattern = '.pt',
+                 full.names = TRUE)
 
-  # List trained models
-  trained_models <- list.files(trained_models_dir, pattern = '.pt', full.names = TRUE)
-
-  if(length(trained_models)==0){
-    print('No models in specified directory')
-    break
-  }
-
-  # List image files
-  image_files <- list.files(image_data_dir, recursive = TRUE, full.names = TRUE)
-  image_files_short <- list.files(image_data_dir, recursive = TRUE, full.names = FALSE)
-
-  # Loop through each trained model
-  for (model_path in trained_models) {
-    performance_scores <- data.frame()
-    model <- luz_load(model_path)
-
-    model_name <- basename(model_path)
-    training_data <- str_split_fixed(model_name, pattern = '_', n = 4)[,2]
-    n_epochs <- str_split_fixed(model_name, pattern = '_', n = 4)[,3]
-    model_type <- str_split_fixed(str_split_fixed(model_name, pattern = '_', n = 4)[,4], pattern = '.pt', n = 2)[,1]
-
-    # Evaluate model on each image file
-
-    actual_labels <- as.character(sapply(image_files_short, function(x) dirname(x)))
-
-    # Define transforms based on model type
-    if (str_detect(model_type, pattern = 'resnet')) {
-      transform_list <- . %>%
-        torchvision::transform_to_tensor() %>%
-        torchvision::transform_color_jitter() %>%
-        transform_resize(256) %>%
-        transform_center_crop(224) %>%
-        transform_normalize(mean = c(0.485, 0.456, 0.406), std = c(0.229, 0.224, 0.225))
-    } else {
-      transform_list <- . %>%
-        torchvision::transform_to_tensor() %>%
-        torchvision::transform_resize(size = c(224, 224)) %>%
-        torchvision::transform_normalize(mean = c(0.485, 0.456, 0.406), std = c(0.229, 0.224, 0.225))
+    if (length(trained_models) == 0) {
+      print('No models in specified directory')
+      break
     }
 
-    test_ds <- image_folder_dataset(image_data_dir, transform = transform_list, target_transform = function(x) as.double(x) - 1)
-    test_dl <- dataloader(test_ds, batch_size = 32, shuffle =FALSE)
+    # List image files
+    image_files <-
+      list.files(image_data_dir,
+                 recursive = TRUE,
+                 full.names = TRUE)
+    image_files_short <-
+      list.files(image_data_dir,
+                 recursive = TRUE,
+                 full.names = FALSE)
 
-    preds <- predict(model, test_dl)
+    # Loop through each trained model
+    for (model_path in trained_models) {
+      performance_scores <- data.frame()
+      model <- luz_load(model_path)
 
-    probs <- as_array(torch_tensor(torch_sigmoid(preds), device = 'cpu'))
+      model_name <- basename(model_path)
+      training_data <-
+        str_split_fixed(model_name, pattern = '_', n = 4)[, 2]
+      n_epochs <-
+        str_split_fixed(model_name, pattern = '_', n = 4)[, 3]
+      model_type <-
+        str_split_fixed(
+          str_split_fixed(model_name, pattern = '_', n = 4)[, 4],
+          pattern = '.pt',
+          n = 2
+        )[, 1]
 
-    # Switch positive/negative probs
-    probs <- 1- probs
+      # Evaluate model on each image file
 
-    # Initialize data frames
-    CombinedTempRow <- data.frame()
-    TransferLearningCNNDF <- data.frame()
-    thresholds <- seq(0.1,1,0.1)
+      actual_labels <-
+        as.character(sapply(image_files_short, function(x)
+          dirname(x)))
 
-    for (threshold in thresholds) {
-      # TrainedModel
-      TrainedModelPredictedClass <- ifelse(probs >= (threshold), positive.class, negative.class)
+      # Define transforms based on model type
+      if (str_detect(model_type, pattern = 'resnet')) {
+        transform_list <- . %>%
+          torchvision::transform_to_tensor() %>%
+          torchvision::transform_color_jitter() %>%
+          transform_resize(256) %>%
+          transform_center_crop(224) %>%
+          transform_normalize(mean = c(0.485, 0.456, 0.406),
+                              std = c(0.229, 0.224, 0.225))
+      } else {
+        transform_list <- . %>%
+          torchvision::transform_to_tensor() %>%
+          torchvision::transform_resize(size = c(224, 224)) %>%
+          torchvision::transform_normalize(mean = c(0.485, 0.456, 0.406),
+                                           std = c(0.229, 0.224, 0.225))
+      }
 
-      TrainedModelPredictedClass <- factor(TrainedModelPredictedClass, levels =levels( as.factor(actual_labels)))
+      test_ds <-
+        image_folder_dataset(
+          image_data_dir,
+          transform = transform_list,
+          target_transform = function(x)
+            as.double(x) - 1
+        )
+      test_dl <-
+        dataloader(test_ds, batch_size = 32, shuffle = FALSE)
 
-      TrainedModelPerf <- caret::confusionMatrix(
-        as.factor(TrainedModelPredictedClass),
-        as.factor(actual_labels),
-        mode = 'everything',positive=positive.class
-      )$byClass
+      preds <- predict(model, test_dl)
 
-      TempRowTrainedModel <- cbind.data.frame(
-        t(TrainedModelPerf),
-        'NA',
-        training_data,
-        n_epochs,
-        model_type
-      )
+      probs <-
+        as_array(torch_tensor(torch_sigmoid(preds), device = 'cpu'))
 
-      colnames(TempRowTrainedModel) <- c(
-        "Sensitivity", "Specificity", "Pos Pred Value", "Neg Pred Value",
-        "Precision", "Recall", "F1", "Prevalence", "Detection Rate",
-        "Detection Prevalence", "Balanced Accuracy",
-        'Validation Loss',
-        "Training Data",
-        "N epochs",
-        "CNN Architecture"
-      )
+      # Switch positive/negative probs
+      probs <- 1 - probs
 
-      TempRowTrainedModel$Class <- positive.class
-      TempRowTrainedModel$Threshold <- as.character(threshold)
+      # Initialize data frames
+      CombinedTempRow <- data.frame()
+      TransferLearningCNNDF <- data.frame()
+      thresholds <- seq(0.1, 1, 0.1)
 
-      CombinedTempRow <- rbind.data.frame(CombinedTempRow, TempRowTrainedModel)
+      for (threshold in thresholds) {
+        # TrainedModel
+        TrainedModelPredictedClass <-
+          ifelse(probs >= (threshold), positive.class, negative.class)
+
+        TrainedModelPredictedClass <-
+          factor(TrainedModelPredictedClass, levels = levels(as.factor(actual_labels)))
+
+        TrainedModelPerf <- caret::confusionMatrix(
+          as.factor(TrainedModelPredictedClass),
+          as.factor(actual_labels),
+          mode = 'everything',
+          positive = positive.class
+        )$byClass
+
+        TempRowTrainedModel <- cbind.data.frame(t(TrainedModelPerf),
+                                                'NA',
+                                                training_data,
+                                                n_epochs,
+                                                model_type)
+
+        colnames(TempRowTrainedModel) <- c(
+          "Sensitivity",
+          "Specificity",
+          "Pos Pred Value",
+          "Neg Pred Value",
+          "Precision",
+          "Recall",
+          "F1",
+          "Prevalence",
+          "Detection Rate",
+          "Detection Prevalence",
+          "Balanced Accuracy",
+          'Validation Loss',
+          "Training Data",
+          "N epochs",
+          "CNN Architecture"
+        )
+
+        TempRowTrainedModel$Class <- positive.class
+        TempRowTrainedModel$Threshold <- as.character(threshold)
+
+        CombinedTempRow <-
+          rbind.data.frame(CombinedTempRow, TempRowTrainedModel)
+      }
+
+      ROCRpred <-  ROCR::prediction(predictions = probs,
+                                    labels = actual_labels)
+      AUCval <- ROCR::performance(ROCRpred, 'auc')
+      CombinedTempRow$AUC <- AUCval@y.values[[1]]
+
+      CombinedTempRow$TestData <-
+        str_replace_all(image_data_dir,
+                        pattern = '/',
+                        replacement = '_')
+      TransferLearningCNNDF <-
+        rbind.data.frame(TransferLearningCNNDF, CombinedTempRow)
+      filename <-
+        paste(
+          output_dir,
+          'performance_tables_trained/',
+          training_data,
+          '_',
+          n_epochs,
+          '_',
+          model_type,
+          '_TransferLearningTrainedModel.csv',
+          sep = ''
+        )
+      dir.create(dirname(filename),
+                 showWarnings = FALSE,
+                 recursive = T)
+      write.csv(TransferLearningCNNDF, filename, row.names = FALSE)
+
     }
 
-    ROCRpred <-  ROCR::prediction(predictions = probs,
-                                  labels = actual_labels)
-    AUCval <- ROCR::performance(ROCRpred,'auc')
-    CombinedTempRow$AUC <- AUCval@y.values[[1]]
-
-    CombinedTempRow$TestData <- str_replace_all(image_data_dir,pattern = '/',replacement ='_')
-    TransferLearningCNNDF <- rbind.data.frame(TransferLearningCNNDF, CombinedTempRow)
-    filename <- paste(output_dir,'performance_tables_trained/', training_data, '_', n_epochs, '_', model_type, '_TransferLearningTrainedModel.csv', sep = '')
-    dir.create(dirname(filename), showWarnings = FALSE, recursive = T)
-    write.csv(TransferLearningCNNDF, filename, row.names = FALSE)
-
+    invisible(NULL)
   }
-
-  invisible(NULL)
-}

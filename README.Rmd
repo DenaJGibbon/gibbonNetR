@@ -11,7 +11,7 @@ knitr::opts_chunk$set(
   comment = "#>",
   out.width="400px", dpi=120
 )
-
+knitr::opts_knit$set(root.dir = '/Users/denaclink/Desktop/RStudioProjects/gibbonNetR_notgithub/')
 ```
 
 # Overview
@@ -38,6 +38,7 @@ library(dplyr)
 library(torch)
 library(torchvision)
 library(purrr)
+
 ```
 
 # Preparing the data
@@ -200,11 +201,16 @@ result$EmbeddingsCombined
 ```
 
 ### We can explore the unsupervised clustering results
-the confusion matrix results when we use 'hdbscan' to match the target class to the cluster with the largest number of observations
+Here we can see the Normalize Mutual Information score
 ```{r}
 result$NMI
+```
+
+
+The confusion matrix results when we use 'hdbscan' to match the target class to the cluster with the largest number of observations
+```{r}
 result$ConfusionMatrix
 ```
 
 
-
+Interestingly, it appears there is better performance when using the unsupervised approach compared to the supervised approach!

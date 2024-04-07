@@ -62,7 +62,10 @@ for (arch in architectures) {
     )
 
    # Reassign column names
-    colnames(metrics) <- c("Class", "Training Data", "CNN Architecture", "Threshold", "F1", "Precision", "Recall", "AUC", "N epochs")
+    colnames(metrics) <- c("Class",
+    "Training Data", "CNN Architecture",
+    "Threshold", "F1", "Precision",
+    "Recall", "AUC", "N epochs")
     #' Write data to CSV file
     filename <- paste0(performance_tables_dir, arch, "_", td, ".csv")
     write.csv(metrics, filename, row.names = FALSE)

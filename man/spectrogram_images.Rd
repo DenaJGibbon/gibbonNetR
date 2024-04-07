@@ -94,7 +94,9 @@ ListImages <- list.files(paste(tempdir(), '/MultiDir/', 'Spectro/', sep = ''), r
 print(ListImages)
 
 # Get the path of a single image
-Singlepath <- list.files(paste(tempdir(), '/MultiDir/', 'Spectro/', sep = ''), recursive = TRUE, full.names = TRUE)[1]
+Singlepath <- list.files(paste(tempdir(),
+'/MultiDir/', 'Spectro/', sep = ''),
+recursive = TRUE, full.names = TRUE)[1]
 
 # Set input data path
 input.data.path <- paste(tempdir(), '/MultiDir/', 'Spectro/train/', sep = '')
