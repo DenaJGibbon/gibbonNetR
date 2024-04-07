@@ -15,9 +15,9 @@
 #' @param class_names A character vector containing the unique classes for training the model.
 #' @param noise_category A character string specifying the noise category for exclusion.
 #' @param max_freq_khz The maximum frequency in kHz for spectrogram visualization.
-#' @param single_class A logical value indicating whether to process only a single class.
+#' @param single_class A logical value indicating whether to process only a single class. For now 'TRUE' is only option.
 #' @param single_class_category A character string specifying the single class category when 'single_class' is set to TRUE.
-#'
+#' @param for_prrec Whether to output all detections to create a PR curve.
 #' @details This function processes sound data from a directory, extracts sound clips, converts them to images, performs image classification using a pre-trained deep learning model, and saves the results including selection tables and image and audio files.
 #'
 #' @examples
@@ -75,7 +75,7 @@ deploy_CNN_multi <- function(
     noise_category = 'noise',
     max_freq_khz = 2,
     single_class = TRUE,
-    single_class_category = 'female.gibbon'
+    single_class_category = 'female.gibbon',for_prrec=TRUE
 ) {
 
 
@@ -273,6 +273,11 @@ deploy_CNN_multi <- function(
 
       }
 
+      if(for_prrec==TRUE){
+
+        Detections <-  unlist(which(Probability[ ,which(class_names==single_class_category) ] >= threshold))
+
+      }
 
       Detections <-  split(Detections, cumsum(c(
         1, diff(Detections)) != 1))
@@ -295,7 +300,10 @@ deploy_CNN_multi <- function(
 
       DetectionClass <-  outputTableTopModel$PredictedClass[DetectionIndices]
 
+      if(for_prrec==TRUE){
 
+        DetectionClass <- rep(single_class_category,length(DetectionIndices))
+      }
 
       print(paste('Saving output to',paste(output_folder, DetectionClass,'_',
                                            image.files.short[DetectionIndices],

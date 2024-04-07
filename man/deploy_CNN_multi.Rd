@@ -22,7 +22,8 @@ deploy_CNN_multi(
   noise_category = "noise",
   max_freq_khz = 2,
   single_class = TRUE,
-  single_class_category = "female.gibbon"
+  single_class_category = "female.gibbon",
+  for_prrec = TRUE
 )
 }
 \arguments{
@@ -52,9 +53,11 @@ deploy_CNN_multi(
 
 \item{max_freq_khz}{The maximum frequency in kHz for spectrogram visualization.}
 
-\item{single_class}{A logical value indicating whether to process only a single class.}
+\item{single_class}{A logical value indicating whether to process only a single class. For now 'TRUE' is only option.}
 
 \item{single_class_category}{A character string specifying the single class category when 'single_class' is set to TRUE.}
+
+\item{for_prrec}{Whether to output all detections to create a PR curve.}
 }
 \description{
 This function processes sound data from a specified directory, performs transfer learning using a pre-trained deep learning model, and saves the results.

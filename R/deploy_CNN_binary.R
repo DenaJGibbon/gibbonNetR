@@ -25,7 +25,7 @@
 #' #' Load data
 #' data("TempBinWav")
 #'
-#' dir.create(paste(tempdir(),'/BinaryDir/Wav/'),recursive = T, showWarnings = FALSE)
+#' dir.create(paste(tempdir(),'/BinaryDir/Wav/'),recursive = TRUE, showWarnings = FALSE)
 #'
 #' #' Write to temp directory
 #' writeWave(TempBinWav,filename = paste(tempdir(),'/BinaryDir/Wav/','TempBinWav.wav'))
@@ -76,13 +76,13 @@ deploy_CNN_binary <- function(
 
 
   # Create output folders if they don't exist
-  dir.create(output_folder, recursive = TRUE, showWarnings = FALSE)
-  dir.create(output_folder_selections, recursive = TRUE, showWarnings = FALSE)
-  dir.create(output_folder_wav, recursive = TRUE, showWarnings = FALSE)
+  dir.create(output_folder, recursive = TRUERUE, showWarnings = FALSE)
+  dir.create(output_folder_selections, recursive = TRUERUE, showWarnings = FALSE)
+  dir.create(output_folder_wav, recursive = TRUERUE, showWarnings = FALSE)
 
 
   if(is.list(path_to_files)==FALSE){
-    path_to_files <- list.files(path_to_files,recursive = T,full.names = T)
+    path_to_files <- list.files(path_to_files,recursive = TRUE,full.names = T)
   }
 
   if( any(is.na(detect_pattern))==FALSE  ){
@@ -142,11 +142,11 @@ deploy_CNN_binary <- function(
     }
 
     for(q in 1: (length(length.files)-1) ){
-      unlink(paste( tempdir(), '/WavFiles', sep=''), recursive = TRUE)
-      unlink(paste( tempdir(), '/Images/Images', sep=''), recursive = TRUE)
+      unlink(paste( tempdir(), '/WavFiles', sep=''), recursive = TRUERUE)
+      unlink(paste( tempdir(), '/Images/Images', sep=''), recursive = TRUERUE)
 
       dir.create(paste( tempdir(), '/WavFiles', sep=''))
-      dir.create(paste( tempdir(), '/Images/Images', sep=''), recursive = TRUE)
+      dir.create(paste( tempdir(), '/Images/Images', sep=''), recursive = TRUERUE)
 
       WavFileTempDir <- paste( tempdir(), '/WavFiles', sep='')
       ImageTempDir <- paste( tempdir(), '/Images/Images', sep='')
@@ -234,7 +234,7 @@ deploy_CNN_binary <- function(
 
       colnames(outputTableTrainedModel) <- c('PredictedClass', 'Probability')
 
-      image.files <- list.files(file.path(test.input),recursive = T,
+      image.files <- list.files(file.path(test.input),recursive = TRUE,
                                 full.names = T)
       nslash <- str_count(image.files,'/')+1
       nslash <- nslash[1]

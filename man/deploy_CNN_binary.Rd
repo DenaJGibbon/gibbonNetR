@@ -64,7 +64,7 @@ This function processes sound data from a directory, extracts sound clips, conve
 #' Load data
 data("TempBinWav")
 
-dir.create(paste(tempdir(),'/BinaryDir/Wav/'),recursive = T, showWarnings = FALSE)
+dir.create(paste(tempdir(),'/BinaryDir/Wav/'),recursive = TRUE, showWarnings = FALSE)
 
 #' Write to temp directory
 writeWave(TempBinWav,filename = paste(tempdir(),'/BinaryDir/Wav/','TempBinWav.wav'))
