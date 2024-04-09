@@ -115,8 +115,8 @@ The use of embeddings has been shown to be an effective way to represent acousti
 
 ```
 
-ModelPath <- "/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_20_resnet50_model.pt"
-result <- extract_embeddings(test_input="/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/examples/test/",
+ModelPath <- model_output/_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_20_resnet50_model.pt"
+result <- extract_embeddings(test_input="data/examples/test/",
                                       model_path=ModelPath,
                                      target_class = "female.gibbon")
 ```
