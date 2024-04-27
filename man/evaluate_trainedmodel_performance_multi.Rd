@@ -43,7 +43,7 @@ class_names <-  c('female.gibbon','hornbill.helmeted','hornbill.rhino','long.arg
 evaluate_trainedmodel_performance_multi(trained_models_dir=trained_models_dir,
                                         class_names=class_names,
                                         image_data_dir=image_data_dir,
-                                        output_dir= paste(tempdir(), '/data/'),  #' Output directory for evaluation results
+                                        output_dir= paste(tempdir(), '/data/'),
                                         noise.category = "noise")
 # Find the location of saved evaluation files
 CSVName <- list.files(paste(tempdir(), '/data/'), recursive = TRUE, full.names = TRUE)

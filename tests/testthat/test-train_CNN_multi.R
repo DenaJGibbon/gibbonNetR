@@ -14,7 +14,7 @@ test_that("train_CNN_multi works", {
     learning_rate = 0.001,
     epoch.iterations = 1,  # Or any other list of integer epochs
     early.stop = "yes",
-    save.model= TRUE,
+    save.model= FALSE,
     output.base.path = paste(tempdir(),'/MultiDir/',sep=''),
     trainingfolder = "test_multi",
     noise.category = 'noise'
@@ -23,6 +23,7 @@ test_that("train_CNN_multi works", {
   ListOutputFiles <- list.files(paste(tempdir(),'/MultiDir/',sep=''),recursive = T,full.names = T)
   TestOutPut <- ListOutputFiles[which(str_detect(ListOutputFiles,'performance_tables_multi/'))]
   TempCSV <- read.csv(TestOutPut[1])
+  head(TempCSV)
   expect_true(ncol(TempCSV)==19)
 
 })

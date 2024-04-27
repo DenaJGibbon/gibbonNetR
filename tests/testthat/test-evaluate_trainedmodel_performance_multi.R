@@ -11,7 +11,8 @@ test_that("Outputs expected dataframe", {
 
   # Find the location of saved evaluation files
   CSVName <- list.files(paste(tempdir(), '/data/'), recursive = TRUE, full.names = TRUE)
-
+  # Check the output of the first file
+  head(read.csv(CSVName[1]))
   # Check the output of the first file
   expect_true( ncol(read.csv(CSVName[1]))==19)
 

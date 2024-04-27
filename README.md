@@ -2,7 +2,7 @@ gibbonNetR: R Package for the Use of CNNs and Transfer Learning on
 Acoustic Data
 ================
 Dena J. Clink and Abdul Hamid Ahmad
-2024-04-07
+2024-04-27
 
 # Overview
 
@@ -207,7 +207,7 @@ Here we can see the Normalize Mutual Information score
 
 ``` r
 result$NMI
-#> [1] 0.7549634
+#> [1] 0.7342826
 ```
 
 The confusion matrix results when we use ‘hdbscan’ to match the target
@@ -216,13 +216,13 @@ class to the cluster with the largest number of observations
 ``` r
 result$ConfusionMatrix
 #>          Sensitivity          Specificity       Pos Pred Value 
-#>            0.9112426            0.9884598            0.9467213 
+#>            0.9072978            0.9853529            0.9330629 
 #>       Neg Pred Value            Precision               Recall 
-#>            0.9801937            0.9467213            0.9112426 
+#>            0.9792678            0.9330629            0.9072978 
 #>                   F1           Prevalence       Detection Rate 
-#>            0.9286432            0.1836957            0.1673913 
+#>            0.9200000            0.1836957            0.1666667 
 #> Detection Prevalence    Balanced Accuracy 
-#>            0.1768116            0.9498512
+#>            0.1786232            0.9463253
 ```
 
 Interestingly, it appears there is better performance when using the

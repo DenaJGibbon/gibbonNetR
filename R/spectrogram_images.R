@@ -6,7 +6,7 @@
 #' @param minfreq.khz Minimum frequency in kHz for the spectrogram. Defaults to 0.4.
 #' @param maxfreq.khz Maximum frequency in kHz for the spectrogram. Defaults to 2.
 #' @param new.sampleratehz New sample rate in Hz for resampling the audio. Defaults to 16000. Set to 'NA' if no resampling is required.
-#'
+#' @param random Logical. If TRUE then randomly samples from folder, if FALSE then divides into sets based on alphabetic file name sequence.
 #' @return Invisible NULL
 #'
 #' @examples
@@ -129,6 +129,7 @@
 spectrogram_images <- function(trainingBasePath,
                                outputBasePath,
                                splits,
+                               random='TRUE',
                                minfreq.khz = 0.4,
                                maxfreq.khz = 1.6,
                                new.sampleratehz = 16000) {
@@ -159,8 +160,13 @@ spectrogram_images <- function(trainingBasePath,
 
     # Calculate indices for splitting
     # Shuffle indices
+    if(random=='TRUE'){
     shuffled_indices <- sample(1:total_files)
+    }
 
+    if(random=='FALSE'){
+      shuffled_indices <- seq(1:total_files)
+    }
     # Calculate indices for splitting
     train_n <- floor(splits[1] * total_files)
     valid_n <- floor(splits[2] * total_files)

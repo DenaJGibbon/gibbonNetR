@@ -8,6 +8,7 @@ spectrogram_images(
   trainingBasePath,
   outputBasePath,
   splits,
+  random = "TRUE",
   minfreq.khz = 0.4,
   maxfreq.khz = 1.6,
   new.sampleratehz = 16000
@@ -19,6 +20,8 @@ spectrogram_images(
 \item{outputBasePath}{Directory where the processed images will be saved.}
 
 \item{splits}{Numeric vector specifying the split ratios for train, valid, and test sets. Defaults to c(0.8, 0.1, 0.1).}
+
+\item{random}{Logical. If TRUE then randomly samples from folder, if FALSE then divides into sets based on alphabetic file name sequence.}
 
 \item{minfreq.khz}{Minimum frequency in kHz for the spectrogram. Defaults to 0.4.}
 
