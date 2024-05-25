@@ -37,7 +37,7 @@ library(gibbonNetR)
 ZenodoLink <- 'https://zenodo.org/records/10927637/files/TrainingClipsMulti.zip?download=1'
 
 # Download into specified zip file location
-download.file(url = ZenodoLink, destfile = 'data/data.zip')
+download.file(url = ZenodoLink, destfile = 'data/data.zip',method = "curl")
 
 # Unzip folder
 exdir <- 'data/trainingclips/'
@@ -67,7 +67,7 @@ gibbonNetR::spectrogram_images(
 ZenodoLink <- 'https://zenodo.org/records/10927637/files/TestFilesMulti.zip?download=1'
 
 # Download into specified zip file location
-download.file(url = ZenodoLink, destfile = 'data/data.zip')
+download.file(url = ZenodoLink, destfile = 'data/data.zip',method = "curl")
 
 # Unzip folder
 exdir <- 'data/testclips/'
@@ -210,7 +210,7 @@ Here we can see the Normalize Mutual Information score
 
 ``` r
 result$NMI
-#> [1] 0.7440309
+#> [1] 0.7301442
 ```
 
 The confusion matrix results when we use ‘hdbscan’ to match the target
@@ -219,13 +219,13 @@ class to the cluster with the largest number of observations
 ``` r
 result$ConfusionMatrix
 #>          Sensitivity          Specificity       Pos Pred Value 
-#>            0.9053254            0.9880160            0.9444444 
+#>            0.9112426            0.9831336            0.9240000 
 #>       Neg Pred Value            Precision               Recall 
-#>            0.9788918            0.9444444            0.9053254 
+#>            0.9800885            0.9240000            0.9112426 
 #>                   F1           Prevalence       Detection Rate 
-#>            0.9244713            0.1836957            0.1663043 
+#>            0.9175770            0.1836957            0.1673913 
 #> Detection Prevalence    Balanced Accuracy 
-#>            0.1760870            0.9466707
+#>            0.1811594            0.9471881
 ```
 
 Interestingly, it appears there is better performance when using the

@@ -56,7 +56,7 @@ library(gibbonNetR)
 ZenodoLink <- 'https://zenodo.org/records/10927637/files/TrainingClipsMulti.zip?download=1'
 
 # Download into specified zip file location
-download.file(url = ZenodoLink, destfile = 'data/data.zip')
+download.file(url = ZenodoLink, destfile = 'data/data.zip',method = "curl")
 
 # Unzip folder
 exdir <- 'data/trainingclips/'
@@ -87,7 +87,7 @@ gibbonNetR::spectrogram_images(
 ZenodoLink <- 'https://zenodo.org/records/10927637/files/TestFilesMulti.zip?download=1'
 
 # Download into specified zip file location
-download.file(url = ZenodoLink, destfile = 'data/data.zip')
+download.file(url = ZenodoLink, destfile = 'data/data.zip',method = "curl")
 
 # Unzip folder
 exdir <- 'data/testclips/'

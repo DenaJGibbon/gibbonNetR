@@ -1,6 +1,6 @@
 #' Extract Embeddings and Create Scatter Plots
 #'
-#' This function loads a fine-tuned PyTorch model, extracts embeddings from a set of test images,
+#' This function loads a fine-tuned Torch model, extracts embeddings from a set of test images,
 #' performs dimensionality reduction using UMAP, and creates scatter plots to visualize the embeddings.
 #'
 #' @param test_input A character string specifying the path to the directory containing the test images.

@@ -11,8 +11,7 @@
 #'
 #' @return Invisible NULL. The performance scores are written to the specified output directory.
 #' @importFrom stringr str_split_fixed str_detect
-#' @examples
-#' {
+#' @examples {
 # if (.Platform$OS.type == "windows") {
 #   # Set directory paths for trained models and test images
 #
