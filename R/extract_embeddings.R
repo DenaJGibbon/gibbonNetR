@@ -34,7 +34,7 @@
 #' trained_models_dir <- system.file("extdata", "trainedresnetmulti/", package = "gibbonNetR")
 #'
 #' #' Specify model path
-#' ModelPath <- list.files(trained_models_dir,full.names = T)
+#' ModelPath <- list.files(trained_models_dir,full.names = TRUE)
 #'
 #' # Specify model path
 #' ImageFile <- system.file("extdata", "multiclass/test/", package = "gibbonNetR")

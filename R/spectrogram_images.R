@@ -92,14 +92,14 @@
 #' )
 #'
 #' # Create a dataloader from the dataset:
-#' train_dl <- dataloader(train_ds, batch_size = train_ds$.length(), shuffle = F, drop_last = TRUE)
+#' train_dl <- dataloader(train_ds, batch_size = train_ds$.length(), shuffle = FALSE, drop_last = TRUE)
 #'
 #' # Extract the next batch from the dataloader
 #' batch <- train_dl$.iter()$.next()
 #'
 #' # Extract the labels for the batch and determine class names
 #' classes <- batch[[2]]
-#' class_names <- list.files(input.data.path,recursive = T)
+#' class_names <- list.files(input.data.path,recursive = TRUE)
 #' class_names <- str_split_fixed(class_names,pattern = '/',n=2)[,1]
 #'
 #' # Convert the batch tensor of images to an array and process them:
@@ -213,7 +213,7 @@ spectrogram_images <- function(trainingBasePath,
       jpeg_filename <-
         file.path(subset_directory, paste0(wav_rm, '.jpg'))
 
-      jpeg(jpeg_filename, res = 50)
+      grDevices::jpeg(jpeg_filename, res = 50)
 
       short_wav <- tuneR::readWave(SoundFiles[y])
 

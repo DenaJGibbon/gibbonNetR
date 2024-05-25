@@ -5,10 +5,10 @@ Authors@R:
     person("Dena J.", "Clink", , "dena.clink@cornell.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-0363-5581"))
 Description: What the package does (one paragraph).
-License: `use_mit_license()`
+License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Depends:
     torch,
     stringr,
@@ -21,7 +21,6 @@ Imports:
     torchvision,
     dbscan,
     aricode,
-    jpeg,
     cowplot,
     ggplot2,
     magrittr,
@@ -33,16 +32,16 @@ Imports:
     luz,
     ggpubr,
     caret,
-    devtools,
     coro,
-    dplyr,
     grDevices,
     stats,
     utils
 Suggests: 
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    dplyr,
+    devtools
 Config/testthat/edition: 3
 VignetteBuilder: knitr
 LazyData: true

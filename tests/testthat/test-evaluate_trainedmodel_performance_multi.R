@@ -10,7 +10,7 @@ test_that("Outputs expected dataframe", {
                                           noise.category='noise')    # Label for negative class
 
   # Find the location of saved evaluation files
-  CSVName <- list.files(paste(tempdir(), '/data/'), recursive = TRUE, full.names = TRUE)
+  CSVName <- list.files(paste(tempdir(), '/data/performance_tables_multi_trained/',sep=''), recursive = TRUE, full.names = TRUE)
   # Check the output of the first file
   head(read.csv(CSVName[1]))
   # Check the output of the first file

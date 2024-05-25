@@ -25,7 +25,7 @@
 #' performance_tables_dir <- paste(tempdir(),"/example_performance_tables/", sep='')
 #'
 #' #' Create directory for performance tables (NOTE THIS IS FOR TESTING ONLY)
-#' dir.create(performance_tables_dir, showWarnings = FALSE, recursive = T)
+#' dir.create(performance_tables_dir, showWarnings = FALSE, recursive = TRUE)
 #'
 #' #' Define list of model architectures
 #' architectures <- c("alexnet", "vgg16", "vgg19")

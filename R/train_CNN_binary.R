@@ -90,7 +90,7 @@ train_CNN_binary <-
     # Create if doesn't exist
     dir.create(output.data.path,
                showWarnings = FALSE,
-               recursive = T)
+               recursive = TRUE)
 
     # Metadata
     metadata <- tibble(

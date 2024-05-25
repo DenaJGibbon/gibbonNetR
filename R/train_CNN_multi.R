@@ -23,6 +23,7 @@
 #' }
 #'
 #' @examples
+#' {
 #' { input.data.path <- system.file("extdata", "multiclass/", package = "gibbonNetR")
 #'   test.data <- system.file("extdata", "multiclass/test/", package = "gibbonNetR")
 #'   result <- train_CNN_multi(
@@ -40,6 +41,7 @@
 #'   noise.category = 'noise'
 #' )
 #' print(result)
+#' }
 #' }
 
 #' @seealso \code{\link[torch]{nn_module}} and other torch functions.
@@ -71,7 +73,7 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
   output.data.path <- paste(output.base.path, trainingfolder, 'multi', 'unfrozen', unfreeze.param,  '/', sep='_')
 
   # Create if doesn't exist
-  dir.create(output.data.path, showWarnings = FALSE, recursive = T)
+  dir.create(output.data.path, showWarnings = FALSE, recursive = TRUE)
 
   # Metadata
   metadata <- tibble(
@@ -281,7 +283,7 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
       stop("Invalid architecture specified. Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'.")
     }
 
-    weight <- torch_tensor( class_weights, device = 'mps' )
+    weight <- torch_tensor( class_weights, device = 'cpu' )
 
     fitted <- net %>%
       luz::setup(
@@ -307,7 +309,8 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
               ),
               luz_callback_csv_logger(paste(output.data.path, trainingfolder, n.epoch, architecture, "logs_model.csv", sep = '_'))
             ),
-            verbose = TRUE
+            verbose = TRUE,
+            accelerator = accelerator(cpu = TRUE)
         )
     } else {
       multiModel <- fitted %>%
@@ -322,7 +325,8 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
               ),
               luz_callback_csv_logger(paste(output.data.path, trainingfolder, n.epoch, architecture, "logs_model.csv", sep = '_'))
             ),
-            verbose = TRUE
+            verbose = TRUE,
+            accelerator = accelerator(cpu = TRUE)
         )
     }
 

@@ -9,6 +9,8 @@
 #' @param path_to_files A character string specifying the path to the directory or list containing sound files to process.
 #' @param clip_duration The duration of each sound clip in seconds.
 #' @param hop_size The hop size for splitting the sound clips.
+#' @param detect_pattern Pattern in sound file to detect for subset.
+#' @param architecture User specified: 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
 #' @param downsample_rate The downsample rate for audio in Hz, set to 'NA' if no downsampling is required.
 #' @param threshold The threshold for audio detection.
 #' @param save_wav A logical value indicating whether to save the extracted sound clips as WAV files.
@@ -25,7 +27,7 @@
 #' # Load data
 #' data("TempBinWav")
 #'
-#' dir.create(paste(tempdir(),'/MultiDir/Wav/'),recursive = T, showWarnings = FALSE)
+#' dir.create(paste(tempdir(),'/MultiDir/Wav/'),recursive = TRUE, showWarnings = FALSE)
 #'
 #' # Write to temp directory
 #' writeWave(TempBinWav,filename = paste(tempdir(),'/MultiDir/Wav/','TempBinWav.wav'))
@@ -34,7 +36,7 @@
 #' trained_models_dir <- system.file("extdata", "trainedresnetmulti/", package = "gibbonNetR")
 #'
 #' #' Specify model path
-#' ModelPath <- list.files(trained_models_dir,full.names = T)
+#' ModelPath <- list.files(trained_models_dir,full.names = TRUE)
 #'
 #' #' Deploy trained model over sound files
 #' deploy_CNN_multi(
