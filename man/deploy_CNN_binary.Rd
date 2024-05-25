@@ -61,36 +61,73 @@ This function processes sound data from a directory, extracts sound clips, conve
 }
 \examples{
 {
-#' Load data
-data("TempBinWav")
+if (.Platform$OS.type == "windows") {
 
-dir.create(paste(tempdir(),'/BinaryDir/Wav/'),recursive = TRUE, showWarnings = FALSE)
+  #' Load data
+  data("TempBinWav")
 
-#' Write to temp directory
-writeWave(TempBinWav,filename = paste(tempdir(),'/BinaryDir/Wav/','TempBinWav.wav'))
+  dir.create(paste(tempdir(),'\\\\BinaryDir\\\\Wav\\\\',sep=''),recursive = TRUE, showWarnings = T)
 
-#' Set model directory
-trained_models_dir <- system.file("extdata", "trainedresnetbinary/", package = "gibbonNetR")
+  #' Write to temp directory
+  writeWave(TempBinWav,filename = paste(tempdir(),'\\\\BinaryDir\\\\Wav\\\\','TempBinWav.wav',sep=''))
 
-#' Specify model path
-ModelPath <- list.files(trained_models_dir,full.names =TRUE)
+  #' Set model directory
+  trained_models_dir <- system.file("extdata", "trainedresnetbinary\\\\", package = "gibbonNetR")
+
+  #' Specify model path
+  ModelPath <- list.files(trained_models_dir,full.names =TRUE)
 
 
-deploy_CNN_binary (
-  clip_duration = 12,
-  architecture='alexnet',
-  output_folder = paste(tempdir(),'/BinaryDir/Results/Images/',sep=''),
-  output_folder_selections = paste(tempdir(),'/BinaryDir/Results/Selections/',sep=''),
-  output_folder_wav = paste(tempdir(),'/BinaryDir/Results/Wavs/',sep=''),
-  detect_pattern=NA,
-  top_model_path = ModelPath,
-  path_to_files = paste(tempdir(),'/BinaryDir/Wav/'),
-  downsample_rate = 'NA',
-  threshold = 0.5,
-  save_wav = F,
-  positive.class = 'Gibbons',
-  negative.class = 'Noise',
-  max_freq_khz = 2
-)
+  deploy_CNN_binary (
+    clip_duration = 12,
+    architecture='alexnet',
+    output_folder = paste(tempdir(),'\\\\BinaryDir\\\\Results\\\\Images\\\\',sep=''),
+    output_folder_selections = paste(tempdir(),'\\\\BinaryDir\\\\Results\\\\Selections\\\\',sep=''),
+    output_folder_wav = paste(tempdir(),'\\\\BinaryDir\\\\Results\\\\Wavs\\\\',sep=''),
+    detect_pattern=NA,
+    top_model_path = ModelPath,
+    path_to_files = paste(tempdir(),'\\\\BinaryDir\\\\Wav\\\\',sep=''),
+    downsample_rate = 'NA',
+    threshold = 0.5,
+    save_wav = F,
+    positive.class = 'Gibbons',
+    negative.class = 'Noise',
+    max_freq_khz = 2
+  )
+
+
+} else  {
+  #' Load data
+  data("TempBinWav")
+
+  dir.create(paste(tempdir(),'/BinaryDir/Wav/',sep=''),recursive = TRUE, showWarnings = FALSE)
+
+  #' Write to temp directory
+  writeWave(TempBinWav,filename = paste(tempdir(),'/BinaryDir/Wav/','TempBinWav.wav',sep=''))
+
+  #' Set model directory
+  trained_models_dir <- system.file("extdata", "trainedresnetbinary/", package = "gibbonNetR")
+
+  #' Specify model path
+  ModelPath <- list.files(trained_models_dir,full.names =TRUE)
+
+
+  deploy_CNN_binary (
+    clip_duration = 12,
+    architecture='alexnet',
+    output_folder = paste(tempdir(),'/BinaryDir/Results/Images/',sep=''),
+    output_folder_selections = paste(tempdir(),'/BinaryDir/Results/Selections/',sep=''),
+    output_folder_wav = paste(tempdir(),'/BinaryDir/Results/Wavs/',sep=''),
+    detect_pattern=NA,
+    top_model_path = ModelPath,
+    path_to_files = paste(tempdir(),'/BinaryDir/Wav/',sep=''),
+    downsample_rate = 'NA',
+    threshold = 0.5,
+    save_wav = F,
+    positive.class = 'Gibbons',
+    negative.class = 'Noise',
+    max_freq_khz = 2
+  )
+}
 }
 }

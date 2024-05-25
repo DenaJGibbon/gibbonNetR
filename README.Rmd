@@ -29,11 +29,14 @@ install.packages("devtools")
 
 # Install gibbonNetR
 devtools::install_github("https://github.com/DenaJGibbon/gibbonNetR")
+
+# The first time you use the package 'torch' will need to install additional packages. You can start the process using the following:
+library(torch)
 ```
 
 ```{r, message=FALSE, echo=FALSE}
-#devtools::load_all("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
-library(gibbonNetR)
+devtools::load_all("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
+#library(gibbonNetR)
 # Load other required libraries
 library(dplyr)
 library(torch)

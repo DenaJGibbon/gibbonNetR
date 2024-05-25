@@ -37,6 +37,7 @@ Process and Save Spectrogram Images from Sound Files
 }
 \examples{
 {
+if (.Platform$OS.type == "unix") {
 # Load the gibbonNetR package
 library(gibbonNetR)
 library(torchvision)
@@ -145,5 +146,6 @@ images \%>\%
         purrr::set_names(class_names) \%>\%
         purrr::map(~ as.raster(normalize_pixel_values(.x))) \%>\%
         purrr::iwalk(~{plot(.x); title(.y)})
-}
+        }
+        }
 }

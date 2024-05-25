@@ -34,7 +34,7 @@ install.packages("devtools")
 devtools::install_github("https://github.com/DenaJGibbon/gibbonNetR")
 ```
 
-```{r, tidy=TRUE, message=FALSE, echo=FALSE}
+```{r, tidy=TRUE, message=FALSE, echo=FALSE,eval = FALSE}
 devtools::load_all("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
 setwd("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
 # Load other required libraries

@@ -11,6 +11,7 @@
 #'
 #' @examples
 #' {
+#' if (.Platform$OS.type == "unix") {
 #' # Load the gibbonNetR package
 #' library(gibbonNetR)
 #' library(torchvision)
@@ -119,8 +120,8 @@
 #'         purrr::set_names(class_names) %>%
 #'         purrr::map(~ as.raster(normalize_pixel_values(.x))) %>%
 #'         purrr::iwalk(~{plot(.x); title(.y)})
-
-#'}
+#'         }
+#'         }
 #' @importFrom tuneR readWave
 #' @importFrom seewave spectro
 #' @importFrom tools file_path_sans_ext
@@ -210,6 +211,7 @@ spectrogram_images <- function(trainingBasePath,
       }
 
       wav_rm <- tools::file_path_sans_ext(SoundFilesShort[y])
+
       jpeg_filename <-
         file.path(subset_directory, paste0(wav_rm, '.jpg'))
 

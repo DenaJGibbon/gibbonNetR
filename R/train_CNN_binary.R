@@ -93,7 +93,7 @@ train_CNN_binary <-
                recursive = TRUE)
 
     # Metadata
-    metadata <- tibble(
+    metadata <- data.frame(
       Model_Name = architecture,
       Training_Data_Path = input.data.path,
       Test_Data_Path = test.data,
@@ -107,7 +107,7 @@ train_CNN_binary <-
       Negative.class = negative.class
     )
 
-    write_csv(metadata,
+    write.csv(metadata,
               paste0(output.data.path, architecture, "_model_metadata.csv"))
 
     for (a in 1:length(epoch.iterations)) {
@@ -350,7 +350,7 @@ train_CNN_binary <-
       }
 
       pos_weight <-
-        torch_tensor(rep(noise.weight, batch_size), device = 'mps')
+        torch_tensor(rep(noise.weight, batch_size), device = 'cpu')
 
       fitted <- net %>%
         luz::setup(
@@ -386,7 +386,8 @@ train_CNN_binary <-
                 )
               )
             ),
-            verbose = TRUE
+            verbose = TRUE,
+            accelerator = accelerator(cpu = TRUE)
           )
       } else {
         BinaryModel <- fitted %>%
@@ -413,7 +414,8 @@ train_CNN_binary <-
                 )
               )
             ),
-            verbose = TRUE
+            verbose = TRUE,
+            accelerator = accelerator(cpu = TRUE)
           )
       }
 

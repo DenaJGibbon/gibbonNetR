@@ -76,7 +76,7 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
   dir.create(output.data.path, showWarnings = FALSE, recursive = TRUE)
 
   # Metadata
-  metadata <- tibble(
+  metadata <- data.frame(
     Model_Name = architecture,
     Training_Data_Path = input.data.path,
     Test_Data_Path = test.data,
@@ -89,7 +89,7 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
     Noise.class=noise.category
   )
 
-  write_csv(metadata, paste0(output.data.path, architecture, "_model_metadata.csv"))
+  write.csv(metadata, paste0(output.data.path, architecture, "_model_metadata.csv"))
 
   for(a in 1:length(epoch.iterations )){
     print(paste('Training', architecture))

@@ -2,7 +2,7 @@ gibbonNetR: R Package for the Use of CNNs and Transfer Learning on
 Acoustic Data
 ================
 Dena J. Clink and Abdul Hamid Ahmad
-2024-04-27
+2024-05-25
 
 # Overview
 
@@ -21,6 +21,9 @@ install.packages("devtools")
 
 # Install gibbonNetR
 devtools::install_github("https://github.com/DenaJGibbon/gibbonNetR")
+
+# The first time you use the package 'torch' will need to install additional packages. You can start the process using the following:
+library(torch)
 ```
 
 # Preparing the data
@@ -207,7 +210,7 @@ Here we can see the Normalize Mutual Information score
 
 ``` r
 result$NMI
-#> [1] 0.7342826
+#> [1] 0.7440309
 ```
 
 The confusion matrix results when we use ‘hdbscan’ to match the target
@@ -216,13 +219,13 @@ class to the cluster with the largest number of observations
 ``` r
 result$ConfusionMatrix
 #>          Sensitivity          Specificity       Pos Pred Value 
-#>            0.9072978            0.9853529            0.9330629 
+#>            0.9053254            0.9880160            0.9444444 
 #>       Neg Pred Value            Precision               Recall 
-#>            0.9792678            0.9330629            0.9072978 
+#>            0.9788918            0.9444444            0.9053254 
 #>                   F1           Prevalence       Detection Rate 
-#>            0.9200000            0.1836957            0.1666667 
+#>            0.9244713            0.1836957            0.1663043 
 #> Detection Prevalence    Balanced Accuracy 
-#>            0.1786232            0.9463253
+#>            0.1760870            0.9466707
 ```
 
 Interestingly, it appears there is better performance when using the

@@ -4,10 +4,10 @@ test_that("Function outputs expected .csv file", {
    data("TempBinWav")
 
    # Save in temp directory
-   dir.create(paste(tempdir(),'/BinaryDir/Wav/'),recursive = T, showWarnings = FALSE)
+   dir.create(paste(tempdir(),'/BinaryDir/Wav/',sep=''),recursive = T, showWarnings = FALSE)
 
    #Write to temp directory
-   writeWave(TempBinWav,filename = paste(tempdir(),'/BinaryDir/Wav/','TempBinWav.wav'))
+   writeWave(TempBinWav,filename = paste(tempdir(),'/BinaryDir/Wav/','TempBinWav.wav',sep=''))
 
    # Set model directory
    trained_models_dir <- system.file("extdata", "trainedresnetbinary/", package = "gibbonNetR")
@@ -24,7 +24,7 @@ test_that("Function outputs expected .csv file", {
      output_folder_wav = paste(tempdir(),'/BinaryDir/Results/Wavs/',sep=''),
      detect_pattern=NA,
      top_model_path = ModelPath,
-     path_to_files = paste(tempdir(),'/BinaryDir/Wav/'),
+     path_to_files = paste(tempdir(),'/BinaryDir/Wav/',sep=''),
      downsample_rate = 'NA',
      threshold = 0.5,
      save_wav = F,
