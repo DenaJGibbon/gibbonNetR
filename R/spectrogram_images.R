@@ -142,6 +142,7 @@ spectrogram_images <- function(trainingBasePath,
 
   # Lists all training folders
   TrainingFolders <- list.files(trainingBasePath, full.names = TRUE)
+
   TrainingFoldersShort <-
     list.files(trainingBasePath, full.names = FALSE)
 

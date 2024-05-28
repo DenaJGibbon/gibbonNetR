@@ -274,4 +274,4 @@ result$ConfusionMatrix
    
 ```
    
-!["A spectrogram image of a detection"\label{fig:fig1}](paper/figures/female.gibbon_ TempBinWav.wav_13_0.25_TopModel_.jpg)
+!["A spectrogram image of a detection"\label{fig:fig1}](paper/figures/female.gibbon.detection.jpg)

@@ -276,8 +276,7 @@ result$ConfusionMatrix
 ```
 
 <figure>
-<img
-src="paper/figures/female.gibbon_%20TempBinWav.wav_13_0.25_TopModel_.jpg"
+<img src="paper/figures/female.gibbon.detection.jpg"
 alt="“A spectrogram image of a detection”" />
 <figcaption aria-hidden="true">“A spectrogram image of a
 detection”</figcaption>

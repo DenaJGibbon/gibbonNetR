@@ -38,17 +38,19 @@ test_that("outputs spectrogram images as expected", {
             )
    )
 
+   # List the files in the output directory
+   list.files(output.dir)
 
    # Generate spectrogram images
    spectrogram_images(
-     trainingBasePath = paste(tempdir(), '/MultiDir/Noise/',sep=''),
-     outputBasePath = paste(tempdir(), '/MultiDir/', 'Spectro/', sep = ''),
+     trainingBasePath = output.dir,
+     outputBasePath = paste(output.dir, 'Spectro/', sep = ''),
      splits = c(1, 0, 0),
      new.sampleratehz = 'NA'
    )
 
    # List the images generated
-   ListImages <- list.files(paste(tempdir(), '/MultiDir/', 'Spectro/train/', sep = ''), recursive = TRUE)
+   ListImages <- list.files(paste(tempdir(), '/MultiDir/', 'Spectro/', sep = ''), recursive = TRUE)
 
    print(ListImages)
 
