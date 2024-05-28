@@ -2,11 +2,11 @@ gibbonNetR: R Package for the Use of CNNs and Transfer Learning on
 Acoustic Data
 ================
 Dena J. Clink and Abdul Hamid Ahmad
-2024-05-25
+2024-05-28
 
 # Overview
 
-This readme provides instructions and code for training and testing the
+This README provides instructions and code for training and testing the
 performance of different convolutional neural network model
 architectures on spectrogram images.
 
@@ -26,6 +26,31 @@ devtools::install_github("https://github.com/DenaJGibbon/gibbonNetR")
 library(torch)
 ```
 
+# Quickstart guide
+
+``` r
+
+  # Set file path to spectorgram images  
+  filepath <- system.file("extdata", "multiclass/", package = "gibbonNetR")
+
+  # Train simple CNN model
+  train_CNN_multi(
+    input.data.path = filepath,
+    test.data = paste(filepath,'/test/',sep=''),
+    architecture = "alexnet",  # Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
+    unfreeze.param = TRUE,
+    batch_size = 6,
+    class_weights = rep( (1/5), 5),
+    learning_rate = 0.001,
+    epoch.iterations = 1,  # Or any other list of integer epochs
+    early.stop = "yes",
+    save.model= FALSE,
+    output.base.path = paste(tempdir(),'/MultiDir/',sep=''),
+    trainingfolder = "test_multi",
+    noise.category = 'noise'
+  )
+```
+
 # Preparing the data
 
 ## Download example training files on Zenodo and convert to spectrogram images
@@ -34,60 +59,30 @@ library(torch)
 library(gibbonNetR)
 
 # Link to training clips on Zenodo
-ZenodoLink <- 'https://zenodo.org/records/10927637/files/TrainingClipsMulti.zip?download=1'
+ZenodoLink <- 'https://zenodo.org/records/11355157/files/trainingclips.zip?download=1'
 
 # Download into specified zip file location
-download.file(url = ZenodoLink, destfile = 'data/data.zip',method = "curl")
+download.file(url = ZenodoLink, destfile = 'data/spectrogram_image_examples.zip',method='curl')
 
 # Unzip folder
-exdir <- 'data/trainingclips/'
-utils::unzip(zipfile = 'data/data.zip', exdir = exdir )
+exdir <- 'data/'
+utils::unzip(zipfile = 'data/spectrogram_image_examples.zip', exdir = exdir )
 
 # Check folder composition
-TrainingDatapath <- paste(exdir,"TrainingClipsMulti",sep='')
+TrainingDatapath <- paste(exdir,"trainingclips",sep='')
 
 # Check folder names
 list.files(TrainingDatapath)
 
 # Create spectrogram images
-gibbonNetR::spectrogram_images(
-  trainingBasePath = TrainingDatapath,
-  outputBasePath   = 'data/examples/',
-  splits           = c(0.7, 0.3, 0),  # 70% training, 30% validation
-  minfreq.khz = 0.4,
-  maxfreq.khz = 2,
-  new.sampleratehz= 'NA'
-)
-```
-
-## Download example test files from Zenodo and convert to spectrogram images
-
-``` r
-# Link to test clips on Zenodo
-ZenodoLink <- 'https://zenodo.org/records/10927637/files/TestFilesMulti.zip?download=1'
-
-# Download into specified zip file location
-download.file(url = ZenodoLink, destfile = 'data/data.zip',method = "curl")
-
-# Unzip folder
-exdir <- 'data/testclips/'
-utils::unzip(zipfile = 'data/data.zip', exdir = exdir )
-
-# Check folder composition
-TestDatapath <- paste(exdir,"TestFilesMulti",sep='')
-
-# Check folder names
-list.files(TestDatapath)
-
-# Create spectrogram images
-gibbonNetR::spectrogram_images(
-  trainingBasePath = TestDatapath,
-  outputBasePath   = 'data/examples/',
-  splits           = c(0, 0, 1),  # 100% in test folder
-  minfreq.khz = 0.4,
-  maxfreq.khz = 2,
-  new.sampleratehz= 'NA'
-)
+spectrogram_images(
+   trainingBasePath = TrainingDatapath,
+   outputBasePath = 'data/trainingimages/',
+   minfreq.khz = 0.4,
+   maxfreq.khz = 1.6,
+   splits = c(0.7, 0.3, 0), # Assign proportion to training, validation, or test folders
+   new.sampleratehz = 'NA'
+ )
 ```
 
 ## Here are a few spectrogram images
@@ -101,16 +96,48 @@ Figure 1. Spectrograms of training clips for CNNs
 
 </div>
 
+## Download example test files on Zenodo and convert to spectrogram images
+
+``` r
+library(gibbonNetR)
+
+# Link to training clips on Zenodo
+ZenodoLink <- 'https://zenodo.org/records/11355157/files/testclips.zip?download=1'
+
+# Download into specified zip file location
+download.file(url = ZenodoLink, destfile = 'data/spectrogram_image_examples.zip',method='curl')
+
+# Unzip folder
+exdir <- 'data/'
+utils::unzip(zipfile = 'data/spectrogram_image_examples.zip', exdir = exdir )
+
+# Check folder composition
+TestDatapath <- paste(exdir,"testclips",sep='')
+
+# Check folder names
+list.files(TestDatapath)
+
+# Create spectorgram images
+spectrogram_images(
+   trainingBasePath = TrainingDatapath,
+   outputBasePath = 'data/testimages/',
+   minfreq.khz = 0.4,
+   maxfreq.khz = 1.6,
+   splits = c(0, 0, 1), # Assign proportion to training, validation, or test folders
+   new.sampleratehz = 'NA'
+ )
+```
+
 # Train the models
 
 ## Training the models using gibbonNetR and evaluating on a test set
 
 ``` r
 # Location of spectrogram images for training
-input.data.path <-  'data/examples/'
+input.data.path <-  'data/trainingimages/'
 
 # Location of spectrogram images for testing
-test.data.path <- 'data/examples/test/'
+test.data.path <- 'data/testimages/test/'
 
 # User specified training data label for metadata
 trainingfolder.short <- 'danummulticlassexample'
@@ -152,11 +179,11 @@ PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=perf
 PerformanceOutput$f1_plot
 ```
 
-<img src="README_files/figure-gfm/unnamed-chunk-8-1.png" width="400px" />
+<img src="README_files/figure-gfm/unnamed-chunk-9-1.png" width="400px" />
 
 ``` r
 PerformanceOutput$best_f1$F1
-#> [1] 0.7062107
+#> [1] 0.9768844
 ```
 
 ## Specify for the ‘hornbill.helmeted’ class
@@ -177,11 +204,11 @@ PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=perf
 PerformanceOutput$f1_plot
 ```
 
-<img src="README_files/figure-gfm/unnamed-chunk-10-1.png" width="400px" />
+<img src="README_files/figure-gfm/unnamed-chunk-11-1.png" width="400px" />
 
 ``` r
 PerformanceOutput$best_f1$F1
-#> [1] 0.9545455
+#> [1] 0.9090909
 ```
 
 # Use the pre-trained model to extract embeddings and use unsupervised clustering to identify signals
@@ -202,7 +229,7 @@ result <- extract_embeddings(test_input="data/examples/test/",
 result$EmbeddingsCombined
 ```
 
-<img src="README_files/figure-gfm/unnamed-chunk-12-1.png" width="400px" />
+<img src="README_files/figure-gfm/unnamed-chunk-13-1.png" width="400px" />
 
 ### We can explore the unsupervised clustering results
 
@@ -210,7 +237,7 @@ Here we can see the Normalize Mutual Information score
 
 ``` r
 result$NMI
-#> [1] 0.7301442
+#> [1] 0.7337035
 ```
 
 The confusion matrix results when we use ‘hdbscan’ to match the target
@@ -219,14 +246,11 @@ class to the cluster with the largest number of observations
 ``` r
 result$ConfusionMatrix
 #>          Sensitivity          Specificity       Pos Pred Value 
-#>            0.9112426            0.9831336            0.9240000 
+#>            0.9110672            0.9840000            0.9275654 
 #>       Neg Pred Value            Precision               Recall 
-#>            0.9800885            0.9240000            0.9112426 
+#>            0.9800797            0.9275654            0.9110672 
 #>                   F1           Prevalence       Detection Rate 
-#>            0.9175770            0.1836957            0.1673913 
+#>            0.9192423            0.1835994            0.1672714 
 #> Detection Prevalence    Balanced Accuracy 
-#>            0.1811594            0.9471881
+#>            0.1803338            0.9475336
 ```
-
-Interestingly, it appears there is better performance when using the
-unsupervised approach compared to the supervised approach!
