@@ -275,7 +275,4 @@ result$ConfusionMatrix
    
 ```
    
-   
-```{r pressure, echo=FALSE, fig.cap="A spectrogram image of a detection"}
-knitr::include_graphics(ListImages[1])
-```
+!["A spectrogram image of a detection"\label{fig:fig1}](paper/figures/female.gibbon_ TempBinWav.wav_13_0.25_TopModel_.jpg)
