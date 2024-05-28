@@ -7,12 +7,12 @@ test_that("function returns expected values", {
    # Evaluate the performance of the trained models using the test images
    evaluate_trainedmodel_performance(trained_models_dir = trained_models_dir,
                                      image_data_dir = image_data_dir,
-                                     output_dir = paste(tempdir(), '/data/'),  # Output directory for evaluation results
+                                     output_dir = paste(tempdir(), '/data/', sep=''),  # Output directory for evaluation results
                                      positive.class = 'Gibbons',   #Label for positive class
                                      negative.class = 'Noise')     #Label for negative class
 
    # Find the location of saved evaluation files
-   CSVName <- list.files(paste(tempdir(), '/data/'), recursive = TRUE, full.names = TRUE)
+   CSVName <- list.files(paste(tempdir(), '/data/',sep=''), recursive = TRUE, full.names = TRUE)
 
    # Check the output of the first file
    head(read.csv(CSVName[1]))

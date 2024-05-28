@@ -213,7 +213,7 @@ Here we can see the Normalize Mutual Information score
 
 ``` r
 result$NMI
-#> [1] 0.7317898
+#> [1] 0.7346602
 ```
 
 The confusion matrix results when we use ‘hdbscan’ to match the target
@@ -222,25 +222,29 @@ class to the cluster with the largest number of observations
 ``` r
 result$ConfusionMatrix
 #>          Sensitivity          Specificity       Pos Pred Value 
-#>            0.9150198            0.9822222            0.9204771 
+#>            0.9130435            0.9835556            0.9258517 
 #>       Neg Pred Value            Precision               Recall 
-#>            0.9809143            0.9204771            0.9150198 
+#>            0.9805051            0.9258517            0.9130435 
 #>                   F1           Prevalence       Detection Rate 
-#>            0.9177403            0.1835994            0.1679971 
+#>            0.9194030            0.1835994            0.1676343 
 #> Detection Prevalence    Balanced Accuracy 
-#>            0.1825109            0.9486210
+#>            0.1810595            0.9482995
 ```
 
 ## We can then deploy the model over longer sound files.
 
 ``` r
   
+   library(gibbonNetR)
+   
+    # Load data
    data("TempBinWav")
 
-   dir.create(paste(tempdir(),'/MultiDir/Wav/'),recursive = T, showWarnings = FALSE)
+   # Save in temp directory
+   dir.create(paste(tempdir(),'/MultiDir/Wav/',sep=''),recursive = T, showWarnings = FALSE)
 
    # Write to temp directory
-   writeWave(TempBinWav,filename = paste(tempdir(),'/MultiDir/Wav/','TempBinWav.wav'))
+   writeWave(TempBinWav,filename = paste(tempdir(),'/MultiDir/Wav/','TempBinWav.wav',sep=''))
 
    # Find model path
    # Set model directory
@@ -258,7 +262,7 @@ result$ConfusionMatrix
      output_folder_wav = paste(tempdir(),'/MultiDir/Results/Wavs/',sep=''),
      detect_pattern=NA,
      top_model_path = ModelPath,
-     path_to_files = paste(tempdir(),'/MultiDir/Wav/'),
+     path_to_files = paste(tempdir(),'/MultiDir/Wav/',sep=''),
      downsample_rate = 'NA',
      save_wav = F,
      class_names = c('female.gibbon','hornbill.helmeted','hornbill.rhino','long.argus','noise'),
@@ -268,11 +272,6 @@ result$ConfusionMatrix
      threshold = .25,
      max_freq_khz = 2
    )
-
-   ListImages <-  list.files(paste(tempdir(),'/MultiDir/Results/Images/',sep=''),
-                                 full.names = T)
-   
-    print(basename(ListImages[1]))
    
 ```
 

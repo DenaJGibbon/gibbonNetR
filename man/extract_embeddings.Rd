@@ -24,7 +24,7 @@ A list containing the following components:
 }
 }
 \description{
-This function loads a fine-tuned PyTorch model, extracts embeddings from a set of test images,
+This function loads a fine-tuned Torch model, extracts embeddings from a set of test images,
 performs dimensionality reduction using UMAP, and creates scatter plots to visualize the embeddings.
 }
 \examples{

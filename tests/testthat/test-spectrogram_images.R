@@ -1,15 +1,10 @@
-test_that("outputs spectrogram images as expecte", {
-
-  # Load the gibbonNetR package
-   library(gibbonNetR)
-   library(torchvision)
-   library(torch)
+test_that("outputs spectrogram images as expected", {
 
    # Load data
    data("TempBinWav")
 
    # Define the output directory
-   output.dir <- paste(tempdir(), '/MultiDir/Noise/')
+   output.dir <- paste(tempdir(), '/MultiDir/Noise/',sep='')
 
    # Create the output directory
    dir.create(output.dir, recursive = TRUE, showWarnings = FALSE)
@@ -46,14 +41,14 @@ test_that("outputs spectrogram images as expecte", {
 
    # Generate spectrogram images
    spectrogram_images(
-     trainingBasePath = paste(tempdir(), '/MultiDir/'),
+     trainingBasePath = paste(tempdir(), '/MultiDir/Noise/',sep=''),
      outputBasePath = paste(tempdir(), '/MultiDir/', 'Spectro/', sep = ''),
      splits = c(1, 0, 0),
      new.sampleratehz = 'NA'
    )
 
    # List the images generated
-   ListImages <- list.files(paste(tempdir(), '/MultiDir/', 'Spectro/train/Noise/', sep = ''), recursive = TRUE)
+   ListImages <- list.files(paste(tempdir(), '/MultiDir/', 'Spectro/train/', sep = ''), recursive = TRUE)
 
    print(ListImages)
 
