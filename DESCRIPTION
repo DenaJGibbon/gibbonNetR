@@ -1,6 +1,6 @@
 Package: gibbonNetR
 Title: gibbonNetR: R Package for the Use of CNNs and Transfer Learning on Acoustic Data
-Version: 1.0.0.0000
+Version: v1.0.0
 Authors@R: 
     person("Dena J.", "Clink", , "dena.clink@cornell.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-0363-5581"))
