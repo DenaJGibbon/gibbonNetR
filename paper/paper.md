@@ -40,12 +40,11 @@ Training deep learning models generally requires a large amount of training data
 
 The two most popular open-source programming languages are R and Python [@scavetta2021]. Python has surpassed R in terms of overall popularity, but R remains an important language for the life sciences [@lawlor2022]. 'Keras' [@chollet2015], 'PyTorch' [@paszke2019] and 'Tensorflow' [@martínabadi2015] are some of the more popular neural network libraries; these libraries were all initially developed for the Python programming language. Until recently, deep learning implementations in R relied on the 'reticulate' package which served as an interface to Python [@ushey2022]. The transfer learning approaches included in this package have already been implemented in Python [@dufourq2022]. Previous implementations of automated detection using deep learning in R relied on the 'reticulate' package [@ruff2021 @silva2022soundclass]. However, the recent release of the 'torch for R' ecosystem provides a framework based on 'PyTorch' that runs natively in R and has no dependency on Python [@falbel2023]. Running natively in R means more straightforward installation, and higher accessibility for users of the R programming environment. @keydana2023 provides tutorials for transfer learning in the 'torch for R' ecosystem, and the functions in 'gibbonNetR' rely heavily on these tutorials.
 
+# Usage
 
 ## Overview
 
 This package provides functions to create spectrogram images, use transfer learning for six pretrained CNN architectures (AlexNet [@krizhevsky2017] , VGG16, VGG19 [@simonyan2014], ResNet18, ResNet50, and ResNet152 [@he2016]) trained on the ImageNet dataset [@deng2009 ]. The package also has functions to evaluate model performance, deploy the highest performing model over a directory of sound files, and extract embeddings from trained models to visualize acoustic data. We provide an example dataset that consists of labelled vocalizations of the loud calls of four vertebrates from Danum Valley Conservation Area, Sabah, Malaysia.
-
-# Usage
 
 ## Data summary
 
