@@ -56,13 +56,14 @@ We include spectrogram images of five classes: great argus pheasant (*Argusianus
 The package currently uses spectrogram images (Figure 1), and 'gibbonNetR' includes a function that can be used to create spectrogram images from .wav files. The 'splits' option will assign the specified proportion of clips to either training, validation, or test folders. We highly recommend that your test data come from a different recording time and/or location to better understand the generalizability of the models [@stowell2022].
 
 ```
- # Generate spectrogram images for training and validation. Test data should come from a different source.
+ # Generate spectrogram images for training (70%) and validation (30%). 
+ # Test data should come from a different source.
  spectrogram_images(
    trainingBasePath = trainingBasePath,
    outputBasePath = outputBasePath,
    minfreq.khz = 0.4,
    maxfreq.khz = 1.6,
-   splits = c(0.7, 0.3, 0), # Assign proportion to training, validation, or test folders
+   splits = c(0.7, 0.3, 0), 
    new.sampleratehz = 'NA'
  )
 ```
@@ -102,9 +103,10 @@ gibbonNetR::train_CNN_multi(input.data.path=input.data.path,
 ## Evaluate model performance
 We can compare the performance of different CNN architectures (Figure 2). Using the 'get_best_performance' function we can evaluate the performance of different model architectures on the test dataset for the specified class.
 ```
-PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
+PerformanceOutput <- get_best_performance(performancetables.dir=performancetables.dir,
                                                       class='female.gibbon',
-                                                      model.type = "multi",Thresh.val=0)
+                                                      model.type = "multi",
+                                                      Thresh.val=0)
 PerformanceOutput$f1_plot
 ```
 ![Figure 2. Evaluating performance of pretrained CNNs.\label{fig:fig2}](figures/modelperformance.pdf)
