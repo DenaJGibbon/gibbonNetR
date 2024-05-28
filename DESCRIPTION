@@ -1,10 +1,10 @@
 Package: gibbonNetR
 Title: gibbonNetR: R Package for the Use of CNNs and Transfer Learning on Acoustic Data
-Version: 0.0.0.9000
+Version: 1.0.0.0000
 Authors@R: 
     person("Dena J.", "Clink", , "dena.clink@cornell.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-0363-5581"))
-Description: What the package does (one paragraph).
+Description: R Package for the Use of CNNs and Transfer Learning on Acoustic Data.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
