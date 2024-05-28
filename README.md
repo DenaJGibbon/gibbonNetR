@@ -120,7 +120,7 @@ list.files(TestDatapath)
 
 # Create spectorgram images
 spectrogram_images(
-   trainingBasePath = TrainingDatapath,
+   trainingBasePath = TestDatapath,
    outputBasePath = 'data/testimages/',
    minfreq.khz = 0.4,
    maxfreq.khz = 1.6,
@@ -213,7 +213,7 @@ Here we can see the Normalize Mutual Information score
 
 ``` r
 result$NMI
-#> [1] 0.7356957
+#> [1] 0.741579
 ```
 
 The confusion matrix results when we use ‘hdbscan’ to match the target
@@ -222,13 +222,13 @@ class to the cluster with the largest number of observations
 ``` r
 result$ConfusionMatrix
 #>          Sensitivity          Specificity       Pos Pred Value 
-#>            0.9110672            0.9844444            0.9294355 
+#>            0.9150198            0.9844444            0.9297189 
 #>       Neg Pred Value            Precision               Recall 
-#>            0.9800885            0.9294355            0.9110672 
+#>            0.9809566            0.9297189            0.9150198 
 #>                   F1           Prevalence       Detection Rate 
-#>            0.9201597            0.1835994            0.1672714 
+#>            0.9223108            0.1835994            0.1679971 
 #> Detection Prevalence    Balanced Accuracy 
-#>            0.1799710            0.9477558
+#>            0.1806967            0.9497321
 ```
 
 ## We can then deploy the model over longer sound files.
@@ -278,7 +278,7 @@ result$ConfusionMatrix
 
 <div class="figure">
 
-<img src="../../../../../private/var/folders/1s/x8xb37tj45j86tn_stc4v44w0000gn/T/Rtmp19ruHy/MultiDir/Results/Images/female.gibbon_ TempBinWav.wav_13_0.25_TopModel_.jpg" alt="A spectrogram image of a detection" width="400px" />
+<img src="../../../../../private/var/folders/1s/x8xb37tj45j86tn_stc4v44w0000gn/T/RtmpybGAO1/MultiDir/Results/Images/female.gibbon_ TempBinWav.wav_13_0.25_TopModel_.jpg" alt="A spectrogram image of a detection" width="400px" />
 <p class="caption">
 A spectrogram image of a detection
 </p>

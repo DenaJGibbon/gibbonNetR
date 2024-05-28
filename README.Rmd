@@ -136,7 +136,7 @@ list.files(TestDatapath)
 
 # Create spectorgram images
 spectrogram_images(
-   trainingBasePath = TrainingDatapath,
+   trainingBasePath = TestDatapath,
    outputBasePath = 'data/testimages/',
    minfreq.khz = 0.4,
    maxfreq.khz = 1.6,
