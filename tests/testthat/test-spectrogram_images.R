@@ -4,7 +4,7 @@ test_that("outputs spectrogram images as expected", {
    data("TempBinWav")
 
    # Define the output directory
-   output.dir <- paste(tempdir(), '/MultiDir/Noise/',sep='')
+   output.dir <- paste(tempdir(), '/MultiDir/Noise/train/',sep='')
 
    # Create the output directory
    dir.create(output.dir, recursive = TRUE, showWarnings = FALSE)
@@ -43,14 +43,15 @@ test_that("outputs spectrogram images as expected", {
 
    # Generate spectrogram images
    spectrogram_images(
-     trainingBasePath = output.dir,
-     outputBasePath = paste(output.dir, 'Spectro/', sep = ''),
-     splits = c(1, 0, 0),
-     new.sampleratehz = 'NA'
+     trainingBasePath =  paste(tempdir(), '/MultiDir/Noise/',sep=''),
+     outputBasePath = paste(tempdir(), 'Spectro/', sep = ''),
+     splits = c(0.7, 0.3, 0),
+     new.sampleratehz = 'NA',
+     random =FALSE
    )
 
    # List the images generated
-   ListImages <- list.files(paste(tempdir(), '/MultiDir/', 'Spectro/', sep = ''), recursive = TRUE)
+   ListImages <- list.files(paste(tempdir(), 'Spectro/', sep = ''), recursive = TRUE)
 
    print(ListImages)
 
