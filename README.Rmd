@@ -48,6 +48,7 @@ library(purrr)
 # Quickstart guide
 
 ```{r eval = FALSE}
+  library(gibbonNetR)
 
   # Set file path to spectorgram images  
   filepath <- system.file("extdata", "multiclass/", package = "gibbonNetR")
@@ -198,26 +199,6 @@ PerformanceOutput$f1_plot
 PerformanceOutput$best_f1$F1
 ```
 
-## Specify for the 'hornbill.helmeted' class
-
-```{r, warning=FALSE, results='hide'}
-
-# Evaluate model performance
-performancetables.dir <- "model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi"
-
-PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
-                                                      class='hornbill.helmeted',
-                                                      model.type = "multi",Thresh.val=0)
-
-```
-
-## Examine the results
-
-```{r, warning=FALSE}
-PerformanceOutput$f1_plot
-PerformanceOutput$best_f1$F1
-```
-
 # Use the pre-trained model to extract embeddings and use unsupervised clustering to identify signals
 
 ## Extract embeddings
@@ -248,4 +229,53 @@ The confusion matrix results when we use 'hdbscan' to match the target class to 
 
 ```{r}
 result$ConfusionMatrix
+```
+
+## We can then deploy the model over longer sound files. 
+```{r, warning=FALSE, results='hide'}
+  
+   data("TempBinWav")
+
+   dir.create(paste(tempdir(),'/MultiDir/Wav/'),recursive = T, showWarnings = FALSE)
+
+   # Write to temp directory
+   writeWave(TempBinWav,filename = paste(tempdir(),'/MultiDir/Wav/','TempBinWav.wav'))
+
+   # Find model path
+   # Set model directory
+   trained_models_dir <- system.file("extdata", "trainedresnetmulti/", package = "gibbonNetR")
+
+   # Specify model path
+   ModelPath <- list.files(trained_models_dir,full.names = T)
+
+   # Deploy trained model over sound files
+   deploy_CNN_multi(
+     clip_duration = 12,
+     architecture='resnet18',
+     output_folder = paste(tempdir(),'/MultiDir/Results/Images/',sep=''),
+     output_folder_selections = paste(tempdir(),'/MultiDir/Results/Selections/',sep=''),
+     output_folder_wav = paste(tempdir(),'/MultiDir/Results/Wavs/',sep=''),
+     detect_pattern=NA,
+     top_model_path = ModelPath,
+     path_to_files = paste(tempdir(),'/MultiDir/Wav/'),
+     downsample_rate = 'NA',
+     save_wav = F,
+     class_names = c('female.gibbon','hornbill.helmeted','hornbill.rhino','long.argus','noise'),
+     noise_category = 'noise',
+     single_class = FALSE,
+     single_class_category = 'female.gibbon',
+     threshold = .25,
+     max_freq_khz = 2
+   )
+
+   ListImages <-  list.files(paste(tempdir(),'/MultiDir/Results/Images/',sep=''),
+                                 full.names = T)
+   
+    print(basename(ListImages[1]))
+   
+```
+   
+   
+```{r pressure, echo=FALSE, fig.cap="A spectrogram image of a detection"}
+knitr::include_graphics(ListImages[1])
 ```

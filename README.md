@@ -29,6 +29,7 @@ library(torch)
 # Quickstart guide
 
 ``` r
+  library(gibbonNetR)
 
   # Set file path to spectorgram images  
   filepath <- system.file("extdata", "multiclass/", package = "gibbonNetR")
@@ -186,31 +187,6 @@ PerformanceOutput$best_f1$F1
 #> [1] 0.9768844
 ```
 
-## Specify for the ‘hornbill.helmeted’ class
-
-``` r
-
-# Evaluate model performance
-performancetables.dir <- "model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi"
-
-PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
-                                                      class='hornbill.helmeted',
-                                                      model.type = "multi",Thresh.val=0)
-```
-
-## Examine the results
-
-``` r
-PerformanceOutput$f1_plot
-```
-
-<img src="README_files/figure-gfm/unnamed-chunk-11-1.png" width="400px" />
-
-``` r
-PerformanceOutput$best_f1$F1
-#> [1] 0.9090909
-```
-
 # Use the pre-trained model to extract embeddings and use unsupervised clustering to identify signals
 
 ## Extract embeddings
@@ -229,7 +205,7 @@ result <- extract_embeddings(test_input="data/examples/test/",
 result$EmbeddingsCombined
 ```
 
-<img src="README_files/figure-gfm/unnamed-chunk-13-1.png" width="400px" />
+<img src="README_files/figure-gfm/unnamed-chunk-11-1.png" width="400px" />
 
 ### We can explore the unsupervised clustering results
 
@@ -237,7 +213,7 @@ Here we can see the Normalize Mutual Information score
 
 ``` r
 result$NMI
-#> [1] 0.7337035
+#> [1] 0.7356957
 ```
 
 The confusion matrix results when we use ‘hdbscan’ to match the target
@@ -246,11 +222,65 @@ class to the cluster with the largest number of observations
 ``` r
 result$ConfusionMatrix
 #>          Sensitivity          Specificity       Pos Pred Value 
-#>            0.9110672            0.9840000            0.9275654 
+#>            0.9110672            0.9844444            0.9294355 
 #>       Neg Pred Value            Precision               Recall 
-#>            0.9800797            0.9275654            0.9110672 
+#>            0.9800885            0.9294355            0.9110672 
 #>                   F1           Prevalence       Detection Rate 
-#>            0.9192423            0.1835994            0.1672714 
+#>            0.9201597            0.1835994            0.1672714 
 #> Detection Prevalence    Balanced Accuracy 
-#>            0.1803338            0.9475336
+#>            0.1799710            0.9477558
 ```
+
+## We can then deploy the model over longer sound files.
+
+``` r
+  
+   data("TempBinWav")
+
+   dir.create(paste(tempdir(),'/MultiDir/Wav/'),recursive = T, showWarnings = FALSE)
+
+   # Write to temp directory
+   writeWave(TempBinWav,filename = paste(tempdir(),'/MultiDir/Wav/','TempBinWav.wav'))
+
+   # Find model path
+   # Set model directory
+   trained_models_dir <- system.file("extdata", "trainedresnetmulti/", package = "gibbonNetR")
+
+   # Specify model path
+   ModelPath <- list.files(trained_models_dir,full.names = T)
+
+   # Deploy trained model over sound files
+   deploy_CNN_multi(
+     clip_duration = 12,
+     architecture='resnet18',
+     output_folder = paste(tempdir(),'/MultiDir/Results/Images/',sep=''),
+     output_folder_selections = paste(tempdir(),'/MultiDir/Results/Selections/',sep=''),
+     output_folder_wav = paste(tempdir(),'/MultiDir/Results/Wavs/',sep=''),
+     detect_pattern=NA,
+     top_model_path = ModelPath,
+     path_to_files = paste(tempdir(),'/MultiDir/Wav/'),
+     downsample_rate = 'NA',
+     save_wav = F,
+     class_names = c('female.gibbon','hornbill.helmeted','hornbill.rhino','long.argus','noise'),
+     noise_category = 'noise',
+     single_class = FALSE,
+     single_class_category = 'female.gibbon',
+     threshold = .25,
+     max_freq_khz = 2
+   )
+
+   ListImages <-  list.files(paste(tempdir(),'/MultiDir/Results/Images/',sep=''),
+                                 full.names = T)
+   
+    print(basename(ListImages[1]))
+   
+```
+
+<div class="figure">
+
+<img src="../../../../../private/var/folders/1s/x8xb37tj45j86tn_stc4v44w0000gn/T/Rtmp19ruHy/MultiDir/Results/Images/female.gibbon_ TempBinWav.wav_13_0.25_TopModel_.jpg" alt="A spectrogram image of a detection" width="400px" />
+<p class="caption">
+A spectrogram image of a detection
+</p>
+
+</div>
