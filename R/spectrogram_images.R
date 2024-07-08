@@ -169,14 +169,17 @@ spectrogram_images <- function(trainingBasePath,
     if(random=='FALSE'){
       shuffled_indices <- seq(1:total_files)
     }
+
     # Calculate indices for splitting
     train_n <- floor(splits[1] * total_files)
     valid_n <- floor(splits[2] * total_files)
 
     train_idx <- shuffled_indices[1:train_n]
+
     valid_idx <- shuffled_indices[(train_n + 1):(train_n + valid_n)]
+
     test_idx <-
-      shuffled_indices[(train_n + valid_n + 1):total_files]
+      shuffled_indices[-c(train_idx,valid_idx)]
 
     if (splits[1] == 0) {
       train_idx <- 0
@@ -190,13 +193,13 @@ spectrogram_images <- function(trainingBasePath,
       test_idx <- 0
     }
 
-    for (y in seq_along(SoundFiles)) {
+    for (y in 1:length(SoundFiles)) {
       # Determine the DataType based on the index
       if (y %in% train_idx) {
         DataType <- FolderVec[1]
       } else if (y %in% valid_idx) {
         DataType <- FolderVec[2]
-      } else {
+      } else if (y %in% test_idx) {
         DataType <- FolderVec[3]
       }
 
