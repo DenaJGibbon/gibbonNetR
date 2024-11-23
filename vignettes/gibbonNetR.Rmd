@@ -14,6 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+First load the packages
+```{r setup, message=FALSE}
 library(gibbonNetR)
 ```
