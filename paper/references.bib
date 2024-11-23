@@ -287,7 +287,7 @@ Publisher: Nature Publishing Group},
 
 @article{lakdari2024mel,
   title={Mel-frequency cepstral coefficients outperform embeddings from pre-trained convolutional neural networks under noisy conditions for discrimination tasks of individual gibbons},
-  author={Lakdari, Mohamed Walid and Ahmad, Abdul Hamid and Sethi, Sarab and Bohn, Gabriel A and Clink, Dena J},
+  author={Lakdari, Mohamed Walid and Ahmad, Abdul Hamid and Sethi, Sarab and Bohn, Gabriel A and Clink, Dena J.},
   journal={Ecological Informatics},
   volume={80},
   pages={102457},
@@ -297,7 +297,7 @@ Publisher: Nature Publishing Group},
 
 @article{sethi2020characterizing,
   title={Characterizing soundscapes across diverse ecosystems using a universal acoustic feature set},
-  author={Sethi, Sarab S and Jones, Nick S and Fulcher, Ben D and Picinali, Lorenzo and Clink, Dena Jane and Klinck, Holger and Orme, C David L and Wrege, Peter H and Ewers, Robert M},
+  author={Sethi, Sarab S and Jones, Nick S and Fulcher, Ben D and Picinali, Lorenzo and Clink, Dena J. and Klinck, Holger and Orme, C David L and Wrege, Peter H and Ewers, Robert M},
   journal={Proceedings of the National Academy of Sciences},
   volume={117},
   number={29},
@@ -330,7 +330,7 @@ Publisher: Nature Publishing Group},
 }
 @article{kennedy2023evidence,
   title={Evidence for acoustic niche partitioning depends on the temporal scale in two sympatric Bornean hornbill species},
-  author={Kennedy, Amy G and Ahmad, Abdul Hamid and Klinck, Holger and Johnson, Lynn M and Clink, Dena J},
+  author={Kennedy, Amy G and Ahmad, Abdul Hamid and Klinck, Holger and Johnson, Lynn M and Clink, Dena J.},
   journal={Biotropica},
   volume={55},
   number={2},
@@ -355,7 +355,7 @@ Publisher: Nature Publishing Group},
 }
 @article{10.1371/journal.pone.0283396,
     doi = {10.1371/journal.pone.0283396},
-    author = {Best, Paul AND Paris, Sébastien AND Glotin, Hervé AND Marxer, Ricard},
+    author = {Best, Paul and Paris, Sébastien and Glotin, Hervé and Marxer, Ricard},
     journal = {PLOS ONE},
     publisher = {Public Library of Science},
     title = {Deep audio embeddings for vocalisation clustering},
@@ -377,7 +377,7 @@ year = {2024},
 issn = {1574-9541},
 doi = {https://doi.org/10.1016/j.ecoinf.2023.102457},
 url = {https://www.sciencedirect.com/science/article/pii/S1574954123004867},
-author = {Mohamed Walid Lakdari and Abdul Hamid Ahmad and Sarab Sethi and Gabriel A. Bohn and Dena J. Clink},
+author = {Lakdari,Mohamed Walid  and Ahmad,Abdul Hamid and Sethi, Sarab and Bohn, Gabriel A.  and Clink, Dena J.},
 keywords = {Vocal individuality, Sound feature extraction, Mel-frequency cepstral coefficients, Convolutional neural networks, Acoustic indices, },
 abstract = {Passive acoustic monitoring – an approach that utilizes autonomous acoustic recording units – allows for non-invasive monitoring of individuals, assuming that it is possible to acoustically distinguish individuals. However, identifying effective analytical approaches for individual identification remains a challenge. Our study investigates how the use of different feature representations impacts our ability to distinguish between individual female Northern grey gibbons (Hylobates funereus). We broadcast pre-recorded calls from twelve gibbon females and re-recorded the calls at varying distances (directly under the tree to ∼400 m away) using autonomous recording units. We evaluated the effectiveness of using different automated feature extraction approaches to classify gibbon calls: Mel-frequency cepstral coefficients (MFCCs), embeddings from three pre-trained neural networks (BirdNET, VGGish, and Wav2Vec2), and four commonly used acoustic indices. We used a supervised classification approach (random forest) to classify calls to the respective female and compared two unsupervised clustering approaches (affinity propagation clustering and hierarchical density-based spatial clustering) to evaluate which features were most effective for distinguishing female calls without using class labels. We used MFCCs as a baseline as previous work has shown they can be used to distinguish high-quality calls of individual gibbon females. Human annotators could only identify calls in spectrograms from recordings <350 m from the playback speaker with signal-to-noise ratio ∼ 0 dB, so our results focus on these recordings. Using supervised classification, our results confirmed the efficiency of MFCCs and the use of embeddings from one neural network (BirdNET) for effective acoustic classification of gibbon individuals at closer recording distances (signal-to-noise ratio > 10 dB), while the remaining features did not perform well. Contrary to our expectations, we found that MFCCs outperformed all other features for the unsupervised clustering tasks at closer distances and none of the features performed well at farther distances. The ability to acoustically discriminate animals under noisy conditions and from low signal-to-noise ratio calls has important implications for monitoring populations of endangered animals, such as gibbons. Focusing only on high signal-to-noise ratio calls for individual discrimination may not be possible for rare sounds, and future work should focus on developing effective approaches of feature extraction that can perform well across noisy, real-world conditions with a limited number of training samples.}
 }
@@ -454,4 +454,33 @@ abstract = {Passive acoustic monitoring – an approach that utilizes autonomous
   author={Silva, Bruno and Mestre, Frederico and Barreiro, Sílvia and Alves, Pedro J and Herrera, José M},
   journal={Methods in Ecology and Evolution},
   year={2022}
+}
+
+@article {Clink2024benchmark,
+	author = {Clink, Dena J. and Cross-Jaya, Hope and Kim, Jinsung and Ahmad, Abdul Hamid and Hong, Moeurk and Sala, Roeun and Birot, H{\'e}l{\`e}ne and Agger, Cain and Vu, Thinh Tien and Thi, Hoa Nguyen and Chi, Thanh Nguyen and Klinck, Holger},
+	title = {Benchmarking for the automated detection and classification of southern yellow-cheeked crested gibbon calls from passive acoustic monitoring data},
+	elocation-id = {2024.08.17.608420},
+	year = {2024},
+	doi = {10.1101/2024.08.17.608420},
+	publisher = {Cold Spring Harbor Laboratory},
+	abstract = {Recent advances in deep and transfer learning have revolutionized our ability for the automated detection and classification of acoustic signals from long-term recordings. Here, we provide a benchmark for the automated detection of southern yellow-cheeked crested gibbon (Nomascus gabriellae) calls collected using autonomous recording units (ARUs) in Andoung Kraleung Village, Cambodia. We compared the performance of support vector machines (SVMs), a quasi-DenseNet architecture (Koogu), transfer learning with pretrained convolutional neural network (ResNet50) models trained on the ImageNet dataset, and transfer learning with embeddings from a global birdsong model (BirdNET) based on an EfficientNet architecture. We also investigated the impact of varying the number of training samples on the performance of these models. We found that BirdNET had superior performance with a smaller number of training samples, whereas Koogu and ResNet50 models only had acceptable performance with a larger number of training samples (\&gt;200 gibbon samples). Effective automated detection approaches are critical for monitoring endangered species, like gibbons. Future work on other gibbon species will be informative. Code and data are publicly available for future benchmarking.},
+	URL = {https://www.biorxiv.org/content/early/2024/08/19/2024.08.17.608420},
+	eprint = {https://www.biorxiv.org/content/early/2024/08/19/2024.08.17.608420.full.pdf},
+	journal = {bioRxiv}
+}
+
+@article{clink2024automated,
+  title={Automated detection of gibbon calls from passive acoustic monitoring data using convolutional neural networks in the" torch for R" ecosystem},
+  author={Clink, Dena J. and Kim, Jinsung and Cross-Jaya, Hope and Ahmad, Abdul Hamid and Hong, Moeurk and Sala, Roeun and Birot, H{\'e}l{\`e}ne and Agger, Cain and Vu, Thinh Tien and Thi, Hoa Nguyen and others},
+  journal={arXiv preprint arXiv:2407.09976},
+  year={2024}
+}
+
+@article{Vu2024,
+  title={Investigating hunting in a protected area in Southeast Asia using passive acoustic monitoring with mobile smartphones and transfer learning},
+  author={Vu, Thinh Tien and Phan, Dai Viet and Le, Thai Son and Clink, Dena J.},
+  journal={Ecological Indicators},
+  year={2024},
+  note={Forthcoming},
+  url={https://www.elsevier.com/locate/ecolind},
 }
