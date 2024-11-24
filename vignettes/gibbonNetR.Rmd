@@ -139,7 +139,7 @@ PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=perf
 
 ```
 
-```{r, eval=FALSE}
+```{r,echo=FALSE, eval=FALSE}
 # Evaluate model performance
 performancetables.dir <- "/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi"
 
@@ -148,6 +148,8 @@ PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=perf
                                                       model.type = "multi",Thresh.val=0)
 
 ```
+
+<img src=https://github.com/DenaJGibbon/gibbonNetR/blob/main/images/multiclass_eval.png>
 
 ## Examine the results
 
