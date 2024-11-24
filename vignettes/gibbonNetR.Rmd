@@ -40,7 +40,7 @@ To follow best practices we want to use training and test data from different pa
 
 ```{r eval=FALSE}
 # Link to training clips on Zenodo
-ZenodoLink <- 'https://zenodo.org/records/14210125/files/trainingclips.zip?download=1'
+ZenodoLink <- 'https://zenodo.org/records/14212086/files/trainingclips.zip?download=1'
 
 # Download into specified zip file location
 download.file(url = ZenodoLink, destfile = 'data/trainingclips.zip',method='curl')
@@ -75,7 +75,7 @@ The "spectrogram_images" function below puts 100% of the test images into the te
 library(gibbonNetR)
 
 # Link to training clips on Zenodo
-ZenodoLink <- 'https://zenodo.org/records/14210125/files/testclips.zip?download=1'
+ZenodoLink <- 'https://zenodo.org/records/14212086/files/testclips.zip?download=1'
 
 # Download into specified zip file location
 download.file(url = ZenodoLink, destfile = 'data/testclips.zip',method='curl')
@@ -161,7 +161,7 @@ PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=perf
 
 
 ## Examine the results
-
+Note that we would not expect great performance since we only trained for one epoch.
 ```{r, eval=FALSE}
 PerformanceOutput$f1_plot
 
@@ -178,7 +178,66 @@ PerformanceOutput$best_recall$Recall
 [1] 1
 ```
 
-
 ```{r, echo=FALSE, out.width="50%", fig.cap="Output from 'get_best_performance' fuction ."}
 knitr::include_graphics("multiclass_eval.png")
 ```
+
+# Trained model evaluation
+We can deploy the trained model over another test dataset to see how well it performs. In this case, the test data is organized into folders with corresponding labels that match those from the training data.  
+
+```{r, eval=FALSE}
+Modify the script above to download the apppropriate test files
+ZenodoLink <- 'https://zenodo.org/records/14212086/files/testclipsmaliau.zip?download=1'
+```
+
+We want to create spectrogram images for this new test dataset. The sample rate for the original files was higher (48 kHz) so we use the downsample call in the function to make sure the spectrogram images are the same resolution.
+```{r, eval=FALSE}
+TestDatapath <- 'data/testclipsmaliau'
+
+# Create spectorgram images
+spectrogram_images(
+   trainingBasePath = TestDatapath,
+   outputBasePath = 'data/testimagesmaliau/',
+   minfreq.khz = 0.4,
+   maxfreq.khz = 1.6,
+   splits = c(0, 0, 1), # Assign proportion to training, validation, or test folders
+   new.sampleratehz = 16000
+ )
+```
+
+
+The 'evaluate_trainedmodel_performance_multi' function will compare the model performance of pretrained models on another test dataset. 
+```{r, eval=FALSE}
+
+trained_models_dir <- '/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/'
+
+class_names <- dput(list.files('/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/trainingimages/train/'))
+
+image_data_dir <- 'data/testimagesmaliau/test/'
+
+dir.create('/data/model_output_test/',recursive = T)
+
+evaluate_trainedmodel_performance_multi(trained_models_dir=trained_models_dir,
+                                          class_names=class_names,
+                                          image_data_dir=image_data_dir,
+                                           output_dir= 'data/model_output_test/',
+                                           noise.category = "noise")
+
+```
+
+## Now we can use the same function as above 'get_best_performance' to investigate model performance.
+```{r,eval=FALSE}
+# Evaluate model performance
+performancetables.dir <- "data/model_output_test/performance_tables_multi_trained/"
+
+PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
+                                                      class='female.gibbon',
+                                                      model.type = "multi",Thresh.val=0)
+
+```
+
+We see that there is a high F1 score across thresholds for the 'female.gibbon' class
+```{r, echo=FALSE, out.width="50%", fig.cap="Output from 'get_best_performance' fuction ."}
+knitr::include_graphics("multiclass__maliau_eval.png")
+```
+
