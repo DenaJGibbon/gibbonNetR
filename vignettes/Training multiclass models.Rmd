@@ -73,6 +73,8 @@ spectrogram_images(
 #knitr::include_graphics("spectro.png")
 ```
 
+<img src="spectro.png" align="center" width = "50%" height="50%"/>
+
 ## Download example test files on Zenodo and convert to spectrogram images
 The "spectrogram_images" function below puts 100% of the test images into the test folder. 
 ```{r eval = FALSE}
