@@ -32,7 +32,6 @@ To follow best practices we want to use training and test data from different pa
 # Link to training clips on Zenodo
 ZenodoLink <- 'https://zenodo.org/records/14210125/files/trainingclips.zip?download=1'
 
-
 # Download into specified zip file location
 download.file(url = ZenodoLink, destfile = 'data/trainingclips.zip',method='curl')
 
@@ -107,7 +106,7 @@ test.data.path <- 'data/testimages/test/'
 trainingfolder.short <- 'danummulticlassexample'
 
 # Specify the architecture type
-architecture <- c('alexnet','resnet50')
+architecture <- c('alexnet','resnet50') # Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
 
 # We can specify the number of epochs to train here
 epoch.iterations <- c(1)
@@ -140,7 +139,7 @@ PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=perf
 
 ```
 
-```{r, warning=FALSE,message=FALSE,results='hide'}
+```{r, eval=FALSE}
 # Evaluate model performance
 performancetables.dir <- "/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi"
 
@@ -149,9 +148,10 @@ PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=perf
                                                       model.type = "multi",Thresh.val=0)
 
 ```
+
 ## Examine the results
 
-```{r, warning=FALSE}
+```{r, eval=FALSE}
 PerformanceOutput$f1_plot
 PerformanceOutput$best_f1$F1
 ```
