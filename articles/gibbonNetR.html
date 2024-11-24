@@ -80,7 +80,7 @@ the example below 70% of the data is used for training and 30% for
 validation.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Link to training clips on Zenodo</span></span>
-<span><span class="va">ZenodoLink</span> <span class="op">&lt;-</span> <span class="st">'https://zenodo.org/records/14210125/files/trainingclips.zip?download=1'</span></span>
+<span><span class="va">ZenodoLink</span> <span class="op">&lt;-</span> <span class="st">'https://zenodo.org/records/14212086/files/trainingclips.zip?download=1'</span></span>
 <span></span>
 <span><span class="co"># Download into specified zip file location</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">ZenodoLink</span>, destfile <span class="op">=</span> <span class="st">'data/trainingclips.zip'</span>,method<span class="op">=</span><span class="st">'curl'</span><span class="op">)</span></span>
@@ -116,7 +116,7 @@ into the test folder.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://denajgibbon.github.io/gibbonNetR/">gibbonNetR</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Link to training clips on Zenodo</span></span>
-<span><span class="va">ZenodoLink</span> <span class="op">&lt;-</span> <span class="st">'https://zenodo.org/records/14210125/files/testclips.zip?download=1'</span></span>
+<span><span class="va">ZenodoLink</span> <span class="op">&lt;-</span> <span class="st">'https://zenodo.org/records/14212086/files/testclips.zip?download=1'</span></span>
 <span></span>
 <span><span class="co"># Download into specified zip file location</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">ZenodoLink</span>, destfile <span class="op">=</span> <span class="st">'data/testclips.zip'</span>,method<span class="op">=</span><span class="st">'curl'</span><span class="op">)</span></span>
@@ -204,6 +204,8 @@ multiple model architectures and number of epochs for training.</p>
 <div class="section level3">
 <h3 id="examine-the-results">Examine the results<a class="anchor" aria-label="anchor" href="#examine-the-results"></a>
 </h3>
+<p>Note that we would not expect great performance since we only trained
+for one epoch.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>PerformanceOutput<span class="sc">$</span>f1_plot</span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>PerformanceOutput<span class="sc">$</span>best_f1<span class="sc">$</span>F1</span>
@@ -219,6 +221,66 @@ multiple model architectures and number of epochs for training.</p>
 <span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>[<span class="dv">1</span>] <span class="dv">1</span></span></code></pre></div>
 <div class="figure" style="text-align: center">
 <img src="multiclass_eval.png" alt="Output from 'get_best_performance' fuction ." width="50%"><p class="caption">
+Output from ‘get_best_performance’ fuction .
+</p>
+</div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="trained-model-evaluation">Trained model evaluation<a class="anchor" aria-label="anchor" href="#trained-model-evaluation"></a>
+</h2>
+<p>We can deploy the trained model over another test dataset to see how
+well it performs. In this case, the test data is organized into folders
+with corresponding labels that match those from the training data.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>Modify the script above to download the apppropriate test files</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>ZenodoLink <span class="ot">&lt;-</span> <span class="st">'https://zenodo.org/records/14212086/files/testclipsmaliau.zip?download=1'</span></span></code></pre></div>
+<p>We want to create spectrogram images for this new test dataset. The
+sample rate for the original files was higher (48 kHz) so we use the
+downsample call in the function to make sure the spectrogram images are
+the same resolution.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">TestDatapath</span> <span class="op">&lt;-</span> <span class="st">'data/testclipsmaliau'</span></span>
+<span></span>
+<span><span class="co"># Create spectorgram images</span></span>
+<span><span class="fu"><a href="../reference/spectrogram_images.html">spectrogram_images</a></span><span class="op">(</span></span>
+<span>   trainingBasePath <span class="op">=</span> <span class="va">TestDatapath</span>,</span>
+<span>   outputBasePath <span class="op">=</span> <span class="st">'data/testimagesmaliau/'</span>,</span>
+<span>   minfreq.khz <span class="op">=</span> <span class="fl">0.4</span>,</span>
+<span>   maxfreq.khz <span class="op">=</span> <span class="fl">1.6</span>,</span>
+<span>   splits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, <span class="co"># Assign proportion to training, validation, or test folders</span></span>
+<span>   new.sampleratehz <span class="op">=</span> <span class="fl">16000</span></span>
+<span> <span class="op">)</span></span></code></pre></div>
+<p>The ‘evaluate_trainedmodel_performance_multi’ function will compare
+the model performance of pretrained models on another test dataset.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">trained_models_dir</span> <span class="op">&lt;-</span> <span class="st">'/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/'</span></span>
+<span></span>
+<span><span class="va">class_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/dput.html" class="external-link">dput</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="st">'/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/trainingimages/train/'</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">image_data_dir</span> <span class="op">&lt;-</span> <span class="st">'data/testimagesmaliau/test/'</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="st">'/data/model_output_test/'</span>,recursive <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/evaluate_trainedmodel_performance_multi.html">evaluate_trainedmodel_performance_multi</a></span><span class="op">(</span>trained_models_dir<span class="op">=</span><span class="va">trained_models_dir</span>,</span>
+<span>                                          class_names<span class="op">=</span><span class="va">class_names</span>,</span>
+<span>                                          image_data_dir<span class="op">=</span><span class="va">image_data_dir</span>,</span>
+<span>                                           output_dir<span class="op">=</span> <span class="st">'data/model_output_test/'</span>,</span>
+<span>                                           noise.category <span class="op">=</span> <span class="st">"noise"</span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="now-we-can-use-the-same-function-as-above-get_best_performance-to-investigate-model-performance-">Now we can use the same function as above ‘get_best_performance’ to
+investigate model performance.<a class="anchor" aria-label="anchor" href="#now-we-can-use-the-same-function-as-above-get_best_performance-to-investigate-model-performance-"></a>
+</h3>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Evaluate model performance</span></span>
+<span><span class="va">performancetables.dir</span> <span class="op">&lt;-</span> <span class="st">"data/model_output_test/performance_tables_multi_trained/"</span></span>
+<span></span>
+<span><span class="va">PerformanceOutput</span> <span class="op">&lt;-</span> <span class="fu">gibbonNetR</span><span class="fu">::</span><span class="fu"><a href="../reference/get_best_performance.html">get_best_performance</a></span><span class="op">(</span>performancetables.dir<span class="op">=</span><span class="va">performancetables.dir</span>,</span>
+<span>                                                      class<span class="op">=</span><span class="st">'female.gibbon'</span>,</span>
+<span>                                                      model.type <span class="op">=</span> <span class="st">"multi"</span>,Thresh.val<span class="op">=</span><span class="fl">0</span><span class="op">)</span></span></code></pre></div>
+We see that there is a high F1 score across thresholds for the
+‘female.gibbon’ class
+<div class="figure" style="text-align: center">
+<img src="multiclass__maliau_eval.png" alt="Output from 'get_best_performance' fuction ." width="50%"><p class="caption">
 Output from ‘get_best_performance’ fuction .
 </p>
 </div>
