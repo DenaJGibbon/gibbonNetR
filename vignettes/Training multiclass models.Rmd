@@ -1,5 +1,5 @@
 ---
-title: "gibbonNetR"
+title: "Training multi-class models"
 output:
   rmarkdown::html_vignette:
     toc: true

@@ -1,0 +1,89 @@
+---
+title: "Unsupervised clustering"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 1
+    number_sections: true
+    self_contained: yes
+vignette: >
+  %\VignetteIndexEntry{gibbonNetR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Use the pre-trained model to extract embeddings and use unsupervised clustering to identify signals
+
+## Extract embeddings
+
+```{r, eval=F, warning=FALSE, results='hide'}
+
+ModelPath <- "model_output/_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_20_resnet50_model.pt"
+result <- extract_embeddings(test_input="data/examples/test/",
+                                      model_path=ModelPath,
+                                     target_class = "female.gibbon")
+```
+
+## We can plot the unsupervised clustering results
+
+```{r, eval=F}
+result$EmbeddingsCombined
+```
+
+### We can explore the unsupervised clustering results
+
+Here we can see the Normalize Mutual Information score
+
+```{r, eval=F}
+result$NMI
+```
+
+The confusion matrix results when we use 'hdbscan' to match the target class to the cluster with the largest number of observations
+
+```{r, eval=F}
+result$ConfusionMatrix
+```
+
+## We can then deploy the model over longer sound files. 
+```{r, eval=F, warning=FALSE, results='hide'}
+  
+   library(gibbonNetR)
+   
+    # Load data
+   data("TempBinWav")
+
+   # Save in temp directory
+   dir.create(paste(tempdir(),'/MultiDir/Wav/',sep=''),recursive = T, showWarnings = FALSE)
+
+   # Write to temp directory
+   writeWave(TempBinWav,filename = paste(tempdir(),'/MultiDir/Wav/','TempBinWav.wav',sep=''))
+
+   # Find model path
+   # Set model directory
+   trained_models_dir <- system.file("extdata", "trainedresnetmulti/", package = "gibbonNetR")
+
+   # Specify model path
+   ModelPath <- list.files(trained_models_dir,full.names = T)
+
+   # Deploy trained model over sound files
+   deploy_CNN_multi(
+     clip_duration = 12,
+     architecture='resnet18',
+     output_folder = paste(tempdir(),'/MultiDir/Results/Images/',sep=''),
+     output_folder_selections = paste(tempdir(),'/MultiDir/Results/Selections/',sep=''),
+     output_folder_wav = paste(tempdir(),'/MultiDir/Results/Wavs/',sep=''),
+     detect_pattern=NA,
+     top_model_path = ModelPath,
+     path_to_files = paste(tempdir(),'/MultiDir/Wav/',sep=''),
+     downsample_rate = 'NA',
+     save_wav = F,
+     class_names = c('female.gibbon','hornbill.helmeted','hornbill.rhino','long.argus','noise'),
+     noise_category = 'noise',
+     single_class = FALSE,
+     single_class_category = 'female.gibbon',
+     threshold = .25,
+     max_freq_khz = 2
+   )
+   
+```
+
