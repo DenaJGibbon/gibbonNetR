@@ -62,7 +62,7 @@
 <h2 id="data-preparation">Data Preparation<a class="anchor" aria-label="anchor" href="#data-preparation"></a>
 </h2>
 <div class="section level3">
-<h3 id="first-load-the-packages">First load the packages<a class="anchor" aria-label="anchor" href="#first-load-the-packages"></a>
+<h3 id="first-load-the-package">First load the package<a class="anchor" aria-label="anchor" href="#first-load-the-package"></a>
 </h3>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://denajgibbon.github.io/gibbonNetR/">gibbonNetR</a></span><span class="op">)</span></span></code></pre></div>
@@ -71,19 +71,23 @@
 <h3 id="we-create-spectrogram-images-of-the-sound-files-">We create spectrogram images of the sound files.<a class="anchor" aria-label="anchor" href="#we-create-spectrogram-images-of-the-sound-files-"></a>
 </h3>
 <p>To follow best practices we want to use training and test data from
-different recording locations. These clips are from Danum Valley
-Conservation Area, Sabah, Malaysia, but are taken from two different
-passive acoustic monitoring arrays. The “spectrogram_images” takes</p>
+different passive acoustic monitoring arrays These clips are from Danum
+Valley Conservation Area, Sabah, Malaysia, but are taken from two
+different arrays. The “spectrogram_images” function takes folders
+organized and labeled by signal type, and creates training, validation,
+or test folders using the “splits” specified in the function call. In
+the example below 70% of the data is used for training and 30% for
+validation.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Link to training clips on Zenodo</span></span>
-<span><span class="va">ZenodoLink</span> <span class="op">&lt;-</span> <span class="st">'https://zenodo.org/records/11355157/files/trainingclips.zip?download=1'</span></span>
+<span><span class="va">ZenodoLink</span> <span class="op">&lt;-</span> <span class="st">'https://zenodo.org/records/14210125/files/trainingclips.zip?download=1'</span></span>
 <span></span>
 <span><span class="co"># Download into specified zip file location</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">ZenodoLink</span>, destfile <span class="op">=</span> <span class="st">'data/spectrogram_image_examples.zip'</span>,method<span class="op">=</span><span class="st">'curl'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">ZenodoLink</span>, destfile <span class="op">=</span> <span class="st">'data/trainingclips.zip'</span>,method<span class="op">=</span><span class="st">'curl'</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Unzip folder</span></span>
 <span><span class="va">exdir</span> <span class="op">&lt;-</span> <span class="st">'data/'</span></span>
-<span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span>zipfile <span class="op">=</span> <span class="st">'data/spectrogram_image_examples.zip'</span>, exdir <span class="op">=</span> <span class="va">exdir</span> <span class="op">)</span></span>
+<span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span>zipfile <span class="op">=</span> <span class="st">'data/trainingclips.zip'</span>, exdir <span class="op">=</span> <span class="va">exdir</span> <span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Check folder composition</span></span>
 <span><span class="va">TrainingDatapath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">exdir</span>,<span class="st">"trainingclips"</span>,sep<span class="op">=</span><span class="st">''</span><span class="op">)</span></span>
@@ -97,6 +101,7 @@ passive acoustic monitoring arrays. The “spectrogram_images” takes</p>
 <span>   outputBasePath <span class="op">=</span> <span class="st">'data/trainingimages/'</span>,</span>
 <span>   minfreq.khz <span class="op">=</span> <span class="fl">0.4</span>,</span>
 <span>   maxfreq.khz <span class="op">=</span> <span class="fl">1.6</span>,</span>
+<span>   random<span class="op">=</span><span class="cn">FALSE</span>,</span>
 <span>   splits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.7</span>, <span class="fl">0.3</span>, <span class="fl">0</span><span class="op">)</span>, <span class="co"># Assign proportion to training, validation, or test folders</span></span>
 <span>   new.sampleratehz <span class="op">=</span> <span class="st">'NA'</span></span>
 <span> <span class="op">)</span></span></code></pre></div>
@@ -105,18 +110,20 @@ passive acoustic monitoring arrays. The “spectrogram_images” takes</p>
 <h3 id="download-example-test-files-on-zenodo-and-convert-to-spectrogram-images">Download example test files on Zenodo and convert to spectrogram
 images<a class="anchor" aria-label="anchor" href="#download-example-test-files-on-zenodo-and-convert-to-spectrogram-images"></a>
 </h3>
+<p>The “spectrogram_images” function below puts 100% of the test images
+into the test folder.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://denajgibbon.github.io/gibbonNetR/">gibbonNetR</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Link to training clips on Zenodo</span></span>
-<span><span class="va">ZenodoLink</span> <span class="op">&lt;-</span> <span class="st">'https://zenodo.org/records/11355157/files/testclips.zip?download=1'</span></span>
+<span><span class="va">ZenodoLink</span> <span class="op">&lt;-</span> <span class="st">'https://zenodo.org/records/14210125/files/testclips.zip?download=1'</span></span>
 <span></span>
 <span><span class="co"># Download into specified zip file location</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">ZenodoLink</span>, destfile <span class="op">=</span> <span class="st">'data/spectrogram_image_examples.zip'</span>,method<span class="op">=</span><span class="st">'curl'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">ZenodoLink</span>, destfile <span class="op">=</span> <span class="st">'data/testclips.zip'</span>,method<span class="op">=</span><span class="st">'curl'</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Unzip folder</span></span>
 <span><span class="va">exdir</span> <span class="op">&lt;-</span> <span class="st">'data/'</span></span>
-<span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span>zipfile <span class="op">=</span> <span class="st">'data/spectrogram_image_examples.zip'</span>, exdir <span class="op">=</span> <span class="va">exdir</span> <span class="op">)</span></span>
+<span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span>zipfile <span class="op">=</span> <span class="st">'data/testclips.zip'</span>, exdir <span class="op">=</span> <span class="va">exdir</span> <span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Check folder composition</span></span>
 <span><span class="va">TestDatapath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">exdir</span>,<span class="st">"testclips"</span>,sep<span class="op">=</span><span class="st">''</span><span class="op">)</span></span>
@@ -133,6 +140,73 @@ images<a class="anchor" aria-label="anchor" href="#download-example-test-files-o
 <span>   splits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, <span class="co"># Assign proportion to training, validation, or test folders</span></span>
 <span>   new.sampleratehz <span class="op">=</span> <span class="st">'NA'</span></span>
 <span> <span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="model-training">Model training<a class="anchor" aria-label="anchor" href="#model-training"></a>
+</h2>
+<p>We start with a multi-class model. We will use the spectrogram images
+for training, test and validation that we created above. Note that for
+“input.data.path” the train and valid folders need to be there. For the
+test data, the path must contain the ‘test’ folder. You can specify
+multiple model architectures and number of epochs for training.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Location of spectrogram images for training</span></span>
+<span><span class="va">input.data.path</span> <span class="op">&lt;-</span>  <span class="st">'data/trainingimages/'</span></span>
+<span></span>
+<span><span class="co"># Location of spectrogram images for testing</span></span>
+<span><span class="va">test.data.path</span> <span class="op">&lt;-</span> <span class="st">'data/testimages/test/'</span></span>
+<span></span>
+<span><span class="co"># User specified training data label for metadata</span></span>
+<span><span class="va">trainingfolder.short</span> <span class="op">&lt;-</span> <span class="st">'danummulticlassexample'</span></span>
+<span></span>
+<span><span class="co"># Specify the architecture type</span></span>
+<span><span class="va">architecture</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'alexnet'</span>,<span class="st">'resnet50'</span><span class="op">)</span> <span class="co"># Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'</span></span>
+<span></span>
+<span><span class="co"># We can specify the number of epochs to train here</span></span>
+<span><span class="va">epoch.iterations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Function to train a multi-class CNN</span></span>
+<span><span class="fu">gibbonNetR</span><span class="fu">::</span><span class="fu"><a href="../reference/train_CNN_multi.html">train_CNN_multi</a></span><span class="op">(</span>input.data.path<span class="op">=</span><span class="va">input.data.path</span>,</span>
+<span>                            architecture <span class="op">=</span><span class="va">architecture</span>,</span>
+<span>                            learning_rate <span class="op">=</span> <span class="fl">0.001</span>,</span>
+<span>                            class_weights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.3</span>, <span class="fl">0.3</span>, <span class="fl">0.2</span>, <span class="fl">0.2</span>, <span class="fl">0</span><span class="op">)</span>,</span>
+<span>                            test.data<span class="op">=</span><span class="va">test.data.path</span>,</span>
+<span>                            unfreeze.param <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                            epoch.iterations<span class="op">=</span><span class="va">epoch.iterations</span>,</span>
+<span>                            save.model<span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                            early.stop <span class="op">=</span> <span class="st">"yes"</span>,</span>
+<span>                            output.base.path <span class="op">=</span> <span class="st">"data/model_output/"</span>,</span>
+<span>                            trainingfolder<span class="op">=</span><span class="va">trainingfolder.short</span>,</span>
+<span>                            noise.category <span class="op">=</span> <span class="st">"noise"</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="model-evaluation">Model evaluation<a class="anchor" aria-label="anchor" href="#model-evaluation"></a>
+</h2>
+<div class="section level3">
+<h3 id="specify-for-the-female-gibbon-class">Specify for the ‘female.gibbon’ class<a class="anchor" aria-label="anchor" href="#specify-for-the-female-gibbon-class"></a>
+</h3>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Evaluate model performance</span></span>
+<span><span class="va">performancetables.dir</span> <span class="op">&lt;-</span> <span class="st">"data/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi"</span></span>
+<span></span>
+<span><span class="va">PerformanceOutput</span> <span class="op">&lt;-</span> <span class="fu">gibbonNetR</span><span class="fu">::</span><span class="fu"><a href="../reference/get_best_performance.html">get_best_performance</a></span><span class="op">(</span>performancetables.dir<span class="op">=</span><span class="va">performancetables.dir</span>,</span>
+<span>                                                      class<span class="op">=</span><span class="st">'female.gibbon'</span>,</span>
+<span>                                                      model.type <span class="op">=</span> <span class="st">"multi"</span>,Thresh.val<span class="op">=</span><span class="fl">0</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Evaluate model performance</span></span>
+<span><span class="va">performancetables.dir</span> <span class="op">&lt;-</span> <span class="st">"/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi"</span></span>
+<span></span>
+<span><span class="va">PerformanceOutput</span> <span class="op">&lt;-</span> <span class="fu">gibbonNetR</span><span class="fu">::</span><span class="fu"><a href="../reference/get_best_performance.html">get_best_performance</a></span><span class="op">(</span>performancetables.dir<span class="op">=</span><span class="va">performancetables.dir</span>,</span>
+<span>                                                      class<span class="op">=</span><span class="st">'female.gibbon'</span>,</span>
+<span>                                                      model.type <span class="op">=</span> <span class="st">"multi"</span>,Thresh.val<span class="op">=</span><span class="fl">0</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="examine-the-results">Examine the results<a class="anchor" aria-label="anchor" href="#examine-the-results"></a>
+</h3>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">PerformanceOutput</span><span class="op">$</span><span class="va">f1_plot</span></span>
+<span><span class="va">PerformanceOutput</span><span class="op">$</span><span class="va">best_f1</span><span class="op">$</span><span class="va">F1</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
