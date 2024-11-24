@@ -21,7 +21,7 @@ This README provides code for training and testing the performance of different 
 
 # Usage
 
-A detailed usage guide can be found at: denajgibbon.github.io/gibbonNetR/
+A detailed usage guide can be found at: https://denajgibbon.github.io/gibbonNetR/
 
 # Installation
 
@@ -54,7 +54,7 @@ library(purrr)
 ```{r eval = FALSE}
   library(gibbonNetR)
 
-  # Set file path to spectorgram images  
+  # Set file path to spectrogram images  
   filepath <- system.file("extdata", "multiclass/", package = "gibbonNetR")
 
   # Train simple CNN model

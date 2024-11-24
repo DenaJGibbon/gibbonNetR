@@ -13,7 +13,7 @@ spectrogram images.
 # Usage
 
 A detailed usage guide can be found at:
-denajgibbon.github.io/gibbonNetR/
+<https://denajgibbon.github.io/gibbonNetR/>
 
 # Installation
 
@@ -36,7 +36,7 @@ library(torch)
 ``` r
   library(gibbonNetR)
 
-  # Set file path to spectorgram images  
+  # Set file path to spectrogram images  
   filepath <- system.file("extdata", "multiclass/", package = "gibbonNetR")
 
   # Train simple CNN model
