@@ -1,5 +1,5 @@
 ---
-title: "Unsupervised clustering"
+title: "2. Unsupervised clustering"
 output:
   rmarkdown::html_vignette:
     toc: true

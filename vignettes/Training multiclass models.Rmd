@@ -1,5 +1,5 @@
 ---
-title: "Training multi-class models"
+title: "1. Multiclass models"
 output:
   rmarkdown::html_vignette:
     toc: true
@@ -69,6 +69,9 @@ spectrogram_images(
 
 ```
 
+```{r, echo=FALSE, out.width="50%", fig.cap="A sample of the spectrogram images."}
+#knitr::include_graphics("spectro.png")
+```
 
 ## Download example test files on Zenodo and convert to spectrogram images
 The "spectrogram_images" function below puts 100% of the test images into the test folder. 
@@ -180,7 +183,7 @@ PerformanceOutput$best_recall$Recall
 ```
 
 ```{r, echo=FALSE, out.width="50%", fig.cap="Output from 'get_best_performance' fuction ."}
-knitr::include_graphics("multiclass_eval.png")
+#knitr::include_graphics("multiclass_eval.png")
 ```
 
 # Trained model evaluation
@@ -239,6 +242,6 @@ PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=perf
 
 We see that there is a high F1 score across thresholds for the 'female.gibbon' class
 ```{r, echo=FALSE, out.width="50%", fig.cap="Output from 'get_best_performance' fuction ."}
-knitr::include_graphics("multiclass__maliau_eval.png")
+#knitr::include_graphics("multiclass__maliau_eval.png")
 ```
 
