@@ -139,11 +139,11 @@ PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=perf
 
 ```
 
-```{r, eval=TRUE}
+```{r, eval=FALSE}
 # Evaluate model performance
-performancetables.dir = "/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi"
+performancetables.dir <- "/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi"
 
-PerformanceOutput = gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
+PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
                                                       class='female.gibbon',
                                                       model.type = "multi",Thresh.val=0)
 
@@ -151,7 +151,7 @@ PerformanceOutput = gibbonNetR::get_best_performance(performancetables.dir=perfo
 
 ## Examine the results
 
-```{r, eval=TRUE}
+```{r, eval=FALSE}
 PerformanceOutput$f1_plot
 PerformanceOutput$best_f1$F1
 ```
