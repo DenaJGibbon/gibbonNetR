@@ -40,7 +40,7 @@ To follow best practices we want to use training and test data from different pa
 
 ```{r eval=FALSE}
 # Link to training clips on Zenodo
-ZenodoLink <- 'https://zenodo.org/records/14212086/files/trainingclips.zip?download=1'
+ZenodoLink <- 'https://zenodo.org/records/14213067/files/trainingclips.zip?download=1'
 
 # Download into specified zip file location
 download.file(url = ZenodoLink, destfile = 'data/trainingclips.zip',method='curl')
@@ -79,7 +79,7 @@ The "spectrogram_images" function below puts 100% of the test images into the te
 library(gibbonNetR)
 
 # Link to training clips on Zenodo
-ZenodoLink <- 'https://zenodo.org/records/14212086/files/testclips.zip?download=1'
+ZenodoLink <- 'https://zenodo.org/records/14213067/files/testclips.zip?download=1'
 
 # Download into specified zip file location
 download.file(url = ZenodoLink, destfile = 'data/testclips.zip',method='curl')
@@ -153,17 +153,6 @@ PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=perf
 
 ```
 
-```{r,eval=FALSE}
-# Evaluate model performance
-performancetables.dir <- "/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi"
-
-PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
-                                                      class='female.gibbon',
-                                                      model.type = "multi",Thresh.val=0)
-
-```
-
-
 ## Examine the results
 Note that we would not expect great performance since we only trained for one epoch.
 ```{r, eval=FALSE}
@@ -192,7 +181,7 @@ We can deploy the trained model over another test dataset to see how well it per
 
 ```{r, eval=FALSE}
 Modify the script above to download the apppropriate test files
-ZenodoLink <- 'https://zenodo.org/records/14212086/files/testclipsmaliau.zip?download=1'
+ZenodoLink <- 'https://zenodo.org/records/14213067/files/testclipsmaliau.zip?download=1'
 ```
 
 We want to create spectrogram images for this new test dataset. The sample rate for the original files was higher (48 kHz) so we use the downsample call in the function to make sure the spectrogram images are the same resolution.

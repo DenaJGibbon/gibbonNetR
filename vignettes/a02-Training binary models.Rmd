@@ -28,7 +28,6 @@ knitr::opts_chunk$set(
 options(width = 100, max.print = 100)
 ```
 
-# NOTE THIS IS THE SAME AS MULTI
 # Data Preparation
 
 ## First load the package
@@ -41,17 +40,17 @@ To follow best practices we want to use training and test data from different pa
 
 ```{r eval=FALSE}
 # Link to training clips on Zenodo
-ZenodoLink <- 'https://zenodo.org/records/14212086/files/trainingclips.zip?download=1'
+ZenodoLink <- 'https://zenodo.org/records/14213067/files/trainingclipsbinary.zip?download=1'
 
 # Download into specified zip file location
-download.file(url = ZenodoLink, destfile = 'data/trainingclips.zip',method='curl')
+download.file(url = ZenodoLink, destfile = 'data/trainingclipsbinary.zip',method='curl')
 
 # Unzip folder
 exdir <- 'data/'
-utils::unzip(zipfile = 'data/trainingclips.zip', exdir = exdir )
+utils::unzip(zipfile = 'data/trainingclipsbinary.zip', exdir = exdir )
 
 # Check folder composition
-TrainingDatapath <- paste(exdir,"trainingclips",sep='')
+TrainingDatapath <- paste(exdir,"trainingclipsbinary",sep='')
 
 # Check folder names
 list.files(TrainingDatapath)
@@ -59,7 +58,7 @@ list.files(TrainingDatapath)
 # Create spectrogram images
 spectrogram_images(
    trainingBasePath = TrainingDatapath,
-   outputBasePath = 'data/trainingimages/',
+   outputBasePath = 'data/trainingimagesbinary/',
    minfreq.khz = 0.4,
    maxfreq.khz = 1.6,
    random=FALSE,
@@ -70,29 +69,23 @@ spectrogram_images(
 
 ```
 
-```{r, echo=FALSE, out.width="50%", fig.cap="A sample of the spectrogram images."}
-#knitr::include_graphics("spectro.png")
-```
-
-<img src="spectro.png" align="center" width = "50%" height="50%"/>
-
 ## Download example test files on Zenodo and convert to spectrogram images
 The "spectrogram_images" function below puts 100% of the test images into the test folder. 
 ```{r eval = FALSE}
 library(gibbonNetR)
 
 # Link to training clips on Zenodo
-ZenodoLink <- 'https://zenodo.org/records/14212086/files/testclips.zip?download=1'
+ZenodoLink <- 'https://zenodo.org/records/14213067/files/testclipsbinary.zip?download=1'
 
 # Download into specified zip file location
-download.file(url = ZenodoLink, destfile = 'data/testclips.zip',method='curl')
+download.file(url = ZenodoLink, destfile = 'data/testclipsbinary.zip',method='curl')
 
 # Unzip folder
 exdir <- 'data/'
-utils::unzip(zipfile = 'data/testclips.zip', exdir = exdir )
+utils::unzip(zipfile = 'data/testclipsbinary.zip', exdir = exdir )
 
 # Check folder composition
-TestDatapath <- paste(exdir,"testclips",sep='')
+TestDatapath <- paste(exdir,"testclipsbinary",sep='')
 
 # Check folder names
 list.files(TestDatapath)
@@ -100,7 +93,7 @@ list.files(TestDatapath)
 # Create spectorgram images
 spectrogram_images(
    trainingBasePath = TestDatapath,
-   outputBasePath = 'data/testimages/',
+   outputBasePath = 'data/testimagesbinary/',
    minfreq.khz = 0.4,
    maxfreq.khz = 1.6,
    splits = c(0, 0, 1), # Assign proportion to training, validation, or test folders
@@ -110,37 +103,44 @@ spectrogram_images(
 ```
 
 # Model training
-We start with a multi-class model. We will use the spectrogram images for training, test and validation that we created above. Note that for "input.data.path" the train and valid folders need to be there. For the test data, the path must contain the 'test' folder. You can specify multiple model architectures and number of epochs for training.  
+We will now train a binary model. We will use the spectrogram images for training, test and validation that we created above. Note that for "input.data.path" the train and valid folders need to be there. For the test data, the path must contain the 'test' folder. You can specify multiple model architectures and number of epochs for training.  
 
 ```{r eval = FALSE}
 # Location of spectrogram images for training
-input.data.path <-  'data/trainingimages/'
+input.data.path <-  'data/trainingimagesbinary/'
 
 # Location of spectrogram images for testing
-test.data.path <- 'data/testimages/test/'
+test.data.path <- 'data/testimagesbinary/test/'
 
 # User specified training data label for metadata
-trainingfolder.short <- 'danummulticlassexample'
+trainingfolder.short <- 'danummbinaryexample'
 
 # Specify the architecture type
-architecture <- c('alexnet','resnet50') # Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
+architectures <- c('alexnet','resnet50') # Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
 
 # We can specify the number of epochs to train here
 epoch.iterations <- c(1)
 
 # Function to train a multi-class CNN
-gibbonNetR::train_CNN_multi(input.data.path=input.data.path,
-                            architecture =architecture,
-                            learning_rate = 0.001,
-                            class_weights = c(0.3, 0.3, 0.2, 0.2, 0),
-                            test.data=test.data.path,
-                            unfreeze.param = TRUE,
-                            epoch.iterations=epoch.iterations,
-                            save.model= TRUE,
-                            early.stop = "yes",
-                            output.base.path = "data/model_output/",
-                            trainingfolder=trainingfolder.short,
-                            noise.category = "noise")
+gibbonNetR::train_CNN_binary(
+      input.data.path = input.data.path,
+      noise.weight = 0.25,
+      architecture = architectures,
+      save.model = FALSE,
+      learning_rate = 0.001,
+      test.data = test.data.path,
+      batch_size = 32,
+      unfreeze.param = TRUE,
+      # FALSE means the features are frozen
+      epoch.iterations = epoch.iterations,
+      list.thresholds = seq(0, 1, .1),
+      early.stop = "yes",
+      output.base.path = 'data/model_output_binary/',
+      trainingfolder = trainingfolder.short,
+      positive.class = "female.gibbon",
+      negative.class = "noise"
+    )
+
 ```
 
 # Model evaluation 
@@ -148,103 +148,37 @@ gibbonNetR::train_CNN_multi(input.data.path=input.data.path,
 
 ```{r eval = FALSE}
 # Evaluate model performance
-performancetables.dir <- "data/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi"
+performancetables.dir <- "data/model_output_binary/_danummbinaryexample_binary_unfrozen_TRUE_/performance_tables"
 
 PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
                                                       class='female.gibbon',
-                                                      model.type = "multi",Thresh.val=0)
-
-```
-
-```{r,eval=FALSE}
-# Evaluate model performance
-performancetables.dir <- "/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi"
-
-PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
-                                                      class='female.gibbon',
-                                                      model.type = "multi",Thresh.val=0)
+                                                      model.type = "binary",Thresh.val=0)
 
 ```
 
 
 ## Examine the results
-Note that we would not expect great performance since we only trained for one epoch.
+Here we get decent performance forr the threshold dependent metrics, AUC is still not great.
 ```{r, eval=FALSE}
 PerformanceOutput$f1_plot
 
+PerformanceOutput$best_recall$Recall
+[1] 1
+
 PerformanceOutput$best_f1$F1
-[1] 0.4862252
+[1] 0.9884259
 
 PerformanceOutput$best_auc$AUC
-[1] 0.2858019
+[1] 0.4363169
 
 PerformanceOutput$best_precision$Precision
-[1] 0.321817
+[1] 0.9907193
 
 PerformanceOutput$best_recall$Recall
 [1] 1
-```
-
-```{r, echo=FALSE, out.width="50%", fig.cap="Output from 'get_best_performance' fuction ."}
-#knitr::include_graphics("multiclass_eval.png")
-```
-
-# Trained model evaluation
-We can deploy the trained model over another test dataset to see how well it performs. In this case, the test data is organized into folders with corresponding labels that match those from the training data.  
-
-```{r, eval=FALSE}
-Modify the script above to download the apppropriate test files
-ZenodoLink <- 'https://zenodo.org/records/14212086/files/testclipsmaliau.zip?download=1'
-```
-
-We want to create spectrogram images for this new test dataset. The sample rate for the original files was higher (48 kHz) so we use the downsample call in the function to make sure the spectrogram images are the same resolution.
-```{r, eval=FALSE}
-TestDatapath <- 'data/testclipsmaliau'
-
-# Create spectorgram images
-spectrogram_images(
-   trainingBasePath = TestDatapath,
-   outputBasePath = 'data/testimagesmaliau/',
-   minfreq.khz = 0.4,
-   maxfreq.khz = 1.6,
-   splits = c(0, 0, 1), # Assign proportion to training, validation, or test folders
-   new.sampleratehz = 16000
- )
-```
-
-
-The 'evaluate_trainedmodel_performance_multi' function will compare the model performance of pretrained models on another test dataset. 
-```{r, eval=FALSE}
-
-trained_models_dir <- '/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/'
-
-class_names <- dput(list.files('/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/data/trainingimages/train/'))
-
-image_data_dir <- 'data/testimagesmaliau/test/'
-
-dir.create('/data/model_output_test/',recursive = T)
-
-evaluate_trainedmodel_performance_multi(trained_models_dir=trained_models_dir,
-                                          class_names=class_names,
-                                          image_data_dir=image_data_dir,
-                                           output_dir= 'data/model_output_test/',
-                                           noise.category = "noise")
 
 ```
 
-Now we can use the same function as above 'get_best_performance' to investigate model performance.
-```{r,eval=FALSE}
-# Evaluate model performance
-performancetables.dir <- "data/model_output_test/performance_tables_multi_trained/"
-
-PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=performancetables.dir,
-                                                      class='female.gibbon',
-                                                      model.type = "multi",Thresh.val=0)
-
-```
-
-We see that there is a high F1 score across thresholds for the 'female.gibbon' class
-```{r, echo=FALSE, out.width="50%", fig.cap="Output from 'get_best_performance' fuction ."}
-#knitr::include_graphics("multiclass__maliau_eval.png")
-```
+ <img src="binary_eval.png" align="center" width = "50%" height="50%"/>
+  <figcaption>"Output from 'get_best_performance' fuction"</em>
 
