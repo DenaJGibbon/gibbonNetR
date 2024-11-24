@@ -20,14 +20,13 @@ knitr::opts_chunk$set(
 
 # Data Preparation
 
-## First load the packages
-
+## First load the package
 ```{r message=FALSE}
 library(gibbonNetR)
 ```
 
 ## We create spectrogram images of the sound files. 
-To follow best practices we want to use training and test data from different recording locations. These clips are from Danum Valley Conservation Area, Sabah, Malaysia, but are taken from two different passive acoustic monitoring arrays. The "spectrogram_images" function takes folders organized and labeled by signal type, and creates training, validation, or test folders using the "splits" specified in the function call.   
+To follow best practices we want to use training and test data from different passive acoustic monitoring arrays These clips are from Danum Valley Conservation Area, Sabah, Malaysia, but are taken from two different arrays. The "spectrogram_images" function takes folders organized and labeled by signal type, and creates training, validation, or test folders using the "splits" specified in the function call. In the example below 70% of the data is used for training and 30% for validation.   
 
 ```{r eval=FALSE}
 # Link to training clips on Zenodo
@@ -53,7 +52,7 @@ spectrogram_images(
    outputBasePath = 'data/trainingimages/',
    minfreq.khz = 0.4,
    maxfreq.khz = 1.6,
-      random=FALSE,
+   random=FALSE,
    splits = c(0.7, 0.3, 0), # Assign proportion to training, validation, or test folders
    new.sampleratehz = 'NA'
  )
@@ -62,7 +61,7 @@ spectrogram_images(
 ```
 
 ## Download example test files on Zenodo and convert to spectrogram images
-
+The "spectrogram_images" function below puts 100% of the test images into the test folder. 
 ```{r eval = FALSE}
 library(gibbonNetR)
 
@@ -95,6 +94,8 @@ spectrogram_images(
 ```
 
 # Model training
+We start with a multi-class model. You can specify multiple model architectures and number of epochs for training.  
+
 ```{r eval = FALSE}
 # Location of spectrogram images for training
 input.data.path <-  'data/trainingimages/'
