@@ -2,7 +2,7 @@ gibbonNetR: R Package for the Use of CNNs and Transfer Learning on
 Acoustic Data
 ================
 Dena J. Clink and Abdul Hamid Ahmad
-2024-05-28
+2024-11-24
 
 # Overview
 
@@ -60,14 +60,14 @@ library(torch)
 library(gibbonNetR)
 
 # Link to training clips on Zenodo
-ZenodoLink <- 'https://zenodo.org/records/11355157/files/trainingclips.zip?download=1'
+ZenodoLink <- 'https://zenodo.org/records/14210125/files/trainingclips.zip?download=1'
 
 # Download into specified zip file location
-download.file(url = ZenodoLink, destfile = 'data/spectrogram_image_examples.zip',method='curl')
+download.file(url = ZenodoLink, destfile = 'data/trainingclips.zip',method='curl')
 
 # Unzip folder
 exdir <- 'data/'
-utils::unzip(zipfile = 'data/spectrogram_image_examples.zip', exdir = exdir )
+utils::unzip(zipfile = 'data/trainingclips.zip', exdir = exdir )
 
 # Check folder composition
 TrainingDatapath <- paste(exdir,"trainingclips",sep='')
@@ -81,6 +81,7 @@ spectrogram_images(
    outputBasePath = 'data/trainingimages/',
    minfreq.khz = 0.4,
    maxfreq.khz = 1.6,
+   random=FALSE,
    splits = c(0.7, 0.3, 0), # Assign proportion to training, validation, or test folders
    new.sampleratehz = 'NA'
  )
@@ -103,14 +104,14 @@ Figure 1. Spectrograms of training clips for CNNs
 library(gibbonNetR)
 
 # Link to training clips on Zenodo
-ZenodoLink <- 'https://zenodo.org/records/11355157/files/testclips.zip?download=1'
+ZenodoLink <- 'https://zenodo.org/records/14210125/files/testclips.zip?download=1'
 
 # Download into specified zip file location
-download.file(url = ZenodoLink, destfile = 'data/spectrogram_image_examples.zip',method='curl')
+download.file(url = ZenodoLink, destfile = 'data/testclips.zip',method='curl')
 
 # Unzip folder
 exdir <- 'data/'
-utils::unzip(zipfile = 'data/spectrogram_image_examples.zip', exdir = exdir )
+utils::unzip(zipfile = 'data/testclips.zip', exdir = exdir )
 
 # Check folder composition
 TestDatapath <- paste(exdir,"testclips",sep='')
@@ -213,7 +214,7 @@ Here we can see the Normalize Mutual Information score
 
 ``` r
 result$NMI
-#> [1] 0.7346602
+#> [1] 0.7317898
 ```
 
 The confusion matrix results when we use ‘hdbscan’ to match the target
@@ -222,13 +223,13 @@ class to the cluster with the largest number of observations
 ``` r
 result$ConfusionMatrix
 #>          Sensitivity          Specificity       Pos Pred Value 
-#>            0.9130435            0.9835556            0.9258517 
+#>            0.9150198            0.9822222            0.9204771 
 #>       Neg Pred Value            Precision               Recall 
-#>            0.9805051            0.9258517            0.9130435 
+#>            0.9809143            0.9204771            0.9150198 
 #>                   F1           Prevalence       Detection Rate 
-#>            0.9194030            0.1835994            0.1676343 
+#>            0.9177403            0.1835994            0.1679971 
 #> Detection Prevalence    Balanced Accuracy 
-#>            0.1810595            0.9482995
+#>            0.1825109            0.9486210
 ```
 
 ## We can then deploy the model over longer sound files.
