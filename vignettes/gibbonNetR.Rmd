@@ -94,7 +94,7 @@ spectrogram_images(
 ```
 
 # Model training
-We start with a multi-class model. You can specify multiple model architectures and number of epochs for training.  
+We start with a multi-class model. We will use the spectrogram images for training, test and validation that we created above. Note that for "input.data.path" the train and valid folders need to be there. For the test data, the path must contain the 'test' folder. You can specify multiple model architectures and number of epochs for training.  
 
 ```{r eval = FALSE}
 # Location of spectrogram images for training
