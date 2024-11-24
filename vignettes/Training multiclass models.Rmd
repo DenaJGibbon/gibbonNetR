@@ -7,7 +7,7 @@ output:
     number_sections: true
     self_contained: yes
 vignette: >
-  %\VignetteIndexEntry{gibbonNetR}
+  %\VignetteIndexEntry{1. Multiclass models}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

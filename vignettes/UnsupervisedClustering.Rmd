@@ -7,14 +7,13 @@ output:
     number_sections: true
     self_contained: yes
 vignette: >
-  %\VignetteIndexEntry{gibbonNetR}
+  %\VignetteIndexEntry{2. Unsupervised clustering}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-# Use the pre-trained model to extract embeddings and use unsupervised clustering to identify signals
-
-## Extract embeddings
+# Extract embeddings
+Use the pre-trained model to extract embeddings and use unsupervised clustering to identify signals
 
 ```{r, eval=F, warning=FALSE, results='hide'}
 
