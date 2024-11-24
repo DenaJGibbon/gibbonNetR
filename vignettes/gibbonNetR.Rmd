@@ -149,7 +149,9 @@ PerformanceOutput <- gibbonNetR::get_best_performance(performancetables.dir=perf
 
 ```
 
-<img src=https://github.com/DenaJGibbon/gibbonNetR/blob/main/images/multiclass_eval.png>
+```{r, echo=FALSE}
+knitr::include_graphics("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/images/multiclass_eval.png")
+```
 
 ## Examine the results
 
