@@ -1,5 +1,5 @@
 ---
-title: "1. Multiclass models"
+title: "2. Binary models"
 output:
   rmarkdown::html_vignette:
     toc: true
@@ -7,7 +7,7 @@ output:
     number_sections: true
     self_contained: yes
 vignette: >
-  %\VignetteIndexEntry{1. Multiclass models}
+  %\VignetteIndexEntry{2. Binary models}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -28,6 +28,7 @@ knitr::opts_chunk$set(
 options(width = 100, max.print = 100)
 ```
 
+# NOTE THIS IS THE SAME AS MULTI
 # Data Preparation
 
 ## First load the package
@@ -69,9 +70,11 @@ spectrogram_images(
 
 ```
 
-  <img src="spectro.png" align="center" width = "50%" height="50%"/>
-  <figcaption>"Representative spectrogram images"</em>
+```{r, echo=FALSE, out.width="50%", fig.cap="A sample of the spectrogram images."}
+#knitr::include_graphics("spectro.png")
+```
 
+<img src="spectro.png" align="center" width = "50%" height="50%"/>
 
 ## Download example test files on Zenodo and convert to spectrogram images
 The "spectrogram_images" function below puts 100% of the test images into the test folder. 
@@ -182,10 +185,9 @@ PerformanceOutput$best_recall$Recall
 [1] 1
 ```
 
-
-  <img src="multiclass_eval.png" align="center" width = "50%" height="50%"/>
-  <figcaption>"Output from 'get_best_performance' fuction"</em>
-
+```{r, echo=FALSE, out.width="50%", fig.cap="Output from 'get_best_performance' fuction ."}
+#knitr::include_graphics("multiclass_eval.png")
+```
 
 # Trained model evaluation
 We can deploy the trained model over another test dataset to see how well it performs. In this case, the test data is organized into folders with corresponding labels that match those from the training data.  
@@ -245,9 +247,4 @@ We see that there is a high F1 score across thresholds for the 'female.gibbon' c
 ```{r, echo=FALSE, out.width="50%", fig.cap="Output from 'get_best_performance' fuction ."}
 #knitr::include_graphics("multiclass__maliau_eval.png")
 ```
-
-
-
-  <img src="multiclass__maliau_eval.png" align="center" width = "50%" height="50%"/>
-  <figcaption>"Output from 'get_best_performance' fuction"</em>
 
