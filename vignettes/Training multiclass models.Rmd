@@ -69,9 +69,6 @@ spectrogram_images(
 
 ```
 
-```{r, echo=FALSE, out.width="50%", fig.cap="A sample of the spectrogram images."}
-knitr::include_graphics("spectro.png")
-```
 
 ## Download example test files on Zenodo and convert to spectrogram images
 The "spectrogram_images" function below puts 100% of the test images into the test folder. 
