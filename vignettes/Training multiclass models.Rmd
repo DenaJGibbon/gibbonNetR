@@ -69,11 +69,12 @@ spectrogram_images(
 
 ```
 
-```{r, echo=FALSE, out.width="50%", fig.cap="A sample of the spectrogram images."}
-#knitr::include_graphics("spectro.png")
-```
 
-<img src="spectro.png" align="center" width = "50%" height="50%"/>
+<p class="cssclass1 cssclass2">
+  <img src="spectro.png" align="center" width = "50%" height="50%"/>
+  <em>"Representative spectrogram images"</em>
+</p>
+
 
 ## Download example test files on Zenodo and convert to spectrogram images
 The "spectrogram_images" function below puts 100% of the test images into the test folder. 
@@ -184,9 +185,10 @@ PerformanceOutput$best_recall$Recall
 [1] 1
 ```
 
-```{r, echo=FALSE, out.width="50%", fig.cap="Output from 'get_best_performance' fuction ."}
-#knitr::include_graphics("multiclass_eval.png")
-```
+<p class="cssclass1 cssclass2">
+  <img src="multiclass_eval.png" align="center" width = "50%" height="50%"/>
+  <em>"Output from 'get_best_performance' fuction"</em>
+</p>
 
 # Trained model evaluation
 We can deploy the trained model over another test dataset to see how well it performs. In this case, the test data is organized into folders with corresponding labels that match those from the training data.  
@@ -247,3 +249,8 @@ We see that there is a high F1 score across thresholds for the 'female.gibbon' c
 #knitr::include_graphics("multiclass__maliau_eval.png")
 ```
 
+
+<p class="cssclass1 cssclass2">
+  <img src="multiclass__maliau_eval.png" align="center" width = "50%" height="50%"/>
+  <em>"Output from 'get_best_performance' fuction"</em>
+</p>
