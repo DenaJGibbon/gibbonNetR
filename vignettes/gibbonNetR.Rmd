@@ -69,6 +69,10 @@ spectrogram_images(
 
 ```
 
+```{r, echo=FALSE, out.width="50%", fig.cap="A sample of the spectrogram images."}
+knitr::include_graphics("spectro.png")
+```
+
 ## Download example test files on Zenodo and convert to spectrogram images
 The "spectrogram_images" function below puts 100% of the test images into the test folder. 
 ```{r eval = FALSE}
@@ -225,7 +229,7 @@ evaluate_trainedmodel_performance_multi(trained_models_dir=trained_models_dir,
 
 ```
 
-## Now we can use the same function as above 'get_best_performance' to investigate model performance.
+Now we can use the same function as above 'get_best_performance' to investigate model performance.
 ```{r,eval=FALSE}
 # Evaluate model performance
 performancetables.dir <- "data/model_output_test/performance_tables_multi_trained/"
