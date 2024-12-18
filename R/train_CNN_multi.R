@@ -411,6 +411,7 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
     TransferLearningCNNDF <- data.frame()
     thresholds <- seq(0.1, 1, 0.1)
 
+
     for (b in 1:length(UniqueClasses)) {
 
 
@@ -419,6 +420,9 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
 
       outputTableMultiSub$ActualClass <-
         ifelse(outputTableMultiSub$ActualClass==UniqueClasses[b],UniqueClasses[b],noise.category)
+
+      binarylabels <- ifelse(outputTableMulti$ActualClass==UniqueClasses[b],1,0)
+      roc_result <- pROC::roc(response=binarylabels, predictor = as.numeric(Probability[, UniqueClasses[b]]),direction = "<")
 
       for (threshold in thresholds) {
         MultiPredictedClass <- ifelse((outputTableMultiSub$Probability > threshold ), UniqueClasses[b], noise.category)
@@ -449,9 +453,9 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
           "CNN Architecture"
         )
 
-        ROCRpred <- ROCR::prediction(predictions = outputTableMultiSub$Probability, labels = outputTableMultiSub$ActualClass)
-        AUCval <- ROCR::performance(ROCRpred, 'auc')
-        TempRowMulti$AUC <- AUCval@y.values[[1]]
+          # ROCRpred <- ROCR::prediction(predictions = outputTableMultiSub$Probability, labels = outputTableMultiSub$ActualClass)
+        # AUCval <- ROCR::performance(ROCRpred, 'auc')
+        TempRowMulti$AUC <- as.numeric(roc_result$auc)
         TempRowMulti$Threshold <- as.character(threshold)
         TempRowMulti$Frozen <- unfreeze.param
         TempRowMulti$Class <- UniqueClasses[b]

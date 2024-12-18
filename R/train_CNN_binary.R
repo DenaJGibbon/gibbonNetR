@@ -548,6 +548,10 @@ train_CNN_binary <-
       TransferLearningCNNDF <- data.frame()
       thresholds <- list.thresholds
 
+      binarylabels <- ifelse(outputTableTrainedModel$ActualClass==positive.class,1,0)
+      roc_result <- pROC::roc(response=binarylabels, predictor = as.numeric(outputTableTrainedModel$Probability),direction = "<")
+
+
       for (threshold in thresholds) {
         # TrainedModel
         TrainedModelPredictedClass <-
@@ -597,13 +601,8 @@ train_CNN_binary <-
           rbind.data.frame(CombinedTempRow, TempRowTrainedModel)
       }
 
-      ROCRpred <-
-        ROCR::prediction(predictions = outputTableTrainedModel$Probability,
-                         labels = outputTableTrainedModel$ActualClass)
 
-      AUCval <- ROCR::performance(ROCRpred, 'aucpr')
-
-      CombinedTempRow$AUC <- as.numeric(AUCval@y.values[[1]])
+      CombinedTempRow$AUC <- roc_result$auc
 
       TransferLearningCNNDF <-
         rbind.data.frame(TransferLearningCNNDF, CombinedTempRow)
