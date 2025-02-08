@@ -35,4 +35,5 @@ Given trained models and a set of images, this function evaluates the performanc
 \examples{
 {
 }
+
 }

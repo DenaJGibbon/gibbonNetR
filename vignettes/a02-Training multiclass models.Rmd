@@ -1,5 +1,5 @@
 ---
-title: "1. Multiclass models"
+title: "2. Multiclass models"
 output:
   rmarkdown::html_vignette:
     toc: true

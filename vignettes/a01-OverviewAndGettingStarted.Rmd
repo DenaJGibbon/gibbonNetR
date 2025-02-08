@@ -1,0 +1,29 @@
+---
+title: "1. Overview and Getting Started"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 1
+    number_sections: true
+    self_contained: yes
+vignette: >
+  %\VignetteIndexEntry{1. Multiclass models}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, eval = TRUE, echo = FALSE, message=FALSE}
+# global option chunks
+knitr::opts_chunk$set(
+  fig.width = 5, 
+  fig.height = 3.5,
+  dpi = 70,
+  comment = "",
+  out.width = "80%",
+  fig.align = "center",
+  message = TRUE,
+  warning = TRUE
+)
+
+options(width = 100, max.print = 100)
+```

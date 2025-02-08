@@ -157,12 +157,15 @@ evaluate_trainedmodel_performance_multi <-
         print(UniqueClasses[b])
         outputTableSub <-
           Probability[, c(UniqueClasses[b], 'ActualClass')]
+
         outputTableSub$Probability <- outputTableSub[, 1]
 
         outputTableSub$ActualClass <-
           ifelse(outputTableSub$ActualClass == UniqueClasses[b],
                  UniqueClasses[b],
                  noise.category)
+
+        roc_result <- pROC::multiclass.roc(outputTableSub$ActualClass, outputTableSub$Probability)
 
         thresholds <- seq(0.1, 1, 0.1)
 
@@ -205,11 +208,7 @@ evaluate_trainedmodel_performance_multi <-
             "CNN Architecture"
           )
 
-          ROCRpred <-
-            ROCR::prediction(predictions = outputTableSub$Probability,
-                             labels = outputTableSub$ActualClass)
-          AUCval <- ROCR::performance(ROCRpred, 'auc')
-          TempRow$AUC <- AUCval@y.values[[1]]
+          TempRow$AUC <- as.numeric(roc_result$auc)
           TempRow$Threshold <- as.character(threshold)
           TempRow$Frozen <- unfreeze
           TempRow$Class <- UniqueClasses[b]
