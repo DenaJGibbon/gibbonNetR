@@ -11,17 +11,11 @@
 #'
 #' @examples
 #' {
-#' if (.Platform$OS.type == "unix") {
-#' # Load the gibbonNetR package
-#' library(gibbonNetR)
-#' library(torchvision)
-#' library(torch)
-#'
-#' # Load data
+#' #' # Load data
 #' data("TempBinWav")
 #'
 #' # Define the output directory
-#' output.dir <- paste(tempdir(), '/MultiDir/Noise/')
+#' output.dir <- file.path(tempdir(), 'MultiDir', 'Soundfiles', 'Noise')
 #'
 #' # Create the output directory
 #' dir.create(output.dir, recursive = TRUE, showWarnings = FALSE)
@@ -36,7 +30,7 @@
 #'                        TempBinWav,
 #'                        from = cutwave.list[i],
 #'                        to = cutwave.list[i + 1],
-#'                        xunit = c("time"),
+#'                        xunit = "time",
 #'                        plot = FALSE,
 #'                        output = "Wave"
 #'                      ))
@@ -46,11 +40,7 @@
 #'        function(i)
 #'          writeWave(
 #'            subsamps[[i]],
-#'            filename = paste(
-#'              output.dir,
-#'              'temp_', i, '_', '.wav',
-#'              sep = ''
-#'            ),
+#'            filename = file.path(output.dir, paste('temp_', i, '_', '.wav', sep = '')),
 #'            extensible = FALSE
 #'          )
 #' )
@@ -60,36 +50,34 @@
 #'
 #' # Generate spectrogram images
 #' spectrogram_images(
-#'   trainingBasePath = paste(tempdir(), '/MultiDir/'),
-#'   outputBasePath = paste(tempdir(), '/MultiDir/', 'Spectro/', sep = ''),
-#'   splits = c(1, 0, 0),
+#'   trainingBasePath =  file.path(tempdir(), 'MultiDir/Soundfiles/'),
+#'   outputBasePath = file.path(tempdir(), 'MultiDir/Soundfiles/', 'Spectro'),
+#'   splits = c(0.5, 0.5, 0.0),
 #'   new.sampleratehz = 'NA'
 #' )
 #'
 #' # List the images generated
-#' ListImages <- list.files(paste(tempdir(), '/MultiDir/', 'Spectro/', sep = ''), recursive = TRUE)
+#' ListImages <- list.files(file.path(tempdir(), 'MultiDir', 'Spectro'), recursive = TRUE)
 #'
 #' print(ListImages)
 #'
 #' # Get the path of a single image
-#' Singlepath <- list.files(paste(tempdir(),
-#' '/MultiDir/', 'Spectro/', sep = ''),
-#' recursive = TRUE, full.names = TRUE)[1]
+#' Singlepath <- list.files(file.path(tempdir(), 'MultiDir', 'Spectro'), recursive = TRUE, full.names = TRUE)[1]
 #'
 #' # Set input data path
-#' input.data.path <- paste(tempdir(), '/MultiDir/', 'Spectro/train/', sep = '')
+#' input.data.path <- file.path(tempdir(), 'MultiDir', 'Spectro', 'train')
 #'
 #' # Load images in path
 #' train_ds <- image_folder_dataset(
-#'   file.path(input.data.path),   #' Path to the image directory
+#'   file.path(input.data.path),   # Path to the image directory
 #'   transform = . %>%
 #'     torchvision::transform_to_tensor() %>%
 #'     torchvision::transform_resize(size = c(224, 224)) %>%
 #'     torchvision::transform_normalize(
-#'       mean = c(0.485, 0.456, 0.406),      #' Mean for normalization
-#'       std = c(0.229, 0.224, 0.225)        #' Standard deviation for normalization
+#'       mean = c(0.485, 0.456, 0.406),      # Mean for normalization
+#'       std = c(0.229, 0.224, 0.225)        # Standard deviation for normalization
 #'     ),
-#'   target_transform = function(x) as.double(x) - 1  #' Transformation for target/labels
+#'   target_transform = function(x) as.double(x) - 1  # Transformation for target/labels
 #' )
 #'
 #' # Create a dataloader from the dataset:
@@ -100,16 +88,16 @@
 #'
 #' # Extract the labels for the batch and determine class names
 #' classes <- batch[[2]]
-#' class_names <- list.files(input.data.path,recursive = TRUE)
-#' class_names <- str_split_fixed(class_names,pattern = '/',n=2)[,1]
+#' class_names <- list.files(input.data.path, recursive = TRUE)
+#' class_names <- str_split_fixed(class_names, pattern = '/', n = 2)[, 1]
 #'
 #' # Convert the batch tensor of images to an array and process them:
 #' images <- as_array(batch[[1]]) %>% aperm(perm = c(1, 3, 4, 2))
 #'
 #' # Set the plotting parameters
-#' par(mfcol = c(3,4), mar = rep(1, 4))
+#' par(mfcol = c(3, 4), mar = rep(1, 4))
 #'
-#' #Define a function to normalize pixel values
+#' # Define a function to normalize pixel values
 #' normalize_pixel_values <- function(image) {
 #'   normalized_image <- (image - min(image)) / (max(image) - min(image))
 #'   return(normalized_image)
@@ -120,8 +108,8 @@
 #'         purrr::set_names(class_names) %>%
 #'         purrr::map(~ as.raster(normalize_pixel_values(.x))) %>%
 #'         purrr::iwalk(~{plot(.x); title(.y)})
-#'         }
-#'         }
+#' }
+
 #' @importFrom tuneR readWave
 #' @importFrom seewave spectro
 #' @importFrom tools file_path_sans_ext
@@ -130,7 +118,7 @@
 spectrogram_images <- function(trainingBasePath,
                                outputBasePath,
                                splits,
-                               random='TRUE',
+                               random='FALSE',
                                minfreq.khz = 0.4,
                                maxfreq.khz = 1.6,
                                new.sampleratehz = 16000) {
