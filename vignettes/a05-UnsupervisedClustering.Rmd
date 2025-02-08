@@ -1,5 +1,5 @@
 ---
-title: "4. Unsupervised clustering"
+title: "5. Unsupervised clustering"
 output:
   rmarkdown::html_vignette:
     toc: true
@@ -7,7 +7,7 @@ output:
     number_sections: true
     self_contained: yes
 vignette: >
-  %\VignetteIndexEntry{4. Unsupervised clustering}
+  %\VignetteIndexEntry{5. Unsupervised clustering}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

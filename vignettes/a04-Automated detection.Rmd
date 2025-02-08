@@ -1,5 +1,5 @@
 ---
-title: "3. Automated detection"
+title: "4. Automated detection"
 output:
   rmarkdown::html_vignette:
     toc: true
@@ -7,7 +7,7 @@ output:
     number_sections: true
     self_contained: yes
 vignette: >
-  %\VignetteIndexEntry{3. Automated detection}
+  %\VignetteIndexEntry{4. Automated detection}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
