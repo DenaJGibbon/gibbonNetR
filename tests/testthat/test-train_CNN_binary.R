@@ -21,5 +21,5 @@ test_that("Outputs appropriate test file", {
   ListOutputFiles <- list.files(paste(tempdir(),'/BinaryDir/',sep=''),recursive = T,full.names = T)
   TestOutPut <- ListOutputFiles[which(str_detect(ListOutputFiles,'performance_tables/'))]
   TempCSV <- read.csv(TestOutPut)
-  expect_true(ncol(TempCSV)==19)
+  expect_true(ncol(TempCSV)==20)
   })

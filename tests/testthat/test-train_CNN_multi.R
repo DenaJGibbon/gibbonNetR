@@ -24,6 +24,6 @@ test_that("train_CNN_multi works", {
   TestOutPut <- ListOutputFiles[which(str_detect(ListOutputFiles,'performance_tables_multi/'))]
   TempCSV <- read.csv(TestOutPut[1])
   head(TempCSV)
-  expect_true(ncol(TempCSV)==19)
+  expect_true(ncol(TempCSV)==20)
 
 })
