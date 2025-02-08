@@ -2,11 +2,12 @@ pandoc: 3.1.11
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
-  a01-Training multiclass models: a01-Training multiclass models.html
-  a02-Training binary models: a02-Training binary models.html
-  a03-Automated detection: a03-Automated detection.html
-  a04-UnsupervisedClustering: a04-UnsupervisedClustering.html
-last_built: 2024-12-18T11:20Z
+  a01-OverviewAndGettingStarted: a01-OverviewAndGettingStarted.html
+  a02-Training multiclass models: a02-Training multiclass models.html
+  a03-Training binary models: a03-Training binary models.html
+  a04-Automated detection: a04-Automated detection.html
+  a05-UnsupervisedClustering: a05-UnsupervisedClustering.html
+last_built: 2025-02-08T15:48Z
 urls:
   reference: https://denajgibbon.github.io/gibbonNetR/reference
   article: https://denajgibbon.github.io/gibbonNetR/articles
