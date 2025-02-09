@@ -14,18 +14,18 @@ vignette: >
 
 ```{r, eval = TRUE, echo = FALSE, message=FALSE}
 # global option chunks
-# knitr::opts_chunk$set(
-#   fig.width = 5, 
-#   fig.height = 3.5,
-#   dpi = 70,
-#   comment = "",
-#   out.width = "80%",
-#   fig.align = "center",
-#   message = TRUE,
-#   warning = TRUE
-# )
-# 
-# options(width = 100, max.print = 100)
+knitr::opts_chunk$set(
+  fig.width = 7,
+  fig.height = 10,
+  dpi = 70,
+  comment = "",
+  out.width = "100%",
+  fig.align = "center",
+  message = TRUE,
+  warning = TRUE
+)
+
+#options(width = 100, max.print = 100)
 ```
 
 # A flowchart overview of the 'gibbonNetR' workflow
