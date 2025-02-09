@@ -111,7 +111,59 @@
 <span class="r-in"><span><span class="co"># Check the output of the first file</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.csv</a></span><span class="op">(</span><span class="va">CSVName</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in cpp_tensor_load(obj$values, device, base64):</span> Lantern is not loaded. Please use `install_torch()` to install additional dependencies.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Evaluating performance of 3_resnet18_model N epochs= multi"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "female.gibbon"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Setting direction: controls &gt; cases</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "hornbill.rhino"</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Setting direction: controls &gt; cases</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sensitivity Specificity Pos.Pred.Value Neg.Pred.Value Precision Recall</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           1         0.0      0.4166667             NA 0.4166667      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           1         0.5      0.5882353      1.0000000 0.5882353      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           0         1.0             NA      0.5833333        NA      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           0         1.0             NA      0.5833333        NA      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           0         1.0             NA      0.5833333        NA      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6           0         1.0             NA      0.5833333        NA      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          F1 Prevalence Detection.Rate Detection.Prevalence Balanced.Accuracy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.5882353  0.4166667      0.4166667            1.0000000              0.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.7407407  0.4166667      0.4166667            0.7083333              0.75</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        NA  0.4166667      0.0000000            0.0000000              0.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        NA  0.4166667      0.0000000            0.0000000              0.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        NA  0.4166667      0.0000000            0.0000000              0.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6        NA  0.4166667      0.0000000            0.0000000              0.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Training.Data N.epochs CNN.Architecture       AUC Threshold Frozen</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          test    multi 3_resnet18_model 0.9214286       0.1   TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          test    multi 3_resnet18_model 0.9214286       0.2   TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          test    multi 3_resnet18_model 0.9214286       0.3   TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          test    multi 3_resnet18_model 0.9214286       0.4   TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          test    multi 3_resnet18_model 0.9214286       0.5   TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          test    multi 3_resnet18_model 0.9214286       0.6   TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           Class Top1Accuracy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 female.gibbon    0.4166667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 female.gibbon    0.4166667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 female.gibbon    0.4166667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 female.gibbon    0.4166667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 female.gibbon    0.4166667</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 female.gibbon    0.4166667</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
