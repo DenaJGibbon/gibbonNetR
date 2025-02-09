@@ -29,6 +29,9 @@ options(width = 100, max.print = 100)
 ```
 
 ```{r, eval = TRUE, echo = FALSE, message=FALSE}
+if (!requireNamespace("DiagrammeR", quietly = TRUE)) {
+  install.packages("DiagrammeR")
+}
 # Install required package if not installed
 library(DiagrammeR)
 
