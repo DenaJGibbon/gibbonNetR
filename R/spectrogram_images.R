@@ -8,8 +8,6 @@
 #' @param new.sampleratehz New sample rate in Hz for resampling the audio. Defaults to 16000. Set to 'NA' if no resampling is required.
 #' @param random Logical. If TRUE then randomly samples from folder, if FALSE then divides into sets based on alphabetic file name sequence.
 #' @return Invisible NULL
-#'
-#' @examples
 #' @examples
 #' {
 #' #' # Load the 'TempBinWav' data

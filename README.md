@@ -2,7 +2,7 @@ gibbonNetR: R Package for the Use of CNNs and Transfer Learning on
 Acoustic Data
 ================
 Dena J. Clink and Abdul Hamid Ahmad
-2024-11-24
+2025-02-09
 
 # Overview
 

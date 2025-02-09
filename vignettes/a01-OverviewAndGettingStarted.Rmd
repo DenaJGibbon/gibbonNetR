@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
   fig.height = 10,
   dpi = 70,
   comment = "",
-  out.width = "100%",
+  out.width = "80%",
   fig.align = "center",
   message = TRUE,
   warning = TRUE
@@ -82,3 +82,4 @@ DiagrammeR::grViz(flowchart)
 
 
 ```
+
