@@ -134,7 +134,6 @@ images <- images \%>\%
   purrr::set_names(class_names) \%>\%
   purrr::map(~ as.raster(normalize_pixel_values(.x))) \%>\%
   purrr::iwalk(~ {plot(.x); title(.y)})  # Plot the image with its respective class name as title
-  print(images)
 }
 
 }
