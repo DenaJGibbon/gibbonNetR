@@ -1,5 +1,5 @@
 ---
-title: "gibbonNetR: R Package for the Use of CNNs and Transfer Learning on Acoustic Data"
+title: "gibbonNetR R Package"
 author: "Dena J. Clink and Abdul Hamid Ahmad"
 date: "`r Sys.Date()`"
 output: github_document
