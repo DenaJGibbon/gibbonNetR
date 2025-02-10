@@ -50,6 +50,7 @@
 #' @importFrom readr write_csv
 #' @importFrom magrittr %>%
 #' @importFrom ggpubr ggline
+#' @importFrom utils write.csv read.csv
 #'
 train_CNN_binary <-
   function(input.data.path,

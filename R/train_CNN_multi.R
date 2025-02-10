@@ -51,7 +51,7 @@
 #' @importFrom readr write_csv
 #' @importFrom magrittr %>%
 #' @importFrom ggpubr ggline
-#'
+#' @importFrom utils write.csv read.csv
 
 train_CNN_multi <- function(input.data.path, test.data, architecture,
                             unfreeze.param = TRUE, batch_size = 32, learning_rate,

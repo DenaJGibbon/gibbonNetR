@@ -62,7 +62,7 @@
 
 #' @importFrom grDevices jpeg graphics.off
 #' @importFrom stats predict median
-#' @importFrom utils write.table
+#' @importFrom utils write.table write.csv read.csv
 #'
 #' @export
 

@@ -58,6 +58,7 @@
 #' @importFrom grDevices jpeg graphics.off
 #' @importFrom stats predict median
 #' @importFrom magrittr %>%
+#' @importFrom utils write.csv read.csv
 #' @export
 
 deploy_CNN_binary <- function(output_folder,

@@ -87,8 +87,9 @@
 #' #' Plot precision-recall curve
 #' print(results$pr_plot)
 #' }
-
+#' @importFrom utils write.csv read.csv
 #' @export
+#'
 get_best_performance <- function(performancetables.dir,
                                  model.type = 'multi',
                                  class = 'hornbill.helmeted',

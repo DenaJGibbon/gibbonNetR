@@ -48,6 +48,7 @@
 #'
 #' print(result$EmbeddingsCombined)
 #'}
+#' @importFrom utils write.csv read.csv
 #' @export
 
 # Define the function
