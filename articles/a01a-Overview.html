@@ -77,12 +77,70 @@
     
     
 <div class="section level2">
+<h2 id="a-description-of-each-of-the-gibbonnetr-functions">A description of each of the ‘gibbonNetR’ functions<a class="anchor" aria-label="anchor" href="#a-description-of-each-of-the-gibbonnetr-functions"></a>
+</h2>
+<p>‘gibbonNetR’ contains functions for the automated detection and
+classification of acoustic signals. A brief summary of the functions is
+shown below.</p>
+<table class="table">
+<colgroup>
+<col width="46%">
+<col width="53%">
+</colgroup>
+<thead><tr class="header">
+<th>File Name</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>deploy_CNN_binary.R</td>
+<td>Deploys a trained binary CNN model over a directory of sound
+files</td>
+</tr>
+<tr class="even">
+<td>deploy_CNN_multi.R</td>
+<td>Deploys a trained multi-class CNN model over a directory of sound
+files</td>
+</tr>
+<tr class="odd">
+<td>evaluate_trainedmodel_performance_multi.R</td>
+<td>Evaluates performance of a multi-class model on a test dataset</td>
+</tr>
+<tr class="even">
+<td>evaluate_trainedmodel_performance.R</td>
+<td>Evaluates performance of a binary model on a test dataset</td>
+</tr>
+<tr class="odd">
+<td>extract_embeddings.R</td>
+<td>Extracts feature embeddings from trained models</td>
+</tr>
+<tr class="even">
+<td>get_best_performance.R</td>
+<td>A function that benchmarks multiple trained models</td>
+</tr>
+<tr class="odd">
+<td>spectrogram_images.R</td>
+<td>Generates and processes spectrogram images</td>
+</tr>
+<tr class="even">
+<td>train_CNN_binary.R</td>
+<td>Trains a binary classification CNN model</td>
+</tr>
+<tr class="odd">
+<td>train_CNN_multi.R</td>
+<td>Trains a multi-class classification CNN model</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
 <h2 id="a-flowchart-overview-of-the-gibbonnetr-workflow">A flowchart overview of the ‘gibbonNetR’ workflow<a class="anchor" aria-label="anchor" href="#a-flowchart-overview-of-the-gibbonnetr-workflow"></a>
 </h2>
 <div class="grViz html-widget html-fill-item" id="htmlwidget-ac96cb3ee4656e2e9ec3" style="width:80%;height:700px;"></div>
 <script type="application/json" data-for="htmlwidget-ac96cb3ee4656e2e9ec3">{"x":{"diagram":"\ndigraph G {\n  graph [layout = dot, rankdir = TB]\n\n  # Nodes: Scripts as rectangles, key decision points as diamonds\n  spectrogram [label = \"Generate Spectrograms\\n(spectrogram_images.R)\", shape = rectangle, style = filled, fillcolor = lightblue]\n    prepare_data [label = \"Prepare Data\", shape = diamond, style = filled, fillcolor = white]\n    \n  train_model [label = \"Train Model\", shape = diamond, style = filled, fillcolor = white]\n  train_binary [label = \"Train Binary CNN\\n(train_CNN_binary.R)\", shape = rectangle, style = filled, fillcolor = green]\n  train_multi [label = \"Train Multi CNN\\n(train_CNN_multi.R)\", shape = rectangle, style = filled, fillcolor = green]\n\n  eval_model [label = \"Evaluate Performance\", shape = diamond, style = filled, fillcolor = white]\n  eval_binary [label = \"Evaluate Binary CNN\\n(evaluate_trainedmodel_performance.R)\", shape = rectangle, style = filled, fillcolor = pink]\n  eval_multi [label = \"Evaluate Multi CNN\\n(evaluate_trainedmodel_performance_multi.R)\", shape = rectangle, style = filled, fillcolor = pink]\n  \n  best_performance [label = \"Get Best Performance\\n(get_best_performance.R)\", shape = rectangle, style = filled, fillcolor = pink]\n\n  deploy_model [label = \"Deploy Model\", shape = diamond, style = filled, fillcolor = white]\n  deploy_binary [label = \"Deploy Binary CNN\\n(deploy_CNN_binary.R)\", shape = rectangle, style = filled, fillcolor = orange]\n  deploy_multi [label = \"Deploy Multi CNN\\n(deploy_CNN_multi.R)\", shape = rectangle, style = filled, fillcolor = orange]\n\ndata_viz [label = \"Extract embeddings + \n unsupervised clustering\", shape = diamond, style = filled, fillcolor = white]\n  extract_embed [label = \"Extract Embeddings (Optional Step)\\n(extract_embeddings.R)\", shape = rectangle, style = filled, fillcolor = cyan]\n\n  # Define Dependencies with Decision Points\n  prepare_data -> spectrogram\n  spectrogram -> train_model\n  train_model -> { train_binary train_multi }\n\n  { train_binary train_multi } -> eval_model\n  eval_model -> { eval_binary eval_multi best_performance }\n\n  { eval_binary eval_multi best_performance } -> deploy_model\n  deploy_model -> { deploy_binary deploy_multi }\n\n  { deploy_binary deploy_multi } -> data_viz\n  \n  data_viz -> extract_embed\n}\n","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
 </div>
-  </main>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
