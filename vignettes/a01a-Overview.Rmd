@@ -59,23 +59,24 @@ digraph G {
 
   # Nodes: Scripts as rectangles, key decision points as diamonds
   spectrogram [label = 'Generate Spectrograms\\n(spectrogram_images.R)', shape = rectangle, style = filled, fillcolor = lightblue]
-    prepare_data [label = 'Prepare Data', shape = diamond, style = filled, fillcolor = white]
-    
+  prepare_data [label = 'Prepare Data', shape = diamond, style = filled, fillcolor = white]
+  
   train_model [label = 'Train Model', shape = diamond, style = filled, fillcolor = white]
   train_binary [label = 'Train Binary CNN\\n(train_CNN_binary.R)', shape = rectangle, style = filled, fillcolor = green]
   train_multi [label = 'Train Multi CNN\\n(train_CNN_multi.R)', shape = rectangle, style = filled, fillcolor = green]
 
-  eval_model [label = 'Evaluate Performance', shape = diamond, style = filled, fillcolor = white]
+  eval_model [label = 'Benchmark Performance of Different Models', shape = diamond, style = filled, fillcolor = white]
+  best_performance [label = 'Get Best Performance\\n(get_best_performance.R)', shape = rectangle, style = filled, fillcolor = pink]
+  
+  eval_test_set [label = 'Evaluate Performance on Test Set', shape = diamond, style = filled, fillcolor = white]
   eval_binary [label = 'Evaluate Binary CNN\\n(evaluate_trainedmodel_performance.R)', shape = rectangle, style = filled, fillcolor = pink]
   eval_multi [label = 'Evaluate Multi CNN\\n(evaluate_trainedmodel_performance_multi.R)', shape = rectangle, style = filled, fillcolor = pink]
-  
-  best_performance [label = 'Get Best Performance\\n(get_best_performance.R)', shape = rectangle, style = filled, fillcolor = pink]
 
   deploy_model [label = 'Deploy Model', shape = diamond, style = filled, fillcolor = white]
   deploy_binary [label = 'Deploy Binary CNN\\n(deploy_CNN_binary.R)', shape = rectangle, style = filled, fillcolor = orange]
   deploy_multi [label = 'Deploy Multi CNN\\n(deploy_CNN_multi.R)', shape = rectangle, style = filled, fillcolor = orange]
 
-data_viz [label = 'Extract embeddings + \n unsupervised clustering', shape = diamond, style = filled, fillcolor = white]
+  data_viz [label = 'Extract embeddings + \n Unsupervised Clustering', shape = diamond, style = filled, fillcolor = white]
   extract_embed [label = 'Extract Embeddings (Optional Step)\\n(extract_embeddings.R)', shape = rectangle, style = filled, fillcolor = cyan]
 
   # Define Dependencies with Decision Points
@@ -84,15 +85,16 @@ data_viz [label = 'Extract embeddings + \n unsupervised clustering', shape = dia
   train_model -> { train_binary train_multi }
 
   { train_binary train_multi } -> eval_model
-  eval_model -> { eval_binary eval_multi best_performance }
-
-  { eval_binary eval_multi best_performance } -> deploy_model
+  eval_model -> best_performance
+  best_performance -> eval_test_set
+  eval_test_set -> { eval_binary eval_multi }
+  { eval_binary eval_multi } -> deploy_model
   deploy_model -> { deploy_binary deploy_multi }
 
   { deploy_binary deploy_multi } -> data_viz
-  
   data_viz -> extract_embed
 }
+
 "
 
 DiagrammeR::grViz(flowchart)

@@ -6,13 +6,17 @@ Dena J. Clink and Abdul Hamid Ahmad
 # Overview
 
 This README provides code for training, testing, and deploying,
-different convolutional neural network model architectures on acoustic
-data using spectrogram images. Using this package you can compare
-different model architectures. Once you determine the best performing
-model you can deploy it over multiple sound files. You can also use a
-trained model as a ‘feature extractor’, and combined with an
-unsupervised clustering algorithm you can visualize differences in
-acoustic signals.
+different convolutional neural network model architectures for automated
+detection and classification of acoustic data.
+
+Users can train both binary and multi-class classification models on
+spectrogram images, and evaluate their performance on test datasets. The
+package includes tools for performance evaluation, allowing easy
+identification of the best-performing model. Once the best-performing
+model is identified, it can be deployed for large-scale inference on
+multiple sound files. In addition to classification, trained CNNs can be
+used as feature extractors. Combined with unsupervised clustering, this
+enables visualization of differences in acoustic signals.
 
 # Usage
 
@@ -55,7 +59,7 @@ library(torch)
     epoch.iterations = 1,  # Or any other list of integer epochs
     early.stop = "yes",
     save.model= FALSE,
-    output.base.path = paste(tempdir(),'/MultiDir/',sep=''),
+    output.base.path = file.path(tempdir(),'/MultiDir/',sep=''),
     trainingfolder = "test_multi",
     noise.category = 'noise'
   )
