@@ -1,75 +1,27 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/404.html</loc>
-  </url>
-  <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/articles/a01a-Overview.html</loc>
-  </url>
-  <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/articles/a01b-GettingStarted.html</loc>
-  </url>
-  <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/articles/a02-Training multiclass models.html</loc>
-  </url>
-  <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/articles/a03-Training binary models.html</loc>
-  </url>
-  <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/articles/a04-Automated detection.html</loc>
-  </url>
-  <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/articles/a05-UnsupervisedClustering.html</loc>
-  </url>
-  <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/index.html</loc>
-  </url>
-  <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/reference/TempBinWav.html</loc>
-  </url>
-  <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/reference/deploy_CNN_binary.html</loc>
-  </url>
-  <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/reference/deploy_CNN_multi.html</loc>
-  </url>
-  <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/reference/evaluate_trainedmodel_performance.html</loc>
-  </url>
-  <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/reference/evaluate_trainedmodel_performance_multi.html</loc>
-  </url>
-  <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/reference/extract_embeddings.html</loc>
-  </url>
-  <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/reference/get_best_performance.html</loc>
-  </url>
-  <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/reference/gibbonNetR-package.html</loc>
-  </url>
-  <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/reference/spectrogram_images.html</loc>
-  </url>
-  <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/reference/train_CNN_binary.html</loc>
-  </url>
-  <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/reference/train_CNN_multi.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://denajgibbon.github.io/gibbonNetR/404.html</loc></url>
+<url><loc>https://denajgibbon.github.io/gibbonNetR/LICENSE-text.html</loc></url>
+<url><loc>https://denajgibbon.github.io/gibbonNetR/LICENSE.html</loc></url>
+<url><loc>https://denajgibbon.github.io/gibbonNetR/articles/a01a-Overview.html</loc></url>
+<url><loc>https://denajgibbon.github.io/gibbonNetR/articles/a01b-GettingStarted.html</loc></url>
+<url><loc>https://denajgibbon.github.io/gibbonNetR/articles/a02-Trainingmulticlassmodels.html</loc></url>
+<url><loc>https://denajgibbon.github.io/gibbonNetR/articles/a03-Trainingbinarymodels.html</loc></url>
+<url><loc>https://denajgibbon.github.io/gibbonNetR/articles/a04-Automateddetection.html</loc></url>
+<url><loc>https://denajgibbon.github.io/gibbonNetR/articles/a05-UnsupervisedClustering.html</loc></url>
+<url><loc>https://denajgibbon.github.io/gibbonNetR/articles/index.html</loc></url>
+<url><loc>https://denajgibbon.github.io/gibbonNetR/authors.html</loc></url>
+<url><loc>https://denajgibbon.github.io/gibbonNetR/index.html</loc></url>
+<url><loc>https://denajgibbon.github.io/gibbonNetR/reference/TempBinWav.html</loc></url>
+<url><loc>https://denajgibbon.github.io/gibbonNetR/reference/deploy_CNN_binary.html</loc></url>
+<url><loc>https://denajgibbon.github.io/gibbonNetR/reference/deploy_CNN_multi.html</loc></url>
+<url><loc>https://denajgibbon.github.io/gibbonNetR/reference/evaluate_trainedmodel_performance.html</loc></url>
+<url><loc>https://denajgibbon.github.io/gibbonNetR/reference/evaluate_trainedmodel_performance_multi.html</loc></url>
+<url><loc>https://denajgibbon.github.io/gibbonNetR/reference/extract_embeddings.html</loc></url>
+<url><loc>https://denajgibbon.github.io/gibbonNetR/reference/get_best_performance.html</loc></url>
+<url><loc>https://denajgibbon.github.io/gibbonNetR/reference/gibbonNetR-package.html</loc></url>
+<url><loc>https://denajgibbon.github.io/gibbonNetR/reference/index.html</loc></url>
+<url><loc>https://denajgibbon.github.io/gibbonNetR/reference/spectrogram_images.html</loc></url>
+<url><loc>https://denajgibbon.github.io/gibbonNetR/reference/train_CNN_binary.html</loc></url>
+<url><loc>https://denajgibbon.github.io/gibbonNetR/reference/train_CNN_multi.html</loc></url>
 </urlset>
+
