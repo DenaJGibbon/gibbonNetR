@@ -5,9 +5,14 @@ Dena J. Clink and Abdul Hamid Ahmad
 
 # Overview
 
-This README provides code for training, testing, and deployings,
+This README provides code for training, testing, and deploying,
 different convolutional neural network model architectures on acoustic
-data using spectrogram images.
+data using spectrogram images. Using this package you can compare
+different model architectures. Once you determine the best performing
+model you can deploy it over multiple sound files. You can also use a
+trained model as a ‘feature extractor’, and combined with an
+unsupervised clustering algorithm you can visualize differences in
+acoustic signals.
 
 # Usage
 
