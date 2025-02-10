@@ -1,5 +1,5 @@
 pandoc: 3.1.11
-pkgdown: 2.1.1
+pkgdown: 2.0.9
 pkgdown_sha: ~
 articles:
   a01-OverviewAndGettingStarted: a01-OverviewAndGettingStarted.html
@@ -7,7 +7,8 @@ articles:
   a03-Training binary models: a03-Training binary models.html
   a04-Automated detection: a04-Automated detection.html
   a05-UnsupervisedClustering: a05-UnsupervisedClustering.html
-last_built: 2025-02-09T15:31Z
+last_built: 2025-02-10T12:30Z
 urls:
   reference: https://denajgibbon.github.io/gibbonNetR/reference
   article: https://denajgibbon.github.io/gibbonNetR/articles
+
