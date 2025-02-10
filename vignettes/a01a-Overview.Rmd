@@ -1,5 +1,5 @@
 ---
-title: "1. Overview and Getting Started"
+title: "1a. Overview"
 output:
   rmarkdown::html_vignette:
     toc: true
@@ -7,7 +7,7 @@ output:
     number_sections: true
     self_contained: yes
 vignette: >
-  %\VignetteIndexEntry{1. Overview and Getting Started}
+  %\VignetteIndexEntry{1a. Overview}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -28,7 +28,24 @@ knitr::opts_chunk$set(
 #options(width = 100, max.print = 100)
 ```
 
-# A flowchart overview of the 'gibbonNetR' workflow
+## A description of each of the 'gibbonNetR' functions
+'gibbonNetR' contains functions for the automated detection and classification of acoustic signals. A brief summary of the functions is shown below.
+
+```{r, echo=FALSE, results="asis"}
+cat("| File Name                                  | Description                                      |\n")
+cat("|-------------------------------------------|--------------------------------------------------|\n")
+cat("| deploy_CNN_binary.R                      | Deploys a trained binary CNN model over a directory of sound files               |\n")
+cat("| deploy_CNN_multi.R                       | Deploys a trained multi-class CNN model over a directory of sound files          |\n")
+cat("| evaluate_trainedmodel_performance_multi.R | Evaluates performance of a multi-class model on a test dataset     |\n")
+cat("| evaluate_trainedmodel_performance.R      | Evaluates performance of a binary model on a test dataset          |\n")
+cat("| extract_embeddings.R                     | Extracts feature embeddings from trained models   |\n")
+cat("| get_best_performance.R                   | A function that benchmarks multiple trained models    |\n")
+cat("| spectrogram_images.R                     | Generates and processes spectrogram images       |\n")
+cat("| train_CNN_binary.R                       | Trains a binary classification CNN model        |\n")
+cat("| train_CNN_multi.R                        | Trains a multi-class classification CNN model   |\n")
+```
+
+## A flowchart overview of the 'gibbonNetR' workflow
 ```{r, eval = TRUE, echo = FALSE, message=FALSE}
 if (!requireNamespace("DiagrammeR", quietly = TRUE)) {
   install.packages("DiagrammeR")
@@ -83,5 +100,4 @@ DiagrammeR::grViz(flowchart)
 
 ```
 
-# Getting started with your own data.
-You will need to have labeled .wav files with at least two classes. Each class should have 
+

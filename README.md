@@ -1,13 +1,13 @@
 gibbonNetR R Package
 ================
 Dena J. Clink and Abdul Hamid Ahmad
-2025-02-09
+2025-02-10
 
 # Overview
 
-This README provides code for training and testing the performance of
-different convolutional neural network model architectures on
-spectrogram images.
+This README provides code for training, testing, and deployings,
+different convolutional neural network model architectures on acoustic
+data using spectrogram images.
 
 # Usage
 

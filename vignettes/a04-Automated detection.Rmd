@@ -21,10 +21,10 @@ vignette: >
    data("TempBinWav")
 
    # Save in temp directory
-   dir.create(paste(tempdir(),'/MultiDir/Wav/',sep=''),recursive = T, showWarnings = FALSE)
+   dir.create(file.path(tempdir(),'/MultiDir/Wav/',sep=''),recursive = T, showWarnings = FALSE)
 
    # Write to temp directory
-   writeWave(TempBinWav,filename = paste(tempdir(),'/MultiDir/Wav/','TempBinWav.wav',sep=''))
+   writeWave(TempBinWav,filename = paste(file.path(tempdir(),'/MultiDir/Wav/'),'TempBinWav.wav',sep=''))
 
    # Find model path
    # Set model directory
@@ -37,9 +37,9 @@ vignette: >
    deploy_CNN_multi(
      clip_duration = 12,
      architecture='resnet18',
-     output_folder = paste(tempdir(),'/MultiDir/Results/Images/',sep=''),
-     output_folder_selections = paste(tempdir(),'/MultiDir/Results/Selections/',sep=''),
-     output_folder_wav = paste(tempdir(),'/MultiDir/Results/Wavs/',sep=''),
+     output_folder = file.path(tempdir(),'/MultiDir/Results/Images/',sep=''),
+     output_folder_selections = file.path(tempdir(),'/MultiDir/Results/Selections/',sep=''),
+     output_folder_wav = file.path(tempdir(),'/MultiDir/Results/Wavs/',sep=''),
      detect_pattern=NA,
      top_model_path = ModelPath,
      path_to_files = paste(tempdir(),'/MultiDir/Wav/',sep=''),
