@@ -84,3 +84,4 @@ DiagrammeR::grViz(flowchart)
 ```
 
 # Getting started with your own data.
+You will need to have labeled .wav files with at least two classes. Each class should have 

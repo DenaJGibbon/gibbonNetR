@@ -92,14 +92,14 @@
 #' #' # Convert the batch tensor of images to an array and reorder dimensions for processing
 #' images <- as_array(batch[[1]]) %>% aperm(perm = c(1, 3, 4, 2))
 #'
-#' #' # Set the plotting parameters for displaying images
-#' par(mfcol = c(3, 4), mar = rep(1, 4))
-#'
 #' #' # Define a function to normalize pixel values in an image (scaling pixel values between 0 and 1)
 #' normalize_pixel_values <- function(image) {
 #'   normalized_image <- (image - min(image)) / (max(image) - min(image))  # Normalize the image
 #'   return(normalized_image)
 #' }
+#'
+#' # Set the plotting parameters for displaying images
+#' par(mfcol = c(3, 4), mar = rep(1, 4))
 #'
 #' #' # Display the images after normalizing them, with titles for each class
 #' images <- images %>%
@@ -107,6 +107,10 @@
 #'   purrr::set_names(class_names) %>%
 #'   purrr::map(~ as.raster(normalize_pixel_values(.x))) %>%
 #'   purrr::iwalk(~ {plot(.x); title(.y)})  # Plot the image with its respective class name as title
+#'  purrr::iwalk(images, ~ {
+#'  print(plot(.x))
+#'  title(.y)
+#'  })
 #' }
 #'
 #' @importFrom tuneR readWave
