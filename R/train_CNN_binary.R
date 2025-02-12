@@ -189,7 +189,7 @@ train_CNN_binary <-
           'Training classes do not match! This is based on the order of the classes in the training folder'
         )
         message(train_ds$class_to_idx)
-        break
+        stop("Stopping due to class mismatch.")  # Stops execution of further code
 
       } else {
         message(paste(

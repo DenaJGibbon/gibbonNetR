@@ -50,8 +50,9 @@ evaluate_trainedmodel_performance <-
 
     if (length(trained_models) == 0) {
       message('No models in specified directory')
-      break
+      stop('Stopping execution: No models found.')  # Stops the execution
     }
+
 
     # List image files
     image_files <-

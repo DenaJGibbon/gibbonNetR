@@ -189,8 +189,9 @@ extract_embeddings <- function(test_input,
 
     if (target_class %in% Embeddings$Label == FALSE) {
       message("target_class not included in test_input folder names")
-      break
+      stop("Stopping execution: target_class not found in labels.")  # Stops the script
     }
+
 
     cluster_with_most_class <-
       colnames(class_counts)[which.max(class_counts[target_class,])]

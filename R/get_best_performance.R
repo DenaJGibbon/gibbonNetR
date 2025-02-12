@@ -106,7 +106,7 @@ get_best_performance <- function(performancetables.dir,
         'Here are the present classes:',
         unique(FrozenCombined[["Class"]])
       ))
-      return(NULL)  # Use return() instead of break
+      return(NULL)
     }
 
     message(paste(
