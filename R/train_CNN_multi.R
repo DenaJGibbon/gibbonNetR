@@ -45,14 +45,15 @@
 #' }
 
 #' @seealso \code{\link[torch]{nn_module}} and other torch functions.
-#' @export
 #' @importFrom stringr str_replace str_split_fixed
 #' @importFrom tibble tibble
 #' @importFrom readr write_csv
 #' @importFrom magrittr %>%
 #' @importFrom ggpubr ggline
 #' @importFrom utils write.csv read.csv
-
+#' @importFrom ROCR prediction performance
+#' @export
+#'
 train_CNN_multi <- function(input.data.path, test.data, architecture,
                             unfreeze.param = TRUE, batch_size = 32, learning_rate,
                             save.model = FALSE,
@@ -92,7 +93,7 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
   write.csv(metadata, paste0(output.data.path, architecture, "_model_metadata.csv"))
 
   for(a in 1:length(epoch.iterations )){
-    print(paste('Training', architecture))
+    message(paste('Training', architecture))
     n.epoch <- epoch.iterations [a]
 
 
@@ -422,7 +423,6 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
         ifelse(outputTableMultiSub$ActualClass==UniqueClasses[b],UniqueClasses[b],noise.category)
 
       binarylabels <- ifelse(outputTableMulti$ActualClass==UniqueClasses[b],1,0)
-      #roc_result <- pROC::roc(response=binarylabels, predictor = as.numeric(Probability[, UniqueClasses[b]]),direction = "<")
 
       for (threshold in thresholds) {
         MultiPredictedClass <- ifelse((outputTableMultiSub$Probability > threshold ), UniqueClasses[b], noise.category)
@@ -468,7 +468,7 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
     # Location to save the output
     output.data.performance <- paste(output.data.path,'performance_tables_multi/',sep='')
 
-    print(output.data.performance)
+    message(output.data.performance)
 
     output.data.performance <- paste(output.data.path,'performance_tables_multi/',sep='')
 

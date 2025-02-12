@@ -49,6 +49,7 @@
 #' print(result$EmbeddingsCombined)
 #'}
 #' @importFrom utils write.csv read.csv
+#' @importFrom coro loop
 #' @export
 
 # Define the function
@@ -100,7 +101,7 @@ extract_embeddings <- function(test_input,
   # Create a new instance of the module
   net <- net()
 
-  print("processing embeddings")
+  message("processing embeddings")
   # Extract features
   features <- list()
 
@@ -187,7 +188,7 @@ extract_embeddings <- function(test_input,
     class_counts <- table(Embeddings$Label, TempCluster$cluster)
 
     if (target_class %in% Embeddings$Label == FALSE) {
-      print("target_class not included in test_input folder names")
+      message("target_class not included in test_input folder names")
       break
     }
 
@@ -211,8 +212,8 @@ extract_embeddings <- function(test_input,
       positive = target_class
     )
 
-    print(paste("Unupervised clustering for", target_class))
-    print(ConfMat$byClass)
+    message(paste("Unupervised clustering for", target_class))
+    message(ConfMat$byClass)
 
     return(
       list(

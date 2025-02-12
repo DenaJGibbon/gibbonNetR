@@ -59,7 +59,7 @@ digraph G {
 
   # Nodes: Scripts as rectangles, key decision points as diamonds
   spectrogram [label = 'Generate Spectrograms\\n(spectrogram_images.R)', shape = rectangle, style = filled, fillcolor = lightblue]
-  prepare_data [label = 'Prepare Data', shape = diamond, style = filled, fillcolor = white]
+  prepare_data [label = 'Prepare Sound Data', shape = diamond, style = filled, fillcolor = white]
   
   train_model [label = 'Train Model', shape = diamond, style = filled, fillcolor = white]
   train_binary [label = 'Train Binary CNN\\n(train_CNN_binary.R)', shape = rectangle, style = filled, fillcolor = green]
@@ -76,8 +76,8 @@ digraph G {
   deploy_binary [label = 'Deploy Binary CNN\\n(deploy_CNN_binary.R)', shape = rectangle, style = filled, fillcolor = orange]
   deploy_multi [label = 'Deploy Multi CNN\\n(deploy_CNN_multi.R)', shape = rectangle, style = filled, fillcolor = orange]
 
-  data_viz [label = 'Extract embeddings + \n Unsupervised Clustering', shape = diamond, style = filled, fillcolor = white]
-  extract_embed [label = 'Extract Embeddings (Optional Step)\\n(extract_embeddings.R)', shape = rectangle, style = filled, fillcolor = cyan]
+  data_viz [label = 'Extract embeddings + \n Unsupervised Clustering \n (Optional Step)', shape = diamond, style = filled, fillcolor = white]
+  extract_embed [label = 'Extract Embeddings \\n(extract_embeddings.R)', shape = rectangle, style = filled, fillcolor = cyan]
 
   # Define Dependencies with Decision Points
   prepare_data -> spectrogram

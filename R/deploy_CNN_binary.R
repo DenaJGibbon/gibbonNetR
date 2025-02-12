@@ -106,7 +106,7 @@ deploy_CNN_binary <- function(output_folder,
     path_to_files_long <- list()
 
     for (a in 1:length(detect_pattern)) {
-      print(paste(
+      message(paste(
         'identifying sound files with the following pattern',
         detect_pattern[a]
       ))
@@ -128,8 +128,8 @@ deploy_CNN_binary <- function(output_folder,
       RavenSelectionTableDFTopModel <- data.frame()
 
       start.time.detection <- Sys.time()
-      print(paste(x, 'out of', length(path_to_files_long)))
-      print(path_to_files_short[x])
+      message(paste(x, 'out of', length(path_to_files_long)))
+      message(path_to_files_short[x])
       TempWav <- readWave(path_to_files_long[x])
       WavDur <- duration(TempWav)
 
@@ -138,7 +138,7 @@ deploy_CNN_binary <- function(output_folder,
 
       i <- 1
       while (i + clip_duration < WavDur) {
-        # print(i)
+        # message(i)
         Seq.start[[i]] = i
         Seq.end[[i]] = i + clip_duration
         i = i + hop_size
@@ -152,7 +152,7 @@ deploy_CNN_binary <- function(output_folder,
 
 
       # Subset sound clips for classification -----------------------------------
-      print('saving sound clips')
+      message('saving sound clips')
       set.seed(13)
       length <- nrow(TempClips)
 
@@ -193,7 +193,7 @@ deploy_CNN_binary <- function(output_folder,
                                       ))
 
         if (downsample_rate != 'NA') {
-          print('downsampling')
+          message('downsampling')
           short.sound.files <- lapply(1:length(short.sound.files),
                                       function(i)
                                         downsample(short.sound.files[[i]],
@@ -201,7 +201,7 @@ deploy_CNN_binary <- function(output_folder,
         }
 
         for (d in 1:length(short.sound.files)) {
-          #print(d)
+          #message(d)
           writeWave(
             short.sound.files[[d]],
             paste(
@@ -218,7 +218,7 @@ deploy_CNN_binary <- function(output_folder,
         }
 
         # Save images to a temp folder
-        print(paste('Creating images', start.time[1], 'start time clips'))
+        message(paste('Creating images', start.time[1], 'start time clips'))
 
         for (e in 1:length(short.sound.files)) {
           jpeg(
@@ -252,7 +252,7 @@ deploy_CNN_binary <- function(output_folder,
         }
 
         # Predict using TopModel ----------------------------------------------------
-        print('Classifying images using Top Model')
+        message('Classifying images using Top Model')
 
         test.input <- paste(tempdir(), '/Images/', sep = '')
 
@@ -306,7 +306,7 @@ deploy_CNN_binary <- function(output_folder,
         image.files.short <-
           str_split_fixed(image.files.short, pattern = '.jpg', n = 2)[, 1]
 
-        print('Saving output')
+        message('Saving output')
 
         Detections <-
           which(outputTableTrainedModel$Probability <= (1 - threshold))
@@ -334,7 +334,7 @@ deploy_CNN_binary <- function(output_folder,
 
         DetectionClass <-  positive.class
 
-        print('Saving output')
+        message('Saving output')
         file.copy(
           image.files[DetectionIndices],
           to = paste(
@@ -448,7 +448,7 @@ deploy_CNN_binary <- function(output_folder,
               row.names = FALSE,
               quote = FALSE
             )
-            print(paste("Saving Selection Table", csv.file.name))
+            message(paste("Saving Selection Table", csv.file.name))
           }
 
 
@@ -490,7 +490,7 @@ deploy_CNN_binary <- function(output_folder,
           row.names = FALSE,
           quote = FALSE
         )
-        print(paste("Saving Selection Table"))
+        message(paste("Saving Selection Table"))
       }
 
       rm(TempWav)
@@ -499,7 +499,7 @@ deploy_CNN_binary <- function(output_folder,
       rm(test_ds)
       rm(short.wav)
       end.time.detection <- Sys.time()
-      print(end.time.detection - start.time.detection)
+      message(end.time.detection - start.time.detection)
       gc()
     }, error = function(e) {
       cat("ERROR :", conditionMessage(e), "\n")

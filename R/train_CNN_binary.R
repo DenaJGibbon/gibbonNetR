@@ -44,14 +44,14 @@
 #'
 #' @seealso \code{\link[torch]{nn_module}} and other torch functions.
 #'
-#' @export
 #' @importFrom stringr str_replace str_split_fixed
 #' @importFrom tibble tibble
 #' @importFrom readr write_csv
 #' @importFrom magrittr %>%
 #' @importFrom ggpubr ggline
 #' @importFrom utils write.csv read.csv
-#'
+#' @importFrom ROCR prediction performance
+#' @export
 train_CNN_binary <-
   function(input.data.path,
            test.data,
@@ -112,7 +112,7 @@ train_CNN_binary <-
               paste0(output.data.path, architecture, "_model_metadata.csv"))
 
     for (a in 1:length(epoch.iterations)) {
-      print(paste('Training', architecture))
+      message(paste('Training', architecture))
       n.epoch <- epoch.iterations [a]
 
 
@@ -185,14 +185,14 @@ train_CNN_binary <-
         attr(train_ds$class_to_idx, "names")[2] == c(negative.class)
 
       if (TrainingLabelsMatch == FALSE) {
-        print(
+        message(
           'Training classes do not match! This is based on the order of the classes in the training folder'
         )
-        print(train_ds$class_to_idx)
+        message(train_ds$class_to_idx)
         break
 
       } else {
-        print(paste(
+        message(paste(
           'Postive class =',
           positive.class,
           ' and Negative class =',
@@ -537,7 +537,7 @@ train_CNN_binary <-
         row.names = FALSE
       )
 
-      print(
+      message(
         paste(
           'Here are actual class labels, if they do not contain the positive or negative class cannot evaluate model performance:',
           unique(outputTableTrainedModel$ActualClass)

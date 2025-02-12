@@ -7,7 +7,6 @@
 #' @param output_dir Path to the directory where the performance scores will be saved.
 #' @param positive.class Label for the positive class.
 #' @param negative.class Label for the negative class.
-#'
 #' @return Invisible NULL. The performance scores are written to the specified output directory.
 #' @importFrom stringr str_split_fixed str_detect
 #' @importFrom purrr %>%
@@ -33,6 +32,7 @@
 #'
 #'}
 #' @importFrom utils write.csv read.csv
+#' @importFrom ROCR prediction performance
 #' @export
 #'
 evaluate_trainedmodel_performance <-
@@ -48,7 +48,7 @@ evaluate_trainedmodel_performance <-
                  full.names = TRUE)
 
     if (length(trained_models) == 0) {
-      print('No models in specified directory')
+      message('No models in specified directory')
       break
     }
 

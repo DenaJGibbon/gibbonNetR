@@ -77,20 +77,20 @@ for (arch in architectures) {
 results <- get_best_performance(performancetables.dir = performance_tables_dir, )
 
  # NOTE: Results will not make sense as it is random
-#' Print the best F1 scores
-print("Best F1 scores:")
+#' message the best F1 scores
+message("Best F1 scores:")
 print(results$best_f1)
 
-#' Print the best precision results
-print("Best precision results:")
+#' message the best precision results
+message("Best precision results:")
 print(results$best_precision)
 
-#' Print the best recall results
-print("Best recall results:")
+#' message the best recall results
+message("Best recall results:")
 print(results$best_recall)
 
-#' Print the best AUC results
-print("Best AUC results:")
+#' message the best AUC results
+message("Best AUC results:")
 print(results$best_auc)
 
 #' Plot F1 scores

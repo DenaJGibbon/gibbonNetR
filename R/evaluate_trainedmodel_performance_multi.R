@@ -35,6 +35,7 @@
 #'
 #' @importFrom purrr %>%
 #' @importFrom utils write.csv read.csv
+
 #' @export
 #'
 evaluate_trainedmodel_performance_multi <-
@@ -54,7 +55,7 @@ evaluate_trainedmodel_performance_multi <-
       )
 
     if (length(trained_models) == 0) {
-      print('No models in specified directory')
+      message('No models in specified directory')
       break
     }
 
@@ -85,7 +86,7 @@ evaluate_trainedmodel_performance_multi <-
           n = 2
         )[, 1]
 
-      print(paste(
+      message(paste(
         'Evaluating performance of',
         model_type,
         'N epochs=',
@@ -138,7 +139,7 @@ evaluate_trainedmodel_performance_multi <-
       CombinedTempRow <- data.frame()
 
       for (b in 1:length(UniqueClasses)) {
-        print(UniqueClasses[b])
+        message(UniqueClasses[b])
         outputTableSub <-
           Probability[, c(UniqueClasses[b], 'ActualClass')]
 
@@ -149,12 +150,10 @@ evaluate_trainedmodel_performance_multi <-
                  UniqueClasses[b],
                  noise.category)
 
-        roc_result <- pROC::multiclass.roc(outputTableSub$ActualClass, outputTableSub$Probability)
-
         thresholds <- seq(0.1, 1, 0.1)
 
         for (threshold in thresholds) {
-          print(threshold)
+          message(threshold)
           PredictedClass <-
             ifelse((outputTableSub$Probability > threshold),
                    UniqueClasses[b],
@@ -192,7 +191,9 @@ evaluate_trainedmodel_performance_multi <-
             "CNN Architecture"
           )
 
-          TempRow$AUC <- as.numeric(roc_result$auc)
+          ROCRpred <- ROCR::prediction(predictions = outputTableSub$Probability, labels = as.factor(outputTableSub$ActualClass))
+          AUCval <- ROCR::performance(ROCRpred, 'auc')
+          TempRow$AUC <- as.numeric(AUCval@y.values)
           TempRow$Threshold <- as.character(threshold)
           TempRow$Frozen <- unfreeze
           TempRow$Class <- UniqueClasses[b]
