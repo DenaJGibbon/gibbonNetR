@@ -12,14 +12,14 @@ RoxygenNote: 7.3.1
 Depends:
     torch,
     torchvision,
-    stringr,
-    seewave,
-    tuneR,
     luz,
-    ggpubr,
+    tuneR,
     R (>= 2.10)
 Imports:
+    stringr,
+    seewave,
     tibble,
+    ggpubr,
     ROCR,
     dbscan,
     aricode,

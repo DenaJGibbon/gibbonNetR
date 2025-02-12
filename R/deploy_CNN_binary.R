@@ -58,7 +58,14 @@
 #' @importFrom grDevices jpeg graphics.off
 #' @importFrom stats predict median
 #' @importFrom magrittr %>%
-#' @importFrom utils write.csv read.csv
+#' @importFrom utils write.csv read.csv write.table
+#' @importFrom tuneR readWave writeWave
+#' @importFrom stringr str_detect str_count str_split_fixed
+#' @importFrom seewave spectro cutw
+#' @importFrom torch torch_tensor as_array torch_sigmoid
+#' @importFrom torchvision transform_to_tensor transform_color_jitter transform_resize transform_center_crop transform_normalize
+#' @importFrom luz luz_load
+#' @importFrom tools file_path_sans_ext
 #' @export
 
 deploy_CNN_binary <- function(output_folder,

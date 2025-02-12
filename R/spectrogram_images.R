@@ -87,7 +87,7 @@
 #' #' # Extract the labels for the batch and determine class names from the folder structure
 #' classes <- batch[[2]]
 #' class_names <- list.files(input.data.path, recursive = TRUE)  # Get class names from subfolder names
-#' class_names <- str_split_fixed(class_names, pattern = '/', n = 2)[, 1]  # Extract the class name (folder name)
+#' class_names <- stringr::str_split_fixed(class_names, pattern = '/', n = 2)[, 1]  # Extract the class name (folder name)
 #'
 #' #' # Convert the batch tensor of images to an array and reorder dimensions for processing
 #' images <- as_array(batch[[1]]) %>% aperm(perm = c(1, 3, 4, 2))
@@ -116,6 +116,7 @@
 #' @importFrom tuneR readWave
 #' @importFrom seewave spectro
 #' @importFrom tools file_path_sans_ext
+#' @importFrom stringr str_split_fixed
 #' @export
 
 spectrogram_images <- function(trainingBasePath,
