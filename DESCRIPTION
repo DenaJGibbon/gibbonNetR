@@ -35,7 +35,8 @@ Imports:
     coro,
     grDevices,
     stats,
-    utils
+    utils,
+    data.table
 Suggests: 
     knitr,
     rmarkdown,
