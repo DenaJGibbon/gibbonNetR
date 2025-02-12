@@ -33,6 +33,7 @@
 #'}
 #' @importFrom utils write.csv read.csv
 #' @importFrom ROCR prediction performance
+#' @import data.table
 #' @export
 #'
 evaluate_trainedmodel_performance <-

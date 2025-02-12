@@ -258,19 +258,27 @@ deploy_CNN_binary <- function(output_folder,
 
         # Define transforms based on model type
         if (str_detect(architecture, pattern = 'resnet')) {
-          transform_list <- . %>%
-            torchvision::transform_to_tensor() %>%
-            torchvision::transform_color_jitter() %>%
-            transform_resize(256) %>%
-            transform_center_crop(224) %>%
-            transform_normalize(mean = c(0.485, 0.456, 0.406),
-                                std = c(0.229, 0.224, 0.225))
+          transform_list <- function(x) {
+            x %>%
+              torchvision::transform_to_tensor() %>%
+              torchvision::transform_color_jitter() %>%
+              torchvision::transform_resize(256) %>%
+              torchvision::transform_center_crop(224) %>%
+              torchvision::transform_normalize(
+                mean = c(0.485, 0.456, 0.406),
+                std = c(0.229, 0.224, 0.225)
+              )
+          }
         } else {
-          transform_list <- . %>%
-            torchvision::transform_to_tensor() %>%
-            torchvision::transform_resize(size = c(224, 224)) %>%
-            torchvision::transform_normalize(mean = c(0.485, 0.456, 0.406),
-                                             std = c(0.229, 0.224, 0.225))
+          transform_list <- function(x) {
+            x %>%
+              torchvision::transform_to_tensor() %>%
+              torchvision::transform_resize(size = c(224, 224)) %>%
+              torchvision::transform_normalize(
+                mean = c(0.485, 0.456, 0.406),
+                std = c(0.229, 0.224, 0.225)
+              )
+          }
         }
 
         test_ds <-

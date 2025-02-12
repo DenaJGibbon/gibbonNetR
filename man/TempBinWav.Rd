@@ -7,7 +7,8 @@
 \format{
 \subsection{\code{TempBinWav}}{
 
-A data frame with 7,240 rows and 60 columns:
+This is a 36 second .wav file that was collected using a SwiftOne autonomous recording unit.
+The recording has one gibbon female call in it.
 \describe{
 \item{country}{Malaysia}
 \item{year}{2024}

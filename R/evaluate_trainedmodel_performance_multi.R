@@ -35,7 +35,7 @@
 #'
 #' @importFrom purrr %>%
 #' @importFrom utils write.csv read.csv
-
+#' @import data.table
 #' @export
 #'
 evaluate_trainedmodel_performance_multi <-
