@@ -157,70 +157,13 @@ and plots visualizing these metrics.</p>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Evaluating performance for hornbill.helmeted Here are the present classes: hornbill.helmeted"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [2] "Evaluating performance for hornbill.helmeted Here are the present classes: other.class"      </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Best F1 results"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "hornbill.helmeted" "hornbill.helmeted" "hornbill.helmeted"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4] "hornbill.helmeted" "hornbill.helmeted" "hornbill.helmeted"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [7] "hornbill.helmeted" "hornbill.helmeted" "hornbill.helmeted"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               Class Training Data CNN Architecture Threshold        F1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 hornbill.helmeted      Dataset1            vgg19 0.7790659 0.7132790</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 hornbill.helmeted      Dataset1            vgg19 0.7790659 0.7132790</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 hornbill.helmeted      Dataset1            vgg19 0.7790659 0.7132790</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 hornbill.helmeted      Dataset2            vgg19 0.5150718 0.8967387</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 hornbill.helmeted      Dataset2            vgg19 0.5150718 0.8967387</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 hornbill.helmeted      Dataset2            vgg19 0.5150718 0.8967387</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7 hornbill.helmeted      Dataset3          alexnet 0.9544738 0.9477269</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8 hornbill.helmeted      Dataset3          alexnet 0.9544738 0.9477269</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9 hornbill.helmeted      Dataset3          alexnet 0.9544738 0.9477269</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Precision    Recall       AUC N epochs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.1470483 0.7377974 0.5260297       10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.1470483 0.7377974 0.5260297       20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.1470483 0.7377974 0.5260297       30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 0.8664833 0.3727094 0.7259830       10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 0.8664833 0.3727094 0.7259830       20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 0.8664833 0.3727094 0.7259830       30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7 0.2197676 0.7370777 0.1838495       10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8 0.2197676 0.7370777 0.1838495       20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9 0.2197676 0.7370777 0.1838495       30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Best Precision results"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               Class Training Data CNN Architecture Threshold        F1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 hornbill.helmeted      Dataset1          alexnet 0.8830174 0.5726334</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 hornbill.helmeted      Dataset2            vgg16 0.9623589 0.2529649</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 hornbill.helmeted      Dataset3            vgg16 0.5310704 0.5164449</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Precision     Recall       AUC N epochs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.9942698 0.79546742 0.3688455       10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.9611048 0.42842151 0.6623176       10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.7703341 0.05795856 0.7542474       10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Best Recall results"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               Class Training Data CNN Architecture Threshold        F1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 hornbill.helmeted      Dataset1          alexnet 0.7883051 0.4533342</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 hornbill.helmeted      Dataset2            vgg19 0.9674695 0.1928159</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 hornbill.helmeted      Dataset3            vgg19 0.5763018 0.4979489</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Precision    Recall       AUC N epochs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.6928034 0.9022990 0.4145463       10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.3428088 0.7608236 0.2963022       10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.3219374 0.9966172 0.1655209       10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Best AUC results"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               Class Training Data CNN Architecture Threshold        F1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 hornbill.helmeted      Dataset1            vgg19 0.7790659 0.7132790</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 hornbill.helmeted      Dataset2            vgg19 0.5150718 0.8967387</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 hornbill.helmeted      Dataset3            vgg16 0.5310704 0.5164449</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Precision     Recall       AUC N epochs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.1470483 0.73779740 0.5260297       10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.8664833 0.37270939 0.7259830       10</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 0.7703341 0.05795856 0.7542474       10</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Best F1 scores:"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 9 × 9</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 9</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Class      `Training Data` `CNN Architecture` Threshold    F1 Precision Recall</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> hornbill.… Dataset1        vgg19                  0.779 0.713     0.147  0.738</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> hornbill.… Dataset1        vgg19                  0.779 0.713     0.147  0.738</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> hornbill.… Dataset1        vgg19                  0.779 0.713     0.147  0.738</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> hornbill.… Dataset2        vgg19                  0.515 0.897     0.866  0.373</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> hornbill.… Dataset2        vgg19                  0.515 0.897     0.866  0.373</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> hornbill.… Dataset2        vgg19                  0.515 0.897     0.866  0.373</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> hornbill.… Dataset3        alexnet                0.954 0.948     0.220  0.737</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> hornbill.… Dataset3        alexnet                0.954 0.948     0.220  0.737</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">9</span> hornbill.… Dataset3        alexnet                0.954 0.948     0.220  0.737</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> hornbill.… Dataset2        vgg19                  0.515 0.897     0.866  0.373</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> hornbill.… Dataset3        alexnet                0.954 0.948     0.220  0.737</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 more variables: AUC &lt;dbl&gt;, `N epochs` &lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Best precision results:"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 9</span></span>
