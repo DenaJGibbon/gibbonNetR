@@ -19,7 +19,7 @@ You will need to have labeled .wav files that contain at least two classes, and 
 To follow best practices we want to use training and test data from different passive acoustic monitoring arrays. These clips are from Danum Valley Conservation Area, Sabah, Malaysia, but are taken from two different arrays. The "spectrogram_images" function takes folders organized and labeled by signal type, and creates training, validation, or test folders using the "splits" specified in the function call. In the example below 70% of the data is used for training and 30% for validation.   
 
 ### We create spectrogram images of the sound files. 
-```{r eval=FALSE}
+```{r eval=TRUE}
 # Link to training clips on Zenodo
 ZenodoLink <- 'https://zenodo.org/records/14213067/files/trainingclips.zip?download=1'
 
@@ -58,10 +58,10 @@ spectrogram_images(
 
 ### Download example test files on Zenodo and convert to spectrogram images
 The "spectrogram_images" function below puts 100% of the test images into the test folder. 
-```{r eval = FALSE}
+```{r eval=TRUE}
 library(gibbonNetR)
 
-# Link to training clips on Zenodo
+# Link to multi-class test clips on Zenodo
 ZenodoLink <- 'https://zenodo.org/records/14213067/files/testclips.zip?download=1'
 
 # Download into specified zip file location
@@ -93,7 +93,7 @@ spectrogram_images(
 
 ### We create spectrogram images of the binary sound files. 
 
-```{r eval=FALSE}
+```{r eval=TRUE}
 # Link to training clips on Zenodo
 ZenodoLink <- 'https://zenodo.org/records/14213067/files/trainingclipsbinary.zip?download=1'
 
@@ -129,7 +129,7 @@ spectrogram_images(
 
 ### Download example test files on Zenodo and convert to spectrogram images
 The "spectrogram_images" function below puts 100% of the test images into the test folder. 
-```{r eval = FALSE}
+```{r eval=TRUE}
 library(gibbonNetR)
 
 # Link to training clips on Zenodo
@@ -143,7 +143,10 @@ exdir <- 'data/'
 utils::unzip(zipfile = 'data/testclipsbinary.zip', exdir = exdir )
 
 # Check folder composition
-TestDatapath <- paste(exdir,"testclipsbinary",sep='')
+ TestDatapath <- paste(exdir,"testclipsbinary/test/",sep='')
+
+ # Check folder names
+ list.files(TestDatapath)
 
 # Check folder names
 list.files(TestDatapath)
