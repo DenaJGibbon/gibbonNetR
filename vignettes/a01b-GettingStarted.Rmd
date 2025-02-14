@@ -12,14 +12,59 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-## Getting started with your own data.
-You will need to have labeled .wav files that contain at least two classes, and one of them should be the 'noise' class. All .wav files for each class should be in a folder with the relevant class name.
+## Getting started with your own data  
 
-## Getting started multi-class example data.
+To use this package with your own data, you will need labeled `.wav` files organized by class. Each class should have its own folder, with at least one class designated as ‘noise’ to help the model distinguish target signals from background sounds.  
+
+### Preparing your data  
+
+1. **Organize Your Data:**  
+   - Create a separate folder for each class, ensuring that all `.wav` files belonging to a class are placed in the corresponding folder.  
+   - Example directory structure:  
+     ```
+     my_data/
+     ├── target_species/
+     │   ├── file1.wav
+     │   ├── file2.wav
+     │   └── ...
+     ├── noise/
+     │   ├── file1.wav
+     │   ├── file2.wav
+     │   └── ...
+     ```
+
+2. **Ensure Consistent File Formats:**  
+   - All `.wav` files should have the same sample rate and bit depth to maintain consistency in training.  
+   - Make sure that each folder contains only .wav files corresponding to the correct label. Files should not be mixed across categories. Incorrect labeling can lead to poor model performance.
+
+3. **Generating Spectrogram Images:**  
+   - The `spectrogram_images` function will convert `.wav` files into spectrogram images for model training.  
+   - You can specify the frequency range, output paths, and dataset split proportions (training, validation, and test). to follow machine learning best practices, your test data should be completely separate from traing and validation sets. 
+   
+
+### Example code to process your own data
+
+```{r eval=FALSE}
+# Define your dataset path
+MyDatapath <- "path/to/your/data"
+
+# Create spectrogram images from your labeled .wav files
+spectrogram_images(
+   trainingBasePath = MyDatapath,
+   outputBasePath = 'data/trainingimages/',
+   minfreq.khz = 0.4,
+   maxfreq.khz = 1.6,
+   random = FALSE,
+   splits = c(0.7, 0.3, 0.0), # Adjust training, validation, and test split as needed
+   new.sampleratehz = 'NA'
+)
+```
+
+## Getting started with multi-class example data.
 To follow best practices we want to use training and test data from different passive acoustic monitoring arrays. These clips are from Danum Valley Conservation Area, Sabah, Malaysia, but are taken from two different arrays. The "spectrogram_images" function takes folders organized and labeled by signal type, and creates training, validation, or test folders using the "splits" specified in the function call. In the example below 70% of the data is used for training and 30% for validation.   
 
 ### We create spectrogram images of the sound files. 
-```{r eval=TRUE}
+```{r eval=FALSE}
 # Link to training clips on Zenodo
 ZenodoLink <- 'https://zenodo.org/records/14213067/files/trainingclips.zip?download=1'
 
@@ -58,7 +103,7 @@ spectrogram_images(
 
 ### Download example test files on Zenodo and convert to spectrogram images
 The "spectrogram_images" function below puts 100% of the test images into the test folder. 
-```{r eval=TRUE}
+```{r eval=FALSE}
 library(gibbonNetR)
 
 # Link to multi-class test clips on Zenodo
@@ -93,7 +138,7 @@ spectrogram_images(
 
 ### We create spectrogram images of the binary sound files. 
 
-```{r eval=TRUE}
+```{r eval=FALSE}
 # Link to training clips on Zenodo
 ZenodoLink <- 'https://zenodo.org/records/14213067/files/trainingclipsbinary.zip?download=1'
 
@@ -129,7 +174,7 @@ spectrogram_images(
 
 ### Download example test files on Zenodo and convert to spectrogram images
 The "spectrogram_images" function below puts 100% of the test images into the test folder. 
-```{r eval=TRUE}
+```{r eval=FALSE}
 library(gibbonNetR)
 
 # Link to training clips on Zenodo

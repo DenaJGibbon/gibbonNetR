@@ -1,4 +1,5 @@
- #----eval=FALSE--------------------------------------------------------
+library(gibbonNetR)
+#----eval=FALSE--------------------------------------------------------
  # Link to training clips on Zenodo
  ZenodoLink <- 'https://zenodo.org/records/14213067/files/trainingclips.zip?download=1'
 
@@ -97,7 +98,7 @@
 
 
 
- ----eval = FALSE------------------------------------------------------
+ #----eval = FALSE------------------------------------------------------
  library(gibbonNetR)
 
  # Link to training clips on Zenodo
@@ -111,7 +112,7 @@
  utils::unzip(zipfile = 'data/testclipsbinary.zip', exdir = exdir )
 
  # Check folder composition
- TestDatapath <- paste(exdir,"testclipsbinary",sep='')
+ TestDatapath <- paste(exdir,"testclipsbinary/test/",sep='')
 
  # Check folder names
  list.files(TestDatapath)
