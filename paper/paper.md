@@ -1,5 +1,5 @@
 ---
-title: 'gibbonNetR: an R Package for the Use of Convolutional Neural Networks and Transfer Learning on Passive Acoustic Monitoring (PAM) Data'
+title: 'gibbonNetR: an R Package for the Use of Convolutional Neural Networks for Automated Detection of Acoustic Data'
 tags:
   - deep learning
   - passive acoustic monitoring

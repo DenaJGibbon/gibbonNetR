@@ -46,6 +46,7 @@ cat("| train_CNN_multi.R                        | Trains a multi-class classific
 ```
 
 ## A flowchart overview of the 'gibbonNetR' workflow
+Below is a sample workflow using the 'gibbonNetR' package. 
 ```{r, eval = TRUE, echo = FALSE, message=FALSE}
 if (!requireNamespace("DiagrammeR", quietly = TRUE)) {
   install.packages("DiagrammeR")
