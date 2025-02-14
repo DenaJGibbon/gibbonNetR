@@ -121,41 +121,34 @@
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>   `usethis::edit_r_environ()`.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Using `Sys.setenv()` doesn't work because the env var must be set before R</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>   starts.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Sensitivity Specificity Pos.Pred.Value Neg.Pred.Value Precision Recall F1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1           1           1              1              1         1      1  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2           1           1              1              1         1      1  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3           1           1              1              1         1      1  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4           1           1              1              1         1      1  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5           1           1              1              1         1      1  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6           1           1              1              1         1      1  1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Prevalence Detection.Rate Detection.Prevalence Balanced.Accuracy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        0.5            0.5                  0.5                 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        0.5            0.5                  0.5                 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        0.5            0.5                  0.5                 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        0.5            0.5                  0.5                 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        0.5            0.5                  0.5                 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6        0.5            0.5                  0.5                 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Validation.Loss  Training.Data N.epochs CNN.Architecture   Class Threshold</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1              NA imagesmalaysia        5   resnet18_model Gibbons       0.1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2              NA imagesmalaysia        5   resnet18_model Gibbons       0.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3              NA imagesmalaysia        5   resnet18_model Gibbons       0.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4              NA imagesmalaysia        5   resnet18_model Gibbons       0.4</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5              NA imagesmalaysia        5   resnet18_model Gibbons       0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6              NA imagesmalaysia        5   resnet18_model Gibbons       0.6</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   AUC</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6   0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                       TestData</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 _Users_denaclink_Desktop_RStudioProjects_gibbonNetR_inst_extdata_binary_test</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 _Users_denaclink_Desktop_RStudioProjects_gibbonNetR_inst_extdata_binary_test</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 _Users_denaclink_Desktop_RStudioProjects_gibbonNetR_inst_extdata_binary_test</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 _Users_denaclink_Desktop_RStudioProjects_gibbonNetR_inst_extdata_binary_test</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 _Users_denaclink_Desktop_RStudioProjects_gibbonNetR_inst_extdata_binary_test</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 _Users_denaclink_Desktop_RStudioProjects_gibbonNetR_inst_extdata_binary_test</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Sensitivity Specificity Pos.Pred.Value Neg.Pred.Value Precision Recall</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           1   0.0000000      0.4166667             NA 0.4166667      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           1   0.5714286      0.6250000      1.0000000 0.6250000      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           0   1.0000000             NA      0.5833333        NA      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           0   1.0000000             NA      0.5833333        NA      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           0   1.0000000             NA      0.5833333        NA      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6           0   1.0000000             NA      0.5833333        NA      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          F1 Prevalence Detection.Rate Detection.Prevalence Balanced.Accuracy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.5882353  0.4166667      0.4166667            1.0000000         0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.7692308  0.4166667      0.4166667            0.6666667         0.7857143</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        NA  0.4166667      0.0000000            0.0000000         0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        NA  0.4166667      0.0000000            0.0000000         0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        NA  0.4166667      0.0000000            0.0000000         0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6        NA  0.4166667      0.0000000            0.0000000         0.5000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Training.Data N.epochs CNN.Architecture        AUC Threshold Frozen</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          test    multi 3_resnet18_model 0.08571429       0.1   TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          test    multi 3_resnet18_model 0.08571429       0.2   TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          test    multi 3_resnet18_model 0.08571429       0.3   TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          test    multi 3_resnet18_model 0.08571429       0.4   TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          test    multi 3_resnet18_model 0.08571429       0.5   TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          test    multi 3_resnet18_model 0.08571429       0.6   TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           Class Top1Accuracy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 female.gibbon        0.375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 female.gibbon        0.375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 female.gibbon        0.375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 female.gibbon        0.375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 female.gibbon        0.375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 female.gibbon        0.375</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
