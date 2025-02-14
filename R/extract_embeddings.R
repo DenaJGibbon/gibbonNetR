@@ -58,8 +58,15 @@ extract_embeddings <- function(test_input,
                                model_path,
                                target_class,
                                unsupervised = "TRUE") {
+
+  # Ensure model_path is a valid file and contains a .pt extension
+  if (!file.exists(model_path) || !grepl("\\.pt$", model_path)) {
+    stop("Invalid model path: Model file does not exist or is not a .pt file.")
+  }
+
   # Load the fine-tuned model
   fine_tuned_model <- luz_load(model_path)
+
 
 
   # Create a dataset from the test images

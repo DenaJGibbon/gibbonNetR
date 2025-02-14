@@ -23,4 +23,11 @@ test_that("Extract embeddings returns expected objects", {
 
   # Check that the data frame has expected columns
   expect_true(all(c("Precision", "Recall", "F1") %in% rownames(as.data.frame(result[3]))))
+
+  # If unsupervised mode is enabled, check for additional outputs
+  if ("NMI" %in% names(result)) {
+    expect_type(result$NMI, "double")
+  }
+
 })
+

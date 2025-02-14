@@ -20,5 +20,11 @@ test_that("Outputs appropriate test file", {
   ListOutputFiles <- list.files(paste(tempdir(), "/BinaryDir/", sep = ""), recursive = T, full.names = T)
   TestOutPut <- ListOutputFiles[which(str_detect(ListOutputFiles, "performance_tables/"))]
   TempCSV <- read.csv(TestOutPut)
+
   expect_true(ncol(TempCSV) == 20)
+
+  # Check that the data frame has expected columns
+  expect_true(all(c("AUC", "Class", "TestDataPath") %in% colnames(TempCSV)))
+
+
 })

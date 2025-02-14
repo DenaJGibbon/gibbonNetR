@@ -22,6 +22,10 @@ test_that("train_CNN_multi works", {
   ListOutputFiles <- list.files(paste(tempdir(), "/", sep = ""), recursive = T, full.names = T)
   TestOutPut <- ListOutputFiles[which(str_detect(ListOutputFiles, "performance_tables_multi/"))]
   TempCSV <- read.csv(TestOutPut[1])
-  head(TempCSV)
+
   expect_true(ncol(TempCSV) == 20)
+
+  # Check that the data frame has expected columns
+  expect_true(all(c("AUC", "Class", "TestDataPath") %in% colnames(TempCSV)))
+
 })

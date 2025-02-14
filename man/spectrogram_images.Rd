@@ -109,7 +109,9 @@ Process and Save Spectrogram Images from Sound Files
   )
 
   # Create a dataloader
-  train_dl <- dataloader(train_ds, batch_size = train_ds$.length(), shuffle = FALSE, drop_last = TRUE)
+  train_dl <- dataloader(train_ds,
+  batch_size = train_ds$.length(),
+  shuffle = FALSE, drop_last = TRUE)
 
   # Extract the next batch from the dataloader
   batch <- train_dl$.iter()$.next()
