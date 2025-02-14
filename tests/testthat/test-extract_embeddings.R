@@ -20,4 +20,8 @@ test_that("Extract embeddings returns expected objects", {
    )
 
    expect_true( length(result)==3 )
+
+   # Check that the data frame has expected columns
+   expect_true(all(c("Precision", "Recall", "F1") %in% rownames( as.data.frame(result[3]))))
+
 })

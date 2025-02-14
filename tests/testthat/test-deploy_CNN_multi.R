@@ -38,6 +38,16 @@ test_that("deploy_CNN_multi returns expected objects", {
 
    ListSelections <-  list.files( paste(tempdir(),'/MultiDir/Results/Selections/',sep=''),full.names = T)
 
-   expect_true( ncol( read.delim(ListSelections[1])) ==10)
+   results <- ListSelections[1]
+
+   expect_true( ncol( read.delim(results)) ==10)
+
+   # Check that output file is created
+   expect_true(file.exists(results))
+
+   # Check that the data frame has expected columns
+   expect_true(all(c("Probability", "Detections", "Class") %in% colnames(read.delim(results))))
+
+
 
 })

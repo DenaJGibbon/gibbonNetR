@@ -1,7 +1,7 @@
 test_that("Outputs expected dataframe", {
   trained_models_dir <- system.file("extdata", "trainedresnetmulti/", package = "gibbonNetR")
-  image_data_dir <- system.file("extdata", "multiclass/test/", package = "gibbonNetR")
 
+  image_data_dir <- system.file("extdata", "multiclass/test/", package = "gibbonNetR")
 
   evaluate_trainedmodel_performance_multi(trained_models_dir = trained_models_dir,
                                           image_data_dir = image_data_dir,
@@ -11,9 +11,15 @@ test_that("Outputs expected dataframe", {
 
   # Find the location of saved evaluation files
   CSVName <- list.files(paste(tempdir(), '/data/performance_tables_multi_trained/',sep=''), recursive = TRUE, full.names = TRUE)
+
+  # Read in results
+  results <- read.csv(CSVName[1])
+
   # Check the output of the first file
-  head(read.csv(CSVName[1]))
-  # Check the output of the first file
-  expect_true( ncol(read.csv(CSVName[1]))==19)
+  expect_true( ncol(results)==19)
+
+  # Check that the data frame has expected columns
+  expect_true(all(c("CNN.Architecture", "AUC", "Class") %in% colnames( as.data.frame(results))))
 
 })
+

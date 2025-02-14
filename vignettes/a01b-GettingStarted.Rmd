@@ -23,7 +23,7 @@ To use this package with your own data, you will need labeled `.wav` files organ
    - Example directory structure:  
      ```
      my_data/
-     ├── target_species/
+     ├── bird_1/
      │   ├── file1.wav
      │   ├── file2.wav
      │   └── ...

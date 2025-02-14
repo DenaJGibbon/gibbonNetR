@@ -102,6 +102,7 @@ extract_embeddings <- function(test_input,
   net <- net()
 
   message("processing embeddings")
+
   # Extract features
   features <- list()
 
@@ -132,6 +133,7 @@ extract_embeddings <- function(test_input,
 
   plot.for.EmbeddingsM2 <-
     cbind.data.frame(EmbeddingsM2.umap$layout[, 1:2], Embeddings$Label)
+
   colnames(plot.for.EmbeddingsM2) <- c("Dim.1", "Dim.2", "Class")
 
   EmbeddingsM2Scatter <-
@@ -214,7 +216,6 @@ extract_embeddings <- function(test_input,
     )
 
     message(paste("Unupervised clustering for", target_class))
-    message(ConfMat$byClass)
 
     return(
       list(
