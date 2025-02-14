@@ -148,10 +148,12 @@ spectrogram_images <- function(trainingBasePath,
       list.files(TrainingFolders[z],
                  recursive = TRUE,
                  full.names = TRUE)
+
     SoundFilesShort <-
       list.files(TrainingFolders[z],
                  recursive = TRUE,
                  full.names = FALSE)
+
     total_files <- length(SoundFiles)
 
     # Calculate indices for splitting
@@ -168,26 +170,26 @@ spectrogram_images <- function(trainingBasePath,
     train_n <- floor(splits[1] * total_files)
     valid_n <- floor(splits[2] * total_files)
 
-    train_idx <- shuffled_indices[1:train_n]
-
-    valid_idx <- shuffled_indices[(train_n + 1):(train_n + valid_n)]
-
-    test_idx <-
-      shuffled_indices[-c(train_idx, valid_idx)]
-
     if (splits[1] == 0) {
-      train_idx <- 0
+     train_idx <- 0
+    } else {
+      train_idx <- shuffled_indices[1:train_n]
     }
 
     if (splits[2] == 0) {
       valid_idx <- 0
+    } else {
+      valid_idx <- shuffled_indices[(train_n + 1):(train_n + valid_n)]
     }
 
     if (splits[3] == 0) {
       test_idx <- 0
+    } else {
+      test_idx <- setdiff(shuffled_indices, c(train_idx, valid_idx))
     }
 
-    for (y in 1:length(SoundFiles)) {
+    message('Creating spectrogram images')
+    for (y in 1:length(SoundFilesShort) ) {
       # Determine the DataType based on the index
       if (y %in% train_idx) {
         DataType <- FolderVec[1]
@@ -203,9 +205,6 @@ spectrogram_images <- function(trainingBasePath,
       if (!dir.exists(subset_directory)) {
         dir.create(subset_directory, recursive = TRUE)
         message('Created output dir: ', subset_directory)
-      } else {
-        message(subset_directory,
-                ' already exists saving spectrogram images')
       }
 
       wav_rm <- tools::file_path_sans_ext(SoundFilesShort[y])

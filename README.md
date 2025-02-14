@@ -1,7 +1,7 @@
 gibbonNetR R Package
 ================
 Dena J. Clink and Abdul Hamid Ahmad
-2025-02-10
+2025-02-14
 
 # Overview
 
@@ -22,6 +22,23 @@ enables visualization of differences in acoustic signals.
 
 A detailed usage guide can be found at:
 <https://denajgibbon.github.io/gibbonNetR/>
+
+# Prerequisites
+
+This package assumes a basic understanding of machine learning, deep
+learning, and convolutional neural networks (CNNs). Users should be
+familiar with training and evaluating models, as well as handling
+spectrogram image data. For those new to these concepts, we recommend
+reviewing foundational machine learning and deep learning resources
+before using this package. a good starting point would be:
+
+Stowell, Dan. “Computational bioacoustics with deep learning: a review
+and roadmap.” PeerJ 10 (2022): e13152.
+<https://peerj.com/articles/13152/>
+
+Some practical information on improving model performance can be found
+here:
+<https://kahst.github.io/BirdNET-Analyzer/best-practices/training.html#>
 
 # Installation
 
