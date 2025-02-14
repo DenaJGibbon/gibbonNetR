@@ -25,7 +25,7 @@ knitr::opts_chunk$set(
   warning = TRUE
 )
 
-#options(width = 100, max.print = 100)
+# options(width = 100, max.print = 100)
 ```
 
 ## A description of each of the 'gibbonNetR' functions
@@ -61,14 +61,14 @@ digraph G {
   # Nodes: Scripts as rectangles, key decision points as diamonds
   spectrogram [label = 'Generate Spectrograms\\n(spectrogram_images.R)', shape = rectangle, style = filled, fillcolor = lightblue]
   prepare_data [label = 'Prepare Sound Data', shape = diamond, style = filled, fillcolor = white]
-  
+
   train_model [label = 'Train Model', shape = diamond, style = filled, fillcolor = white]
   train_binary [label = 'Train Binary CNN\\n(train_CNN_binary.R)', shape = rectangle, style = filled, fillcolor = green]
   train_multi [label = 'Train Multi CNN\\n(train_CNN_multi.R)', shape = rectangle, style = filled, fillcolor = green]
 
   eval_model [label = 'Benchmark Performance of Different Models', shape = diamond, style = filled, fillcolor = white]
   best_performance [label = 'Get Best Performance\\n(get_best_performance.R)', shape = rectangle, style = filled, fillcolor = pink]
-  
+
   eval_test_set [label = 'Evaluate Performance on Test Set', shape = diamond, style = filled, fillcolor = white]
   eval_binary [label = 'Evaluate Binary CNN\\n(evaluate_trainedmodel_performance.R)', shape = rectangle, style = filled, fillcolor = pink]
   eval_multi [label = 'Evaluate Multi CNN\\n(evaluate_trainedmodel_performance_multi.R)', shape = rectangle, style = filled, fillcolor = pink]
@@ -99,8 +99,6 @@ digraph G {
 "
 
 DiagrammeR::grViz(flowchart)
-
-
 ```
 
 

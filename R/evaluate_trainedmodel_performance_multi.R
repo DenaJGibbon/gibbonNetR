@@ -12,26 +12,26 @@
 #' @return Invisible NULL. The performance scores are written to the specified output directory.
 #' @importFrom stringr str_split_fixed str_detect
 #' @examples {
-#' # Set directory paths for trained models and test images
-#' trained_models_dir <- system.file("extdata", "trainedresnetmulti", package = "gibbonNetR")
-#' image_data_dir <- system.file("extdata", "multiclass", "test", package = "gibbonNetR")
-#' class_names <- c('female.gibbon', 'hornbill.helmeted', 'hornbill.rhino', 'long.argus', 'noise')
+#'   # Set directory paths for trained models and test images
+#'   trained_models_dir <- system.file("extdata", "trainedresnetmulti", package = "gibbonNetR")
+#'   image_data_dir <- system.file("extdata", "multiclass", "test", package = "gibbonNetR")
+#'   class_names <- c("female.gibbon", "hornbill.helmeted", "hornbill.rhino", "long.argus", "noise")
 #'
-#' # Evaluate the performance of the trained models using the test images
-#' evaluate_trainedmodel_performance_multi(
-#'   trained_models_dir = trained_models_dir,
-#'   class_names = class_names,
-#'   image_data_dir = image_data_dir,
-#'   output_dir = file.path(tempdir(), 'data/'),
-#'   noise.category = "noise"
-#' )
+#'   # Evaluate the performance of the trained models using the test images
+#'   evaluate_trainedmodel_performance_multi(
+#'     trained_models_dir = trained_models_dir,
+#'     class_names = class_names,
+#'     image_data_dir = image_data_dir,
+#'     output_dir = file.path(tempdir(), "data/"),
+#'     noise.category = "noise"
+#'   )
 #'
-#' # Find the location of saved evaluation files
-#' CSVName <- list.files(file.path(tempdir(), 'data'), recursive = TRUE, full.names = TRUE)
+#'   # Find the location of saved evaluation files
+#'   CSVName <- list.files(file.path(tempdir(), "data"), recursive = TRUE, full.names = TRUE)
 #'
-#' # Check the output of the first file
-#' head(read.csv(CSVName[1]))
-#'}
+#'   # Check the output of the first file
+#'   head(read.csv(CSVName[1]))
+#' }
 #'
 #' @importFrom purrr %>%
 #' @importFrom utils write.csv read.csv
@@ -41,34 +41,36 @@
 evaluate_trainedmodel_performance_multi <-
   function(trained_models_dir,
            image_data_dir,
-           output_dir = 'data/',
+           output_dir = "data/",
            class_names,
-           noise.category = 'noise',
+           noise.category = "noise",
            unfreeze = TRUE) {
     # List trained models
     trained_models <-
       list.files(
         trained_models_dir,
-        pattern = '.pt',
+        pattern = ".pt",
         full.names = TRUE,
         recursive = T
       )
 
     if (length(trained_models) == 0) {
-      message('No models in specified directory')
-      stop('Stopping execution: No models found.')  # Stops the execution
+      message("No models in specified directory")
+      stop("Stopping execution: No models found.") # Stops the execution
     }
 
 
     # List image files
     image_files <-
       list.files(image_data_dir,
-                 recursive = TRUE,
-                 full.names = TRUE)
+        recursive = TRUE,
+        full.names = TRUE
+      )
     image_files_short <-
       list.files(image_data_dir,
-                 recursive = TRUE,
-                 full.names = FALSE)
+        recursive = TRUE,
+        full.names = FALSE
+      )
 
     # Loop through each trained model
     for (model_path in trained_models) {
@@ -77,54 +79,59 @@ evaluate_trainedmodel_performance_multi <-
 
       model_name <- basename(model_path)
       training_data <-
-        str_split_fixed(model_name, pattern = '_', n = 4)[, 2]
+        str_split_fixed(model_name, pattern = "_", n = 4)[, 2]
       n_epochs <-
-        str_split_fixed(model_name, pattern = '_', n = 4)[, 3]
+        str_split_fixed(model_name, pattern = "_", n = 4)[, 3]
       model_type <-
         str_split_fixed(
-          str_split_fixed(model_name, pattern = '_', n = 4)[, 4],
-          pattern = '.pt',
+          str_split_fixed(model_name, pattern = "_", n = 4)[, 4],
+          pattern = ".pt",
           n = 2
         )[, 1]
 
       message(paste(
-        'Evaluating performance of',
+        "Evaluating performance of",
         model_type,
-        'N epochs=',
+        "N epochs=",
         n_epochs
       ))
       # Evaluate model on each image file
 
-      Folder <- sapply(image_files_short, function(x)
-        dirname(x))
+      Folder <- sapply(image_files_short, function(x) {
+        dirname(x)
+      })
 
       # Define transforms based on model type
-      if (str_detect(model_type, pattern = 'ResNet')) {
+      if (str_detect(model_type, pattern = "ResNet")) {
         transform_list <- . %>%
           torchvision::transform_to_tensor() %>%
           torchvision::transform_color_jitter() %>%
           transform_resize(256) %>%
           transform_center_crop(224) %>%
-          transform_normalize(mean = c(0.485, 0.456, 0.406),
-                              std = c(0.229, 0.224, 0.225))
+          transform_normalize(
+            mean = c(0.485, 0.456, 0.406),
+            std = c(0.229, 0.224, 0.225)
+          )
       } else {
         transform_list <- . %>%
           torchvision::transform_to_tensor() %>%
           torchvision::transform_resize(size = c(224, 224)) %>%
-          torchvision::transform_normalize(mean = c(0.485, 0.456, 0.406),
-                                           std = c(0.229, 0.224, 0.225))
+          torchvision::transform_normalize(
+            mean = c(0.485, 0.456, 0.406),
+            std = c(0.229, 0.224, 0.225)
+          )
       }
 
       test_ds <-
         image_folder_dataset(image_data_dir, transform = transform_list)
       test_dl <- dataloader(test_ds, batch_size = 32, shuffle = FALSE)
 
-      #Predict using trained model
+      # Predict using trained model
       Pred <- predict(model, test_dl)
 
       # Calculate the probability associated with each class
       Probability <-
-        as_array(torch_tensor(nnf_softmax(Pred, dim = 2), device = 'cpu'))
+        as_array(torch_tensor(nnf_softmax(Pred, dim = 2), device = "cpu"))
 
       Probability <- as.data.frame(Probability)
       colnames(Probability) <- class_names
@@ -142,14 +149,15 @@ evaluate_trainedmodel_performance_multi <-
       for (b in 1:length(UniqueClasses)) {
         message(UniqueClasses[b])
         outputTableSub <-
-          Probability[, c(UniqueClasses[b], 'ActualClass')]
+          Probability[, c(UniqueClasses[b], "ActualClass")]
 
         outputTableSub$Probability <- outputTableSub[, 1]
 
         outputTableSub$ActualClass <-
           ifelse(outputTableSub$ActualClass == UniqueClasses[b],
-                 UniqueClasses[b],
-                 noise.category)
+            UniqueClasses[b],
+            noise.category
+          )
 
         thresholds <- seq(0.1, 1, 0.1)
 
@@ -157,8 +165,9 @@ evaluate_trainedmodel_performance_multi <-
           message(threshold)
           PredictedClass <-
             ifelse((outputTableSub$Probability > threshold),
-                   UniqueClasses[b],
-                   noise.category)
+              UniqueClasses[b],
+              noise.category
+            )
 
           PredictedClass <-
             factor(PredictedClass, levels = levels(as.factor(outputTableSub$ActualClass)))
@@ -166,14 +175,16 @@ evaluate_trainedmodel_performance_multi <-
           Perf <- caret::confusionMatrix(
             as.factor(PredictedClass),
             as.factor(outputTableSub$ActualClass),
-            mode = 'everything',
+            mode = "everything",
             positive = UniqueClasses[b]
           )$byClass
 
-          TempRow <- cbind.data.frame(t(Perf),
-                                      training_data,
-                                      n_epochs,
-                                      model_type)
+          TempRow <- cbind.data.frame(
+            t(Perf),
+            training_data,
+            n_epochs,
+            model_type
+          )
 
           colnames(TempRow) <- c(
             "Sensitivity",
@@ -193,7 +204,7 @@ evaluate_trainedmodel_performance_multi <-
           )
 
           ROCRpred <- ROCR::prediction(predictions = outputTableSub$Probability, labels = as.factor(outputTableSub$ActualClass))
-          AUCval <- ROCR::performance(ROCRpred, 'auc')
+          AUCval <- ROCR::performance(ROCRpred, "auc")
           TempRow$AUC <- as.numeric(AUCval@y.values)
           TempRow$Threshold <- as.character(threshold)
           TempRow$Frozen <- unfreeze
@@ -208,31 +219,31 @@ evaluate_trainedmodel_performance_multi <-
       filename <-
         paste(
           output_dir,
-          'performance_tables_multi_trained/',
+          "performance_tables_multi_trained/",
           training_data,
-          '_',
+          "_",
           n_epochs,
-          '_',
+          "_",
           model_type,
-          '_TransferLearningTrainedModel.csv',
-          sep = ''
+          "_TransferLearningTrainedModel.csv",
+          sep = ""
         )
 
       filename_multi <-
         paste(
           output_dir,
-          '/performance_tables_multi_trained_combined/',
+          "/performance_tables_multi_trained_combined/",
           training_data,
-          '_',
+          "_",
           n_epochs,
-          '_',
+          "_",
           model_type,
-          '_TransferLearningCNNDFmulti.csv',
-          sep = ''
+          "_TransferLearningCNNDFmulti.csv",
+          sep = ""
         )
 
       dir.create(
-        paste(output_dir, '/performance_tables_multi_trained/', sep = ''),
+        paste(output_dir, "/performance_tables_multi_trained/", sep = ""),
         showWarnings = FALSE,
         recursive = T
       )
@@ -242,7 +253,7 @@ evaluate_trainedmodel_performance_multi <-
 
       # Save to cpu
       PredictTop1 <-
-        as_array(torch_tensor(PredictTop1, device = 'cpu'))
+        as_array(torch_tensor(PredictTop1, device = "cpu"))
 
       # Convert to a factor
       PredictTop1 <- as.factor(PredictTop1)
@@ -260,8 +271,10 @@ evaluate_trainedmodel_performance_multi <-
         factor(PredictTop1Names, levels = levels(as.factor(Folder)))
 
       # Create confusion matrix with filtered predictions
-      ConfMatrix <- caret::confusionMatrix(data = PredictTop1Names,
-                                           reference = as.factor(Folder))
+      ConfMatrix <- caret::confusionMatrix(
+        data = PredictTop1Names,
+        reference = as.factor(Folder)
+      )
 
 
       CombinedTempRow$Top1Accuracy <-

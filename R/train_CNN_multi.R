@@ -23,26 +23,23 @@
 #' }
 #'
 #' @examples
-#' {
-#' { input.data.path <- system.file("extdata", "multiclass/", package = "gibbonNetR")
+#' {{ input.data.path <- system.file("extdata", "multiclass/", package = "gibbonNetR")
 #'   test.data <- system.file("extdata", "multiclass/test/", package = "gibbonNetR")
 #'   result <- train_CNN_multi(
-#'   input.data.path = input.data.path,
-#'   test.data = test.data,
-#'   architecture = "alexnet",  # Choose architecture
-#'   unfreeze.param = TRUE,
-#'   class_weights = rep( (1/5), 5),
-#'   batch_size = 6,
-#'   learning_rate = 0.001,
-#'   epoch.iterations = 1,  # Or any other list of integer epochs
-#'   early.stop = "yes",
-#'   output.base.path = paste(tempdir(),'/',sep=''),
-#'   trainingfolder = "test",
-#'   noise.category = 'noise'
-#' )
-#' print(result)
-#' }
-#' }
+#'     input.data.path = input.data.path,
+#'     test.data = test.data,
+#'     architecture = "alexnet", # Choose architecture
+#'     unfreeze.param = TRUE,
+#'     class_weights = rep((1 / 5), 5),
+#'     batch_size = 6,
+#'     learning_rate = 0.001,
+#'     epoch.iterations = 1, # Or any other list of integer epochs
+#'     early.stop = "yes",
+#'     output.base.path = paste(tempdir(), "/", sep = ""),
+#'     trainingfolder = "test",
+#'     noise.category = "noise"
+#'   )
+#'   print(result) }}
 
 #' @seealso \code{\link[torch]{nn_module}} and other torch functions.
 #' @importFrom stringr str_replace str_split_fixed
@@ -58,20 +55,19 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
                             unfreeze.param = TRUE, batch_size = 32, learning_rate,
                             save.model = FALSE,
                             class_weights = c(0.49, 0.49, 0.02),
-                            epoch.iterations = 1, early.stop = 'yes',
+                            epoch.iterations = 1, early.stop = "yes",
                             output.base.path = tempdir(),
                             trainingfolder,
                             noise.category = "Noise") {
-
   # Device
-  device <- if(cuda_is_available()) "cuda" else "cpu"
+  device <- if (cuda_is_available()) "cuda" else "cpu"
 
   to_device <- function(x, device) {
     x$to(device = device)
   }
 
   # Location to save the output
-  output.data.path <- paste(output.base.path, trainingfolder, 'multi', 'unfrozen', unfreeze.param,  '/', sep='_')
+  output.data.path <- paste(output.base.path, trainingfolder, "multi", "unfrozen", unfreeze.param, "/", sep = "_")
 
   # Create if doesn't exist
   dir.create(output.data.path, showWarnings = FALSE, recursive = TRUE)
@@ -86,21 +82,21 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
     EarlyStop = early.stop,
     Layers_Unfrozen = unfreeze.param,
     Epochs = epoch.iterations,
-    Learning_rate=learning_rate,
-    Noise.class=noise.category
+    Learning_rate = learning_rate,
+    Noise.class = noise.category
   )
 
   write.csv(metadata, paste0(output.data.path, architecture, "_model_metadata.csv"))
 
-  for(a in 1:length(epoch.iterations )){
-    message(paste('Training', architecture))
-    n.epoch <- epoch.iterations [a]
+  for (a in 1:length(epoch.iterations)) {
+    message(paste("Training", architecture))
+    n.epoch <- epoch.iterations[a]
 
 
-    if (architecture %in% c("alexnet", "vgg16", "vgg19")==TRUE) {
+    if (architecture %in% c("alexnet", "vgg16", "vgg19") == TRUE) {
       # Data loaders setup
       train_ds <- image_folder_dataset(
-        file.path(input.data.path,'train' ),
+        file.path(input.data.path, "train"),
         transform = . %>%
           torchvision::transform_to_tensor() %>%
           torchvision::transform_resize(size = c(224, 224)) %>%
@@ -115,18 +111,18 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
           torchvision::transform_resize(size = c(224, 224)) %>%
           torchvision::transform_normalize(mean = c(0.485, 0.456, 0.406), std = c(0.229, 0.224, 0.225))
       )
-
     }
 
-    if (architecture %in% c("resnet18", "resnet50", "resnet152")==TRUE) {
+    if (architecture %in% c("resnet18", "resnet50", "resnet152") == TRUE) {
       train_ds <- image_folder_dataset(
-        file.path(input.data.path,'train' ),
+        file.path(input.data.path, "train"),
         transform = . %>%
           torchvision::transform_to_tensor() %>%
           torchvision::transform_color_jitter() %>%
           transform_resize(256) %>%
           transform_center_crop(224) %>%
-          transform_normalize(mean = c(0.485, 0.456, 0.406), std = c(0.229, 0.224, 0.225)))
+          transform_normalize(mean = c(0.485, 0.456, 0.406), std = c(0.229, 0.224, 0.225))
+      )
 
       valid_ds <- image_folder_dataset(
         file.path(input.data.path, "valid"),
@@ -134,8 +130,8 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
           torchvision::transform_to_tensor() %>%
           transform_resize(256) %>%
           transform_center_crop(224) %>%
-          transform_normalize(mean = c(0.485, 0.456, 0.406), std = c(0.229, 0.224, 0.225)))
-
+          transform_normalize(mean = c(0.485, 0.456, 0.406), std = c(0.229, 0.224, 0.225))
+      )
     }
 
 
@@ -145,7 +141,7 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
     # Read class names
     class_names <- sort(unique(attr(train_ds$class_to_idx, "names")))
     num_classes <- length(class_names)
-    cat('Detected classes:', paste(class_names, collapse = ', '), '\n')
+    cat("Detected classes:", paste(class_names, collapse = ", "), "\n")
 
 
     # Model setup
@@ -168,14 +164,13 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
         },
         forward = function(x) {
           output <- self$model(x)
-          torch_squeeze(output, dim=2)
+          torch_squeeze(output, dim = 2)
         }
       )
-
     } else if (architecture == "vgg16") {
       net <- torch::nn_module(
         initialize = function() {
-          self$model <- model_vgg16 (pretrained = TRUE)
+          self$model <- model_vgg16(pretrained = TRUE)
 
           for (par in self$parameters) {
             par$requires_grad_(unfreeze.param)
@@ -193,7 +188,7 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
         },
         forward = function(x) {
           output <- self$model(x)
-          torch_squeeze(output, dim=2)
+          torch_squeeze(output, dim = 2)
         }
       )
     } else if (architecture == "vgg19") {
@@ -217,7 +212,7 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
         },
         forward = function(x) {
           output <- self$model(x)
-          torch_squeeze(output, dim=2)
+          torch_squeeze(output, dim = 2)
         }
       )
     } else if (architecture == "resnet18") {
@@ -237,7 +232,7 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
         },
         forward = function(x) {
           output <- self$model(x)
-          torch_squeeze(output, dim=2)
+          torch_squeeze(output, dim = 2)
         }
       )
     } else if (architecture == "resnet50") {
@@ -257,7 +252,7 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
         },
         forward = function(x) {
           output <- self$model(x)
-          torch_squeeze(output, dim=2)
+          torch_squeeze(output, dim = 2)
         }
       )
     } else if (architecture == "resnet152") {
@@ -277,18 +272,18 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
         },
         forward = function(x) {
           output <- self$model(x)
-          torch_squeeze(output, dim=2)
+          torch_squeeze(output, dim = 2)
         }
       )
     } else {
       stop("Invalid architecture specified. Choose 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'.")
     }
 
-    weight <- torch_tensor( class_weights, device = 'cpu' )
+    weight <- torch_tensor(class_weights, device = "cpu")
 
     fitted <- net %>%
       luz::setup(
-        loss = nn_cross_entropy_loss(weight=weight),
+        loss = nn_cross_entropy_loss(weight = weight),
         optimizer = optim_adam,
         metrics = list(
           luz_metric_accuracy()
@@ -296,65 +291,67 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
       )
 
     # Training the model
-    if (early.stop == 'yes') {
+    if (early.stop == "yes") {
       multiModel <- fitted %>%
-        fit(train_dl, epochs = n.epoch, valid_data = valid_dl,
-            callbacks = list(
-              luz_callback_early_stopping(patience = 2),
-              luz_callback_lr_scheduler(
-                lr_one_cycle,
-                max_lr =learning_rate,
-                epochs = n.epoch,
-                steps_per_epoch = length(train_dl),
-                call_on = "on_batch_end"
-              ),
-              luz_callback_csv_logger(paste(output.data.path, trainingfolder, n.epoch, architecture, "logs_model.csv", sep = '_'))
+        fit(train_dl,
+          epochs = n.epoch, valid_data = valid_dl,
+          callbacks = list(
+            luz_callback_early_stopping(patience = 2),
+            luz_callback_lr_scheduler(
+              lr_one_cycle,
+              max_lr = learning_rate,
+              epochs = n.epoch,
+              steps_per_epoch = length(train_dl),
+              call_on = "on_batch_end"
             ),
-            verbose = TRUE,
-            accelerator = accelerator(cpu = TRUE)
+            luz_callback_csv_logger(paste(output.data.path, trainingfolder, n.epoch, architecture, "logs_model.csv", sep = "_"))
+          ),
+          verbose = TRUE,
+          accelerator = accelerator(cpu = TRUE)
         )
     } else {
       multiModel <- fitted %>%
-        fit(train_dl, epochs = n.epoch, valid_data = valid_dl,
-            callbacks = list(
-              luz_callback_lr_scheduler(
-                lr_one_cycle,
-                max_lr =learning_rate,
-                epochs = n.epoch,
-                steps_per_epoch = length(train_dl),
-                call_on = "on_batch_end"
-              ),
-              luz_callback_csv_logger(paste(output.data.path, trainingfolder, n.epoch, architecture, "logs_model.csv", sep = '_'))
+        fit(train_dl,
+          epochs = n.epoch, valid_data = valid_dl,
+          callbacks = list(
+            luz_callback_lr_scheduler(
+              lr_one_cycle,
+              max_lr = learning_rate,
+              epochs = n.epoch,
+              steps_per_epoch = length(train_dl),
+              call_on = "on_batch_end"
             ),
-            verbose = TRUE,
-            accelerator = accelerator(cpu = TRUE)
+            luz_callback_csv_logger(paste(output.data.path, trainingfolder, n.epoch, architecture, "logs_model.csv", sep = "_"))
+          ),
+          verbose = TRUE,
+          accelerator = accelerator(cpu = TRUE)
         )
     }
 
 
-    if(save.model==TRUE){
-      luz_save(multiModel, paste( output.data.path,trainingfolder,n.epoch,architecture, "model.pt",sep='_'))
+    if (save.model == TRUE) {
+      luz_save(multiModel, paste(output.data.path, trainingfolder, n.epoch, architecture, "model.pt", sep = "_"))
     }
 
 
-    TempCSV.TrainedModel <- read.csv(paste(output.data.path, trainingfolder, n.epoch, architecture, "logs_model.csv", sep = '_'))
-    TrainedModel.loss <- TempCSV.TrainedModel[nrow(TempCSV.TrainedModel),]$loss
+    TempCSV.TrainedModel <- read.csv(paste(output.data.path, trainingfolder, n.epoch, architecture, "logs_model.csv", sep = "_"))
+    TrainedModel.loss <- TempCSV.TrainedModel[nrow(TempCSV.TrainedModel), ]$loss
 
 
-    LossPlot <- ggline(data=TempCSV.TrainedModel,x='epoch',y='loss',color = 'set')
+    LossPlot <- ggline(data = TempCSV.TrainedModel, x = "epoch", y = "loss", color = "set")
     print(LossPlot)
 
     # Get the list of image files
-    imageFiles <- list.files(paste(test.data,sep=''), recursive = TRUE, full.names = TRUE)
-    imageFileShort <- list.files(paste(test.data,sep=''), recursive = TRUE, full.names = FALSE)
-    Folder <- str_split_fixed(imageFileShort,pattern = '/',n=2)[,1]
-    imageFileShort <- str_split_fixed(imageFileShort,pattern = '/',n=2)[,2]
+    imageFiles <- list.files(paste(test.data, sep = ""), recursive = TRUE, full.names = TRUE)
+    imageFileShort <- list.files(paste(test.data, sep = ""), recursive = TRUE, full.names = FALSE)
+    Folder <- str_split_fixed(imageFileShort, pattern = "/", n = 2)[, 1]
+    imageFileShort <- str_split_fixed(imageFileShort, pattern = "/", n = 2)[, 2]
 
     # Prepare output tables
     outputTableTrainedModel <- data.frame()
 
     # Define transforms based on model type
-    if (str_detect(architecture, pattern = 'resnet')) {
+    if (str_detect(architecture, pattern = "resnet")) {
       transform_list <- . %>%
         torchvision::transform_to_tensor() %>%
         torchvision::transform_color_jitter() %>%
@@ -369,7 +366,7 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
     }
 
     test_ds <- image_folder_dataset(test.data, transform = transform_list)
-    test_dl <- dataloader(test_ds, batch_size = batch_size, shuffle =FALSE)
+    test_dl <- dataloader(test_ds, batch_size = batch_size, shuffle = FALSE)
 
     # Predict using TrainedModel
     TrainedModelPred <- predict(multiModel, test_dl)
@@ -378,13 +375,13 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
     PredMPS <- torch_argmax(TrainedModelPred, dim = 2)
 
     # Save to cpu
-    PredMPS <- as_array(torch_tensor(PredMPS, device = 'cpu'))
+    PredMPS <- as_array(torch_tensor(PredMPS, device = "cpu"))
 
     # Convert to a factor
     modelMultiPred <- as.factor(PredMPS)
 
     # Calculate the probability associated with each class
-    Probability <- as_array(torch_tensor(nnf_softmax(TrainedModelPred, dim = 2), device = 'cpu'))
+    Probability <- as_array(torch_tensor(nnf_softmax(TrainedModelPred, dim = 2), device = "cpu"))
 
     # Find the index of the maximum value in each row
     max_prob_idx <- apply(Probability, 1, which.max)
@@ -396,11 +393,11 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
     modelMultiNames <- factor(modelMultiPred, levels = 1:length(class_names), labels = class_names)
 
     outputTableMulti <- cbind.data.frame(modelMultiNames, predicted_class_probability)
-    colnames(outputTableMulti) <- c('PredictedClass', 'Probability')
+    colnames(outputTableMulti) <- c("PredictedClass", "Probability")
     outputTableMulti$ActualClass <- Folder
 
     # Save the output table as CSV file
-    write.csv(outputTableMulti, paste(output.data.path,trainingfolder,n.epoch,architecture, "output_Multi.csv", sep = '_'), row.names = FALSE)
+    write.csv(outputTableMulti, paste(output.data.path, trainingfolder, n.epoch, architecture, "output_Multi.csv", sep = "_"), row.names = FALSE)
 
     UniqueClasses <- unique(outputTableMulti$ActualClass)
     Probability <- as.data.frame(Probability)
@@ -414,30 +411,28 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
 
 
     for (b in 1:length(UniqueClasses)) {
-
-
-      outputTableMultiSub <-outputTableMulti
-      outputTableMultiSub$Probability <- Probability[,c(UniqueClasses[b] )]
+      outputTableMultiSub <- outputTableMulti
+      outputTableMultiSub$Probability <- Probability[, c(UniqueClasses[b])]
 
       outputTableMultiSub$ActualClass <-
-        ifelse(outputTableMultiSub$ActualClass==UniqueClasses[b],UniqueClasses[b],noise.category)
+        ifelse(outputTableMultiSub$ActualClass == UniqueClasses[b], UniqueClasses[b], noise.category)
 
-      binarylabels <- ifelse(outputTableMulti$ActualClass==UniqueClasses[b],1,0)
+      binarylabels <- ifelse(outputTableMulti$ActualClass == UniqueClasses[b], 1, 0)
 
       for (threshold in thresholds) {
-        MultiPredictedClass <- ifelse((outputTableMultiSub$Probability > threshold ), UniqueClasses[b], noise.category)
+        MultiPredictedClass <- ifelse((outputTableMultiSub$Probability > threshold), UniqueClasses[b], noise.category)
 
-        MultiPredictedClass <- factor(MultiPredictedClass, levels =levels(  as.factor(outputTableMultiSub$ActualClass)))
+        MultiPredictedClass <- factor(MultiPredictedClass, levels = levels(as.factor(outputTableMultiSub$ActualClass)))
 
         MultiPerf <- caret::confusionMatrix(
           as.factor(MultiPredictedClass),
           as.factor(outputTableMultiSub$ActualClass),
-          mode = 'everything'
+          mode = "everything"
         )$byClass
 
         TempRowMulti <- cbind.data.frame(
           t(MultiPerf),
-          TrainedModel.loss ,
+          TrainedModel.loss,
           trainingfolder,
           n.epoch,
           architecture
@@ -454,31 +449,30 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
         )
 
         ROCRpred <- ROCR::prediction(predictions = outputTableMultiSub$Probability, labels = outputTableMultiSub$ActualClass)
-        AUCval <- ROCR::performance(ROCRpred, 'auc')
+        AUCval <- ROCR::performance(ROCRpred, "auc")
         TempRowMulti$AUC <- as.numeric(AUCval@y.values)
         TempRowMulti$Threshold <- as.character(threshold)
         TempRowMulti$Frozen <- unfreeze.param
         TempRowMulti$Class <- UniqueClasses[b]
         TempRowMulti$Class <- as.factor(TempRowMulti$Class)
-        TempRowMulti$TestDataPath <-  test.data
+        TempRowMulti$TestDataPath <- test.data
         CombinedTempRow <- rbind.data.frame(CombinedTempRow, TempRowMulti)
       }
     }
 
     # Location to save the output
-    output.data.performance <- paste(output.data.path,'performance_tables_multi/',sep='')
+    output.data.performance <- paste(output.data.path, "performance_tables_multi/", sep = "")
 
     message(output.data.performance)
 
-    output.data.performance <- paste(output.data.path,'performance_tables_multi/',sep='')
+    output.data.performance <- paste(output.data.path, "performance_tables_multi/", sep = "")
 
     # Create if doesn't exist
-    dir.create(output.data.performance, showWarnings = FALSE,recursive = T)
+    dir.create(output.data.performance, showWarnings = FALSE, recursive = T)
 
-    filename <- paste(output.data.performance, trainingfolder, '_', n.epoch, '_', architecture, '_TransferLearningCNNDFMultiThreshold.csv', sep = '')
+    filename <- paste(output.data.performance, trainingfolder, "_", n.epoch, "_", architecture, "_TransferLearningCNNDFMultiThreshold.csv", sep = "")
     write.csv(CombinedTempRow, filename, row.names = FALSE)
 
     rm(multiModel)
   }
 }
-

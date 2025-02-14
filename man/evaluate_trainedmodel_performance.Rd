@@ -31,24 +31,23 @@ Given trained models and a set of images, this function evaluates the performanc
 }
 \examples{
 {
-# Set directory paths for trained models and test images
-trained_models_dir <- system.file("extdata", "trainedresnetbinary", package = "gibbonNetR")
-image_data_dir <- system.file("extdata", "binary", "test", package = "gibbonNetR")
+  # Set directory paths for trained models and test images
+  trained_models_dir <- system.file("extdata", "trainedresnetbinary", package = "gibbonNetR")
+  image_data_dir <- system.file("extdata", "binary", "test", package = "gibbonNetR")
 
-# Evaluate the performance of the trained models using the test images
-evaluate_trainedmodel_performance(
-  trained_models_dir = trained_models_dir,
-  image_data_dir = image_data_dir,
-  output_dir = file.path(tempdir(), 'data/'),
-  positive.class = 'Gibbons',  # Label for positive class
-  negative.class = 'Noise'    # Label for negative class
-)
+  # Evaluate the performance of the trained models using the test images
+  evaluate_trainedmodel_performance(
+    trained_models_dir = trained_models_dir,
+    image_data_dir = image_data_dir,
+    output_dir = file.path(tempdir(), "data/"),
+    positive.class = "Gibbons", # Label for positive class
+    negative.class = "Noise" # Label for negative class
+  )
 
-# Find the location of saved evaluation files
-CSVName <- list.files(file.path(tempdir(), 'data'), recursive = TRUE, full.names = TRUE)
+  # Find the location of saved evaluation files
+  CSVName <- list.files(file.path(tempdir(), "data"), recursive = TRUE, full.names = TRUE)
 
-# Check the output of the first file
-head(read.csv(CSVName[1]))
-
+  # Check the output of the first file
+  head(read.csv(CSVName[1]))
 }
 }

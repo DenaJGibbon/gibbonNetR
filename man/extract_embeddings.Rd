@@ -29,22 +29,23 @@ performs dimensionality reduction using UMAP, and creates scatter plots to visua
 }
 \examples{
 {
-#' Set model directory
-trained_models_dir <- system.file("extdata", "trainedresnetmulti/", package = "gibbonNetR")
+  #' Set model directory
+  trained_models_dir <- system.file("extdata", "trainedresnetmulti/", package = "gibbonNetR")
 
-#' Specify model path
-ModelPath <- list.files(trained_models_dir,full.names = TRUE)
+  #' Specify model path
+  ModelPath <- list.files(trained_models_dir, full.names = TRUE)
 
-# Specify model path
-ImageFile <- system.file("extdata", "multiclass/test/", package = "gibbonNetR")
+  # Specify model path
+  ImageFile <- system.file("extdata", "multiclass/test/", package = "gibbonNetR")
 
-# Function to extract and plot embeddings
-result <- extract_embeddings(test_input=ImageFile,
-                             model_path =ModelPath,
-                             target_class = "female.gibbon",
-                             unsupervised='TRUE'
-)
+  # Function to extract and plot embeddings
+  result <- extract_embeddings(
+    test_input = ImageFile,
+    model_path = ModelPath,
+    target_class = "female.gibbon",
+    unsupervised = "TRUE"
+  )
 
-print(result$EmbeddingsCombined)
+  print(result$EmbeddingsCombined)
 }
 }

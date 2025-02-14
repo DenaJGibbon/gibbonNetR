@@ -18,12 +18,13 @@ Embeddings are learned feature representations from CNNs. Instead of doing class
 Use the pre-trained model to extract embeddings and use unsupervised clustering to identify signals
 
 ```{r, eval=F, warning=FALSE, results='hide'}
-
 ModelPath <- "data/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_1_alexnet_model.pt"
 
-result <- extract_embeddings(test_input="data/testimages/test/",
-                                      model_path=ModelPath,
-                                     target_class = "female.gibbon")
+result <- extract_embeddings(
+  test_input = "data/testimages/test/",
+  model_path = ModelPath,
+  target_class = "female.gibbon"
+)
 ```
 
 ## We can plot the unsupervised clustering results

@@ -34,25 +34,25 @@ Given trained models and a set of images, this function evaluates the performanc
 }
 \examples{
 {
-# Set directory paths for trained models and test images
-trained_models_dir <- system.file("extdata", "trainedresnetmulti", package = "gibbonNetR")
-image_data_dir <- system.file("extdata", "multiclass", "test", package = "gibbonNetR")
-class_names <- c('female.gibbon', 'hornbill.helmeted', 'hornbill.rhino', 'long.argus', 'noise')
+  # Set directory paths for trained models and test images
+  trained_models_dir <- system.file("extdata", "trainedresnetmulti", package = "gibbonNetR")
+  image_data_dir <- system.file("extdata", "multiclass", "test", package = "gibbonNetR")
+  class_names <- c("female.gibbon", "hornbill.helmeted", "hornbill.rhino", "long.argus", "noise")
 
-# Evaluate the performance of the trained models using the test images
-evaluate_trainedmodel_performance_multi(
-  trained_models_dir = trained_models_dir,
-  class_names = class_names,
-  image_data_dir = image_data_dir,
-  output_dir = file.path(tempdir(), 'data/'),
-  noise.category = "noise"
-)
+  # Evaluate the performance of the trained models using the test images
+  evaluate_trainedmodel_performance_multi(
+    trained_models_dir = trained_models_dir,
+    class_names = class_names,
+    image_data_dir = image_data_dir,
+    output_dir = file.path(tempdir(), "data/"),
+    noise.category = "noise"
+  )
 
-# Find the location of saved evaluation files
-CSVName <- list.files(file.path(tempdir(), 'data'), recursive = TRUE, full.names = TRUE)
+  # Find the location of saved evaluation files
+  CSVName <- list.files(file.path(tempdir(), "data"), recursive = TRUE, full.names = TRUE)
 
-# Check the output of the first file
-head(read.csv(CSVName[1]))
+  # Check the output of the first file
+  head(read.csv(CSVName[1]))
 }
 
 }

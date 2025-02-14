@@ -64,18 +64,19 @@ A list containing two elements:
 This function trains Convolutional Neural Network (CNN) models, such as AlexNet, VGG16, VGG19, ResNet18, ResNet50, or ResNet152, on a given dataset. The trained model is saved along with metadata for further usage.
 }
 \examples{
-{ input.data.path <- system.file("extdata", "binary/", package = "gibbonNetR")
+{
+  input.data.path <- system.file("extdata", "binary/", package = "gibbonNetR")
   test.data <- system.file("extdata", "binary/test/", package = "gibbonNetR")
   result <- train_CNN_binary(
     input.data.path = input.data.path,
     test.data = test.data,
-    architecture = "alexnet",  # Choose architecture
+    architecture = "alexnet", # Choose architecture
     unfreeze.param = TRUE,
     batch_size = 6,
     learning_rate = 0.001,
-    epoch.iterations = 1,  # Or any other list of integer epochs
+    epoch.iterations = 1, # Or any other list of integer epochs
     early.stop = "yes",
-    output.base.path = paste(tempdir(),'/',sep=''),
+    output.base.path = paste(tempdir(), "/", sep = ""),
     trainingfolder = "test_binary"
   )
   print(result)

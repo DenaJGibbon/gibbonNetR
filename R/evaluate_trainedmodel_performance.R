@@ -11,26 +11,25 @@
 #' @importFrom stringr str_split_fixed str_detect
 #' @importFrom purrr %>%
 #' @examples {
-#' # Set directory paths for trained models and test images
-#' trained_models_dir <- system.file("extdata", "trainedresnetbinary", package = "gibbonNetR")
-#' image_data_dir <- system.file("extdata", "binary", "test", package = "gibbonNetR")
+#'   # Set directory paths for trained models and test images
+#'   trained_models_dir <- system.file("extdata", "trainedresnetbinary", package = "gibbonNetR")
+#'   image_data_dir <- system.file("extdata", "binary", "test", package = "gibbonNetR")
 #'
-#' # Evaluate the performance of the trained models using the test images
-#' evaluate_trainedmodel_performance(
-#'   trained_models_dir = trained_models_dir,
-#'   image_data_dir = image_data_dir,
-#'   output_dir = file.path(tempdir(), 'data/'),
-#'   positive.class = 'Gibbons',  # Label for positive class
-#'   negative.class = 'Noise'    # Label for negative class
-#' )
+#'   # Evaluate the performance of the trained models using the test images
+#'   evaluate_trainedmodel_performance(
+#'     trained_models_dir = trained_models_dir,
+#'     image_data_dir = image_data_dir,
+#'     output_dir = file.path(tempdir(), "data/"),
+#'     positive.class = "Gibbons", # Label for positive class
+#'     negative.class = "Noise" # Label for negative class
+#'   )
 #'
-#' # Find the location of saved evaluation files
-#' CSVName <- list.files(file.path(tempdir(), 'data'), recursive = TRUE, full.names = TRUE)
+#'   # Find the location of saved evaluation files
+#'   CSVName <- list.files(file.path(tempdir(), "data"), recursive = TRUE, full.names = TRUE)
 #'
-#' # Check the output of the first file
-#' head(read.csv(CSVName[1]))
-#'
-#'}
+#'   # Check the output of the first file
+#'   head(read.csv(CSVName[1]))
+#' }
 #' @importFrom utils write.csv read.csv
 #' @importFrom ROCR prediction performance
 #' @import data.table
@@ -39,30 +38,33 @@
 evaluate_trainedmodel_performance <-
   function(trained_models_dir,
            image_data_dir,
-           output_dir = 'data/',
-           positive.class = 'Gibbons',
-           negative.class = 'Noise') {
+           output_dir = "data/",
+           positive.class = "Gibbons",
+           negative.class = "Noise") {
     # List trained models
     trained_models <-
       list.files(trained_models_dir,
-                 pattern = '.pt',
-                 full.names = TRUE)
+        pattern = ".pt",
+        full.names = TRUE
+      )
 
     if (length(trained_models) == 0) {
-      message('No models in specified directory')
-      stop('Stopping execution: No models found.')  # Stops the execution
+      message("No models in specified directory")
+      stop("Stopping execution: No models found.") # Stops the execution
     }
 
 
     # List image files
     image_files <-
       list.files(image_data_dir,
-                 recursive = TRUE,
-                 full.names = TRUE)
+        recursive = TRUE,
+        full.names = TRUE
+      )
     image_files_short <-
       list.files(image_data_dir,
-                 recursive = TRUE,
-                 full.names = FALSE)
+        recursive = TRUE,
+        full.names = FALSE
+      )
 
     # Loop through each trained model
     for (model_path in trained_models) {
@@ -71,45 +73,51 @@ evaluate_trainedmodel_performance <-
 
       model_name <- basename(model_path)
       training_data <-
-        str_split_fixed(model_name, pattern = '_', n = 4)[, 2]
+        str_split_fixed(model_name, pattern = "_", n = 4)[, 2]
       n_epochs <-
-        str_split_fixed(model_name, pattern = '_', n = 4)[, 3]
+        str_split_fixed(model_name, pattern = "_", n = 4)[, 3]
       model_type <-
         str_split_fixed(
-          str_split_fixed(model_name, pattern = '_', n = 4)[, 4],
-          pattern = '.pt',
+          str_split_fixed(model_name, pattern = "_", n = 4)[, 4],
+          pattern = ".pt",
           n = 2
         )[, 1]
 
       # Evaluate model on each image file
 
       actual_labels <-
-        as.character(sapply(image_files_short, function(x)
-          dirname(x)))
+        as.character(sapply(image_files_short, function(x) {
+          dirname(x)
+        }))
 
       # Define transforms based on model type
-      if (str_detect(model_type, pattern = 'resnet')) {
+      if (str_detect(model_type, pattern = "resnet")) {
         transform_list <- . %>%
           torchvision::transform_to_tensor() %>%
           torchvision::transform_color_jitter() %>%
           transform_resize(256) %>%
           transform_center_crop(224) %>%
-          transform_normalize(mean = c(0.485, 0.456, 0.406),
-                              std = c(0.229, 0.224, 0.225))
+          transform_normalize(
+            mean = c(0.485, 0.456, 0.406),
+            std = c(0.229, 0.224, 0.225)
+          )
       } else {
         transform_list <- . %>%
           torchvision::transform_to_tensor() %>%
           torchvision::transform_resize(size = c(224, 224)) %>%
-          torchvision::transform_normalize(mean = c(0.485, 0.456, 0.406),
-                                           std = c(0.229, 0.224, 0.225))
+          torchvision::transform_normalize(
+            mean = c(0.485, 0.456, 0.406),
+            std = c(0.229, 0.224, 0.225)
+          )
       }
 
       test_ds <-
         image_folder_dataset(
           image_data_dir,
           transform = transform_list,
-          target_transform = function(x)
+          target_transform = function(x) {
             as.double(x) - 1
+          }
         )
       test_dl <-
         dataloader(test_ds, batch_size = 32, shuffle = FALSE)
@@ -117,7 +125,7 @@ evaluate_trainedmodel_performance <-
       preds <- predict(model, test_dl)
 
       probs <-
-        as_array(torch_tensor(torch_sigmoid(preds), device = 'cpu'))
+        as_array(torch_tensor(torch_sigmoid(preds), device = "cpu"))
 
       # Switch positive/negative probs
       probs <- 1 - probs
@@ -138,15 +146,17 @@ evaluate_trainedmodel_performance <-
         TrainedModelPerf <- caret::confusionMatrix(
           as.factor(TrainedModelPredictedClass),
           as.factor(actual_labels),
-          mode = 'everything',
+          mode = "everything",
           positive = positive.class
         )$byClass
 
-        TempRowTrainedModel <- cbind.data.frame(t(TrainedModelPerf),
-                                                'NA',
-                                                training_data,
-                                                n_epochs,
-                                                model_type)
+        TempRowTrainedModel <- cbind.data.frame(
+          t(TrainedModelPerf),
+          "NA",
+          training_data,
+          n_epochs,
+          model_type
+        )
 
         colnames(TempRowTrainedModel) <- c(
           "Sensitivity",
@@ -160,7 +170,7 @@ evaluate_trainedmodel_performance <-
           "Detection Rate",
           "Detection Prevalence",
           "Balanced Accuracy",
-          'Validation Loss',
+          "Validation Loss",
           "Training Data",
           "N epochs",
           "CNN Architecture"
@@ -173,34 +183,37 @@ evaluate_trainedmodel_performance <-
           rbind.data.frame(CombinedTempRow, TempRowTrainedModel)
       }
 
-      ROCRpred <-  ROCR::prediction(predictions = probs,
-                                    labels = actual_labels)
-      AUCval <- ROCR::performance(ROCRpred, 'auc')
+      ROCRpred <- ROCR::prediction(
+        predictions = probs,
+        labels = actual_labels
+      )
+      AUCval <- ROCR::performance(ROCRpred, "auc")
       CombinedTempRow$AUC <- AUCval@y.values[[1]]
 
       CombinedTempRow$TestData <-
         str_replace_all(image_data_dir,
-                        pattern = '/',
-                        replacement = '_')
+          pattern = "/",
+          replacement = "_"
+        )
       TransferLearningCNNDF <-
         rbind.data.frame(TransferLearningCNNDF, CombinedTempRow)
       filename <-
         paste(
           output_dir,
-          'performance_tables_trained/',
+          "performance_tables_trained/",
           training_data,
-          '_',
+          "_",
           n_epochs,
-          '_',
+          "_",
           model_type,
-          '_TransferLearningTrainedModel.csv',
-          sep = ''
+          "_TransferLearningTrainedModel.csv",
+          sep = ""
         )
       dir.create(dirname(filename),
-                 showWarnings = FALSE,
-                 recursive = T)
+        showWarnings = FALSE,
+        recursive = T
+      )
       write.csv(TransferLearningCNNDF, filename, row.names = FALSE)
-
     }
 
     invisible(NULL)

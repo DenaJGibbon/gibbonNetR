@@ -30,24 +30,25 @@
 #' @import caret
 #'
 #' @examples {
-#' #' Set model directory
-#' trained_models_dir <- system.file("extdata", "trainedresnetmulti/", package = "gibbonNetR")
+#'   #' Set model directory
+#'   trained_models_dir <- system.file("extdata", "trainedresnetmulti/", package = "gibbonNetR")
 #'
-#' #' Specify model path
-#' ModelPath <- list.files(trained_models_dir,full.names = TRUE)
+#'   #' Specify model path
+#'   ModelPath <- list.files(trained_models_dir, full.names = TRUE)
 #'
-#' # Specify model path
-#' ImageFile <- system.file("extdata", "multiclass/test/", package = "gibbonNetR")
+#'   # Specify model path
+#'   ImageFile <- system.file("extdata", "multiclass/test/", package = "gibbonNetR")
 #'
-#' # Function to extract and plot embeddings
-#' result <- extract_embeddings(test_input=ImageFile,
-#'                              model_path =ModelPath,
-#'                              target_class = "female.gibbon",
-#'                              unsupervised='TRUE'
-#' )
+#'   # Function to extract and plot embeddings
+#'   result <- extract_embeddings(
+#'     test_input = ImageFile,
+#'     model_path = ModelPath,
+#'     target_class = "female.gibbon",
+#'     unsupervised = "TRUE"
+#'   )
 #'
-#' print(result$EmbeddingsCombined)
-#'}
+#'   print(result$EmbeddingsCombined)
+#' }
 #' @importFrom utils write.csv read.csv
 #' @importFrom coro loop
 #' @export
@@ -56,7 +57,7 @@
 extract_embeddings <- function(test_input,
                                model_path,
                                target_class,
-                               unsupervised = 'TRUE') {
+                               unsupervised = "TRUE") {
   # Load the fine-tuned model
   fine_tuned_model <- luz_load(model_path)
 
@@ -71,8 +72,9 @@ extract_embeddings <- function(test_input,
         mean = c(0.485, 0.456, 0.406),
         std = c(0.229, 0.224, 0.225)
       ),
-    target_transform = function(x)
+    target_transform = function(x) {
       as.double(x) - 1
+    }
   )
 
   # Create a dataloader
@@ -125,7 +127,7 @@ extract_embeddings <- function(test_input,
 
   EmbeddingsM2.umap <-
     umap::umap(
-      Embeddings[,-c(1025)],
+      Embeddings[, -c(1025)],
       controlscale = TRUE,
       scale = 3,
       n_neighbors = 5
@@ -179,29 +181,31 @@ extract_embeddings <- function(test_input,
       axis.ticks.y = element_blank()
     ) +
     theme(plot.title = element_text(hjust = 1)) +
-    theme(plot.title = element_text(hjust = 1)) + guides(color = 'none')
+    theme(plot.title = element_text(hjust = 1)) + guides(color = "none")
 
   EmbeddingsCombined <-
     cowplot::plot_grid(EmbeddingsM2Scatter, EmbeddingsM2ScatterUnsuper,
-                       nrow = 2)
+      nrow = 2
+    )
 
-  if (unsupervised == 'TRUE') {
+  if (unsupervised == "TRUE") {
     # Find the cluster with the most observations of the target class
     class_counts <- table(Embeddings$Label, TempCluster$cluster)
 
     if (target_class %in% Embeddings$Label == FALSE) {
       message("target_class not included in test_input folder names")
-      stop("Stopping execution: target_class not found in labels.")  # Stops the script
+      stop("Stopping execution: target_class not found in labels.") # Stops the script
     }
 
 
     cluster_with_most_class <-
-      colnames(class_counts)[which.max(class_counts[target_class,])]
+      colnames(class_counts)[which.max(class_counts[target_class, ])]
 
     Binary <-
       ifelse(TempCluster$cluster == cluster_with_most_class,
-             target_class,
-             "Noise")
+        target_class,
+        "Noise"
+      )
     BinaryLabels <-
       ifelse(Embeddings$Label == target_class, target_class, "Noise")
 

@@ -25,18 +25,19 @@
 #' }
 #'
 #' @examples
-#' { input.data.path <- system.file("extdata", "binary/", package = "gibbonNetR")
+#' {
+#'   input.data.path <- system.file("extdata", "binary/", package = "gibbonNetR")
 #'   test.data <- system.file("extdata", "binary/test/", package = "gibbonNetR")
 #'   result <- train_CNN_binary(
 #'     input.data.path = input.data.path,
 #'     test.data = test.data,
-#'     architecture = "alexnet",  # Choose architecture
+#'     architecture = "alexnet", # Choose architecture
 #'     unfreeze.param = TRUE,
 #'     batch_size = 6,
 #'     learning_rate = 0.001,
-#'     epoch.iterations = 1,  # Or any other list of integer epochs
+#'     epoch.iterations = 1, # Or any other list of integer epochs
 #'     early.stop = "yes",
-#'     output.base.path = paste(tempdir(),'/',sep=''),
+#'     output.base.path = paste(tempdir(), "/", sep = ""),
 #'     trainingfolder = "test_binary"
 #'   )
 #'   print(result)
@@ -62,17 +63,18 @@ train_CNN_binary <-
            learning_rate,
            save.model = FALSE,
            epoch.iterations = 1,
-           early.stop = 'yes',
-           output.base.path = 'data/',
+           early.stop = "yes",
+           output.base.path = "data/",
            trainingfolder,
            list.thresholds = seq(0.1, 1, .1),
            positive.class = "Gibbons",
            negative.class = "Noise") {
     # Device
-    device <- if (cuda_is_available())
+    device <- if (cuda_is_available()) {
       "cuda"
-    else
+    } else {
       "cpu"
+    }
 
     to_device <- function(x, device) {
       x$to(device = device)
@@ -81,17 +83,19 @@ train_CNN_binary <-
     # Location to save the output
     output.data.path <-
       paste(output.base.path,
-            trainingfolder,
-            'binary',
-            'unfrozen',
-            unfreeze.param,
-            '/',
-            sep = '_')
+        trainingfolder,
+        "binary",
+        "unfrozen",
+        unfreeze.param,
+        "/",
+        sep = "_"
+      )
 
     # Create if doesn't exist
     dir.create(output.data.path,
-               showWarnings = FALSE,
-               recursive = TRUE)
+      showWarnings = FALSE,
+      recursive = TRUE
+    )
 
     # Metadata
     metadata <- data.frame(
@@ -108,18 +112,20 @@ train_CNN_binary <-
       Negative.class = negative.class
     )
 
-    write.csv(metadata,
-              paste0(output.data.path, architecture, "_model_metadata.csv"))
+    write.csv(
+      metadata,
+      paste0(output.data.path, architecture, "_model_metadata.csv")
+    )
 
     for (a in 1:length(epoch.iterations)) {
-      message(paste('Training', architecture))
-      n.epoch <- epoch.iterations [a]
+      message(paste("Training", architecture))
+      n.epoch <- epoch.iterations[a]
 
 
       if (architecture %in% c("alexnet", "vgg16", "vgg19") == TRUE) {
         # Data loaders setup
         train_ds <- image_folder_dataset(
-          file.path(input.data.path, 'train'),
+          file.path(input.data.path, "train"),
           transform = . %>%
             torchvision::transform_to_tensor() %>%
             torchvision::transform_resize(size = c(224, 224)) %>%
@@ -128,8 +134,9 @@ train_CNN_binary <-
               mean = c(0.485, 0.456, 0.406),
               std = c(0.229, 0.224, 0.225)
             ),
-          target_transform = function(x)
+          target_transform = function(x) {
             as.double(x) - 1
+          }
         )
 
         valid_ds <- image_folder_dataset(
@@ -141,15 +148,15 @@ train_CNN_binary <-
               mean = c(0.485, 0.456, 0.406),
               std = c(0.229, 0.224, 0.225)
             ),
-          target_transform = function(x)
+          target_transform = function(x) {
             as.double(x) - 1
+          }
         )
-
       }
 
       if (architecture %in% c("resnet18", "resnet50", "resnet152") == TRUE) {
         train_ds <- image_folder_dataset(
-          file.path(input.data.path, 'train'),
+          file.path(input.data.path, "train"),
           transform = . %>%
             torchvision::transform_to_tensor() %>%
             torchvision::transform_color_jitter() %>%
@@ -159,8 +166,9 @@ train_CNN_binary <-
               mean = c(0.485, 0.456, 0.406),
               std = c(0.229, 0.224, 0.225)
             ),
-          target_transform = function(x)
+          target_transform = function(x) {
             as.double(x) - 1
+          }
         )
 
         valid_ds <- image_folder_dataset(
@@ -173,32 +181,30 @@ train_CNN_binary <-
               mean = c(0.485, 0.456, 0.406),
               std = c(0.229, 0.224, 0.225)
             ),
-          target_transform = function(x)
+          target_transform = function(x) {
             as.double(x) - 1
+          }
         )
-
       }
 
 
       TrainingLabelsMatch <-
         attr(train_ds$class_to_idx, "names")[1] == c(positive.class) &
-        attr(train_ds$class_to_idx, "names")[2] == c(negative.class)
+          attr(train_ds$class_to_idx, "names")[2] == c(negative.class)
 
       if (TrainingLabelsMatch == FALSE) {
         message(
-          'Training classes do not match! This is based on the order of the classes in the training folder'
+          "Training classes do not match! This is based on the order of the classes in the training folder"
         )
         message(train_ds$class_to_idx)
-        stop("Stopping due to class mismatch.")  # Stops execution of further code
-
+        stop("Stopping due to class mismatch.") # Stops execution of further code
       } else {
         message(paste(
-          'Postive class =',
+          "Postive class =",
           positive.class,
-          ' and Negative class =',
+          " and Negative class =",
           negative.class
         ))
-
       }
 
 
@@ -240,11 +246,10 @@ train_CNN_binary <-
             self$model(x)[, 1]
           }
         )
-
       } else if (architecture == "vgg16") {
         net <- torch::nn_module(
           initialize = function() {
-            self$model <- model_vgg16 (pretrained = TRUE)
+            self$model <- model_vgg16(pretrained = TRUE)
 
             for (par in self$parameters) {
               par$requires_grad_(unfreeze.param)
@@ -351,7 +356,7 @@ train_CNN_binary <-
       }
 
       pos_weight <-
-        torch_tensor(rep(noise.weight, batch_size), device = 'cpu')
+        torch_tensor(rep(noise.weight, batch_size), device = "cpu")
 
       fitted <- net %>%
         luz::setup(
@@ -361,7 +366,7 @@ train_CNN_binary <-
         )
 
       # Training the model
-      if (early.stop == 'yes') {
+      if (early.stop == "yes") {
         BinaryModel <- fitted %>%
           fit(
             train_dl,
@@ -383,7 +388,7 @@ train_CNN_binary <-
                   n.epoch,
                   architecture,
                   "logs_model.csv",
-                  sep = '_'
+                  sep = "_"
                 )
               )
             ),
@@ -411,7 +416,7 @@ train_CNN_binary <-
                   n.epoch,
                   architecture,
                   "logs_model.csv",
-                  sep = '_'
+                  sep = "_"
                 )
               )
             ),
@@ -430,7 +435,7 @@ train_CNN_binary <-
             n.epoch,
             architecture,
             "model.pt",
-            sep = '_'
+            sep = "_"
           )
         )
       }
@@ -444,7 +449,7 @@ train_CNN_binary <-
             n.epoch,
             architecture,
             "logs_model.csv",
-            sep = '_'
+            sep = "_"
           )
         )
       TrainedModel.loss <-
@@ -453,48 +458,55 @@ train_CNN_binary <-
       LossPlot <-
         ggline(
           data = TempCSV.TrainedModel,
-          x = 'epoch',
-          y = 'loss',
-          color = 'set'
+          x = "epoch",
+          y = "loss",
+          color = "set"
         )
       print(LossPlot)
 
       # Calculate performance metrics for TrainedModel -------------------------------------
-      dir.create(paste(output.data.path, 'performance_tables', sep = ''),
-                 showWarnings = FALSE)
+      dir.create(paste(output.data.path, "performance_tables", sep = ""),
+        showWarnings = FALSE
+      )
 
       # Get the list of image files
       imageFiles <-
-        list.files(paste(test.data, sep = ''),
-                   recursive = TRUE,
-                   full.names = TRUE)
+        list.files(paste(test.data, sep = ""),
+          recursive = TRUE,
+          full.names = TRUE
+        )
       imageFileShort <-
-        list.files(paste(test.data, sep = ''),
-                   recursive = TRUE,
-                   full.names = FALSE)
-      Folder <- str_split_fixed(imageFileShort, pattern = '/', n = 2)[, 1]
+        list.files(paste(test.data, sep = ""),
+          recursive = TRUE,
+          full.names = FALSE
+        )
+      Folder <- str_split_fixed(imageFileShort, pattern = "/", n = 2)[, 1]
       imageFileShort <-
-        str_split_fixed(imageFileShort, pattern = '/', n = 2)[, 2]
+        str_split_fixed(imageFileShort, pattern = "/", n = 2)[, 2]
 
       # Prepare output tables
       outputTableTrainedModel <- data.frame()
 
 
       # Define transforms based on model type
-      if (str_detect(architecture, pattern = 'resnet')) {
+      if (str_detect(architecture, pattern = "resnet")) {
         transform_list <- . %>%
           torchvision::transform_to_tensor() %>%
           torchvision::transform_color_jitter() %>%
           transform_resize(256) %>%
           transform_center_crop(224) %>%
-          transform_normalize(mean = c(0.485, 0.456, 0.406),
-                              std = c(0.229, 0.224, 0.225))
+          transform_normalize(
+            mean = c(0.485, 0.456, 0.406),
+            std = c(0.229, 0.224, 0.225)
+          )
       } else {
         transform_list <- . %>%
           torchvision::transform_to_tensor() %>%
           torchvision::transform_resize(size = c(224, 224)) %>%
-          torchvision::transform_normalize(mean = c(0.485, 0.456, 0.406),
-                                           std = c(0.229, 0.224, 0.225))
+          torchvision::transform_normalize(
+            mean = c(0.485, 0.456, 0.406),
+            std = c(0.229, 0.224, 0.225)
+          )
       }
 
       test_ds <-
@@ -506,7 +518,7 @@ train_CNN_binary <-
       TrainedModelPred <- predict(BinaryModel, test_dl)
       TrainedModelProb <- torch_sigmoid(TrainedModelPred)
       TrainedModelProb <-
-        as_array(torch_tensor(TrainedModelProb, device = 'cpu'))
+        as_array(torch_tensor(TrainedModelProb, device = "cpu"))
       TrainedModelClass <-
         ifelse((TrainedModelProb) < 0.5, positive.class, negative.class)
 
@@ -532,14 +544,14 @@ train_CNN_binary <-
           trainingfolder,
           n.epoch,
           "output_TrainedModel.csv",
-          sep = '_'
+          sep = "_"
         ),
         row.names = FALSE
       )
 
       message(
         paste(
-          'Here are actual class labels, if they do not contain the positive or negative class cannot evaluate model performance:',
+          "Here are actual class labels, if they do not contain the positive or negative class cannot evaluate model performance:",
           unique(outputTableTrainedModel$ActualClass)
         )
       )
@@ -549,14 +561,14 @@ train_CNN_binary <-
       TransferLearningCNNDF <- data.frame()
       thresholds <- list.thresholds
 
-      binarylabels <- ifelse(outputTableTrainedModel$ActualClass==positive.class,1,0)
+      binarylabels <- ifelse(outputTableTrainedModel$ActualClass == positive.class, 1, 0)
 
       for (threshold in thresholds) {
         # TrainedModel
         TrainedModelPredictedClass <-
           ifelse((outputTableTrainedModel$Probability) >= threshold,
-                 positive.class,
-                 negative.class
+            positive.class,
+            negative.class
           )
         TrainedModelPredictedClass <-
           factor(TrainedModelPredictedClass, levels = levels(as.factor(
@@ -566,7 +578,7 @@ train_CNN_binary <-
         TrainedModelPerf <- caret::confusionMatrix(
           as.factor(TrainedModelPredictedClass),
           as.factor(outputTableTrainedModel$ActualClass),
-          mode = 'everything'
+          mode = "everything"
         )$byClass
 
         TempRowTrainedModel <- cbind.data.frame(
@@ -601,27 +613,27 @@ train_CNN_binary <-
       }
 
 
-      ROCRpred <- ROCR::prediction(predictions =  as.numeric(outputTableTrainedModel$Probability), labels = binarylabels)
-      AUCval <- ROCR::performance(ROCRpred, 'auc')
+      ROCRpred <- ROCR::prediction(predictions = as.numeric(outputTableTrainedModel$Probability), labels = binarylabels)
+      AUCval <- ROCR::performance(ROCRpred, "auc")
 
-      CombinedTempRow$AUC <-as.numeric(AUCval@y.values)
+      CombinedTempRow$AUC <- as.numeric(AUCval@y.values)
 
       TransferLearningCNNDF <-
         rbind.data.frame(TransferLearningCNNDF, CombinedTempRow)
       TransferLearningCNNDF$Frozen <- unfreeze.param
       TransferLearningCNNDF$Class <- positive.class
-      TransferLearningCNNDF$TestDataPath <-  test.data[1]
+      TransferLearningCNNDF$TestDataPath <- test.data[1]
       filename <-
         paste(
           output.data.path,
-          'performance_tables/',
+          "performance_tables/",
           trainingfolder,
-          '_',
+          "_",
           n.epoch,
-          '_',
+          "_",
           architecture,
-          '_CNNDF.csv',
-          sep = ''
+          "_CNNDF.csv",
+          sep = ""
         )
       write.csv(TransferLearningCNNDF, filename, row.names = FALSE)
 

@@ -18,101 +18,103 @@
 
 #' @examples
 #' {
-#' # Simulate data for performance tables
-#' set.seed(123)
+#'   # Simulate data for performance tables
+#'   set.seed(123)
 #'
-#' #' Set directory
-#' performance_tables_dir <- paste(tempdir(),"/example_performance_tables/", sep='')
+#'   #' Set directory
+#'   performance_tables_dir <- paste(tempdir(), "/example_performance_tables/", sep = "")
 #'
-#' #' Create directory for performance tables (NOTE THIS IS FOR TESTING ONLY)
-#' dir.create(performance_tables_dir, showWarnings = FALSE, recursive = TRUE)
+#'   #' Create directory for performance tables (NOTE THIS IS FOR TESTING ONLY)
+#'   dir.create(performance_tables_dir, showWarnings = FALSE, recursive = TRUE)
 #'
-#' #' Define list of model architectures
-#' architectures <- c("alexnet", "vgg16", "vgg19")
+#'   #' Define list of model architectures
+#'   architectures <- c("alexnet", "vgg16", "vgg19")
 #'
-#' #' Define list of training datasets
-#' training_datasets <- c("Dataset1", "Dataset2", "Dataset3")
+#'   #' Define list of training datasets
+#'   training_datasets <- c("Dataset1", "Dataset2", "Dataset3")
 #'
-#' #' Create performance tables
-#' for (arch in architectures) {
-#'   for (td in training_datasets) {
-#'     #' Generate random performance metrics
-#'     metrics <- data.frame(
-#'       Class = rep(c("hornbill.helmeted", "other.class"), each = 5),
-#'       "Training Data" = rep(td, 10),
-#'       "CNN Architecture" = rep(arch, 10),
-#'       Threshold = runif(10, 0, 1),
-#'       F1 = runif(10, 0, 1),
-#'       Precision = runif(10, 0, 1),
-#'       Recall = runif(10, 0, 1),
-#'       AUC = runif(10, 0, 1),
-#'       `N epochs` = rep(c(10, 20, 30), each = 10)
-#'     )
+#'   #' Create performance tables
+#'   for (arch in architectures) {
+#'     for (td in training_datasets) {
+#'       #' Generate random performance metrics
+#'       metrics <- data.frame(
+#'         Class = rep(c("hornbill.helmeted", "other.class"), each = 5),
+#'         "Training Data" = rep(td, 10),
+#'         "CNN Architecture" = rep(arch, 10),
+#'         Threshold = runif(10, 0, 1),
+#'         F1 = runif(10, 0, 1),
+#'         Precision = runif(10, 0, 1),
+#'         Recall = runif(10, 0, 1),
+#'         AUC = runif(10, 0, 1),
+#'         `N epochs` = rep(c(10, 20, 30), each = 10)
+#'       )
 #'
-#'    # Reassign column names
-#'     colnames(metrics) <- c("Class",
-#'     "Training Data", "CNN Architecture",
-#'     "Threshold", "F1", "Precision",
-#'     "Recall", "AUC", "N epochs")
-#'     #' Write data to CSV file
-#'     filename <- paste0(performance_tables_dir, arch, "_", td, ".csv")
-#'     write.csv(metrics, filename, row.names = FALSE)
+#'       # Reassign column names
+#'       colnames(metrics) <- c(
+#'         "Class",
+#'         "Training Data", "CNN Architecture",
+#'         "Threshold", "F1", "Precision",
+#'         "Recall", "AUC", "N epochs"
+#'       )
+#'       #' Write data to CSV file
+#'       filename <- paste0(performance_tables_dir, arch, "_", td, ".csv")
+#'       write.csv(metrics, filename, row.names = FALSE)
+#'     }
 #'   }
-#' }
 #'
 #'
-#' #' Call the function with default parameters
-#' results <- get_best_performance(performancetables.dir = performance_tables_dir, )
+#'   #' Call the function with default parameters
+#'   results <- get_best_performance(performancetables.dir = performance_tables_dir, )
 #'
-#'  # NOTE: Results will not make sense as it is random
-#' #' message the best F1 scores
-#' message("Best F1 scores:")
-#' print(results$best_f1)
+#'   # NOTE: Results will not make sense as it is random
+#'   #' message the best F1 scores
+#'   message("Best F1 scores:")
+#'   print(results$best_f1)
 #'
-#' #' message the best precision results
-#' message("Best precision results:")
-#' print(results$best_precision)
+#'   #' message the best precision results
+#'   message("Best precision results:")
+#'   print(results$best_precision)
 #'
-#' #' message the best recall results
-#' message("Best recall results:")
-#' print(results$best_recall)
+#'   #' message the best recall results
+#'   message("Best recall results:")
+#'   print(results$best_recall)
 #'
-#' #' message the best AUC results
-#' message("Best AUC results:")
-#' print(results$best_auc)
+#'   #' message the best AUC results
+#'   message("Best AUC results:")
+#'   print(results$best_auc)
 #'
-#' #' Plot F1 scores
-#' print(results$f1_plot)
+#'   #' Plot F1 scores
+#'   print(results$f1_plot)
 #'
-#' #' Plot precision-recall curve
-#' print(results$pr_plot)
+#'   #' Plot precision-recall curve
+#'   print(results$pr_plot)
 #' }
 #' @importFrom utils write.csv read.csv
 #' @export
 #'
 get_best_performance <- function(performancetables.dir,
-                                 model.type = 'multi',
-                                 class = 'hornbill.helmeted',
+                                 model.type = "multi",
+                                 class = "hornbill.helmeted",
                                  Thresh.val = 0.5) {
   # Read all CSV files from the directory
   FrozenFiles <- list.files(performancetables.dir, full.names = TRUE)
   FrozenCombined <- suppressMessages(map_dfr(FrozenFiles, read_csv))
 
-  if (model.type == 'multi') {
+  if (model.type == "multi") {
     if (!class %in% FrozenCombined[["Class"]]) {
       message(paste(
-        'Not detected',
+        "Not detected",
         class,
-        'Here are the present classes:',
+        "Here are the present classes:",
         unique(FrozenCombined[["Class"]])
       ))
       return(NULL)
     }
 
     message(paste(
-      'Evaluating performance for',
+      "Evaluating performance for",
       class,
-      'Here are the present classes:',
+      "Here are the present classes:",
       paste(unique(FrozenCombined[["Class"]]))
     ))
 

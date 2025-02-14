@@ -58,26 +58,23 @@ A list containing two elements:
 This function facilitates training of convolutional neural network (CNN) models using various transfer learning architectures such as AlexNet, VGG16, VGG19, ResNet18, ResNet50, or ResNet152, on a given dataset. The trained model is saved along with metadata for further usage.
 }
 \examples{
-{
-{ input.data.path <- system.file("extdata", "multiclass/", package = "gibbonNetR")
+{{ input.data.path <- system.file("extdata", "multiclass/", package = "gibbonNetR")
   test.data <- system.file("extdata", "multiclass/test/", package = "gibbonNetR")
   result <- train_CNN_multi(
-  input.data.path = input.data.path,
-  test.data = test.data,
-  architecture = "alexnet",  # Choose architecture
-  unfreeze.param = TRUE,
-  class_weights = rep( (1/5), 5),
-  batch_size = 6,
-  learning_rate = 0.001,
-  epoch.iterations = 1,  # Or any other list of integer epochs
-  early.stop = "yes",
-  output.base.path = paste(tempdir(),'/',sep=''),
-  trainingfolder = "test",
-  noise.category = 'noise'
-)
-print(result)
-}
-}
+    input.data.path = input.data.path,
+    test.data = test.data,
+    architecture = "alexnet", # Choose architecture
+    unfreeze.param = TRUE,
+    class_weights = rep((1 / 5), 5),
+    batch_size = 6,
+    learning_rate = 0.001,
+    epoch.iterations = 1, # Or any other list of integer epochs
+    early.stop = "yes",
+    output.base.path = paste(tempdir(), "/", sep = ""),
+    trainingfolder = "test",
+    noise.category = "noise"
+  )
+  print(result) }}
 }
 \seealso{
 \code{\link[torch]{nn_module}} and other torch functions.
