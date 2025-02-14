@@ -141,18 +141,19 @@
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="op">{</span> <span class="va">input.data.path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"binary/"</span>, package <span class="op">=</span> <span class="st">"gibbonNetR"</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">input.data.path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"binary/"</span>, package <span class="op">=</span> <span class="st">"gibbonNetR"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="va">test.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"binary/test/"</span>, package <span class="op">=</span> <span class="st">"gibbonNetR"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">train_CNN_binary</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    input.data.path <span class="op">=</span> <span class="va">input.data.path</span>,</span></span>
 <span class="r-in"><span>    test.data <span class="op">=</span> <span class="va">test.data</span>,</span></span>
-<span class="r-in"><span>    architecture <span class="op">=</span> <span class="st">"alexnet"</span>,  <span class="co"># Choose architecture</span></span></span>
+<span class="r-in"><span>    architecture <span class="op">=</span> <span class="st">"alexnet"</span>, <span class="co"># Choose architecture</span></span></span>
 <span class="r-in"><span>    unfreeze.param <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>    batch_size <span class="op">=</span> <span class="fl">6</span>,</span></span>
 <span class="r-in"><span>    learning_rate <span class="op">=</span> <span class="fl">0.001</span>,</span></span>
-<span class="r-in"><span>    epoch.iterations <span class="op">=</span> <span class="fl">1</span>,  <span class="co"># Or any other list of integer epochs</span></span></span>
+<span class="r-in"><span>    epoch.iterations <span class="op">=</span> <span class="fl">1</span>, <span class="co"># Or any other list of integer epochs</span></span></span>
 <span class="r-in"><span>    early.stop <span class="op">=</span> <span class="st">"yes"</span>,</span></span>
-<span class="r-in"><span>    output.base.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>,<span class="st">'/'</span>,sep<span class="op">=</span><span class="st">''</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>    output.base.path <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"/"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    trainingfolder <span class="op">=</span> <span class="st">"test_binary"</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></span>
@@ -160,8 +161,8 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Training alexnet</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Postive class = Gibbons  and Negative class = Noise</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 1/1</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Train metrics: Loss: 0.3382 - Acc: 0.6667</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Valid metrics: Loss: 0.5377 - Acc: 0.6111</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Train metrics: Loss: 0.8196 - Acc: 0.4444</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Valid metrics: Loss: 0.4976 - Acc: 0.8889</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> `geom_line()`: Each group consists of only one observation.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Do you need to adjust the <span style="color: #00BB00;">group</span> aesthetic?</span>
 <span class="r-plt img"><img src="train_CNN_binary-1.png" alt="" width="700" height="433"></span>

@@ -79,9 +79,11 @@ clustering to identify signals</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ModelPath</span> <span class="op">&lt;-</span> <span class="st">"data/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_1_alexnet_model.pt"</span></span>
 <span></span>
-<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_embeddings.html">extract_embeddings</a></span><span class="op">(</span>test_input<span class="op">=</span><span class="st">"data/testimages/test/"</span>,</span>
-<span>                                      model_path<span class="op">=</span><span class="va">ModelPath</span>,</span>
-<span>                                     target_class <span class="op">=</span> <span class="st">"female.gibbon"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_embeddings.html">extract_embeddings</a></span><span class="op">(</span></span>
+<span>  test_input <span class="op">=</span> <span class="st">"data/testimages/test/"</span>,</span>
+<span>  model_path <span class="op">=</span> <span class="va">ModelPath</span>,</span>
+<span>  target_class <span class="op">=</span> <span class="st">"female.gibbon"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="we-can-plot-the-unsupervised-clustering-results">We can plot the unsupervised clustering results<a class="anchor" aria-label="anchor" href="#we-can-plot-the-unsupervised-clustering-results"></a>
 </h3>

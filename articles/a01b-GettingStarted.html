@@ -134,13 +134,13 @@ and validation sets.</li>
 <span></span>
 <span><span class="co"># Create spectrogram images from your labeled .wav files</span></span>
 <span><span class="fu"><a href="../reference/spectrogram_images.html">spectrogram_images</a></span><span class="op">(</span></span>
-<span>   trainingBasePath <span class="op">=</span> <span class="va">MyDatapath</span>,</span>
-<span>   outputBasePath <span class="op">=</span> <span class="st">'data/trainingimages/'</span>,</span>
-<span>   minfreq.khz <span class="op">=</span> <span class="fl">0.4</span>,</span>
-<span>   maxfreq.khz <span class="op">=</span> <span class="fl">1.6</span>,</span>
-<span>   random <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>   splits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.7</span>, <span class="fl">0.3</span>, <span class="fl">0.0</span><span class="op">)</span>, <span class="co"># Adjust training, validation, and test split as needed</span></span>
-<span>   new.sampleratehz <span class="op">=</span> <span class="st">'NA'</span></span>
+<span>  trainingBasePath <span class="op">=</span> <span class="va">MyDatapath</span>,</span>
+<span>  outputBasePath <span class="op">=</span> <span class="st">"data/trainingimages/"</span>,</span>
+<span>  minfreq.khz <span class="op">=</span> <span class="fl">0.4</span>,</span>
+<span>  maxfreq.khz <span class="op">=</span> <span class="fl">1.6</span>,</span>
+<span>  random <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  splits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.7</span>, <span class="fl">0.3</span>, <span class="fl">0.0</span><span class="op">)</span>, <span class="co"># Adjust training, validation, and test split as needed</span></span>
+<span>  new.sampleratehz <span class="op">=</span> <span class="st">"NA"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
@@ -160,34 +160,34 @@ validation.</p>
 </h3>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Link to training clips on Zenodo</span></span>
-<span><span class="va">ZenodoLink</span> <span class="op">&lt;-</span> <span class="st">'https://zenodo.org/records/14213067/files/trainingclips.zip?download=1'</span></span>
+<span><span class="va">ZenodoLink</span> <span class="op">&lt;-</span> <span class="st">"https://zenodo.org/records/14213067/files/trainingclips.zip?download=1"</span></span>
 <span></span>
 <span><span class="co"># Create data folder in your working directory</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="st">"data"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Download into specified zip file location</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">ZenodoLink</span>, destfile <span class="op">=</span> <span class="st">'data/trainingclips.zip'</span>,method<span class="op">=</span><span class="st">'curl'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">ZenodoLink</span>, destfile <span class="op">=</span> <span class="st">"data/trainingclips.zip"</span>, method <span class="op">=</span> <span class="st">"curl"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Unzip folder</span></span>
-<span><span class="va">exdir</span> <span class="op">&lt;-</span> <span class="st">'data/'</span></span>
-<span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span>zipfile <span class="op">=</span> <span class="st">'data/trainingclips.zip'</span>, exdir <span class="op">=</span> <span class="va">exdir</span> <span class="op">)</span></span>
+<span><span class="va">exdir</span> <span class="op">&lt;-</span> <span class="st">"data/"</span></span>
+<span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span>zipfile <span class="op">=</span> <span class="st">"data/trainingclips.zip"</span>, exdir <span class="op">=</span> <span class="va">exdir</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Check folder composition</span></span>
-<span><span class="va">TrainingDatapath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">exdir</span>,<span class="st">"trainingclips"</span>,sep<span class="op">=</span><span class="st">''</span><span class="op">)</span></span>
+<span><span class="va">TrainingDatapath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">exdir</span>, <span class="st">"trainingclips"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Check folder names</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">TrainingDatapath</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create spectrogram images</span></span>
 <span><span class="fu"><a href="../reference/spectrogram_images.html">spectrogram_images</a></span><span class="op">(</span></span>
-<span>   trainingBasePath <span class="op">=</span> <span class="va">TrainingDatapath</span>,</span>
-<span>   outputBasePath <span class="op">=</span> <span class="st">'data/trainingimages/'</span>,</span>
-<span>   minfreq.khz <span class="op">=</span> <span class="fl">0.4</span>,</span>
-<span>   maxfreq.khz <span class="op">=</span> <span class="fl">1.6</span>,</span>
-<span>   random<span class="op">=</span><span class="cn">FALSE</span>,</span>
-<span>   splits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.7</span>, <span class="fl">0.3</span>, <span class="fl">0</span><span class="op">)</span>, <span class="co"># Assign proportion to training, validation, or test folders</span></span>
-<span>   new.sampleratehz <span class="op">=</span> <span class="st">'NA'</span></span>
-<span> <span class="op">)</span></span></code></pre></div>
+<span>  trainingBasePath <span class="op">=</span> <span class="va">TrainingDatapath</span>,</span>
+<span>  outputBasePath <span class="op">=</span> <span class="st">"data/trainingimages/"</span>,</span>
+<span>  minfreq.khz <span class="op">=</span> <span class="fl">0.4</span>,</span>
+<span>  maxfreq.khz <span class="op">=</span> <span class="fl">1.6</span>,</span>
+<span>  random <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  splits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.7</span>, <span class="fl">0.3</span>, <span class="fl">0</span><span class="op">)</span>, <span class="co"># Assign proportion to training, validation, or test folders</span></span>
+<span>  new.sampleratehz <span class="op">=</span> <span class="st">"NA"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <img src="spectro.png" align="center" width="50%" height="50%"><figcaption><p>“Representative spectrogram images”</p>
 </figcaption>
 </div>
@@ -201,30 +201,30 @@ into the test folder.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://denajgibbon.github.io/gibbonNetR/">gibbonNetR</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Link to multi-class test clips on Zenodo</span></span>
-<span><span class="va">ZenodoLink</span> <span class="op">&lt;-</span> <span class="st">'https://zenodo.org/records/14213067/files/testclips.zip?download=1'</span></span>
+<span><span class="va">ZenodoLink</span> <span class="op">&lt;-</span> <span class="st">"https://zenodo.org/records/14213067/files/testclips.zip?download=1"</span></span>
 <span></span>
 <span><span class="co"># Download into specified zip file location</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">ZenodoLink</span>, destfile <span class="op">=</span> <span class="st">'data/testclips.zip'</span>,method<span class="op">=</span><span class="st">'curl'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">ZenodoLink</span>, destfile <span class="op">=</span> <span class="st">"data/testclips.zip"</span>, method <span class="op">=</span> <span class="st">"curl"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Unzip folder</span></span>
-<span><span class="va">exdir</span> <span class="op">&lt;-</span> <span class="st">'data/'</span></span>
-<span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span>zipfile <span class="op">=</span> <span class="st">'data/testclips.zip'</span>, exdir <span class="op">=</span> <span class="va">exdir</span> <span class="op">)</span></span>
+<span><span class="va">exdir</span> <span class="op">&lt;-</span> <span class="st">"data/"</span></span>
+<span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span>zipfile <span class="op">=</span> <span class="st">"data/testclips.zip"</span>, exdir <span class="op">=</span> <span class="va">exdir</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Check folder composition</span></span>
-<span><span class="va">TestDatapath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">exdir</span>,<span class="st">"testclips"</span>,sep<span class="op">=</span><span class="st">''</span><span class="op">)</span></span>
+<span><span class="va">TestDatapath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">exdir</span>, <span class="st">"testclips"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Check folder names</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">TestDatapath</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create spectorgram images</span></span>
 <span><span class="fu"><a href="../reference/spectrogram_images.html">spectrogram_images</a></span><span class="op">(</span></span>
-<span>   trainingBasePath <span class="op">=</span> <span class="va">TestDatapath</span>,</span>
-<span>   outputBasePath <span class="op">=</span> <span class="st">'data/testimages/'</span>,</span>
-<span>   minfreq.khz <span class="op">=</span> <span class="fl">0.4</span>,</span>
-<span>   maxfreq.khz <span class="op">=</span> <span class="fl">1.6</span>,</span>
-<span>   splits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, <span class="co"># Assign proportion to training, validation, or test folders</span></span>
-<span>   new.sampleratehz <span class="op">=</span> <span class="st">'NA'</span></span>
-<span> <span class="op">)</span></span></code></pre></div>
+<span>  trainingBasePath <span class="op">=</span> <span class="va">TestDatapath</span>,</span>
+<span>  outputBasePath <span class="op">=</span> <span class="st">"data/testimages/"</span>,</span>
+<span>  minfreq.khz <span class="op">=</span> <span class="fl">0.4</span>,</span>
+<span>  maxfreq.khz <span class="op">=</span> <span class="fl">1.6</span>,</span>
+<span>  splits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, <span class="co"># Assign proportion to training, validation, or test folders</span></span>
+<span>  new.sampleratehz <span class="op">=</span> <span class="st">"NA"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -235,34 +235,34 @@ into the test folder.</p>
 </h3>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Link to training clips on Zenodo</span></span>
-<span><span class="va">ZenodoLink</span> <span class="op">&lt;-</span> <span class="st">'https://zenodo.org/records/14213067/files/trainingclipsbinary.zip?download=1'</span></span>
+<span><span class="va">ZenodoLink</span> <span class="op">&lt;-</span> <span class="st">"https://zenodo.org/records/14213067/files/trainingclipsbinary.zip?download=1"</span></span>
 <span></span>
 <span><span class="co"># Create data folder in your working directory</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="st">"data"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Download into specified zip file location</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">ZenodoLink</span>, destfile <span class="op">=</span> <span class="st">'data/trainingclipsbinary.zip'</span>,method<span class="op">=</span><span class="st">'curl'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">ZenodoLink</span>, destfile <span class="op">=</span> <span class="st">"data/trainingclipsbinary.zip"</span>, method <span class="op">=</span> <span class="st">"curl"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Unzip folder</span></span>
-<span><span class="va">exdir</span> <span class="op">&lt;-</span> <span class="st">'data/'</span></span>
-<span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span>zipfile <span class="op">=</span> <span class="st">'data/trainingclipsbinary.zip'</span>, exdir <span class="op">=</span> <span class="va">exdir</span> <span class="op">)</span></span>
+<span><span class="va">exdir</span> <span class="op">&lt;-</span> <span class="st">"data/"</span></span>
+<span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span>zipfile <span class="op">=</span> <span class="st">"data/trainingclipsbinary.zip"</span>, exdir <span class="op">=</span> <span class="va">exdir</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Check folder composition</span></span>
-<span><span class="va">TrainingDatapath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">exdir</span>,<span class="st">"trainingclipsbinary"</span>,sep<span class="op">=</span><span class="st">''</span><span class="op">)</span></span>
+<span><span class="va">TrainingDatapath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">exdir</span>, <span class="st">"trainingclipsbinary"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Check folder names</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">TrainingDatapath</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create spectrogram images</span></span>
 <span><span class="fu"><a href="../reference/spectrogram_images.html">spectrogram_images</a></span><span class="op">(</span></span>
-<span>   trainingBasePath <span class="op">=</span> <span class="va">TrainingDatapath</span>,</span>
-<span>   outputBasePath <span class="op">=</span> <span class="st">'data/trainingimagesbinary/'</span>,</span>
-<span>   minfreq.khz <span class="op">=</span> <span class="fl">0.4</span>,</span>
-<span>   maxfreq.khz <span class="op">=</span> <span class="fl">1.6</span>,</span>
-<span>   random<span class="op">=</span><span class="cn">FALSE</span>,</span>
-<span>   splits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.7</span>, <span class="fl">0.3</span>, <span class="fl">0</span><span class="op">)</span>, <span class="co"># Assign proportion to training, validation, or test folders</span></span>
-<span>   new.sampleratehz <span class="op">=</span> <span class="st">'NA'</span></span>
-<span> <span class="op">)</span></span></code></pre></div>
+<span>  trainingBasePath <span class="op">=</span> <span class="va">TrainingDatapath</span>,</span>
+<span>  outputBasePath <span class="op">=</span> <span class="st">"data/trainingimagesbinary/"</span>,</span>
+<span>  minfreq.khz <span class="op">=</span> <span class="fl">0.4</span>,</span>
+<span>  maxfreq.khz <span class="op">=</span> <span class="fl">1.6</span>,</span>
+<span>  random <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  splits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.7</span>, <span class="fl">0.3</span>, <span class="fl">0</span><span class="op">)</span>, <span class="co"># Assign proportion to training, validation, or test folders</span></span>
+<span>  new.sampleratehz <span class="op">=</span> <span class="st">"NA"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="download-example-test-files-on-zenodo-and-convert-to-spectrogram-images-1">Download example test files on Zenodo and convert to spectrogram
@@ -274,33 +274,33 @@ into the test folder.</p>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://denajgibbon.github.io/gibbonNetR/">gibbonNetR</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Link to training clips on Zenodo</span></span>
-<span><span class="va">ZenodoLink</span> <span class="op">&lt;-</span> <span class="st">'https://zenodo.org/records/14213067/files/testclipsbinary.zip?download=1'</span></span>
+<span><span class="va">ZenodoLink</span> <span class="op">&lt;-</span> <span class="st">"https://zenodo.org/records/14213067/files/testclipsbinary.zip?download=1"</span></span>
 <span></span>
 <span><span class="co"># Download into specified zip file location</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">ZenodoLink</span>, destfile <span class="op">=</span> <span class="st">'data/testclipsbinary.zip'</span>,method<span class="op">=</span><span class="st">'curl'</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html" class="external-link">download.file</a></span><span class="op">(</span>url <span class="op">=</span> <span class="va">ZenodoLink</span>, destfile <span class="op">=</span> <span class="st">"data/testclipsbinary.zip"</span>, method <span class="op">=</span> <span class="st">"curl"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Unzip folder</span></span>
-<span><span class="va">exdir</span> <span class="op">&lt;-</span> <span class="st">'data/'</span></span>
-<span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span>zipfile <span class="op">=</span> <span class="st">'data/testclipsbinary.zip'</span>, exdir <span class="op">=</span> <span class="va">exdir</span> <span class="op">)</span></span>
+<span><span class="va">exdir</span> <span class="op">&lt;-</span> <span class="st">"data/"</span></span>
+<span><span class="fu">utils</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/utils/unzip.html" class="external-link">unzip</a></span><span class="op">(</span>zipfile <span class="op">=</span> <span class="st">"data/testclipsbinary.zip"</span>, exdir <span class="op">=</span> <span class="va">exdir</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Check folder composition</span></span>
-<span> <span class="va">TestDatapath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">exdir</span>,<span class="st">"testclipsbinary/test/"</span>,sep<span class="op">=</span><span class="st">''</span><span class="op">)</span></span>
+<span><span class="va">TestDatapath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">exdir</span>, <span class="st">"testclipsbinary/test/"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span></span>
-<span> <span class="co"># Check folder names</span></span>
-<span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">TestDatapath</span><span class="op">)</span></span>
+<span><span class="co"># Check folder names</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">TestDatapath</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Check folder names</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">TestDatapath</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create spectorgram images</span></span>
 <span><span class="fu"><a href="../reference/spectrogram_images.html">spectrogram_images</a></span><span class="op">(</span></span>
-<span>   trainingBasePath <span class="op">=</span> <span class="va">TestDatapath</span>,</span>
-<span>   outputBasePath <span class="op">=</span> <span class="st">'data/testimagesbinary/'</span>,</span>
-<span>   minfreq.khz <span class="op">=</span> <span class="fl">0.4</span>,</span>
-<span>   maxfreq.khz <span class="op">=</span> <span class="fl">1.6</span>,</span>
-<span>   splits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, <span class="co"># Assign proportion to training, validation, or test folders</span></span>
-<span>   new.sampleratehz <span class="op">=</span> <span class="st">'NA'</span></span>
-<span> <span class="op">)</span></span></code></pre></div>
+<span>  trainingBasePath <span class="op">=</span> <span class="va">TestDatapath</span>,</span>
+<span>  outputBasePath <span class="op">=</span> <span class="st">"data/testimagesbinary/"</span>,</span>
+<span>  minfreq.khz <span class="op">=</span> <span class="fl">0.4</span>,</span>
+<span>  maxfreq.khz <span class="op">=</span> <span class="fl">1.6</span>,</span>
+<span>  splits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, <span class="co"># Assign proportion to training, validation, or test folders</span></span>
+<span>  new.sampleratehz <span class="op">=</span> <span class="st">"NA"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
