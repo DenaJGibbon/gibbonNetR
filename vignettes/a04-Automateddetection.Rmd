@@ -13,20 +13,25 @@ vignette: >
 ---
 
 ## We can then deploy the model over longer sound files. 
+Below is an example of deploying a trained multi-class ResNet model over a longer sound file.
 ```{r, eval=F, warning=FALSE, results='hide'}
+# Load the library
 library(gibbonNetR)
 
 # Load data
 data("TempBinWav")
 
-# Save in temp directory
-dir.create(file.path(tempdir(), "/MultiDir/Wav/", sep = ""), recursive = T, showWarnings = FALSE)
+# Create a temp directory to save the file
+dir.create(
+  file.path(tempdir(), "/MultiDir/Wav/", sep = ""),
+  recursive = T,
+  showWarnings = FALSE
+)
 
 # Write to temp directory
 writeWave(TempBinWav, filename = paste(file.path(tempdir(), "/MultiDir/Wav/"), "TempBinWav.wav", sep = ""))
 
 # Find model path
-# Set model directory
 trained_models_dir <- system.file("extdata", "trainedresnetmulti/", package = "gibbonNetR")
 
 # Specify model path
@@ -44,12 +49,35 @@ deploy_CNN_multi(
   path_to_files = paste(tempdir(), "/MultiDir/Wav/", sep = ""),
   downsample_rate = "NA",
   save_wav = F,
-  class_names = c("female.gibbon", "hornbill.helmeted", "hornbill.rhino", "long.argus", "noise"),
+  class_names = c(
+    "female.gibbon",
+    "hornbill.helmeted",
+    "hornbill.rhino",
+    "long.argus",
+    "noise"
+  ),
   noise_category = "noise",
   single_class = FALSE,
   single_class_category = "female.gibbon",
   threshold = .25,
   max_freq_khz = 2
 )
+```
+
+We can then look at the resulting selection table
+```{r, eval=F, warning=FALSE, results='hide'}
+
+# List the files in the selection table folder (as specified above)
+TempDir <- list.files(file.path(tempdir(), "/MultiDir/Results/Selections/", sep = ""),
+                      full.names = TRUE)
+
+# Read in the selection table
+read.delim(TempDir[1])
+
+# There is one gibbon detection
+Selection          View Channel Begin.Time..s. End.Time..s. Low.Freq..Hz.
+1         1 Spectrogram 1       1             13           25           100
+High.Freq..Hz. Probability        Detections         Class
+1           2000        0.25 TempBinWav.wav_13 female.gibbon
 ```
 

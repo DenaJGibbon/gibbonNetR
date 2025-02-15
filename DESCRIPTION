@@ -1,50 +1,53 @@
 Package: gibbonNetR
-Title: gibbonNetR: R Package for the Use of CNNs and Transfer Learning on Acoustic Data
+Title: gibbonNetR: R Package for the Use of CNNs and Transfer Learning on
+    Acoustic Data
 Version: 1.0.0
 Authors@R: 
     person("Dena J.", "Clink", , "dena.clink@cornell.edu", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0003-0363-5581"))
-Description: R Package for the Use of CNNs and Transfer Learning on Acoustic Data.
+Description: R Package for the Use of CNNs on
+    Acoustic Data.
 License: MIT + file LICENSE
-Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1
+URL: https://denajgibbon.github.io/gibbonNetR/
+BugReports: https://github.com/DenaJGibbon/gibbonNetR/issues
 Depends:
+    luz,
+    R (>= 2.10),
     torch,
     torchvision,
-    luz,
-    tuneR,
-    R (>= 2.10)
+    tuneR
 Imports:
-    stringr,
-    seewave,
-    tibble,
-    ggpubr,
-    ROCR,
-    dbscan,
     aricode,
+    caret,
+    coro,
     cowplot,
+    data.table,
+    dbscan,
     ggplot2,
+    ggpubr,
+    grDevices,
     magrittr,
     purrr,
     readr,
+    ROCR,
+    seewave,
+    stats,
+    stringr,
+    tibble,
     torchdatasets,
     umap,
-    viridis,
-    caret,
-    coro,
-    grDevices,
-    stats,
     utils,
-    data.table
+    viridis
 Suggests: 
+    devtools,
+    dplyr,
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0),
-    dplyr,
-    devtools
+    testthat (>= 3.0.0)
+VignetteBuilder: 
+    knitr
 Config/testthat/edition: 3
-VignetteBuilder: knitr
+Encoding: UTF-8
 LazyData: true
-URL: https://denajgibbon.github.io/gibbonNetR/
-BugReports: https://github.com/DenaJGibbon/gibbonNetR/issues
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1

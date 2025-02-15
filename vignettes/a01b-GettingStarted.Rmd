@@ -34,12 +34,12 @@ To use this package with your own data, you will need labeled `.wav` files organ
      ```
 
 2. **Ensure Consistent File Formats:**  
-   - All `.wav` files should have the same sample rate and bit depth to maintain consistency in training.  
-   - Make sure that each folder contains only .wav files corresponding to the correct label. Files should not be mixed across categories. Incorrect labeling can lead to poor model performance.
+   - All `.wav` files should have the same sample rate to maintain consistency in training.  
+   - Make sure that each folder contains only .wav files corresponding to the correct label. Files should not be mixed across labels. Incorrect labeling can lead to poor model performance.
 
 3. **Generating Spectrogram Images:**  
-   - The `spectrogram_images` function will convert `.wav` files into spectrogram images for model training.  
-   - You can specify the frequency range, output paths, and dataset split proportions (training, validation, and test). to follow machine learning best practices, your test data should be completely separate from traing and validation sets. 
+   - The `spectrogram_images` function will convert `.wav` files into spectrogram images for training.  
+   - You can specify the frequency range, output paths, and dataset split proportions (training, validation, and test). To follow machine learning best practices, your test data should be completely separate from training and validation sets. 
    
 
 ### Example code to process your own data
@@ -96,11 +96,13 @@ spectrogram_images(
 )
 ```
 
+This dataset contains five classes including: female northern grey gibbons, helmeted hornbills, rhinoceros hornbills, and great argus pheasants. The data also contain a noise category.
+
   <img src="spectro.png" align="center" width = "50%" height="50%"/>
   <figcaption>"Representative spectrogram images"</em>
 
 ### Download example test files on Zenodo and convert to spectrogram images
-The "spectrogram_images" function below puts 100% of the test images into the test folder. 
+The "spectrogram_images" function below puts 100% of the test images into the test folder. This dataset contains two classes: female northern grey gibbons, and a noise category.
 ```{r eval=FALSE}
 library(gibbonNetR)
 

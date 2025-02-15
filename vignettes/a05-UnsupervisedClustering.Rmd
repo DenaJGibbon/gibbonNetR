@@ -12,10 +12,12 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-# Extract embeddings
+### Extract embeddings
 Embeddings are learned feature representations from CNNs. Instead of doing classification, the CNNs can also be used as feature extractors for spectrogram images. 
 
-Use the pre-trained model to extract embeddings and use unsupervised clustering to identify signals
+Below we use the pre-trained model to extract embeddings and use unsupervised clustering to identify signals.
+
+When unsupervised is set to TRUE, the function assigns clusters to the extracted embeddings using the HDBSCAN clustering algorithm. It then identifies the cluster with the most observations of the target_class.
 
 ```{r, eval=F, warning=FALSE, results='hide'}
 ModelPath <- "data/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_1_alexnet_model.pt"
@@ -23,31 +25,41 @@ ModelPath <- "data/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/_da
 result <- extract_embeddings(
   test_input = "data/testimages/test/",
   model_path = ModelPath,
-  target_class = "female.gibbon"
+  target_class = "female.gibbon",
+  unsupervised = "TRUE"
 )
 ```
 
-## We can plot the unsupervised clustering results
+### We can plot the unsupervised clustering results
 
 ```{r, eval=F}
 result$EmbeddingsCombined
 ```
 
  <img src="unsupervisedclustering.png" align="center" width = "75%" height="75%"/>
-  <figcaption>"Unsupervised clustering with embeddings"<figcaption>
+  <figcaption>"Fig. 1. Unsupervised clustering with embeddings. Top is a UMAP plot with points colored by class. Bottom is UMAP plot with points colored by unsupervised cluster assignment."<figcaption>
 
 
 ### We can explore the unsupervised clustering results
 
-Here we can see the Normalize Mutual Information score
+
+Here we can see the Normalize Mutual Information score. The function calculates the Normalized Mutual Information (NMI) score between the clustering results and the ground truth labels, and it generates a confusion matrix comparing the unsupervised clusters with the known class labels. This allows evaluation of how well the unsupervised clustering aligns with the true class labels.
 
 ```{r, eval=F}
 result$NMI
 ```
 
-The confusion matrix results when we use 'hdbscan' to match the target class to the cluster with the largest number of observations
+The confusion matrix results when we use 'hdbscan' to match the target class to the cluster with the largest number of observations.
 
 ```{r, eval=F}
 result$ConfusionMatrix
+         Sensitivity          Specificity       Pos Pred Value 
+           0.9169960            0.9893333            0.9508197 
+      Neg Pred Value            Precision               Recall 
+           0.9814815            0.9508197            0.9169960 
+                  F1           Prevalence       Detection Rate 
+           0.9336016            0.1835994            0.1683599 
+Detection Prevalence    Balanced Accuracy 
+           0.1770682            0.9531647 
 ```
 
