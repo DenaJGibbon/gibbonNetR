@@ -97,13 +97,13 @@ extract_embeddings <- function(test_input,
       }
 
       # Remove the original fully connected layer (fc):
-      self$model$fc <- NULL  # Or: self$model$fc <- nn_identity() for a no-op layer
+      self$model$fc <- NULL  # Or: self$model$fc <- nn_identity()
 
       # Create the feature extractor part (up to the avgpool):
       self$feature_extractor <- nn_sequential(
         self$model$conv1,
         self$model$bn1,
-        self$model$relu,       # Add relu if needed
+        self$model$relu,
         self$model$maxpool,
         self$model$layer1,
         self$model$layer2,
@@ -113,20 +113,10 @@ extract_embeddings <- function(test_input,
         nn_flatten(start_dim = 2) # Important: Flatten the output
       )
 
-      # Add your new classifier (if needed):
-      self$classifier <- nn_sequential(
-        nn_linear(512, 1024),  # Adjust 512 if needed
-        nn_relu(),
-        nn_linear(1024, 1024),
-        nn_relu(),
-        nn_linear(1024, num_classes) # num_classes should be defined
-      )
-
     },
     forward = function(x) {
       features <- x %>% self$feature_extractor() # Extract features
-      output <- features %>% self$classifier() # Classify (if classifier is defined)
-      return(output) # Return the output
+      return(features) # Return the features directly
     }
   )
 
