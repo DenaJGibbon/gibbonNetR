@@ -6,7 +6,7 @@ test_that("train_CNN_multi works", {
   train_CNN_multi(
     input.data.path = input.data.path,
     test.data = test.data,
-    architecture = "alexnet", # Choose architecture
+    architecture = "resnet18", # Choose architecture
     unfreeze.param = TRUE,
     class_weights = rep((1 / 5), 5),
     batch_size = 6,
@@ -15,7 +15,8 @@ test_that("train_CNN_multi works", {
     early.stop = "yes",
     output.base.path = paste(tempdir(), "/", sep = ""),
     trainingfolder = "test",
-    noise.category = "noise"
+    noise.category = "noise",
+    save.model = TRUE
   )
 
 

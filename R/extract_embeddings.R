@@ -69,8 +69,6 @@ extract_embeddings <- function(test_input,
   # Load the fine-tuned model
   fine_tuned_model <- luz_load(model_path)
 
-
-
   # Create a dataset from the test images
   test_ds <- image_folder_dataset(
     file.path(test_input),
@@ -89,23 +87,46 @@ extract_embeddings <- function(test_input,
   # Create a dataloader
   test_dl <- dataloader(test_ds, batch_size = 32, shuffle = FALSE)
 
-  # Define the module
-  net <- torch::nn_module(
+  net <- nn_module(
     initialize = function() {
-      self$model <- fine_tuned_model
-      self$feature_extractor <- nn_sequential(
-        self$model$features,
-        self$model$avgpool,
-        nn_flatten(start_dim = 2),
-        self$model$classifier[1:6],
-        nn_linear(150528, 1024)
-      )
-      for (par in self$parameters) {
+      self$model <- model_resnet18(pretrained = TRUE)
+
+      # Freeze all original ResNet parameters:
+      for (par in self$model$parameters) {
         par$requires_grad_(FALSE)
       }
+
+      # Remove the original fully connected layer (fc):
+      self$model$fc <- NULL  # Or: self$model$fc <- nn_identity() for a no-op layer
+
+      # Create the feature extractor part (up to the avgpool):
+      self$feature_extractor <- nn_sequential(
+        self$model$conv1,
+        self$model$bn1,
+        self$model$relu,       # Add relu if needed
+        self$model$maxpool,
+        self$model$layer1,
+        self$model$layer2,
+        self$model$layer3,
+        self$model$layer4,
+        self$model$avgpool,
+        nn_flatten(start_dim = 2) # Important: Flatten the output
+      )
+
+      # Add your new classifier (if needed):
+      self$classifier <- nn_sequential(
+        nn_linear(512, 1024),  # Adjust 512 if needed
+        nn_relu(),
+        nn_linear(1024, 1024),
+        nn_relu(),
+        nn_linear(1024, num_classes) # num_classes should be defined
+      )
+
     },
     forward = function(x) {
-      x %>% self$feature_extractor()
+      features <- x %>% self$feature_extractor() # Extract features
+      output <- features %>% self$classifier() # Classify (if classifier is defined)
+      return(output) # Return the output
     }
   )
 
@@ -136,7 +157,7 @@ extract_embeddings <- function(test_input,
 
   EmbeddingsM2.umap <-
     umap::umap(
-      Embeddings[, -c(1025)],
+      Embeddings[, -c(ncol(Embeddings))],
       controlscale = TRUE,
       scale = 3,
       n_neighbors = 5
