@@ -21,7 +21,7 @@
 #' @param single_class_category A character string specifying the single class category when 'single_class' is set to TRUE.
 #' @param for_prrec Whether to output all detections to create a PR curve.
 #' @details This function processes sound data from a directory, extracts sound clips, converts them to images, performs image classification using a pre-trained deep learning model, and saves the results including selection tables and image and audio files.
-#'
+#' @return Returns spectrogram images, wav files (if specified), and Raven selection tables for each sound file.
 #' @examples
 #' {
 #'   # Load data

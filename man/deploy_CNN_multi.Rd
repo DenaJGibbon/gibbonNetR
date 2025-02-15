@@ -63,6 +63,9 @@ deploy_CNN_multi(
 
 \item{for_prrec}{Whether to output all detections to create a PR curve.}
 }
+\value{
+Returns spectrogram images, wav files (if specified), and Raven selection tables for each sound file.
+}
 \description{
 This function processes sound data from a specified directory, performs transfer learning using a pre-trained deep learning model, and saves the results.
 }

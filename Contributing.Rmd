@@ -1,0 +1,19 @@
+# Contributing to 'gibbonNetR'
+
+Thank you for your interest in contributing to this project! Please follow the guidelines below to help maintain a smooth collaboration.
+
+## Getting Started
+
+1. Fork the repository and clone it locally.
+2. Create a new branch for your feature or bug fix.
+3. Follow the coding standards and document your changes clearly.
+
+## Reporting Issues
+
+- Use the [Issues](https://github.com/DenaJGibbon/gibbonNetR/issues) tab to report bugs or suggest enhancements.
+- Provide clear descriptions, screenshots (if applicable), and steps to reproduce the issue.
+
+
+---
+
+Thank you for your contributions! 🚀

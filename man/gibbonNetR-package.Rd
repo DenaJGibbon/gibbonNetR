@@ -12,6 +12,7 @@ R Package for the Use of CNNs and Transfer Learning on Acoustic Data.
 Useful links:
 \itemize{
   \item \url{https://denajgibbon.github.io/gibbonNetR/}
+  \item Report bugs at \url{https://github.com/DenaJGibbon/gibbonNetR/issues}
 }
 
 }
