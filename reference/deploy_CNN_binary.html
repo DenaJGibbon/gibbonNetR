@@ -27,6 +27,7 @@
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/DenaJGibbon/gibbonNetR/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul></div>
 
 
@@ -36,7 +37,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Transfer Learning from Sound Directories</h1>
-
+      <small class="dont-index">Source: <a href="https://github.com/DenaJGibbon/gibbonNetR/blob/main/R/deploy_CNN_binary.R" class="external-link"><code>R/deploy_CNN_binary.R</code></a></small>
       <div class="d-none name"><code>deploy_CNN_binary.Rd</code></div>
     </div>
 
@@ -130,6 +131,10 @@
 
 </dl></div>
     <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    <p>Returns spectrogram images, wav files (if specified), and Raven selection tables for each sound file.</p>
+    </div>
+    <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>This function processes sound data from a directory, extracts sound clips, converts them to images, performs image classification using a pre-trained deep learning model, and saves the results including selection tables and image and audio files.</p>
     </div>
@@ -177,8 +182,8 @@
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Classifying images using Top Model</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Saving output</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Saving output</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving Selection Table /tmp/RtmpnTy729/BinaryDir/Results/SelectionsGibbons-__TempBinWav.wavTopModelBinary.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.653495311737061</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving Selection Table /tmp/RtmpD40Qx1/BinaryDir/Results/SelectionsGibbons-__TempBinWav.wavTopModelBinary.txt</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.62890100479126</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
