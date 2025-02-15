@@ -13,7 +13,6 @@ BugReports: https://github.com/DenaJGibbon/gibbonNetR/issues
 Depends:
     luz,
     R (>= 2.10),
-    torch,
     torchvision,
     tuneR
 Imports:

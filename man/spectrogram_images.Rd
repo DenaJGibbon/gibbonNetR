@@ -109,7 +109,7 @@ Process and Save Spectrogram Images from Sound Files
   )
 
   # Create a dataloader
-  train_dl <- dataloader(train_ds,
+  train_dl <- torch::dataloader(train_ds,
   batch_size = train_ds$.length(),
   shuffle = FALSE, drop_last = TRUE)
 
@@ -122,7 +122,7 @@ Process and Save Spectrogram Images from Sound Files
   class_names <- stringr::str_split_fixed(class_names, pattern = "/", n = 2)[, 1]
 
   # Convert batch tensor of images to an array and reorder dimensions
-  images <- as_array(batch[[1]]) \%>\% aperm(perm = c(1, 3, 4, 2))
+  images <- torch::as_array(batch[[1]]) \%>\% aperm(perm = c(1, 3, 4, 2))
 
   # Define a function to normalize pixel values
   normalize_pixel_values <- function(image) {

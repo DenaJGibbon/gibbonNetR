@@ -59,6 +59,7 @@
 extract_embeddings <- function(test_input,
                                model_path,
                                target_class,
+                               num_classes=5,
                                unsupervised = "TRUE") {
 
   # Ensure model_path is a valid file and contains a .pt extension
@@ -87,36 +88,23 @@ extract_embeddings <- function(test_input,
   # Create a dataloader
   test_dl <- dataloader(test_ds, batch_size = 32, shuffle = FALSE)
 
-  net <- nn_module(
+  # Define the module
+  net <- torch::nn_module(
     initialize = function() {
-      self$model <- model_resnet18(pretrained = TRUE)
-
-      # Freeze all original ResNet parameters:
-      for (par in self$model$parameters) {
+      self$model <- fine_tuned_model
+      self$feature_extractor <- nn_sequential(
+        self$model$features,
+        self$model$avgpool,
+        nn_flatten(start_dim = 2),
+        self$model$classifier[1:num_classes],
+        nn_linear(150528, 1024)
+      )
+      for (par in self$parameters) {
         par$requires_grad_(FALSE)
       }
-
-      # Remove the original fully connected layer (fc):
-      self$model$fc <- NULL  # Or: self$model$fc <- nn_identity()
-
-      # Create the feature extractor part (up to the avgpool):
-      self$feature_extractor <- nn_sequential(
-        self$model$conv1,
-        self$model$bn1,
-        self$model$relu,
-        self$model$maxpool,
-        self$model$layer1,
-        self$model$layer2,
-        self$model$layer3,
-        self$model$layer4,
-        self$model$avgpool,
-        nn_flatten(start_dim = 2) # Important: Flatten the output
-      )
-
     },
     forward = function(x) {
-      features <- x %>% self$feature_extractor() # Extract features
-      return(features) # Return the features directly
+      x %>% self$feature_extractor()
     }
   )
 

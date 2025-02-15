@@ -4,7 +4,13 @@
 \alias{extract_embeddings}
 \title{Extract Embeddings and Create Scatter Plots}
 \usage{
-extract_embeddings(test_input, model_path, target_class, unsupervised = "TRUE")
+extract_embeddings(
+  test_input,
+  model_path,
+  target_class,
+  num_classes = 5,
+  unsupervised = "TRUE"
+)
 }
 \arguments{
 \item{test_input}{A character string specifying the path to the directory containing the test images.}
