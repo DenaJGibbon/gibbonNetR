@@ -8,3 +8,4 @@ inst/doc
 .Rapp.history
 .Rbuildignore
 .Renviron
+*.html  # Ignore generated HTML files
