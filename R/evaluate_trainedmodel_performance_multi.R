@@ -36,6 +36,8 @@
 #' @importFrom purrr %>%
 #' @importFrom utils write.csv read.csv
 #' @import data.table
+#' @note Takes the directory of models trained 'train_CNN_multi'
+#' and test folder created using 'spectrogram_images'.
 #' @export
 #'
 evaluate_trainedmodel_performance_multi <-

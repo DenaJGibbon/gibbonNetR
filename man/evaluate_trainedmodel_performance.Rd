@@ -29,6 +29,10 @@ Invisible NULL. The performance scores are written to the specified output direc
 \description{
 Given trained models and a set of images, this function evaluates the performance of the models.
 }
+\note{
+Takes the directory of models trained 'train_CNN_binary' and
+test folder created using 'spectrogram_images'
+}
 \examples{
 {
   # Set directory paths for trained models and test images

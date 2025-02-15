@@ -49,6 +49,8 @@
 #' @importFrom ggpubr ggline
 #' @importFrom utils write.csv read.csv
 #' @importFrom ROCR prediction performance
+#' @note Requires train, valid, and test folders
+#' created using created using 'spectrogram_images'
 #' @export
 #'
 train_CNN_multi <- function(input.data.path, test.data, architecture,

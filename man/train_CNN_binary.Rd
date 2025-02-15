@@ -63,6 +63,10 @@ A list containing two elements:
 \description{
 This function trains Convolutional Neural Network (CNN) models, such as AlexNet, VGG16, VGG19, ResNet18, ResNet50, or ResNet152, on a given dataset. The trained model is saved along with metadata for further usage.
 }
+\note{
+Requires train, valid, and test folders
+created using created using 'spectrogram_images'
+}
 \examples{
 {
   input.data.path <- system.file("extdata", "binary/", package = "gibbonNetR")

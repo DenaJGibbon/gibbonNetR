@@ -6,7 +6,7 @@
 \alias{gibbonNetR-package}
 \title{gibbonNetR: gibbonNetR: R Package for the Use of CNNs and Transfer Learning on Acoustic Data}
 \description{
-R Package for the Use of CNNs and Transfer Learning on Acoustic Data.
+R Package for the Use of CNNs on Acoustic Data.
 }
 \seealso{
 Useful links:

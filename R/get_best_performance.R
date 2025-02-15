@@ -14,15 +14,15 @@
 #' @importFrom readr read_csv
 #' @importFrom ggpubr ggline ggscatter
 #' @importFrom magrittr %>%
-#'
-
+#' @note 'train_CNN_binary' and 'train_CNN_multi' output a directory of 'performance tables'.
+#' This function requres that directory as input.
 #' @examples
 #' {
 #'   # Simulate data for performance tables
 #'   set.seed(123)
 #'
 #'   #' Set directory
-#'   performance_tables_dir <- paste(tempdir(), "/example_performance_tables/", sep = "")
+#'   performance_tables_dir <- paste(tempdir(), "/performance_tables/", sep = "")
 #'
 #'   #' Create directory for performance tables (NOTE THIS IS FOR TESTING ONLY)
 #'   dir.create(performance_tables_dir, showWarnings = FALSE, recursive = TRUE)

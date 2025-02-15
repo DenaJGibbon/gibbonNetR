@@ -10,6 +10,8 @@
 #' @return Invisible NULL. The performance scores are written to the specified output directory.
 #' @importFrom stringr str_split_fixed str_detect
 #' @importFrom purrr %>%
+#' @note Takes the directory of models trained 'train_CNN_binary' and
+#' test folder created using 'spectrogram_images'
 #' @examples {
 #'   # Set directory paths for trained models and test images
 #'   trained_models_dir <- system.file("extdata", "trainedresnetbinary", package = "gibbonNetR")

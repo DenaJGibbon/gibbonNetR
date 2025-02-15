@@ -27,6 +27,10 @@ A list containing the following components:
 This function loads a fine-tuned Torch model, extracts embeddings from a set of test images,
 performs dimensionality reduction using UMAP, and creates scatter plots to visualize the embeddings.
 }
+\note{
+Requires a model trained using 'train_CNN_multi' or 'train_CNN_binary',
+and a directory of spectrogram images created using 'spectrogram_images'.
+}
 \examples{
 {
   #' Set model directory

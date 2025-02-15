@@ -51,6 +51,8 @@
 #' }
 #' @importFrom utils write.csv read.csv
 #' @importFrom coro loop
+#' @note Requires a model trained using 'train_CNN_multi' or 'train_CNN_binary',
+#' and a directory of spectrogram images created using 'spectrogram_images'.
 #' @export
 
 # Define the function

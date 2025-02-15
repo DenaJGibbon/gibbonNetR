@@ -1,7 +1,59 @@
+@Article{ROCR,
+    entry = {article},
+    title = {ROCR: visualizing classifier performance in R},
+    author = {T. Sing and O. Sander and N. Beerenwinkel and T. Lengauer},
+    year = {2005},
+    journal = {Bioinformatics},
+    volume = {21},
+    number = {20},
+    pages = {7881},
+    url = {http://rocr.bioinf.mpi-sb.mpg.de},
+  }
+
+@article{seewave2008,
+    title = {Seewave: a free modular tool for sound analysis and synthesis},
+    author = {{J. Sueur} and {T. Aubin} and {C. Simonis}},
+    year = {2008},
+    journal = {Bioacoustics},
+    volume = {18},
+    pages = {213-226},
+  }
+
+@article{clink2019gibbonfindr,
+  title={gibbonR: An R package for the detection and classification of acoustic signals},
+  author={Clink, D. J. and Klinck, Holger},
+  journal={arXiv preprint arXiv:1906.02572},
+  year={2019}
+}
+
+@article{clinkzenodo2024,
+  author       = {Clink, D. J. and
+                  Hamid Ahmad, Abdul},
+  title        = {A labelled dataset of the loud calls of four
+                   vertebrates collected using passive acoustic
+                   monitoring in Malaysian Borneo
+                  },
+  month        = nov,
+  year         = 2024,
+  publisher    = {Zenodo},
+  doi          = {10.5281/zenodo.14213067},
+  url          = {https://doi.org/10.5281/zenodo.14213067},
+}
+
+@article{araya2017warbler,
+  title={warbleR: an R package to streamline analysis of animal acoustic signals},
+  author={Araya-Salas, Marcelo and Smith-Vidaurre, Grace},
+  journal={Methods in Ecology and Evolution},
+  volume={8},
+  number={2},
+  pages={184--191},
+  year={2017},
+  publisher={Wiley Online Library}
+}
 
 @article{clink2023,
 	title = {A workflow for the automated detection and classification of female gibbon calls from long-term acoustic recordings},
-	author = {Clink, Dena J. and Kier, Isabel and Ahmad, Abdul Hamid and Klinck, Holger},
+	author = {Clink, D. J. and Kier, Isabel and Ahmad, Abdul Hamid and Klinck, Holger},
 	year = {2023},
 	date = {2023},
 	journal = {Frontiers in Ecology and Evolution},
@@ -292,7 +344,7 @@ Publisher: Nature Publishing Group},
 
 @article{lakdari2024mel,
   title={Mel-frequency cepstral coefficients outperform embeddings from pre-trained convolutional neural networks under noisy conditions for discrimination tasks of individual gibbons},
-  author={Lakdari, Mohamed Walid and Ahmad, Abdul Hamid and Sethi, Sarab and Bohn, Gabriel A and Clink, Dena J.},
+  author={Lakdari, Mohamed Walid and Ahmad, Abdul Hamid and Sethi, Sarab and Bohn, Gabriel A and Clink, D. J.},
   journal={Ecological Informatics},
   volume={80},
   pages={102457},
@@ -303,7 +355,7 @@ Publisher: Nature Publishing Group},
 
 @article{sethi2020characterizing,
   title={Characterizing soundscapes across diverse ecosystems using a universal acoustic feature set},
-  author={Sethi, Sarab S and Jones, Nick S and Fulcher, Ben D and Picinali, Lorenzo and Clink, Dena J. and Klinck, Holger and Orme, C David L and Wrege, Peter H and Ewers, Robert M},
+  author={Sethi, Sarab S and Jones, Nick S and Fulcher, Ben D and Picinali, Lorenzo and Clink, D. J. and Klinck, Holger and Orme, C David L and Wrege, Peter H and Ewers, Robert M},
   journal={Proceedings of the National Academy of Sciences},
   volume={117},
   number={29},
@@ -327,7 +379,7 @@ Publisher: Nature Publishing Group},
 
 @article{clink2021not,
   title={Not by the light of the moon: investigating circadian rhythms and environmental predictors of calling in Bornean great argus},
-  author={Clink, Dena J. and Groves, Tom and Ahmad, Abdul Hamid and Klinck, Holger},
+  author={Clink, D. J. and Groves, Tom and Ahmad, Abdul Hamid and Klinck, Holger},
   journal={Plos one},
   volume={16},
   number={2},
@@ -339,7 +391,7 @@ Publisher: Nature Publishing Group},
 
 @article{kennedy2023evidence,
   title={Evidence for acoustic niche partitioning depends on the temporal scale in two sympatric Bornean hornbill species},
-  author={Kennedy, Amy G and Ahmad, Abdul Hamid and Klinck, Holger and Johnson, Lynn M and Clink, Dena J.},
+  author={Kennedy, Amy G and Ahmad, Abdul Hamid and Klinck, Holger and Johnson, Lynn M and Clink, D. J.},
   journal={Biotropica},
   volume={55},
   number={2},
@@ -387,7 +439,7 @@ year = {2024},
 issn = {1574-9541},
 doi = {10.1016/j.ecoinf.2023.102457},
 url = {https://www.sciencedirect.com/science/article/pii/S1574954123004867},
-author = {Lakdari,Mohamed Walid  and Ahmad,Abdul Hamid and Sethi, Sarab and Bohn, Gabriel A.  and Clink, Dena J.},
+author = {Lakdari,Mohamed Walid  and Ahmad,Abdul Hamid and Sethi, Sarab and Bohn, Gabriel A.  and Clink, D. J.},
 keywords = {Vocal individuality, Sound feature extraction, Mel-frequency cepstral coefficients, Convolutional neural networks, Acoustic indices, },
 abstract = {Passive acoustic monitoring – an approach that utilizes autonomous acoustic recording units – allows for non-invasive monitoring of individuals, assuming that it is possible to acoustically distinguish individuals. However, identifying effective analytical approaches for individual identification remains a challenge. Our study investigates how the use of different feature representations impacts our ability to distinguish between individual female Northern grey gibbons (Hylobates funereus). We broadcast pre-recorded calls from twelve gibbon females and re-recorded the calls at varying distances (directly under the tree to ∼400 m away) using autonomous recording units. We evaluated the effectiveness of using different automated feature extraction approaches to classify gibbon calls: Mel-frequency cepstral coefficients (MFCCs), embeddings from three pre-trained neural networks (BirdNET, VGGish, and Wav2Vec2), and four commonly used acoustic indices. We used a supervised classification approach (random forest) to classify calls to the respective female and compared two unsupervised clustering approaches (affinity propagation clustering and hierarchical density-based spatial clustering) to evaluate which features were most effective for distinguishing female calls without using class labels. We used MFCCs as a baseline as previous work has shown they can be used to distinguish high-quality calls of individual gibbon females. Human annotators could only identify calls in spectrograms from recordings <350 m from the playback speaker with signal-to-noise ratio ∼ 0 dB, so our results focus on these recordings. Using supervised classification, our results confirmed the efficiency of MFCCs and the use of embeddings from one neural network (BirdNET) for effective acoustic classification of gibbon individuals at closer recording distances (signal-to-noise ratio > 10 dB), while the remaining features did not perform well. Contrary to our expectations, we found that MFCCs outperformed all other features for the unsupervised clustering tasks at closer distances and none of the features performed well at farther distances. The ability to acoustically discriminate animals under noisy conditions and from low signal-to-noise ratio calls has important implications for monitoring populations of endangered animals, such as gibbons. Focusing only on high signal-to-noise ratio calls for individual discrimination may not be possible for rare sounds, and future work should focus on developing effective approaches of feature extraction that can perform well across noisy, real-world conditions with a limited number of training samples.}
 }
@@ -467,7 +519,7 @@ abstract = {Passive acoustic monitoring – an approach that utilizes autonomous
 }
 
 @article {Clink2024benchmark,
-	author = {Clink, Dena J. and Cross-Jaya, Hope and Kim, Jinsung and Ahmad, Abdul Hamid and Hong, Moeurk and Sala, Roeun and Birot, H{\'e}l{\`e}ne and Agger, Cain and Vu, Thinh Tien and Thi, Hoa Nguyen and Chi, Thanh Nguyen and Klinck, Holger},
+	author = {Clink, D. J. and Cross-Jaya, Hope and Kim, Jinsung and Ahmad, Abdul Hamid and Hong, Moeurk and Sala, Roeun and Birot, H{\'e}l{\`e}ne and Agger, Cain and Vu, Thinh Tien and Thi, Hoa Nguyen and Chi, Thanh Nguyen and Klinck, Holger},
 	title = {Benchmarking for the automated detection and classification of southern yellow-cheeked crested gibbon calls from passive acoustic monitoring data},
 	elocation-id = {2024.08.17.608420},
 	year = {2024},
@@ -481,16 +533,27 @@ abstract = {Passive acoustic monitoring – an approach that utilizes autonomous
 
 @article{clink2024automated,
   title={Automated detection of gibbon calls from passive acoustic monitoring data using convolutional neural networks in the" torch for R" ecosystem},
-  author={Clink, Dena J. and Kim, Jinsung and Cross-Jaya, Hope and Ahmad, Abdul Hamid and Hong, Moeurk and Sala, Roeun and Birot, H{\'e}l{\`e}ne and Agger, Cain and Vu, Thinh Tien and Thi, Hoa Nguyen and others},
+  author={Clink, D. J. and Kim, Jinsung and Cross-Jaya, Hope and Ahmad, Abdul Hamid and Hong, Moeurk and Sala, Roeun and Birot, H{\'e}l{\`e}ne and Agger, Cain and Vu, Thinh Tien and Thi, Hoa Nguyen and others},
   journal={arXiv preprint arXiv:2407.09976},
   year={2024}
 }
 
 @article{Vu2024,
   title={Investigating hunting in a protected area in Southeast Asia using passive acoustic monitoring with mobile smartphones and transfer learning},
-  author={Vu, Thinh Tien and Phan, Dai Viet and Le, Thai Son and Clink, Dena J.},
+  author={Vu, Thinh Tien and Phan, Dai Viet and Le, Thai Son and Clink, D. J.},
   journal={Ecological Indicators},
   year={2024},
   note={Forthcoming},
   url={10.1016/j.ecolind.2024.112501},
 }
+
+@misc{pytorch_quantized_transfer_learning,
+  author       = {Takhirov, Zafar},
+  title        = {Quantized Transfer Learning Tutorial},
+  year         = 2021,
+  url          = {https://pytorch.org/tutorials/intermediate/quantized_transfer_learning_tutorial.html},
+  note         = {Accessed: 2025-02-15}
+}
+
+
+
