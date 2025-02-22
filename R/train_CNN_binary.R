@@ -6,7 +6,7 @@
 #' @param test.data Character. The path to the folder containing the test data.
 #' @param architecture Character. The CNN architecture to use ('alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152').
 #' @param noise.weight Numeric. Assigned weight for the noise class. Default is 0.5.
-#' @param unfreeze.param Logical. Determines whether to unfreeze.param all layers of the pretrained CNN for retraining. Default is TRUE.
+#' @param unfreeze.param Logical. Determines whether to unfreeze all layers of the pretrained CNN for retraining. Default is TRUE.
 #' @param batch_size Numeric. Batch size for training the model. Default is 32.
 #' @param learning_rate Numeric. The learning rate for training the model.
 #' @param epoch.iterations Numeric. The number of epochs for training the model. Default is 1.

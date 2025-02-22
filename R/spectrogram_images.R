@@ -3,6 +3,7 @@
 #' @param trainingBasePath Base directory containing the training folders.
 #' @param outputBasePath Directory where the processed images will be saved.
 #' @param splits Numeric vector specifying the split ratios for train, valid, and test sets. Defaults to c(0.8, 0.1, 0.1).
+#' @param windowlength window length for input into 'spectro' function from seewave. Deafults to 512.
 #' @param minfreq.khz Minimum frequency in kHz for the spectrogram. Defaults to 0.4.
 #' @param maxfreq.khz Maximum frequency in kHz for the spectrogram. Defaults to 2.
 #' @param new.sampleratehz New sample rate in Hz for resampling the audio. Defaults to 16000. Set to 'NA' if no resampling is required.
@@ -128,6 +129,7 @@ spectrogram_images <- function(trainingBasePath,
                                outputBasePath,
                                splits,
                                random = "FALSE",
+                               windowlength=512,
                                minfreq.khz = 0.4,
                                maxfreq.khz = 1.6,
                                new.sampleratehz = 16000) {
@@ -196,7 +198,7 @@ spectrogram_images <- function(trainingBasePath,
     }
 
     message("Creating spectrogram images")
-    for (y in 1:length(SoundFilesShort)) {
+    for (y in 1:length(SoundFilesShort)) {  tryCatch({
       # Determine the DataType based on the index
       if (y %in% train_idx) {
         DataType <- FolderVec[1]
@@ -231,6 +233,7 @@ spectrogram_images <- function(trainingBasePath,
         short_wav,
         tlab = "",
         flab = "",
+        wl = windowlength,
         axisX = FALSE,
         axisY = FALSE,
         scale = FALSE,
@@ -238,6 +241,9 @@ spectrogram_images <- function(trainingBasePath,
         grid = FALSE
       )
       graphics.off()
+    }, error = function(e) {
+      cat("ERROR :", conditionMessage(e), basename(SoundFilesShort[y]), "\n")
+    })
     }
   }
 

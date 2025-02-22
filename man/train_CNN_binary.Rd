@@ -31,7 +31,7 @@ train_CNN_binary(
 
 \item{noise.weight}{Numeric. Assigned weight for the noise class. Default is 0.5.}
 
-\item{unfreeze.param}{Logical. Determines whether to unfreeze.param all layers of the pretrained CNN for retraining. Default is TRUE.}
+\item{unfreeze.param}{Logical. Determines whether to unfreeze all layers of the pretrained CNN for retraining. Default is TRUE.}
 
 \item{batch_size}{Numeric. Batch size for training the model. Default is 32.}
 

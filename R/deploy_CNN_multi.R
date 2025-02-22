@@ -97,18 +97,19 @@ deploy_CNN_multi <- function(output_folder,
                              single_class = TRUE,
                              single_class_category = "female.gibbon",
                              for_prrec = TRUE) {
+
   # Create output folders if they don't exist
   dir.create(output_folder,
     recursive = TRUE,
-    showWarnings = FALSE
+    showWarnings = TRUE
   )
   dir.create(output_folder_selections,
     recursive = TRUE,
-    showWarnings = FALSE
+    showWarnings = TRUE
   )
   dir.create(output_folder_wav,
     recursive = TRUE,
-    showWarnings = FALSE
+    showWarnings = TRUE
   )
 
   path_to_files <-

@@ -450,7 +450,8 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
           "CNN Architecture"
         )
 
-        ROCRpred <- ROCR::prediction(predictions = outputTableMultiSub$Probability, labels = outputTableMultiSub$ActualClass)
+        ROCRpred <- ROCR::prediction(predictions =
+                                       outputTableMultiSub$Probability, labels = outputTableMultiSub$ActualClass)
         AUCval <- ROCR::performance(ROCRpred, "auc")
         TempRowMulti$AUC <- as.numeric(AUCval@y.values)
         TempRowMulti$Threshold <- as.character(threshold)

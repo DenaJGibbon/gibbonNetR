@@ -9,6 +9,7 @@ spectrogram_images(
   outputBasePath,
   splits,
   random = "FALSE",
+  windowlength = 512,
   minfreq.khz = 0.4,
   maxfreq.khz = 1.6,
   new.sampleratehz = 16000
@@ -22,6 +23,8 @@ spectrogram_images(
 \item{splits}{Numeric vector specifying the split ratios for train, valid, and test sets. Defaults to c(0.8, 0.1, 0.1).}
 
 \item{random}{Logical. If TRUE then randomly samples from folder, if FALSE then divides into sets based on alphabetic file name sequence.}
+
+\item{windowlength}{window length for input into 'spectro' function from seewave. Deafults to 512.}
 
 \item{minfreq.khz}{Minimum frequency in kHz for the spectrogram. Defaults to 0.4.}
 
