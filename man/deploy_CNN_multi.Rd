@@ -20,6 +20,7 @@ deploy_CNN_multi(
   class_names = c("female.gibbon", "hornbill.helmeted", "hornbill.rhino", "long.argus",
     "noise"),
   noise_category = "noise",
+  min_freq_khz = 0.4,
   max_freq_khz = 2,
   single_class = TRUE,
   single_class_category = "female.gibbon",
@@ -54,6 +55,8 @@ deploy_CNN_multi(
 \item{class_names}{A character vector containing the unique classes for training the model.}
 
 \item{noise_category}{A character string specifying the noise category for exclusion.}
+
+\item{min_freq_khz}{The minimum frequency in kHz for spectrogram visualization.}
 
 \item{max_freq_khz}{The maximum frequency in kHz for spectrogram visualization.}
 

@@ -16,6 +16,7 @@
 #' @param save_wav A logical value indicating whether to save the extracted sound clips as WAV files. Default is TRUE.
 #' @param positive.class A character string specifying the positive class label. Default is 'Gibbons'.
 #' @param negative.class A character string specifying the negative class label. Default is 'Noise'.
+#' @param min_freq_khz The minimum frequency in kHz for spectrogram visualization.
 #' @param max_freq_khz The maximum frequency in kHz for spectrogram visualization. Default is 2.
 #' @return Returns spectrogram images, wav files (if specified), and Raven selection tables for each sound file.
 #' @details This function processes sound data from a directory, extracts sound clips, converts them to images, performs image classification using a pre-trained deep learning model, and saves the results including selection tables and image and audio files.
@@ -82,6 +83,7 @@ deploy_CNN_binary <- function(output_folder,
                               save_wav = TRUE,
                               positive.class = "Gibbons",
                               negative.class = "Noise",
+                              min_freq_khz = 0.4,
                               max_freq_khz = 2) {
   # Create output folders if they don't exist
   dir.create(output_folder,
@@ -255,7 +257,7 @@ deploy_CNN_binary <- function(output_folder,
               axisY = F,
               scale = F,
               grid = F,
-              flim = c(0.4, max_freq_khz),
+              flim = c(min_freq_khz, max_freq_khz),
               fastdisp = TRUE,
               noisereduction = 1
             )
@@ -360,11 +362,12 @@ deploy_CNN_binary <- function(output_folder,
             image.files[DetectionIndices],
             to = paste(
               output_folder,
+              '/',
+              round(outputTableTrainedModel$Probability[DetectionIndices], 2),
+              "_",
               DetectionClass,
               "_",
               image.files.short[DetectionIndices],
-              "_",
-              round(outputTableTrainedModel$Probability[DetectionIndices], 2),
               "_TopModel_.jpg",
               sep = ""
             )
@@ -376,11 +379,12 @@ deploy_CNN_binary <- function(output_folder,
               wav.file.paths[DetectionIndices],
               to = paste(
                 output_folder_wav,
+                '/',
+                round(outputTableTrainedModel$Probability[DetectionIndices], 2),
+                "_",
                 DetectionClass,
                 "_",
                 image.files.short[DetectionIndices],
-                "_",
-                round(outputTableTrainedModel$Probability[DetectionIndices], 2),
                 "_TopModel_.wav",
                 sep = ""
               )

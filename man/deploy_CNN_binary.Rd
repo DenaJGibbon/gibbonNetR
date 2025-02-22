@@ -19,6 +19,7 @@ deploy_CNN_binary(
   save_wav = TRUE,
   positive.class = "Gibbons",
   negative.class = "Noise",
+  min_freq_khz = 0.4,
   max_freq_khz = 2
 )
 }
@@ -50,6 +51,8 @@ deploy_CNN_binary(
 \item{positive.class}{A character string specifying the positive class label. Default is 'Gibbons'.}
 
 \item{negative.class}{A character string specifying the negative class label. Default is 'Noise'.}
+
+\item{min_freq_khz}{The minimum frequency in kHz for spectrogram visualization.}
 
 \item{max_freq_khz}{The maximum frequency in kHz for spectrogram visualization. Default is 2.}
 }

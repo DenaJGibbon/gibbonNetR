@@ -16,6 +16,7 @@
 #' @param save_wav A logical value indicating whether to save the extracted sound clips as WAV files.
 #' @param class_names A character vector containing the unique classes for training the model.
 #' @param noise_category A character string specifying the noise category for exclusion.
+#' @param min_freq_khz The minimum frequency in kHz for spectrogram visualization.
 #' @param max_freq_khz The maximum frequency in kHz for spectrogram visualization.
 #' @param single_class A logical value indicating whether to process only a single class. For now 'TRUE' is only option.
 #' @param single_class_category A character string specifying the single class category when 'single_class' is set to TRUE.
@@ -93,6 +94,7 @@ deploy_CNN_multi <- function(output_folder,
                                "noise"
                              ),
                              noise_category = "noise",
+                             min_freq_khz = 0.4,
                              max_freq_khz = 2,
                              single_class = TRUE,
                              single_class_category = "female.gibbon",
@@ -265,7 +267,7 @@ deploy_CNN_multi <- function(output_folder,
               axisY = F,
               scale = F,
               grid = F,
-              flim = c(0.4, max_freq_khz),
+              flim = c(min_freq_khz, max_freq_khz),
               fastdisp = TRUE,
               noisereduction = 1
             )
@@ -407,6 +409,7 @@ deploy_CNN_multi <- function(output_folder,
             "Saving output to",
             paste(
               output_folder,
+              '/',
               DetectionClass,
               "_",
               image.files.short[DetectionIndices],
@@ -420,12 +423,13 @@ deploy_CNN_multi <- function(output_folder,
           file.copy(
             image.files[DetectionIndices],
             to = paste(
-              output_folder,
+              output_folder_wav,
+              '/',
+              round(predicted_class_probability[DetectionIndices], 2),
+              "_",
               DetectionClass,
               "_",
               image.files.short[DetectionIndices],
-              "_",
-              round(predicted_class_probability[DetectionIndices], 2),
               "_TopModel_.jpg",
               sep = ""
             )
@@ -437,11 +441,11 @@ deploy_CNN_multi <- function(output_folder,
               wav.file.paths[DetectionIndices],
               to = paste(
                 output_folder_wav,
+                round(predicted_class_probability[DetectionIndices], 2),
+                "_",
                 DetectionClass,
                 "_",
                 image.files.short[DetectionIndices],
-                "_",
-                round(predicted_class_probability[DetectionIndices], 2),
                 "_TopModel_.wav",
                 sep = ""
               )
