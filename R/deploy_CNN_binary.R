@@ -11,6 +11,7 @@
 #' @param architecture A character string specifying the architecture of the pre-trained model.
 #' @param clip_duration The duration of each sound clip in seconds.
 #' @param hop_size The hop size for splitting the sound clips.
+#' @param windowlength window length for input into 'spectro' function from seewave. Deafults to 512.
 #' @param downsample_rate The downsample rate for audio in Hz. Set to 'NA' if no downsampling is required.
 #' @param threshold The threshold for audio detection.
 #' @param save_wav A logical value indicating whether to save the extracted sound clips as WAV files. Default is TRUE.
@@ -74,6 +75,7 @@ deploy_CNN_binary <- function(output_folder,
                               output_folder_wav,
                               top_model_path,
                               path_to_files,
+                              windowlength= 512,
                               detect_pattern = NA,
                               architecture,
                               clip_duration = 12,
@@ -253,6 +255,7 @@ deploy_CNN_binary <- function(output_folder,
               short.wav,
               tlab = "",
               flab = "",
+              wl = windowlength,
               axisX = F,
               axisY = F,
               scale = F,

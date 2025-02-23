@@ -9,6 +9,7 @@
 #' @param path_to_files A character string specifying the path to the directory or list containing sound files to process.
 #' @param clip_duration The duration of each sound clip in seconds.
 #' @param hop_size The hop size for splitting the sound clips.
+#' @param windowlength window length for input into 'spectro' function from seewave. Deafults to 512.
 #' @param detect_pattern Pattern in sound file to detect for subset.
 #' @param architecture User specified: 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'
 #' @param downsample_rate The downsample rate for audio in Hz, set to 'NA' if no downsampling is required.
@@ -79,6 +80,7 @@ deploy_CNN_multi <- function(output_folder,
                              output_folder_wav,
                              top_model_path,
                              path_to_files,
+                             windowlength = 512,
                              detect_pattern = NA,
                              architecture,
                              clip_duration = 12,
@@ -261,6 +263,7 @@ deploy_CNN_multi <- function(output_folder,
 
             seewave::spectro(
               short.wav,
+              wl = windowlength,
               tlab = "",
               flab = "",
               axisX = F,

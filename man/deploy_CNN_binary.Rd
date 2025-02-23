@@ -10,6 +10,7 @@ deploy_CNN_binary(
   output_folder_wav,
   top_model_path,
   path_to_files,
+  windowlength = 512,
   detect_pattern = NA,
   architecture,
   clip_duration = 12,
@@ -33,6 +34,8 @@ deploy_CNN_binary(
 \item{top_model_path}{A character string specifying the path to the pre-trained top model for classification.}
 
 \item{path_to_files}{A character string specifying the path to the directory containing sound files to process.}
+
+\item{windowlength}{window length for input into 'spectro' function from seewave. Deafults to 512.}
 
 \item{detect_pattern}{(optional) A character string specifying a pattern to detect in the file names. Default is NA.}
 

@@ -10,10 +10,11 @@
 #'
 #' @return A list containing best F1 scores, best precision results, best recall results,
 #'         and plots visualizing these metrics.
-#' @importFrom purrr map_dfr
+#' @importFrom purrr map_dfr map
 #' @importFrom readr read_csv
 #' @importFrom ggpubr ggline ggscatter
 #' @importFrom magrittr %>%
+#' @importFrom dplyr bind_rows
 #' @note 'train_CNN_binary' and 'train_CNN_multi' output a directory of 'performance tables'.
 #' This function requres that directory as input.
 #' @examples
@@ -98,7 +99,10 @@ get_best_performance <- function(performancetables.dir,
                                  Thresh.val = 0.5) {
   # Read all CSV files from the directory
   FrozenFiles <- list.files(performancetables.dir, full.names = TRUE)
-  FrozenCombined <- suppressMessages(map_dfr(FrozenFiles, read_csv))
+
+  FrozenCombined <- FrozenFiles %>%
+    map(read_csv,show_col_types = FALSE) %>%
+    bind_rows()
 
   if (model.type == "multi") {
     if (!class %in% FrozenCombined[["Class"]]) {
