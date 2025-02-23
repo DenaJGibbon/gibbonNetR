@@ -413,11 +413,11 @@ deploy_CNN_multi <- function(output_folder,
             paste(
               output_folder,
               '/',
+              round(predicted_class_probability[DetectionIndices], 2),
+              "_",
               DetectionClass,
               "_",
               image.files.short[DetectionIndices],
-              "_",
-              round(predicted_class_probability[DetectionIndices], 2),
               "_TopModel_.jpg",
               sep = ""
             )
@@ -426,7 +426,7 @@ deploy_CNN_multi <- function(output_folder,
           file.copy(
             image.files[DetectionIndices],
             to = paste(
-              output_folder_wav,
+              output_folder,
               '/',
               round(predicted_class_probability[DetectionIndices], 2),
               "_",
