@@ -94,6 +94,8 @@ We can calculate the Normalize Mutual Information score, which provides a value 
 
 There have been huge advances in the fields of deep learning and automated detection for PAM data in recent years. The approach presented in this package is one of the first to use the 'torch for R' ecosystem and to employ automated detection using deep learning natively in R. More recent approaches use transfer learning from models that are explicitly trained on bioacoustics data, such as BirdNET [@ghani2023], have been introduced. There is a huge need in the field of bioacoustics to do benchmarking, wherein different model architectures and performance are compared across diverse datasets. The methods presented here can provide important benchmarks for future work, and for understanding how and if deep learning advances improve performance over more traditional methods. In addition, this package provides a comprehensive suite of tools for processing, analyzing, and visualizing acoustic data, providing robust support for tasks such as automated detection, feature extraction, classification, and data visualization, which are critical for conservation work using PAM. The R package is available on [Github](https://github.com/DenaJGibbon/gibbonNetR), where issues can be opened.
 
+# Ethical statement
+The research presented here adhered to all local and international laws. Institutional approval was provided by Cornell University (IACUC 2017–0098). Sabah Biodiversity Centre and the Danum Valley Management Committee provided permission for the collection of acoustic recordings.
 
 # Acknowledgments
 
