@@ -30,6 +30,7 @@
     <a class="dropdown-item" href="../articles/a03-Trainingbinarymodels.html">3. Binary models</a>
     <a class="dropdown-item" href="../articles/a04-Automateddetection.html">4. Automated detection</a>
     <a class="dropdown-item" href="../articles/a05-UnsupervisedClustering.html">5. Unsupervised clustering</a>
+    <a class="dropdown-item" href="../articles/a06-CompleteExample.html">6. A complete working example</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -65,6 +66,7 @@
 <span>  <span class="va">output_folder_wav</span>,</span>
 <span>  <span class="va">top_model_path</span>,</span>
 <span>  <span class="va">path_to_files</span>,</span>
+<span>  windowlength <span class="op">=</span> <span class="fl">512</span>,</span>
 <span>  detect_pattern <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  <span class="va">architecture</span>,</span>
 <span>  clip_duration <span class="op">=</span> <span class="fl">12</span>,</span>
@@ -75,6 +77,7 @@
 <span>  class_names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"female.gibbon"</span>, <span class="st">"hornbill.helmeted"</span>, <span class="st">"hornbill.rhino"</span>, <span class="st">"long.argus"</span>,</span>
 <span>    <span class="st">"noise"</span><span class="op">)</span>,</span>
 <span>  noise_category <span class="op">=</span> <span class="st">"noise"</span>,</span>
+<span>  min_freq_khz <span class="op">=</span> <span class="fl">0.4</span>,</span>
 <span>  max_freq_khz <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  single_class <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  single_class_category <span class="op">=</span> <span class="st">"female.gibbon"</span>,</span>
@@ -102,6 +105,10 @@
 
 <dt>path_to_files</dt>
 <dd><p>A character string specifying the path to the directory or list containing sound files to process.</p></dd>
+
+
+<dt>windowlength</dt>
+<dd><p>window length for input into 'spectro' function from seewave. Deafults to 512.</p></dd>
 
 
 <dt>detect_pattern</dt>
@@ -138,6 +145,10 @@
 
 <dt>noise_category</dt>
 <dd><p>A character string specifying the noise category for exclusion.</p></dd>
+
+
+<dt>min_freq_khz</dt>
+<dd><p>The minimum frequency in kHz for spectrogram visualization.</p></dd>
 
 
 <dt>max_freq_khz</dt>
@@ -181,7 +192,7 @@
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"MultiDir"</span>, <span class="st">"Wav"</span><span class="op">)</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co"># Write to temp directory</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/tuneR/man/writeWave.html" class="external-link">writeWave</a></span><span class="op">(</span><span class="va">TempBinWav</span>, filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"MultiDir"</span>, <span class="st">"Wav"</span>, <span class="st">"TempBinWav.wav"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">writeWave</span><span class="op">(</span><span class="va">TempBinWav</span>, filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"MultiDir"</span>, <span class="st">"Wav"</span>, <span class="st">"TempBinWav.wav"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co"># Set model directory</span></span></span>
 <span class="r-in"><span>  <span class="va">trained_models_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"trainedresnetmulti"</span>, package <span class="op">=</span> <span class="st">"gibbonNetR"</span><span class="op">)</span></span></span>
@@ -208,6 +219,9 @@
 <span class="r-in"><span>    max_freq_khz <span class="op">=</span> <span class="fl">2</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'/var/folders/1s/x8xb37tj45j86tn_stc4v44w0000gn/T//Rtmp7NriIJ/MultiDir/Results/Images' already exists</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'/var/folders/1s/x8xb37tj45j86tn_stc4v44w0000gn/T//Rtmp7NriIJ/MultiDir/Results/Selections' already exists</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'/var/folders/1s/x8xb37tj45j86tn_stc4v44w0000gn/T//Rtmp7NriIJ/MultiDir/Results/Wavs' already exists</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 1 out of 1</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> TempBinWav.wav</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> saving sound clips</span>
@@ -220,13 +234,13 @@
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>   `usethis::edit_r_environ()`.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Using `Sys.setenv()` doesn't work because the env var must be set before R</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>   starts.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 2122</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 2222</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Saving output</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving output to /var/folders/1s/x8xb37tj45j86tn_stc4v44w0000gn/T//Rtmpe1dEqC/MultiDir/Results/Imagesfemale.gibbon_TempBinWav.wav_13_0.25_TopModel_.jpg</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> TempBinWav.wav_13</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1Spectrogram 11132510020000.25TempBinWav.wav_13female.gibbon</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving Selection Table With Detections</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.547288179397583</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving output to /var/folders/1s/x8xb37tj45j86tn_stc4v44w0000gn/T//Rtmp7NriIJ/MultiDir/Results/Images/___TopModel_.jpg</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> NANANANANANANANANANA</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving Selection Table No Detections </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.481580018997192</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

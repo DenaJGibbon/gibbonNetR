@@ -30,6 +30,7 @@
     <a class="dropdown-item" href="../articles/a03-Trainingbinarymodels.html">3. Binary models</a>
     <a class="dropdown-item" href="../articles/a04-Automateddetection.html">4. Automated detection</a>
     <a class="dropdown-item" href="../articles/a05-UnsupervisedClustering.html">5. Unsupervised clustering</a>
+    <a class="dropdown-item" href="../articles/a06-CompleteExample.html">6. A complete working example</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -64,6 +65,7 @@
 <span>  <span class="va">outputBasePath</span>,</span>
 <span>  <span class="va">splits</span>,</span>
 <span>  random <span class="op">=</span> <span class="st">"FALSE"</span>,</span>
+<span>  windowlength <span class="op">=</span> <span class="fl">512</span>,</span>
 <span>  minfreq.khz <span class="op">=</span> <span class="fl">0.4</span>,</span>
 <span>  maxfreq.khz <span class="op">=</span> <span class="fl">1.6</span>,</span>
 <span>  new.sampleratehz <span class="op">=</span> <span class="fl">16000</span></span>
@@ -86,6 +88,10 @@
 
 <dt>random</dt>
 <dd><p>Logical. If TRUE then randomly samples from folder, if FALSE then divides into sets based on alphabetic file name sequence.</p></dd>
+
+
+<dt>windowlength</dt>
+<dd><p>window length for input into 'spectro' function from seewave. Deafults to 512.</p></dd>
 
 
 <dt>minfreq.khz</dt>
@@ -124,7 +130,7 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co"># Extract subsamples from the waveform</span></span></span>
 <span class="r-in"><span>  <span class="va">subsamps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">cutwave.list</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/tuneR/man/extractWave.html" class="external-link">extractWave</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu">extractWave</span><span class="op">(</span></span></span>
 <span class="r-in"><span>      <span class="va">TempBinWav</span>,</span></span>
 <span class="r-in"><span>      from <span class="op">=</span> <span class="va">cutwave.list</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>      to <span class="op">=</span> <span class="va">cutwave.list</span><span class="op">[</span><span class="va">i</span> <span class="op">+</span> <span class="fl">1</span><span class="op">]</span>,</span></span>
@@ -136,7 +142,7 @@
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co"># Write the extracted subsamples to .wav files</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">subsamps</span><span class="op">)</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/pkg/tuneR/man/writeWave.html" class="external-link">writeWave</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="fu">writeWave</span><span class="op">(</span></span></span>
 <span class="r-in"><span>      <span class="va">subsamps</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>      filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">output.dir</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"temp_"</span>, <span class="va">i</span>, <span class="st">"_"</span>, <span class="st">".wav"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>      extensible <span class="op">=</span> <span class="cn">FALSE</span></span></span>
@@ -169,7 +175,7 @@
 <span class="r-in"><span>  <span class="va">input.data.path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"MultiDir"</span>, <span class="st">"Spectro"</span>, <span class="st">"train"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co"># Load images and apply transformations</span></span></span>
-<span class="r-in"><span>  <span class="va">train_ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://torchvision.mlverse.org/reference/image_folder_dataset.html" class="external-link">image_folder_dataset</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">train_ds</span> <span class="op">&lt;-</span> <span class="fu">image_folder_dataset</span><span class="op">(</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">input.data.path</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>    transform <span class="op">=</span> <span class="va">.</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
 <span class="r-in"><span>      <span class="fu">torchvision</span><span class="fu">::</span><span class="fu"><a href="https://torchvision.mlverse.org/reference/transform_to_tensor.html" class="external-link">transform_to_tensor</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
@@ -217,8 +223,6 @@
 <span class="r-in"><span>  <span class="op">}</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Creating spectrogram images</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Created output dir: /var/folders/1s/x8xb37tj45j86tn_stc4v44w0000gn/T//Rtmpe1dEqC/MultiDir//Spectro/train/Noise</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Created output dir: /var/folders/1s/x8xb37tj45j86tn_stc4v44w0000gn/T//Rtmpe1dEqC/MultiDir//Spectro/valid/Noise</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "train/Noise/temp_1_.jpg" "train/Noise/temp_2_.jpg"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [3] "valid/Noise/temp_3_.jpg" "valid/Noise/temp_4_.jpg"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [5] "valid/Noise/temp_5_.jpg"</span>

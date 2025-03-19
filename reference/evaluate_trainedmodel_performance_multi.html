@@ -30,6 +30,7 @@
     <a class="dropdown-item" href="../articles/a03-Trainingbinarymodels.html">3. Binary models</a>
     <a class="dropdown-item" href="../articles/a04-Automateddetection.html">4. Automated detection</a>
     <a class="dropdown-item" href="../articles/a05-UnsupervisedClustering.html">5. Unsupervised clustering</a>
+    <a class="dropdown-item" href="../articles/a06-CompleteExample.html">6. A complete working example</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -161,33 +162,33 @@ and test folder created using 'spectrogram_images'.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 0.9</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Sensitivity Specificity Pos.Pred.Value Neg.Pred.Value Precision Recall</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1           1   0.0000000      0.4166667             NA 0.4166667      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2           1   0.5714286      0.6250000      1.0000000 0.6250000      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3           0   1.0000000             NA      0.5833333        NA      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4           0   1.0000000             NA      0.5833333        NA      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5           0   1.0000000             NA      0.5833333        NA      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6           0   1.0000000             NA      0.5833333        NA      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1           1           0      0.4166667             NA 0.4166667      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           1           0      0.4166667             NA 0.4166667      1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           0           1             NA      0.5833333        NA      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           0           1             NA      0.5833333        NA      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5           0           1             NA      0.5833333        NA      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6           0           1             NA      0.5833333        NA      0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          F1 Prevalence Detection.Rate Detection.Prevalence Balanced.Accuracy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.5882353  0.4166667      0.4166667            1.0000000         0.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.7692308  0.4166667      0.4166667            0.6666667         0.7857143</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        NA  0.4166667      0.0000000            0.0000000         0.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        NA  0.4166667      0.0000000            0.0000000         0.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        NA  0.4166667      0.0000000            0.0000000         0.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6        NA  0.4166667      0.0000000            0.0000000         0.5000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Training.Data N.epochs CNN.Architecture        AUC Threshold Frozen</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          test    multi 3_resnet18_model 0.08571429       0.1   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          test    multi 3_resnet18_model 0.08571429       0.2   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3          test    multi 3_resnet18_model 0.08571429       0.3   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4          test    multi 3_resnet18_model 0.08571429       0.4   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5          test    multi 3_resnet18_model 0.08571429       0.5   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6          test    multi 3_resnet18_model 0.08571429       0.6   TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.5882353  0.4166667      0.4166667                    1               0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.5882353  0.4166667      0.4166667                    1               0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        NA  0.4166667      0.0000000                    0               0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        NA  0.4166667      0.0000000                    0               0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        NA  0.4166667      0.0000000                    0               0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6        NA  0.4166667      0.0000000                    0               0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Training.Data N.epochs CNN.Architecture       AUC Threshold Frozen</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          test    multi 3_resnet18_model 0.4285714       0.1   TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          test    multi 3_resnet18_model 0.4285714       0.2   TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          test    multi 3_resnet18_model 0.4285714       0.3   TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          test    multi 3_resnet18_model 0.4285714       0.4   TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          test    multi 3_resnet18_model 0.4285714       0.5   TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          test    multi 3_resnet18_model 0.4285714       0.6   TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           Class Top1Accuracy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 female.gibbon        0.375</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 female.gibbon        0.375</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 female.gibbon        0.375</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 female.gibbon        0.375</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 female.gibbon        0.375</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 female.gibbon        0.375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 female.gibbon        0.125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 female.gibbon        0.125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 female.gibbon        0.125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 female.gibbon        0.125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 female.gibbon        0.125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 female.gibbon        0.125</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

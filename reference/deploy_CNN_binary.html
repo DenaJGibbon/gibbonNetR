@@ -30,6 +30,7 @@
     <a class="dropdown-item" href="../articles/a03-Trainingbinarymodels.html">3. Binary models</a>
     <a class="dropdown-item" href="../articles/a04-Automateddetection.html">4. Automated detection</a>
     <a class="dropdown-item" href="../articles/a05-UnsupervisedClustering.html">5. Unsupervised clustering</a>
+    <a class="dropdown-item" href="../articles/a06-CompleteExample.html">6. A complete working example</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -65,6 +66,7 @@
 <span>  <span class="va">output_folder_wav</span>,</span>
 <span>  <span class="va">top_model_path</span>,</span>
 <span>  <span class="va">path_to_files</span>,</span>
+<span>  windowlength <span class="op">=</span> <span class="fl">512</span>,</span>
 <span>  detect_pattern <span class="op">=</span> <span class="cn">NA</span>,</span>
 <span>  <span class="va">architecture</span>,</span>
 <span>  clip_duration <span class="op">=</span> <span class="fl">12</span>,</span>
@@ -74,6 +76,7 @@
 <span>  save_wav <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  positive.class <span class="op">=</span> <span class="st">"Gibbons"</span>,</span>
 <span>  negative.class <span class="op">=</span> <span class="st">"Noise"</span>,</span>
+<span>  min_freq_khz <span class="op">=</span> <span class="fl">0.4</span>,</span>
 <span>  max_freq_khz <span class="op">=</span> <span class="fl">2</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -98,6 +101,10 @@
 
 <dt>path_to_files</dt>
 <dd><p>A character string specifying the path to the directory containing sound files to process.</p></dd>
+
+
+<dt>windowlength</dt>
+<dd><p>window length for input into 'spectro' function from seewave. Deafults to 512.</p></dd>
 
 
 <dt>detect_pattern</dt>
@@ -136,6 +143,10 @@
 <dd><p>A character string specifying the negative class label. Default is 'Noise'.</p></dd>
 
 
+<dt>min_freq_khz</dt>
+<dd><p>The minimum frequency in kHz for spectrogram visualization.</p></dd>
+
+
 <dt>max_freq_khz</dt>
 <dd><p>The maximum frequency in kHz for spectrogram visualization. Default is 2.</p></dd>
 
@@ -165,7 +176,7 @@
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"BinaryDir"</span>, <span class="st">"Wav"</span><span class="op">)</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span>, showWarnings <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co">#' Write to temp directory</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/tuneR/man/writeWave.html" class="external-link">writeWave</a></span><span class="op">(</span><span class="va">TempBinWav</span>, filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"BinaryDir"</span>, <span class="st">"Wav"</span>, <span class="st">"TempBinWav.wav"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">writeWave</span><span class="op">(</span><span class="va">TempBinWav</span>, filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"BinaryDir"</span>, <span class="st">"Wav"</span>, <span class="st">"TempBinWav.wav"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="co">#' Set model directory</span></span></span>
 <span class="r-in"><span>  <span class="va">trained_models_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"trainedresnetbinary"</span>, package <span class="op">=</span> <span class="st">"gibbonNetR"</span><span class="op">)</span></span></span>
@@ -191,6 +202,7 @@
 <span class="r-in"><span>    max_freq_khz <span class="op">=</span> <span class="fl">2</span></span></span>
 <span class="r-in"><span>  <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>'/var/folders/1s/x8xb37tj45j86tn_stc4v44w0000gn/T//Rtmp7NriIJ/BinaryDir/Wav' already exists</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 1 out of 1</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> TempBinWav.wav</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> saving sound clips</span>
@@ -205,8 +217,8 @@
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>   starts.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Saving output</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Saving output</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving Selection Table /var/folders/1s/x8xb37tj45j86tn_stc4v44w0000gn/T//Rtmpe1dEqC/BinaryDir/Results/SelectionsGibbons-__TempBinWav.wavTopModelBinary.txt</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.623010158538818</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Saving Selection Table /var/folders/1s/x8xb37tj45j86tn_stc4v44w0000gn/T//Rtmp7NriIJ/BinaryDir/Results/SelectionsGibbons-__TempBinWav.wavTopModelBinary.txt</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.46829104423523</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

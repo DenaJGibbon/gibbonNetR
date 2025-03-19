@@ -30,6 +30,7 @@
     <a class="dropdown-item" href="../articles/a03-Trainingbinarymodels.html">3. Binary models</a>
     <a class="dropdown-item" href="../articles/a04-Automateddetection.html">4. Automated detection</a>
     <a class="dropdown-item" href="../articles/a05-UnsupervisedClustering.html">5. Unsupervised clustering</a>
+    <a class="dropdown-item" href="../articles/a06-CompleteExample.html">6. A complete working example</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -97,7 +98,7 @@
 
 
 <dt>unfreeze.param</dt>
-<dd><p>Logical. Determines whether to unfreeze.param all layers of the pretrained CNN for retraining. Default is TRUE.</p></dd>
+<dd><p>Logical. Determines whether to unfreeze all layers of the pretrained CNN for retraining. Default is TRUE.</p></dd>
 
 
 <dt>batch_size</dt>
@@ -186,8 +187,8 @@ created using created using 'spectrogram_images'</p>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Using `Sys.setenv()` doesn't work because the env var must be set before R</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>   starts.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 1/1</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Train metrics: Loss: 1.3635 - Acc: 0.4444</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Valid metrics: Loss: 0.479 - Acc: 0.5556</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Train metrics: Loss: 0.4002 - Acc: 0.4444</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Valid metrics: Loss: 2.0601 - Acc: 0.5556</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> `geom_line()`: Each group consists of only one observation.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Do you need to adjust the <span style="color: #00BB00;">group</span> aesthetic?</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Some torch operators might not yet be implemented for the MPS device. A</span>
