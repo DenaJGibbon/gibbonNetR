@@ -1,0 +1,13 @@
+---
+title: "6. A complete working example"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 1
+    number_sections: true
+    self_contained: yes
+vignette: >
+  %\VignetteIndexEntry{5. Unsupervised clustering}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---

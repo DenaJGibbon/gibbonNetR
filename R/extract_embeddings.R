@@ -86,44 +86,28 @@ extract_embeddings <- function(test_input,
   )
 
   # Create a dataloader
-  test_dl <- dataloader(test_ds, batch_size = 32, shuffle = FALSE)
+  test_dl <- dataloader(test_ds, batch_size = 1, shuffle = FALSE)
 
-  # Define the module
-  net <- torch::nn_module(
-    initialize = function() {
-      self$model <- fine_tuned_model
-      self$feature_extractor <- nn_sequential(
-        self$model$features,
-        self$model$avgpool,
-        nn_flatten(start_dim = 2),
-        self$model$classifier[1:num_classes],
-        nn_linear(150528, 1024)
-      )
-      for (par in self$parameters) {
-        par$requires_grad_(FALSE)
-      }
-    },
-    forward = function(x) {
-      x %>% self$feature_extractor()
-    }
-  )
+  # Extract the actual model from the fitted luz model
+  model <- fine_tuned_model$model$modules$model
+  model$eval()
 
-  # Create a new instance of the module
-  net <- net()
+  # Remove the classification head to use as a feature extractor
+  model$fc <- nn_identity()
 
-  message("processing embeddings")
-
-  # Extract features
+  # Initialize a list to store features
   features <- list()
 
   coro::loop(for (batch in test_dl) {
     inputs <- batch[[1]]
+    # Perform inference without gradient calculation
     with_no_grad({
-      outputs <- net$forward(inputs)
+      outputs <- model(inputs)
     })
     features <- c(features, list(outputs$cpu() %>% as_array()))
   })
 
+  # Combine the list of feature matrices into a single feature vector matrix
   features <- do.call(rbind, features)
 
   # Read Embeddings.csv

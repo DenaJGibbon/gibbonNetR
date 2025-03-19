@@ -12,7 +12,7 @@ test_that("Outputs appropriate test file", {
     learning_rate = 0.001,
     epoch.iterations = 1, # Or any other list of integer epochs
     early.stop = "yes",
-    save.model = F,
+    save.model = TRUE,
     output.base.path = paste(tempdir(), "/BinaryDir/", sep = ""),
     trainingfolder = "test_binary"
   )

@@ -19,11 +19,25 @@ Below we use the pre-trained model to extract embeddings and use unsupervised cl
 
 When unsupervised is set to TRUE, the function assigns clusters to the extracted embeddings using the HDBSCAN clustering algorithm. It then identifies the cluster with the most observations of the target_class.
 
-```{r, eval=F, warning=FALSE, results='hide'}
-ModelPath <- "data/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_1_alexnet_model.pt"
+```{r, echo=F, warning=FALSE, message=FALSE, results='hide'}
+devtools::load_all("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
+
+ModelPath <- "/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/inst/extdata/trainedresnetbinary/_imagesmalaysia_5_resnet18_model.pt"
 
 result <- extract_embeddings(
-  test_input = "data/testimages/test/",
+  test_input = "/Users/denaclink/Desktop/RStudioProjects/gibbonNetR/inst/extdata/multiclass/test/",
+  model_path = ModelPath,
+  target_class = "female.gibbon",
+  unsupervised = "TRUE"
+)
+```
+
+
+```{r, eval=F, warning=FALSE, results='hide'}
+ModelPath <- "inst/extdata/trainedresnetbinary/_imagesmalaysia_5_resnet18_model.pt"
+
+result <- extract_embeddings(
+  test_input = "inst/extdata/multiclass/test/",
   model_path = ModelPath,
   target_class = "female.gibbon",
   unsupervised = "TRUE"
@@ -32,7 +46,7 @@ result <- extract_embeddings(
 
 ### We can plot the unsupervised clustering results
 
-```{r, eval=F}
+```{r, eval=FALSE}
 result$EmbeddingsCombined
 ```
 

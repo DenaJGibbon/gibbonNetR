@@ -13,6 +13,7 @@ BugReports: https://github.com/DenaJGibbon/gibbonNetR/issues
 Depends:
     luz,
     R (>= 2.10),
+    torch,
     torchvision,
     tuneR
 Imports:
@@ -22,6 +23,7 @@ Imports:
     cowplot,
     data.table,
     dbscan,
+    dplyr,
     ggplot2,
     ggpubr,
     grDevices,
@@ -39,7 +41,6 @@ Imports:
     viridis
 Suggests: 
     devtools,
-    dplyr,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
