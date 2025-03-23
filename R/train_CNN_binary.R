@@ -60,6 +60,9 @@ train_CNN_binary <-
            test.data,
            architecture,
            noise.weight = 0.5,
+           brightness = 1,
+           contrast = 1 ,
+           saturation = 1,
            unfreeze.param = TRUE,
            batch_size = 32,
            learning_rate,
@@ -131,7 +134,9 @@ train_CNN_binary <-
           transform = . %>%
             torchvision::transform_to_tensor() %>%
             torchvision::transform_resize(size = c(224, 224)) %>%
-            torchvision::transform_color_jitter() %>%
+            torchvision::transform_color_jitter(brightness = brightness,
+                                                contrast = contrast ,
+                                                saturation = saturation) %>%
             torchvision::transform_normalize(
               mean = c(0.485, 0.456, 0.406),
               std = c(0.229, 0.224, 0.225)
@@ -161,7 +166,9 @@ train_CNN_binary <-
           file.path(input.data.path, "train"),
           transform = . %>%
             torchvision::transform_to_tensor() %>%
-            torchvision::transform_color_jitter() %>%
+            torchvision::transform_color_jitter(brightness = brightness,
+                                                contrast = contrast ,
+                                                saturation = saturation) %>%
             transform_resize(256) %>%
             transform_center_crop(224) %>%
             transform_normalize(
@@ -494,7 +501,9 @@ train_CNN_binary <-
       if (str_detect(architecture, pattern = "resnet")) {
         transform_list <- . %>%
           torchvision::transform_to_tensor() %>%
-          torchvision::transform_color_jitter() %>%
+          torchvision::transform_color_jitter(brightness = brightness,
+                                              contrast = contrast ,
+                                              saturation = saturation) %>%
           transform_resize(256) %>%
           transform_center_crop(224) %>%
           transform_normalize(

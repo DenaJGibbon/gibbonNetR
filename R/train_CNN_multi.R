@@ -59,6 +59,9 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
                             class_weights = c(0.49, 0.49, 0.02),
                             epoch.iterations = 1, early.stop = "yes",
                             output.base.path = tempdir(),
+                            brightness = 1,
+                            contrast = 1 ,
+                            saturation = 1,
                             trainingfolder,
                             noise.category = "Noise") {
   # Device
@@ -102,7 +105,9 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
         transform = . %>%
           torchvision::transform_to_tensor() %>%
           torchvision::transform_resize(size = c(224, 224)) %>%
-          torchvision::transform_color_jitter() %>%
+          torchvision::transform_color_jitter(brightness = brightness,
+                                              contrast = contrast ,
+                                              saturation = saturation ) %>%
           torchvision::transform_normalize(mean = c(0.485, 0.456, 0.406), std = c(0.229, 0.224, 0.225))
       )
 
@@ -120,7 +125,9 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
         file.path(input.data.path, "train"),
         transform = . %>%
           torchvision::transform_to_tensor() %>%
-          torchvision::transform_color_jitter() %>%
+          torchvision::transform_color_jitter(brightness = brightness,
+                                              contrast = contrast ,
+                                              saturation = saturation) %>%
           transform_resize(256) %>%
           transform_center_crop(224) %>%
           transform_normalize(mean = c(0.485, 0.456, 0.406), std = c(0.229, 0.224, 0.225))
@@ -222,7 +229,7 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
         initialize = function() {
           self$model <- model_resnet18(pretrained = TRUE)
           for (par in self$parameters) {
-            par$requires_grad_(unfreeze.param) # False means the features are unfrozen
+            par$requires_grad_(unfreeze.param) #
           }
           self$model$fc <- nn_sequential(
             nn_linear(self$model$fc$in_features, 1024),
@@ -242,7 +249,7 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
         initialize = function() {
           self$model <- model_resnet50(pretrained = TRUE)
           for (par in self$parameters) {
-            par$requires_grad_(unfreeze.param) # False means the features are unfrozen
+            par$requires_grad_(unfreeze.param) #
           }
           self$model$fc <- nn_sequential(
             nn_linear(self$model$fc$in_features, 1024),
@@ -262,7 +269,7 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
         initialize = function() {
           self$model <- model_resnet152(pretrained = TRUE)
           for (par in self$parameters) {
-            par$requires_grad_(unfreeze.param) # False means the features are unfrozen
+            par$requires_grad_(unfreeze.param) #
           }
           self$model$fc <- nn_sequential(
             nn_linear(self$model$fc$in_features, 1024),
@@ -356,7 +363,9 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
     if (str_detect(architecture, pattern = "resnet")) {
       transform_list <- . %>%
         torchvision::transform_to_tensor() %>%
-        torchvision::transform_color_jitter() %>%
+        torchvision::transform_color_jitter(brightness = brightness,
+                                            contrast = contrast ,
+                                            saturation = saturation) %>%
         transform_resize(256) %>%
         transform_center_crop(224) %>%
         transform_normalize(mean = c(0.485, 0.456, 0.406), std = c(0.229, 0.224, 0.225))
