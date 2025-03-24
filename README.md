@@ -1,7 +1,7 @@
 gibbonNetR R Package
 ================
 Dena J. Clink and Abdul Hamid Ahmad
-2025-02-15
+2025-03-24
 
 # Overview
 
@@ -52,14 +52,11 @@ install.packages("devtools")
 # Install gibbonNetR
 devtools::install_github("https://github.com/DenaJGibbon/gibbonNetR")
 
-# NOTE: As of February 15, 2025 need to install 
-# an older version of 'torch'
-remotes::install_version("torch", version = "0.13.0")
-
 # The first time you use the package 'torch' will need to install additional packages. You can start the process using the following:
 library(torch)
 ```
 
+    #> Warning: package 'torch' was built under R version 4.4.1
     #> Warning: package 'purrr' was built under R version 4.4.1
 
 # Quickstart guide
