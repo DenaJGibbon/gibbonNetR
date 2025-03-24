@@ -107,7 +107,6 @@ evaluate_trainedmodel_performance_multi <-
       if (str_detect(model_type, pattern = "ResNet")) {
         transform_list <- . %>%
           torchvision::transform_to_tensor() %>%
-          torchvision::transform_color_jitter() %>%
           transform_resize(256) %>%
           transform_center_crop(224) %>%
           transform_normalize(

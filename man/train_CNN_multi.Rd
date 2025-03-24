@@ -16,9 +16,9 @@ train_CNN_multi(
   epoch.iterations = 1,
   early.stop = "yes",
   output.base.path = tempdir(),
-  brightness = 1,
-  contrast = 1,
-  saturation = 1,
+  brightness = 0,
+  contrast = 0,
+  saturation = 0,
   trainingfolder,
   noise.category = "Noise"
 )

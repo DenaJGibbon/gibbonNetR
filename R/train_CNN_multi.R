@@ -59,9 +59,9 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
                             class_weights = c(0.49, 0.49, 0.02),
                             epoch.iterations = 1, early.stop = "yes",
                             output.base.path = tempdir(),
-                            brightness = 1,
-                            contrast = 1 ,
-                            saturation = 1,
+                            brightness = 0,
+                            contrast = 0 ,
+                            saturation = 0,
                             trainingfolder,
                             noise.category = "Noise") {
   # Device
