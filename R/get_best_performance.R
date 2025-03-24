@@ -138,16 +138,20 @@ get_best_performance <- function(performancetables.dir,
   for (td in unique_training_data) {
     subset_data <- FrozenCombined[FrozenCombined[["Training Data"]] == td, ]
 
-    max_f1_row <- subset_data[which.max(subset_data[["F1"]]), ]
+    maxF1 <- max(na.omit(subset_data$F1))
+    max_f1_row <- subset(subset_data, F1 == maxF1)
     best_f1_results <- rbind(best_f1_results, max_f1_row)
 
-    max_precision_row <- subset_data[which.max(subset_data[["Precision"]]), ]
+    maxprecision <- max(na.omit(subset_data$Precision))
+    max_precision_row <- subset(subset_data, Precision == maxprecision)
     best_precision_results <- rbind(best_precision_results, max_precision_row)
 
-    max_recall_row <- subset_data[which.max(subset_data[["Recall"]]), ]
+    maxrecall <- max(na.omit(subset_data$Recall))
+    max_recall_row <- subset(subset_data, Precision == maxrecall)
     best_recall_results <- rbind(best_recall_results, max_recall_row)
 
-    max_auc_row <- subset_data[which.max(subset_data[["AUC"]]), ]
+    maxauc <- max(na.omit(subset_data$AUC))
+    max_auc_row <- subset(subset_data,AUC==maxauc)
     best_auc_results <- rbind(best_auc_results, max_auc_row)
   }
 
