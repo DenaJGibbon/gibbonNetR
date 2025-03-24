@@ -56,9 +56,6 @@ devtools::install_github("https://github.com/DenaJGibbon/gibbonNetR")
 library(torch)
 ```
 
-    #> Warning: package 'torch' was built under R version 4.4.1
-    #> Warning: package 'purrr' was built under R version 4.4.1
-
 # Quickstart guide
 
 ``` r

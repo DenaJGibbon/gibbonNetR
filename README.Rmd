@@ -47,7 +47,7 @@ devtools::install_github("https://github.com/DenaJGibbon/gibbonNetR")
 library(torch)
 ```
 
-```{r, message=FALSE, echo=FALSE}
+```{r, message=FALSE, echo=FALSE, warning=FALSE}
 devtools::load_all("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
 # library(gibbonNetR)
 # Load other required libraries
