@@ -49,6 +49,7 @@
 #' @importFrom ggpubr ggline
 #' @importFrom utils write.csv read.csv
 #' @importFrom ROCR prediction performance
+#' @importFrom tidyr pivot_longer
 #' @note Requires train, valid, and test folders
 #' created using created using 'spectrogram_images'
 #' @export
@@ -403,16 +404,11 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
     # Convert the integer predictions to factor and then to character based on the levels
     modelMultiNames <- factor(modelMultiPred, levels = 1:length(class_names), labels = class_names)
 
-    outputTableMulti <- cbind.data.frame(modelMultiNames, predicted_class_probability)
-    colnames(outputTableMulti) <- c("PredictedClass", "Probability")
-    outputTableMulti$ActualClass <- Folder
+    outputTableMulti <- cbind.data.frame(Probability,Folder)
+    colnames(outputTableMulti) <- c(class_names,"ActualClass" )
 
-    # Save the output table as CSV file
-    write.csv(outputTableMulti, paste(output.data.path, trainingfolder, n.epoch, architecture, "output_Multi.csv", sep = "_"), row.names = FALSE)
 
-    UniqueClasses <- unique(outputTableMulti$ActualClass)
-    Probability <- as.data.frame(Probability)
-    colnames(Probability) <- UniqueClasses
+    UniqueClasses <- class_names
     UniqueClasses <- UniqueClasses[-which(UniqueClasses == noise.category)]
 
     # Initialize data frames
@@ -420,55 +416,70 @@ train_CNN_multi <- function(input.data.path, test.data, architecture,
     TransferLearningCNNDF <- data.frame()
     thresholds <- seq(0.1, 1, 0.1)
 
-
     for (b in 1:length(UniqueClasses)) {
       outputTableMultiSub <- outputTableMulti
-      outputTableMultiSub$Probability <- Probability[, c(UniqueClasses[b])]
 
-      outputTableMultiSub$ActualClass <-
-        ifelse(outputTableMultiSub$ActualClass == UniqueClasses[b], UniqueClasses[b], noise.category)
-
-      binarylabels <- ifelse(outputTableMulti$ActualClass == UniqueClasses[b], 1, 0)
-
-      for (threshold in thresholds) {
-        MultiPredictedClass <- ifelse((outputTableMultiSub$Probability > threshold), UniqueClasses[b], noise.category)
-
-        MultiPredictedClass <- factor(MultiPredictedClass, levels = levels(as.factor(outputTableMultiSub$ActualClass)))
-
-        MultiPerf <- caret::confusionMatrix(
-          as.factor(MultiPredictedClass),
-          as.factor(outputTableMultiSub$ActualClass),
-          mode = "everything"
-        )$byClass
-
-        TempRowMulti <- cbind.data.frame(
-          t(MultiPerf),
-          TrainedModel.loss,
-          trainingfolder,
-          n.epoch,
-          architecture
+      # Convert to long format
+      prob_long <- outputTableMultiSub %>%
+        pivot_longer(
+          cols = -ActualClass,  # Convert all columns except ActualClass
+          names_to = "PredictedClass",
+          values_to = "Probability"
         )
 
-        colnames(TempRowMulti) <- c(
-          "Sensitivity", "Specificity", "Pos Pred Value", "Neg Pred Value",
-          "Precision", "Recall", "F1", "Prevalence", "Detection Rate",
-          "Detection Prevalence", "Balanced Accuracy",
-          "Validation loss",
-          "Training Data",
-          "N epochs",
-          "CNN Architecture"
-        )
+      prob_long$Probability <-
+        ifelse(prob_long$PredictedClass == "Noise", 1 -
+                 prob_long$Probability, prob_long$Probability)
 
-        ROCRpred <- ROCR::prediction(predictions =
-                                       outputTableMultiSub$Probability, labels = outputTableMultiSub$ActualClass)
-        AUCval <- ROCR::performance(ROCRpred, "auc")
-        TempRowMulti$AUC <- as.numeric(AUCval@y.values)
-        TempRowMulti$Threshold <- as.character(threshold)
-        TempRowMulti$Frozen <- unfreeze.param
-        TempRowMulti$Class <- UniqueClasses[b]
-        TempRowMulti$Class <- as.factor(TempRowMulti$Class)
-        TempRowMulti$TestDataPath <- test.data
-        CombinedTempRow <- rbind.data.frame(CombinedTempRow, TempRowMulti)
+      prob_long <-
+        subset(prob_long,ActualClass== UniqueClasses[b] |ActualClass== noise.category )
+
+      binary_labels <- ifelse(prob_long$ActualClass == UniqueClasses[b], 1, 0)
+
+      if(sum(binary_labels)==0){
+        message(paste('Skipping',UniqueClasses[b], 'cannot calcuate performance'))
+      } else {
+        pred <- prediction(prob_long$Probability , binary_labels)
+        AUCval <- performance(pred, measure = "auc")
+
+        for (threshold in thresholds) {
+          MultiPredictedClass <- ifelse((prob_long$Probability > threshold), UniqueClasses[b], noise.category)
+
+          MultiPredictedClass <- factor(MultiPredictedClass, levels = levels(as.factor(prob_long$ActualClass)))
+
+          MultiPerf <- caret::confusionMatrix(
+            as.factor(MultiPredictedClass),
+            as.factor(prob_long$ActualClass),
+            mode = "everything"
+          )$byClass
+
+          TempRowMulti <- cbind.data.frame(
+            t(MultiPerf),
+            TrainedModel.loss,
+            trainingfolder,
+            n.epoch,
+            architecture
+          )
+
+          colnames(TempRowMulti) <- c(
+            "Sensitivity", "Specificity", "Pos Pred Value", "Neg Pred Value",
+            "Precision", "Recall", "F1", "Prevalence", "Detection Rate",
+            "Detection Prevalence", "Balanced Accuracy",
+            "Validation loss",
+            "Training Data",
+            "N epochs",
+            "CNN Architecture"
+          )
+
+          TempRowMulti$AUC <- as.numeric(AUCval@y.values)
+          TempRowMulti$Threshold <- as.character(threshold)
+          TempRowMulti$Frozen <- unfreeze.param
+          TempRowMulti$Class <- UniqueClasses[b]
+          TempRowMulti$Class <- as.factor(TempRowMulti$Class)
+          TempRowMulti$TestDataPath <- test.data
+          CombinedTempRow <- rbind.data.frame(CombinedTempRow, TempRowMulti)
+        }
+
       }
     }
 

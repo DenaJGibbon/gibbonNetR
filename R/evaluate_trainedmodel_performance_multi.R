@@ -36,6 +36,7 @@
 #' @importFrom purrr %>%
 #' @importFrom utils write.csv read.csv
 #' @import data.table
+#' @importFrom tidyr pivot_longer
 #' @note Takes the directory of models trained 'train_CNN_multi'
 #' and test folder created using 'spectrogram_images'.
 #' @export
@@ -127,92 +128,103 @@ evaluate_trainedmodel_performance_multi <-
         image_folder_dataset(image_data_dir, transform = transform_list)
       test_dl <- dataloader(test_ds, batch_size = 32, shuffle = FALSE)
 
-      # Predict using trained model
-      Pred <- predict(model, test_dl)
+      # Predict using TrainedModel
+      TrainedModelPred <- predict(model, test_dl)
+
+      # Return the index of the max values (i.e. which class)
+      PredMPS <- torch_argmax(TrainedModelPred, dim = 2)
+
+      # Save to cpu
+      PredMPS <- as_array(torch_tensor(PredMPS, device = "cpu"))
+
+      # Convert to a factor
+      modelMultiPred <- as.factor(PredMPS)
 
       # Calculate the probability associated with each class
-      Probability <-
-        as_array(torch_tensor(nnf_softmax(Pred, dim = 2), device = "cpu"))
+      Probability <- as_array(torch_tensor(nnf_softmax(TrainedModelPred, dim = 2), device = "cpu"))
 
-      Probability <- as.data.frame(Probability)
-      colnames(Probability) <- class_names
+      # Find the index of the maximum value in each row
+      max_prob_idx <- apply(Probability, 1, which.max)
 
-      Probability$ActualClass <- Folder
+      # Map the index to actual probability
+      predicted_class_probability <- sapply(1:nrow(Probability), function(i) Probability[i, max_prob_idx[i]])
 
-      UniqueClasses <- unique(Probability$ActualClass)
+      # Convert the integer predictions to factor and then to character based on the levels
+      modelMultiNames <- factor(modelMultiPred, levels = 1:length(class_names), labels = class_names)
 
-      UniqueClasses <-
-        UniqueClasses[-which(UniqueClasses == noise.category)]
+      outputTableMulti <- cbind.data.frame(Probability,Folder)
+      colnames(outputTableMulti) <- c(class_names,"ActualClass" )
+
+
+      UniqueClasses <- class_names
+      UniqueClasses <- UniqueClasses[-which(UniqueClasses == noise.category)]
 
       # Initialize data frames
       CombinedTempRow <- data.frame()
+      TransferLearningCNNDF <- data.frame()
+      thresholds <- seq(0.1, 1, 0.1)
 
       for (b in 1:length(UniqueClasses)) {
-        message(UniqueClasses[b])
-        outputTableSub <-
-          Probability[, c(UniqueClasses[b], "ActualClass")]
+        outputTableMultiSub <- outputTableMulti
 
-        outputTableSub$Probability <- outputTableSub[, 1]
-
-        outputTableSub$ActualClass <-
-          ifelse(outputTableSub$ActualClass == UniqueClasses[b],
-            UniqueClasses[b],
-            noise.category
+        # Convert to long format
+        prob_long <- outputTableMultiSub %>%
+          pivot_longer(
+            cols = -ActualClass,  # Convert all columns except ActualClass
+            names_to = "PredictedClass",
+            values_to = "Probability"
           )
 
-        thresholds <- seq(0.1, 1, 0.1)
+        prob_long$Probability <-
+          ifelse(prob_long$PredictedClass == "Noise", 1 -
+                   prob_long$Probability, prob_long$Probability)
 
-        for (threshold in thresholds) {
-          message(threshold)
-          PredictedClass <-
-            ifelse((outputTableSub$Probability > threshold),
-              UniqueClasses[b],
-              noise.category
+        prob_long <-
+          subset(prob_long,ActualClass== UniqueClasses[b] |ActualClass== noise.category )
+
+        binary_labels <- ifelse(prob_long$ActualClass == UniqueClasses[b], 1, 0)
+
+        if(sum(binary_labels)==0){
+          message(paste('Skipping',UniqueClasses[b], 'cannot calcuate performance'))
+        } else {
+          pred <- prediction(prob_long$Probability , binary_labels)
+          AUCval <- performance(pred, measure = "auc")
+
+          for (threshold in thresholds) {
+            MultiPredictedClass <- ifelse((prob_long$Probability > threshold), UniqueClasses[b], noise.category)
+
+            MultiPredictedClass <- factor(MultiPredictedClass, levels = levels(as.factor(prob_long$ActualClass)))
+
+            MultiPerf <- caret::confusionMatrix(
+              as.factor(MultiPredictedClass),
+              as.factor(prob_long$ActualClass),
+              mode = "everything"
+            )$byClass
+
+            TempRowMulti <- cbind.data.frame(
+              t(MultiPerf),
+              training_data,
+              n_epochs,
+              model_type
             )
 
-          PredictedClass <-
-            factor(PredictedClass, levels = levels(as.factor(outputTableSub$ActualClass)))
+            colnames(TempRowMulti) <- c(
+              "Sensitivity", "Specificity", "Pos Pred Value", "Neg Pred Value",
+              "Precision", "Recall", "F1", "Prevalence", "Detection Rate",
+              "Detection Prevalence", "Balanced Accuracy",
+              "Training Data",
+              "N epochs",
+              "CNN Architecture"
+            )
 
-          Perf <- caret::confusionMatrix(
-            as.factor(PredictedClass),
-            as.factor(outputTableSub$ActualClass),
-            mode = "everything",
-            positive = UniqueClasses[b]
-          )$byClass
+            TempRowMulti$AUC <- as.numeric(AUCval@y.values)
+            TempRowMulti$Threshold <- as.character(threshold)
+            TempRowMulti$Class <- UniqueClasses[b]
+            TempRowMulti$Class <- as.factor(TempRowMulti$Class)
+            TempRowMulti$TestDataPath <- image_data_dir
+            CombinedTempRow <- rbind.data.frame(CombinedTempRow, TempRowMulti)
+          }
 
-          TempRow <- cbind.data.frame(
-            t(Perf),
-            training_data,
-            n_epochs,
-            model_type
-          )
-
-          colnames(TempRow) <- c(
-            "Sensitivity",
-            "Specificity",
-            "Pos Pred Value",
-            "Neg Pred Value",
-            "Precision",
-            "Recall",
-            "F1",
-            "Prevalence",
-            "Detection Rate",
-            "Detection Prevalence",
-            "Balanced Accuracy",
-            "Training Data",
-            "N epochs",
-            "CNN Architecture"
-          )
-
-          ROCRpred <- ROCR::prediction(predictions = outputTableSub$Probability, labels = as.factor(outputTableSub$ActualClass))
-          AUCval <- ROCR::performance(ROCRpred, "auc")
-          TempRow$AUC <- as.numeric(AUCval@y.values)
-          TempRow$Threshold <- as.character(threshold)
-          TempRow$Frozen <- unfreeze
-          TempRow$Class <- UniqueClasses[b]
-          TempRow$Class <- as.factor(TempRow$Class)
-          CombinedTempRow <-
-            rbind.data.frame(CombinedTempRow, TempRow)
         }
       }
 
@@ -250,7 +262,7 @@ evaluate_trainedmodel_performance_multi <-
       )
 
       # Return the index of the max values (i.e. which class)
-      PredictTop1 <- torch_argmax(Pred, dim = 2)
+      PredictTop1 <- torch_argmax(TrainedModelPred, dim = 2)
 
       # Save to cpu
       PredictTop1 <-
