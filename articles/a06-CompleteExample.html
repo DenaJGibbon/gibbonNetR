@@ -129,7 +129,7 @@ explained here: <a href="https://denajgibbon.github.io/gibbonNetR/articles/a01b-
 </h2>
 <p>For this example we will specify the ‘resnet18’ architecture, as it
 is the least complex of the ResNet architectures in this package and can
-run faster. We will only train for two epochs.</p>
+run faster. We will only train for 1 and 2 epochs.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Location of spectrogram images for training</span></span>
 <span><span class="va">input.data.path</span> <span class="op">&lt;-</span>  <span class="st">'data/trainingimages/'</span></span>
@@ -144,7 +144,7 @@ run faster. We will only train for two epochs.</p>
 <span><span class="va">architecture</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'resnet18'</span><span class="op">)</span> <span class="co"># Choose from 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'.</span></span>
 <span></span>
 <span><span class="co"># We can specify the number of epochs to train here</span></span>
-<span><span class="va">epoch.iterations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">epoch.iterations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Function to train a multi-class CNN</span></span>
 <span><span class="fu">gibbonNetR</span><span class="fu">::</span><span class="fu"><a href="../reference/train_CNN_multi.html">train_CNN_multi</a></span><span class="op">(</span>input.data.path<span class="op">=</span><span class="va">input.data.path</span>,</span>
@@ -165,18 +165,14 @@ run faster. We will only train for two epochs.</p>
 <p>Now we can inspect the output in the ‘data/model_output’ folder.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="st">"data/model_output/"</span>,recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##  [1] "_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_1_alexnet_logs_model.csv"                                                  </span></span>
-<span><span class="co">##  [2] "_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_1_alexnet_model.pt"                                                        </span></span>
-<span><span class="co">##  [3] "_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_1_resnet18_logs_model.csv"                                                 </span></span>
-<span><span class="co">##  [4] "_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_1_resnet18_model.pt"                                                       </span></span>
-<span><span class="co">##  [5] "_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_2_alexnet_logs_model.csv"                                                  </span></span>
-<span><span class="co">##  [6] "_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_2_alexnet_model.pt"                                                        </span></span>
-<span><span class="co">##  [7] "_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_2_alexnet_output_Multi.csv"                                                </span></span>
-<span><span class="co">##  [8] "_danummulticlassexample_multi_unfrozen_TRUE_/alexnet_model_metadata.csv"                                                                        </span></span>
-<span><span class="co">##  [9] "_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi/danummulticlassexample_1_alexnet_TransferLearningCNNDFMultiThreshold.csv" </span></span>
-<span><span class="co">## [10] "_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi/danummulticlassexample_1_resnet18_TransferLearningCNNDFMultiThreshold.csv"</span></span>
-<span><span class="co">## [11] "_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi/danummulticlassexample_2_alexnet_TransferLearningCNNDFMultiThreshold.csv" </span></span>
-<span><span class="co">## [12] "_danummulticlassexample_multi_unfrozen_TRUE_/resnet18_model_metadata.csv"</span></span></code></pre>
+<pre><code><span><span class="co">## [1] "_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_1_resnet18_logs_model.csv"                                                 </span></span>
+<span><span class="co">## [2] "_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_1_resnet18_model.pt"                                                       </span></span>
+<span><span class="co">## [3] "_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_2_resnet18_logs_model.csv"                                                 </span></span>
+<span><span class="co">## [4] "_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_2_resnet18_model.pt"                                                       </span></span>
+<span><span class="co">## [5] "_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_2_resnet18_output_TrainedModel_testdata.csv"                               </span></span>
+<span><span class="co">## [6] "_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi/danummulticlassexample_1_resnet18_TransferLearningCNNDFMultiThreshold.csv"</span></span>
+<span><span class="co">## [7] "_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi/danummulticlassexample_2_resnet18_TransferLearningCNNDFMultiThreshold.csv"</span></span>
+<span><span class="co">## [8] "_danummulticlassexample_multi_unfrozen_TRUE_/resnet18_model_metadata.csv"</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="now-we-can-evaluate-performance-">Now we can evaluate performance.<a class="anchor" aria-label="anchor" href="#now-we-can-evaluate-performance-"></a>
@@ -198,10 +194,10 @@ a toy example, we would not expect great performance.</p>
 <p><img src="a06-CompleteExample_files/figure-html/unnamed-chunk-8-1.png" width="700"></p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">PerformanceOutput</span><span class="op">$</span><span class="va">best_f1</span><span class="op">$</span><span class="va">F1</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 0.9556452</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 0.2226057</span></span></code></pre>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">PerformanceOutput</span><span class="op">$</span><span class="va">best_auc</span><span class="op">$</span><span class="va">AUC</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 0.6677081</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 0.4679669</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="we-can-deploy-the-best-performing-model-over-a-longer-soundfile">We can deploy the best performing model over a longer soundfile<a class="anchor" aria-label="anchor" href="#we-can-deploy-the-best-performing-model-over-a-longer-soundfile"></a>
