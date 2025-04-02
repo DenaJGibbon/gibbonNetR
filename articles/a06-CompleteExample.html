@@ -126,9 +126,9 @@ explained [here] (<a href="https://denajgibbon.github.io/gibbonNetR/articles/a01
 <div class="section level2">
 <h2 id="now-we-can-train-a-model-">Now we can train a model.<a class="anchor" aria-label="anchor" href="#now-we-can-train-a-model-"></a>
 </h2>
-<p>For this example we will specify the ‘AlexNet’ architecture, as it is
-the least complex and can run faster. We will only train for one
-epoch.</p>
+<p>For this example we will specify the ‘resnet18’ architecture, as it
+is the least complex of the ResNet architectures in this package and can
+run faster. We will only train for two epochs.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Location of spectrogram images for training</span></span>
 <span><span class="va">input.data.path</span> <span class="op">&lt;-</span>  <span class="st">'data/trainingimages/'</span></span>
@@ -143,7 +143,7 @@ epoch.</p>
 <span><span class="va">architecture</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">'resnet18'</span><span class="op">)</span> <span class="co"># Choose from 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'.</span></span>
 <span></span>
 <span><span class="co"># We can specify the number of epochs to train here</span></span>
-<span><span class="va">epoch.iterations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">epoch.iterations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Function to train a multi-class CNN</span></span>
 <span><span class="fu">gibbonNetR</span><span class="fu">::</span><span class="fu"><a href="../reference/train_CNN_multi.html">train_CNN_multi</a></span><span class="op">(</span>input.data.path<span class="op">=</span><span class="va">input.data.path</span>,</span>
@@ -214,7 +214,7 @@ performance.</p>
 <span>  <span class="fu">writeWave</span><span class="op">(</span><span class="va">TempBinWav</span>, filename <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"/MultiDir/Wav/"</span>, <span class="st">"TempBinWav.wav"</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="co"># Specify model path</span></span>
-<span>  <span class="va">ModelPath</span> <span class="op">&lt;-</span> <span class="st">'data/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_1_alexnet_model.pt'</span></span>
+<span>  <span class="va">ModelPath</span> <span class="op">&lt;-</span> <span class="st">'data/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_1_resnet18_model.pt'</span></span>
 <span></span>
 <span>  <span class="co"># Deploy trained model over sound files</span></span>
 <span>  <span class="fu"><a href="../reference/deploy_CNN_multi.html">deploy_CNN_multi</a></span><span class="op">(</span></span>
@@ -235,10 +235,44 @@ performance.</p>
 <span>    threshold <span class="op">=</span> <span class="fl">.25</span>,</span>
 <span>    max_freq_khz <span class="op">=</span> <span class="fl">2</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="0.76_female.gibbon_TempBinWav.wav_13_TopModel_.jpg" style="width:50.0%" alt="Spectrogram image of a detection from ‘deploy_CNN_multi’"> #
+Extract embeddings This function extracts embeddings from images and
+applies unsupervised clustering. Presently it serves as a data
+visualization technique.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span>  <span class="co"># Find model path</span></span>
+<span> <span class="va">ModelPath</span> <span class="op">&lt;-</span> <span class="st">'data/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_1_resnet18_model.pt'</span></span>
+<span></span>
+<span>  <span class="co"># Specify model path</span></span>
+<span> <span class="va">ImageFilePath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"multiclass/test/"</span>, package <span class="op">=</span> <span class="st">"gibbonNetR"</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># Function to extract and plot embeddings</span></span>
+<span>  <span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_embeddings.html">extract_embeddings</a></span><span class="op">(</span></span>
+<span>    test_input <span class="op">=</span> <span class="va">ImageFilePath</span>,</span>
+<span>    model_path <span class="op">=</span> <span class="va">ModelPath</span>,</span>
+<span>    target_class <span class="op">=</span> <span class="st">"female.gibbon"</span>,</span>
+<span>    unsupervised <span class="op">=</span> <span class="st">"TRUE"</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">result</span><span class="op">$</span><span class="va">EmbeddingsCombined</span></span>
+<span>  </span>
+<span>  <span class="va">result</span><span class="op">$</span><span class="va">NMI</span></span>
+<span>  </span>
+<span>  <span class="va">result</span><span class="op">$</span><span class="va">ConfusionMatrixUnsupervisedAssigment</span></span></code></pre></div>
 <div class="float">
-<img src="0.33_female.gibbon_TempBinWav.wav_19_TopModel_.jpg" style="width:50.0%" alt="Spectrogram image of a detection from ‘deploy_CNN_multi’"><div class="figcaption">Spectrogram image of a detection from
-‘deploy_CNN_multi’</div>
+<img src="UnsupervisedPlot.png" style="width:50.0%" alt="Unsupervised clustering plot"><div class="figcaption">Unsupervised clustering plot</div>
 </div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>result<span class="sc">$</span>NMI</span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>[<span class="dv">1</span>] <span class="fl">0.8275459</span></span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="sc">&gt;</span> result<span class="sc">$</span>ConfusionMatrixUnsupervisedAssigment</span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a>         Sensitivity          Specificity       Pos Pred Value </span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a>           <span class="fl">0.9407115</span>            <span class="fl">0.9933333</span>            <span class="fl">0.9694501</span> </span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a>      Neg Pred Value            Precision               Recall </span>
+<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a>           <span class="fl">0.9867550</span>            <span class="fl">0.9694501</span>            <span class="fl">0.9407115</span> </span>
+<span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a>                  F1           Prevalence       Detection Rate </span>
+<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a>           <span class="fl">0.9548646</span>            <span class="fl">0.1835994</span>            <span class="fl">0.1727141</span> </span>
+<span id="cb22-10"><a href="#cb22-10" tabindex="-1"></a>Detection Prevalence    Balanced Accuracy </span>
+<span id="cb22-11"><a href="#cb22-11" tabindex="-1"></a>           <span class="fl">0.1781567</span>            <span class="fl">0.9670224</span> </span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
