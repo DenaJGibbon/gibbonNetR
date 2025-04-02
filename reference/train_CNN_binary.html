@@ -149,8 +149,11 @@
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A list containing two elements:</p><ul><li><p><strong>Output_Path</strong>: The path where the model and metadata are saved.</p></li>
-<li><p><strong>Metadata</strong>: A dataframe containing metadata about the training session.</p></li>
+<p>The function generates multiple output files, including:</p><ul><li><p><strong>Trained Models</strong>: If save.model = TRUE outputs saved model files (.pt) for specified architectures.</p></li>
+<li><p><strong>Training Logs</strong>: logs_model.csv containing logs of training sessions, including loss and accuracy metrics.</p></li>
+<li><p><strong>Metadata</strong>: model_metadata.csv contains metadata from training run</p></li>
+<li><p><strong>Model predictions</strong>: Saved for each architecture in output_TrainedModel_testdata.csv</p></li>
+<li><p><strong>Performance Evaluation</strong>: Saves .csv summarizing performance for each architecture in nested folder in output.base.path 'performance_tables'.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
@@ -191,8 +194,8 @@ created using created using 'spectrogram_images'</p>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Using `Sys.setenv()` doesn't work because the env var must be set before R</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>   starts.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 1/1</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Train metrics: Loss: 0.8602 - Acc: 0.6667</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Valid metrics: Loss: 0.2978 - Acc: 0.8333</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Train metrics: Loss: 0.494 - Acc: 0.5556</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Valid metrics: Loss: 0.8198 - Acc: 0.4444</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> `geom_line()`: Each group consists of only one observation.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Do you need to adjust the <span style="color: #00BB00;">group</span> aesthetic?</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Some torch operators might not yet be implemented for the MPS device. A</span>
