@@ -48,6 +48,7 @@
     <a class="dropdown-item" href="../articles/a04-Automateddetection.html">4. Automated detection</a>
     <a class="dropdown-item" href="../articles/a05-UnsupervisedClustering.html">5. Unsupervised clustering</a>
     <a class="dropdown-item" href="../articles/a06-CompleteExample.html">6. A complete working example</a>
+    <a class="dropdown-item" href="../articles/a07-JOSS%20figures.html">7. Recreate figures from JOSS article</a>
   </div>
 </li>
       </ul>
@@ -87,7 +88,7 @@
 <h2 id="create-spectrogram-images-for-training">Create spectrogram images for training<a class="anchor" aria-label="anchor" href="#create-spectrogram-images-for-training"></a>
 </h2>
 <p>This example assumes you have downloaded the multiclass data as
-explained [here] (<a href="https://denajgibbon.github.io/gibbonNetR/articles/a01b-GettingStarted.html" class="uri">https://denajgibbon.github.io/gibbonNetR/articles/a01b-GettingStarted.html</a>).</p>
+explained here: <a href="https://denajgibbon.github.io/gibbonNetR/articles/a01b-GettingStarted.html" class="uri">https://denajgibbon.github.io/gibbonNetR/articles/a01b-GettingStarted.html</a>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://denajgibbon.github.io/gibbonNetR/">gibbonNetR</a></span><span class="op">)</span></span>
 <span><span class="co"># Check folder composition</span></span>
@@ -180,8 +181,10 @@ run faster. We will only train for two epochs.</p>
 <div class="section level2">
 <h2 id="now-we-can-evaluate-performance-">Now we can evaluate performance.<a class="anchor" aria-label="anchor" href="#now-we-can-evaluate-performance-"></a>
 </h2>
-<p>Since this is a toy example, we would not expect great
-performance.</p>
+<p>Once training is complete, we can assess the model’s performance
+using the function get_best_performance(). This function retrieves the
+model’s evaluation metrics and generates an F1-score plot. Since this is
+a toy example, we would not expect great performance.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">performancetables.dir</span> <span class="op">&lt;-</span> <span class="st">'data/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/performance_tables_multi'</span></span>
 <span></span>
@@ -235,16 +238,24 @@ performance.</p>
 <span>    threshold <span class="op">=</span> <span class="fl">.25</span>,</span>
 <span>    max_freq_khz <span class="op">=</span> <span class="fl">2</span></span>
 <span>  <span class="op">)</span></span></code></pre></div>
-<p><img src="0.76_female.gibbon_TempBinWav.wav_13_TopModel_.jpg" style="width:50.0%" alt="Spectrogram image of a detection from ‘deploy_CNN_multi’"> #
-Extract embeddings This function extracts embeddings from images and
-applies unsupervised clustering. Presently it serves as a data
-visualization technique.</p>
+<div class="float">
+<img src="0.76_female.gibbon_TempBinWav.wav_13_TopModel_.jpg" style="width:50.0%" alt="Spectrogram image of a detection from ‘deploy_CNN_multi’"><div class="figcaption">Spectrogram image of a detection from
+‘deploy_CNN_multi’</div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="extract-embeddings">Extract embeddings<a class="anchor" aria-label="anchor" href="#extract-embeddings"></a>
+</h2>
+<p>This function extracts embeddings from images and applies an
+unsupervised clustering algorithm (hdbscan). Presently it serves as a
+data visualization technique. Note that it might take a long time to run
+on your computer.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span>  <span class="co"># Find model path</span></span>
 <span> <span class="va">ModelPath</span> <span class="op">&lt;-</span> <span class="st">'data/model_output/_danummulticlassexample_multi_unfrozen_TRUE_/_danummulticlassexample_1_resnet18_model.pt'</span></span>
 <span></span>
 <span>  <span class="co"># Specify model path</span></span>
-<span> <span class="va">ImageFilePath</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"multiclass/test/"</span>, package <span class="op">=</span> <span class="st">"gibbonNetR"</span><span class="op">)</span></span>
+<span> <span class="va">ImageFilePath</span> <span class="op">&lt;-</span> <span class="st">'data/testimages/test/'</span></span>
 <span></span>
 <span>  <span class="co"># Function to extract and plot embeddings</span></span>
 <span>  <span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/extract_embeddings.html">extract_embeddings</a></span><span class="op">(</span></span>
@@ -254,13 +265,9 @@ visualization technique.</p>
 <span>    unsupervised <span class="op">=</span> <span class="st">"TRUE"</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
-<span>  <span class="va">result</span><span class="op">$</span><span class="va">EmbeddingsCombined</span></span>
-<span>  </span>
-<span>  <span class="va">result</span><span class="op">$</span><span class="va">NMI</span></span>
-<span>  </span>
-<span>  <span class="va">result</span><span class="op">$</span><span class="va">ConfusionMatrixUnsupervisedAssigment</span></span></code></pre></div>
+<span>  <span class="va">result</span><span class="op">$</span><span class="va">EmbeddingsCombined</span></span></code></pre></div>
 <div class="float">
-<img src="UnsupervisedPlot.png" style="width:50.0%" alt="Unsupervised clustering plot"><div class="figcaption">Unsupervised clustering plot</div>
+<img src="UnsupervisedPlot.png" style="width:75.0%" alt="Unsupervised clustering plot"><div class="figcaption">Unsupervised clustering plot</div>
 </div>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>result<span class="sc">$</span>NMI</span>
 <span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>[<span class="dv">1</span>] <span class="fl">0.8275459</span></span>
