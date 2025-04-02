@@ -57,10 +57,13 @@ train_CNN_binary(
 \item{negative.class}{Character. The name of the negative class label. Default is 'Noise'.}
 }
 \value{
-A list containing two elements:
+The function generates multiple output files, including:
 \itemize{
-\item \strong{Output_Path}: The path where the model and metadata are saved.
-\item \strong{Metadata}: A dataframe containing metadata about the training session.
+\item \strong{Trained Models}: If save.model = TRUE outputs saved model files (.pt) for specified architectures.
+\item \strong{Training Logs}: logs_model.csv containing logs of training sessions, including loss and accuracy metrics.
+\item \strong{Metadata}: model_metadata.csv contains metadata from training run
+\item \strong{Model predictions}: Saved for each architecture in output_TrainedModel_testdata.csv
+\item \strong{Performance Evaluation}: Saves .csv summarizing performance for each architecture in nested folder in output.base.path 'performance_tables'.
 }
 }
 \description{

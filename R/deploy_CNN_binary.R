@@ -19,7 +19,7 @@
 #' @param negative.class A character string specifying the negative class label. Default is 'Noise'.
 #' @param min_freq_khz The minimum frequency in kHz for spectrogram visualization.
 #' @param max_freq_khz The maximum frequency in kHz for spectrogram visualization. Default is 2.
-#' @return Returns spectrogram images, wav files (if specified), and Raven selection tables for each sound file.
+#' @return Returns spectrogram images, wav files (if specified), and Raven selection tables for each sound file in specified directory.
 #' @details This function processes sound data from a directory, extracts sound clips, converts them to images, performs image classification using a pre-trained deep learning model, and saves the results including selection tables and image and audio files.
 #' @note This function requires a model trained using the 'train_CNN_binary' function as input.
 #' @examples

@@ -8,7 +8,6 @@
 #' @param maxfreq.khz Maximum frequency in kHz for the spectrogram. Defaults to 2.
 #' @param new.sampleratehz New sample rate in Hz for resampling the audio. Defaults to 16000. Set to 'NA' if no resampling is required.
 #' @param random Logical. If TRUE then randomly samples from folder, if FALSE then divides into sets based on alphabetic file name sequence.
-#' @return Invisible NULL
 #' @examples
 #' {
 #'   # Load the 'TempBinWav' data
@@ -117,7 +116,10 @@
 #'     title(.y)
 #'   })
 #' }
-#'
+#' @return The function saves spectrogram images to train, valid, or test folders to the specified 'outputBasePath'.
+#' \itemize{
+#'   \item \strong{Folders with spectrogram images}: Depending on specified splits.
+#' }
 #' @importFrom tuneR readWave
 #' @importFrom seewave spectro
 #' @importFrom tools file_path_sans_ext

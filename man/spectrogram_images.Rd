@@ -33,7 +33,10 @@ spectrogram_images(
 \item{new.sampleratehz}{New sample rate in Hz for resampling the audio. Defaults to 16000. Set to 'NA' if no resampling is required.}
 }
 \value{
-Invisible NULL
+The function saves spectrogram images to train, valid, or test folders to the specified 'outputBasePath'.
+\itemize{
+\item \strong{Folders with spectrogram images}: Depending on specified splits.
+}
 }
 \description{
 Process and Save Spectrogram Images from Sound Files
@@ -146,5 +149,4 @@ Process and Save Spectrogram Images from Sound Files
     title(.y)
   })
 }
-
 }

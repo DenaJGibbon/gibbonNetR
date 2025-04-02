@@ -24,7 +24,7 @@ evaluate_trainedmodel_performance(
 \item{negative.class}{Label for the negative class.}
 }
 \value{
-Invisible NULL. The performance scores are written to the specified output directory.
+The .csv files containing summary of performance are written to output_dir.
 }
 \description{
 Given trained models and a set of images, this function evaluates the performance of the models.

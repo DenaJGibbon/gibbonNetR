@@ -9,7 +9,7 @@
 #' @param noise.category Category label for noise class. Default is 'noise'.
 #' @param unfreeze Logical indicating whether to unfreeze model parameters. User specified based on trained model.
 #'
-#' @return Invisible NULL. The performance scores are written to the specified output directory.
+#' @return The .csv files containing summary of performance are written to output_dir.
 #' @importFrom stringr str_split_fixed str_detect
 #' @examples {
 #'   # Set directory paths for trained models and test images

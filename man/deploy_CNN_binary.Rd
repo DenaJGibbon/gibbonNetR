@@ -60,7 +60,7 @@ deploy_CNN_binary(
 \item{max_freq_khz}{The maximum frequency in kHz for spectrogram visualization. Default is 2.}
 }
 \value{
-Returns spectrogram images, wav files (if specified), and Raven selection tables for each sound file.
+Returns spectrogram images, wav files (if specified), and Raven selection tables for each sound file in specified directory.
 }
 \description{
 This function processes sound data from a specified directory, performs transfer learning using a pre-trained deep learning model, and saves the results.

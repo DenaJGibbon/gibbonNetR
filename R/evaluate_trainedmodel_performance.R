@@ -7,7 +7,7 @@
 #' @param output_dir Path to the directory where the performance scores will be saved.
 #' @param positive.class Label for the positive class.
 #' @param negative.class Label for the negative class.
-#' @return Invisible NULL. The performance scores are written to the specified output directory.
+#' @return The .csv files containing summary of performance are written to output_dir.
 #' @importFrom stringr str_split_fixed str_detect
 #' @importFrom purrr %>%
 #' @note Takes the directory of models trained 'train_CNN_binary' and

@@ -35,7 +35,7 @@ To use this package with your own data, you will need labeled `.wav` files organ
 
 2. **Ensure Consistent File Formats:**  
    - All `.wav` files should have the same sample rate to maintain consistency in training.  
-   - Make sure that each folder contains only .wav files corresponding to the correct label. Files should not be mixed across labels. Incorrect labeling can lead to poor model performance.
+   - Make sure that each folder contains only .wav files corresponding to the correct label. Incorrect labeling can lead to poor model performance.
 
 3. **Generating Spectrogram Images:**  
    - The `spectrogram_images` function will convert `.wav` files into spectrogram images for training.  
@@ -104,7 +104,7 @@ This dataset contains five classes including: female northern grey gibbons, helm
   <figcaption>"Representative spectrogram images"</em>
 
 ### Download example test files on Zenodo and convert to spectrogram images
-The "spectrogram_images" function below puts 100% of the test images into the test folder. This dataset contains two classes: female northern grey gibbons, and a noise category.
+The "spectrogram_images" function below puts 100% of the test images into the test folder. This dataset contains the same five classes as the training data.
 ```{r eval=FALSE}
 library(gibbonNetR)
 
