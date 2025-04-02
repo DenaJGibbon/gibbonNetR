@@ -178,36 +178,51 @@ This function requres that directory as input.</p>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Evaluating performance for hornbill.helmeted Here are the present classes: hornbill.helmetedEvaluating performance for hornbill.helmeted Here are the present classes: other.class</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Best F1 scores:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 9</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 9 × 9</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Class      `Training Data` `CNN Architecture` Threshold    F1 Precision Recall</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> hornbill.… Dataset1        vgg19                  0.779 0.713     0.147  0.738</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> hornbill.… Dataset2        vgg19                  0.515 0.897     0.866  0.373</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> hornbill.… Dataset3        alexnet                0.954 0.948     0.220  0.737</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> hornbill.… Dataset1        vgg19                  0.779 0.713     0.147  0.738</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> hornbill.… Dataset1        vgg19                  0.779 0.713     0.147  0.738</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> hornbill.… Dataset2        vgg19                  0.515 0.897     0.866  0.373</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> hornbill.… Dataset2        vgg19                  0.515 0.897     0.866  0.373</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> hornbill.… Dataset2        vgg19                  0.515 0.897     0.866  0.373</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> hornbill.… Dataset3        alexnet                0.954 0.948     0.220  0.737</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> hornbill.… Dataset3        alexnet                0.954 0.948     0.220  0.737</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">9</span> hornbill.… Dataset3        alexnet                0.954 0.948     0.220  0.737</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 more variables: AUC &lt;dbl&gt;, `N epochs` &lt;dbl&gt;</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Best precision results:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 9</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 9 × 9</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Class      `Training Data` `CNN Architecture` Threshold    F1 Precision Recall</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> hornbill.… Dataset1        alexnet                0.883 0.573     0.994 0.795 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> hornbill.… Dataset2        vgg16                  0.962 0.253     0.961 0.428 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> hornbill.… Dataset3        vgg16                  0.531 0.516     0.770 0.058<span style="text-decoration: underline;">0</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> hornbill.… Dataset1        alexnet                0.883 0.573     0.994 0.795 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> hornbill.… Dataset1        alexnet                0.883 0.573     0.994 0.795 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> hornbill.… Dataset2        vgg16                  0.962 0.253     0.961 0.428 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> hornbill.… Dataset2        vgg16                  0.962 0.253     0.961 0.428 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> hornbill.… Dataset2        vgg16                  0.962 0.253     0.961 0.428 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> hornbill.… Dataset3        vgg16                  0.531 0.516     0.770 0.058<span style="text-decoration: underline;">0</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> hornbill.… Dataset3        vgg16                  0.531 0.516     0.770 0.058<span style="text-decoration: underline;">0</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">9</span> hornbill.… Dataset3        vgg16                  0.531 0.516     0.770 0.058<span style="text-decoration: underline;">0</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 more variables: AUC &lt;dbl&gt;, `N epochs` &lt;dbl&gt;</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Best recall results:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 9</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Class      `Training Data` `CNN Architecture` Threshold    F1 Precision Recall</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> hornbill.… Dataset1        alexnet                0.788 0.453     0.693  0.902</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> hornbill.… Dataset2        vgg19                  0.967 0.193     0.343  0.761</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> hornbill.… Dataset3        vgg19                  0.576 0.498     0.322  0.997</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 more variables: AUC &lt;dbl&gt;, `N epochs` &lt;dbl&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 0 × 9</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 9 variables: Class &lt;chr&gt;, Training Data &lt;chr&gt;, CNN Architecture &lt;chr&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   Threshold &lt;dbl&gt;, F1 &lt;dbl&gt;, Precision &lt;dbl&gt;, Recall &lt;dbl&gt;, AUC &lt;dbl&gt;,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;">#   N epochs &lt;dbl&gt;</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Best AUC results:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 3 × 9</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># A tibble: 9 × 9</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Class      `Training Data` `CNN Architecture` Threshold    F1 Precision Recall</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>                  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>     <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">1</span> hornbill.… Dataset1        vgg19                  0.779 0.713     0.147 0.738 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> hornbill.… Dataset2        vgg19                  0.515 0.897     0.866 0.373 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> hornbill.… Dataset3        vgg16                  0.531 0.516     0.770 0.058<span style="text-decoration: underline;">0</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">2</span> hornbill.… Dataset1        vgg19                  0.779 0.713     0.147 0.738 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">3</span> hornbill.… Dataset1        vgg19                  0.779 0.713     0.147 0.738 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">4</span> hornbill.… Dataset2        vgg19                  0.515 0.897     0.866 0.373 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">5</span> hornbill.… Dataset2        vgg19                  0.515 0.897     0.866 0.373 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">6</span> hornbill.… Dataset2        vgg19                  0.515 0.897     0.866 0.373 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">7</span> hornbill.… Dataset3        vgg16                  0.531 0.516     0.770 0.058<span style="text-decoration: underline;">0</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">8</span> hornbill.… Dataset3        vgg16                  0.531 0.516     0.770 0.058<span style="text-decoration: underline;">0</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BCBCBC;">9</span> hornbill.… Dataset3        vgg16                  0.531 0.516     0.770 0.058<span style="text-decoration: underline;">0</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #949494;"># ℹ 2 more variables: AUC &lt;dbl&gt;, `N epochs` &lt;dbl&gt;</span></span>
 <span class="r-plt img"><img src="get_best_performance-1.png" alt="" width="700" height="433"></span>
 <span class="r-plt img"><img src="get_best_performance-2.png" alt="" width="700" height="433"></span>

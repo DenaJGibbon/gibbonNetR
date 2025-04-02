@@ -139,56 +139,43 @@ and test folder created using 'spectrogram_images'.</p>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>   `usethis::edit_r_environ()`.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #BB0000;">✖</span> Using `Sys.setenv()` doesn't work because the env var must be set before R</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>   starts.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> female.gibbon</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.1</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.4</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.5</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.6</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.7</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.8</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.9</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> hornbill.rhino</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.1</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.2</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.3</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.4</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.5</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.6</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.7</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.8</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 0.9</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> 1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Skipping hornbill.helmeted cannot calcuate performance</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Skipping long.argus cannot calcuate performance</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Sensitivity Specificity Pos.Pred.Value Neg.Pred.Value Precision Recall</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1           1           0      0.4166667             NA 0.4166667      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2           1           0      0.4166667             NA 0.4166667      1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3           0           1             NA      0.5833333        NA      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4           0           1             NA      0.5833333        NA      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5           0           1             NA      0.5833333        NA      0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6           0           1             NA      0.5833333        NA      0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        1.00        0.00       0.500000             NA  0.500000   1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        0.54        0.48       0.509434      0.5106383  0.509434   0.54</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        0.00        1.00             NA      0.5000000        NA   0.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        0.00        1.00             NA      0.5000000        NA   0.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        0.00        1.00             NA      0.5000000        NA   0.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6        0.00        1.00             NA      0.5000000        NA   0.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          F1 Prevalence Detection.Rate Detection.Prevalence Balanced.Accuracy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.5882353  0.4166667      0.4166667                    1               0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.5882353  0.4166667      0.4166667                    1               0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        NA  0.4166667      0.0000000                    0               0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        NA  0.4166667      0.0000000                    0               0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        NA  0.4166667      0.0000000                    0               0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6        NA  0.4166667      0.0000000                    0               0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Training.Data N.epochs CNN.Architecture       AUC Threshold Frozen</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1          test    multi 3_resnet18_model 0.4285714       0.1   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2          test    multi 3_resnet18_model 0.4285714       0.2   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3          test    multi 3_resnet18_model 0.4285714       0.3   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4          test    multi 3_resnet18_model 0.4285714       0.4   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5          test    multi 3_resnet18_model 0.4285714       0.5   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6          test    multi 3_resnet18_model 0.4285714       0.6   TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           Class Top1Accuracy</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1 female.gibbon        0.125</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 female.gibbon        0.125</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 female.gibbon        0.125</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4 female.gibbon        0.125</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5 female.gibbon        0.125</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 female.gibbon        0.125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0.6666667        0.5           0.50                 1.00              0.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 0.5242718        0.5           0.27                 0.53              0.51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        NA        0.5           0.00                 0.00              0.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        NA        0.5           0.00                 0.00              0.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        NA        0.5           0.00                 0.00              0.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6        NA        0.5           0.00                 0.00              0.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Training.Data N.epochs CNN.Architecture   AUC Threshold         Class</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          test    multi 3_resnet18_model 0.498       0.1 female.gibbon</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2          test    multi 3_resnet18_model 0.498       0.2 female.gibbon</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3          test    multi 3_resnet18_model 0.498       0.3 female.gibbon</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4          test    multi 3_resnet18_model 0.498       0.4 female.gibbon</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5          test    multi 3_resnet18_model 0.498       0.5 female.gibbon</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6          test    multi 3_resnet18_model 0.498       0.6 female.gibbon</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                                                                       TestDataPath</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 /Users/denaclink/Desktop/RStudioProjects/gibbonNetR/inst/extdata/multiclass/test</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 /Users/denaclink/Desktop/RStudioProjects/gibbonNetR/inst/extdata/multiclass/test</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 /Users/denaclink/Desktop/RStudioProjects/gibbonNetR/inst/extdata/multiclass/test</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 /Users/denaclink/Desktop/RStudioProjects/gibbonNetR/inst/extdata/multiclass/test</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 /Users/denaclink/Desktop/RStudioProjects/gibbonNetR/inst/extdata/multiclass/test</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 /Users/denaclink/Desktop/RStudioProjects/gibbonNetR/inst/extdata/multiclass/test</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Top1Accuracy</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        0.125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        0.125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        0.125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        0.125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        0.125</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6        0.125</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
