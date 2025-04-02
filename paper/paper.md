@@ -99,6 +99,6 @@ The research presented here adhered to all local and international laws. Institu
 
 # Acknowledgments
 
-We would like to thank the Sabah Biodiversity Centre and Danum Valley Conservation Area for granting us permission to conduct research. We are incredibly grateful for the detailed comments provided by Steffi LaZerte, which substantially improved the package and documentation.
+We would like to thank the Sabah Biodiversity Centre and Danum Valley Conservation Area for granting us permission to conduct research. We are incredibly grateful for the detailed comments provided by Steffi LaZerte and Camille Desjonquères, which substantially improved the package and documentation.
 
 # References

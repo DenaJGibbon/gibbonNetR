@@ -62,7 +62,7 @@ list.files("data/testimages/test/", recursive = TRUE)[1:2]
 
 
 # Now we can train a model.
-For this example we will specify the 'resnet18' architecture, as it is the least complex of the ResNet architectures in this package and can run faster. We will only train for two epochs.
+For this example we will specify the 'resnet18' architecture, as it is the least complex of the ResNet architectures in this package and can run faster. We will only train for 1 and 2 epochs.
 ```{r, eval=FALSE, warning=FALSE}
 
 # Location of spectrogram images for training
@@ -78,7 +78,7 @@ trainingfolder.short <- 'danummulticlassexample'
 architecture <- c('resnet18') # Choose from 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'.
 
 # We can specify the number of epochs to train here
-epoch.iterations <- c(2)
+epoch.iterations <- c(1,2)
 
 # Function to train a multi-class CNN
 gibbonNetR::train_CNN_multi(input.data.path=input.data.path,

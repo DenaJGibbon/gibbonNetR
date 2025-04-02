@@ -27,6 +27,8 @@ Clink, D. J., & Ahmad, A. H. (2024). gibbonNetR: an R Package for the Use of Con
 
 # Training Multi-Class CNNs
 The script below shows how to train multiple CNN architectures. The number of epochs is set to 20. This script may take a very long time to run, depending on your computer. You can try with the less complex architectures, like AlexNet, VGG16, and ResNet18 if the time to train is prohibitive. 
+
+This example assumes you have downloaded and prepared the multiclass data as explained here: https://denajgibbon.github.io/gibbonNetR/articles/a01b-GettingStarted.html.
 ```{r, eval=FALSE, warning=FALSE}
 # Location of spectrogram images for training
 input.data.path <-  'data/trainingimages/'
