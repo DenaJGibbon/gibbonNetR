@@ -62,7 +62,6 @@ evaluate_trainedmodel_performance_multi <-
       stop("Stopping execution: No models found.") # Stops the execution
     }
 
-
     # List image files
     image_files <-
       list.files(image_data_dir,
@@ -155,7 +154,6 @@ evaluate_trainedmodel_performance_multi <-
       outputTableMulti <- cbind.data.frame(Probability,Folder)
       colnames(outputTableMulti) <- c(class_names,"ActualClass" )
 
-
       UniqueClasses <- class_names
       UniqueClasses <- UniqueClasses[-which(UniqueClasses == noise.category)]
 
@@ -165,45 +163,43 @@ evaluate_trainedmodel_performance_multi <-
       thresholds <- seq(0.1, 1, 0.1)
 
       for (b in 1:length(UniqueClasses)) {
+        current_class <- UniqueClasses[b]
+
         outputTableMultiSub <- outputTableMulti
 
-        # Convert to long format
-        prob_long <- outputTableMultiSub %>%
-          pivot_longer(
-            cols = -ActualClass,  # Convert all columns except ActualClass
-            names_to = "PredictedClass",
-            values_to = "Probability"
-          )
+        # Subset to relevant rows (only current class and noise)
 
-        prob_long$Probability <-
-          ifelse(prob_long$PredictedClass == "Noise", 1 -
-                   prob_long$Probability, prob_long$Probability)
+        binary_subset <- subset(outputTableMultiSub,
+                                      ActualClass== current_class |
+                                      ActualClass== noise.category )
 
-        prob_long <-
-          subset(prob_long,ActualClass== UniqueClasses[b] |ActualClass== noise.category )
+        binary_subset$binary_label <-
+          ifelse(binary_subset$ActualClass==current_class,1,0)
 
-        binary_labels <- ifelse(prob_long$ActualClass == UniqueClasses[b], 1, 0)
+        binary_subset$Probability <- binary_subset[,current_class]
 
-        if(sum(binary_labels)==0){
-          message(paste('Skipping',UniqueClasses[b], 'cannot calcuate performance'))
+        if (sum(binary_subset$binary_label) == 0) {
+          message(paste("Skipping", current_class, "- cannot calculate performance"))
         } else {
-          pred <- prediction(prob_long$Probability , binary_labels)
+          pred <- prediction(binary_subset$Probability, binary_subset$binary_label)
           AUCval <- performance(pred, measure = "auc")
 
           for (threshold in thresholds) {
-            MultiPredictedClass <- ifelse((prob_long$Probability > threshold), UniqueClasses[b], noise.category)
+            predicted_class <- ifelse(binary_subset$Probability > threshold,
+                                      current_class, noise.category)
 
-            MultiPredictedClass <- factor(MultiPredictedClass, levels = levels(as.factor(prob_long$ActualClass)))
+            predicted_class <- factor(predicted_class,
+                                      levels = levels(as.factor(binary_subset$ActualClass)))
 
-            MultiPerf <- caret::confusionMatrix(
-              as.factor(MultiPredictedClass),
-              as.factor(prob_long$ActualClass),
+            cm <- caret::confusionMatrix(
+              predicted_class,
+              as.factor(binary_subset$ActualClass),
               mode = "everything"
             )$byClass
 
             TempRowMulti <- cbind.data.frame(
-              t(MultiPerf),
-              training_data,
+              t(cm),
+              model_name,
               n_epochs,
               model_type
             )
@@ -212,19 +208,16 @@ evaluate_trainedmodel_performance_multi <-
               "Sensitivity", "Specificity", "Pos Pred Value", "Neg Pred Value",
               "Precision", "Recall", "F1", "Prevalence", "Detection Rate",
               "Detection Prevalence", "Balanced Accuracy",
-              "Training Data",
-              "N epochs",
-              "CNN Architecture"
+              "Training Data", "N epochs", "CNN Architecture"
             )
 
             TempRowMulti$AUC <- as.numeric(AUCval@y.values)
-            TempRowMulti$Threshold <- as.character(threshold)
-            TempRowMulti$Class <- UniqueClasses[b]
-            TempRowMulti$Class <- as.factor(TempRowMulti$Class)
-            TempRowMulti$TestDataPath <- image_data_dir
-            CombinedTempRow <- rbind.data.frame(CombinedTempRow, TempRowMulti)
-          }
+            TempRowMulti$Threshold <- threshold
+            TempRowMulti$Class <- current_class
+            TempRowMulti$TestDataPath <- basename(image_data_dir)
 
+            CombinedTempRow <- rbind(CombinedTempRow, TempRowMulti)
+          }
         }
       }
 
