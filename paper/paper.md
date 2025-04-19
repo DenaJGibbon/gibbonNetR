@@ -58,7 +58,7 @@ We include sound files and spectrogram images of five sound classes: great argus
 
 The package currently uses spectrogram images (Figure 1) to train and evaluate CNN model performance, and we includes a function that can be used to create spectrogram images from Waveform Audio File Formant (.wav) files. The .wav files should be organized into separate folders, with each folder named according to the class label of the files it contains. We highly recommend that your test data come from a different recording time and/or location to better understand the generalizability of the models [@stowell2022].
 
-![Figure 1. Spectrograms of training clips for CNNs.\label{fig:fig1}](figures/spectro.png)
+![Figure 1. Spectrograms of training clips for CNNs.](figures/spectro.png)
 
 ## Model training
 
@@ -76,7 +76,7 @@ PerformanceOutput <- get_best_performance(performancetables.dir=performancetable
 PerformanceOutput$f1_plot
 ```
 
-![Figure 2. Evaluating performance of pretrained CNNs.\label{fig:fig2}](figures/modelperformance.pdf)
+![Figure 2. Evaluating performance of pretrained CNNs.](figures/modelperformance.pdf)
 
 ## Extract embeddings
 
@@ -86,7 +86,7 @@ Embeddings from deep learning models can be used as features in unsupervised app
 
 In Figure 3 the top plot is a Uniform Manifold Approximation and Projection (UMAP) where each point represents one call, and the colors indicate the original class label. The bottom plot is the same UMAP plot, but with points colored based on cluster assignment by the 'hdbscan' algorithm [@dbscan].
 
-![Figure 3. UMAP plot of embeddings from test data set colored by actual label (top) and unsupervised cluster assignment (bottom).\label{fig:fig2}](figures/embeddings.png)
+![Figure 3. UMAP plot of embeddings from test data set colored by actual label (top) and unsupervised cluster assignment (bottom).](figures/embeddings.png)
 
 ### Explore the unsupervised clustering results
 
