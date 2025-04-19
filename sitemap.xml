@@ -1,81 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/404.html</loc>
+    <loc>/404.html</loc>
   </url>
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/LICENSE-text.html</loc>
+    <loc>/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/LICENSE.html</loc>
+    <loc>/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/articles/a01a-Overview.html</loc>
+    <loc>/articles/a01a-Overview.html</loc>
   </url>
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/articles/a01b-GettingStarted.html</loc>
+    <loc>/articles/a01b-GettingStarted.html</loc>
   </url>
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/articles/a02-Trainingmulticlassmodels.html</loc>
+    <loc>/articles/a02-Trainingmulticlassmodels.html</loc>
   </url>
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/articles/a03-Trainingbinarymodels.html</loc>
+    <loc>/articles/a03-Trainingbinarymodels.html</loc>
   </url>
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/articles/a04-Automateddetection.html</loc>
+    <loc>/articles/a04-Automateddetection.html</loc>
   </url>
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/articles/a05-UnsupervisedClustering.html</loc>
+    <loc>/articles/a05-UnsupervisedClustering.html</loc>
   </url>
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/articles/a06-CompleteExample.html</loc>
+    <loc>/articles/a06-CompleteExample.html</loc>
   </url>
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/articles/a07-JOSS figures.html</loc>
+    <loc>/articles/a07-JOSSfigures.html</loc>
   </url>
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/articles/index.html</loc>
+    <loc>/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/authors.html</loc>
+    <loc>/authors.html</loc>
   </url>
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/index.html</loc>
+    <loc>/index.html</loc>
   </url>
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/reference/TempBinWav.html</loc>
+    <loc>/reference/TempBinWav.html</loc>
   </url>
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/reference/deploy_CNN_binary.html</loc>
+    <loc>/reference/deploy_CNN_binary.html</loc>
   </url>
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/reference/deploy_CNN_multi.html</loc>
+    <loc>/reference/deploy_CNN_multi.html</loc>
   </url>
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/reference/evaluate_trainedmodel_performance.html</loc>
+    <loc>/reference/evaluate_trainedmodel_performance.html</loc>
   </url>
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/reference/evaluate_trainedmodel_performance_multi.html</loc>
+    <loc>/reference/evaluate_trainedmodel_performance_multi.html</loc>
   </url>
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/reference/extract_embeddings.html</loc>
+    <loc>/reference/extract_embeddings.html</loc>
   </url>
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/reference/get_best_performance.html</loc>
+    <loc>/reference/get_best_performance.html</loc>
   </url>
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/reference/gibbonNetR-package.html</loc>
+    <loc>/reference/gibbonNetR-package.html</loc>
   </url>
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/reference/index.html</loc>
+    <loc>/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/reference/spectrogram_images.html</loc>
+    <loc>/reference/spectrogram_images.html</loc>
   </url>
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/reference/train_CNN_binary.html</loc>
+    <loc>/reference/train_CNN_binary.html</loc>
   </url>
   <url>
-    <loc>https://denajgibbon.github.io/gibbonNetR/reference/train_CNN_multi.html</loc>
+    <loc>/reference/train_CNN_multi.html</loc>
   </url>
 </urlset>
