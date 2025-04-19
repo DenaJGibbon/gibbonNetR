@@ -2,9 +2,10 @@
   "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "gibbonNetR",
-  "description": "R Package for the Use of CNNs and Transfer Learning on Acoustic Data.",
-  "name": "gibbonNetR: gibbonNetR: R Package for the Use of CNNs and Transfer Learning on Acoustic Data",
+  "description": "R Package for the Use of CNNs on Acoustic Data.",
+  "name": "gibbonNetR: gibbonNetR: R Package for the Use of CNNs and Transfer Learning on\n    Acoustic Data",
   "codeRepository": "https://github.com/DenaJGibbon/gibbonNetR",
+  "issueTracker": "https://github.com/DenaJGibbon/gibbonNetR/issues",
   "license": "https://spdx.org/licenses/MIT",
   "version": "1.0.0",
   "programmingLanguage": {
@@ -32,6 +33,18 @@
     }
   ],
   "softwareSuggestions": [
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "devtools",
+      "name": "devtools",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=devtools"
+    },
     {
       "@type": "SoftwareApplication",
       "identifier": "knitr",
@@ -68,58 +81,10 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=testthat"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "dplyr",
-      "name": "dplyr",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=dplyr"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "devtools",
-      "name": "devtools",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=devtools"
     }
   ],
   "softwareRequirements": {
     "1": {
-      "@type": "SoftwareApplication",
-      "identifier": "torch",
-      "name": "torch",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=torch"
-    },
-    "2": {
-      "@type": "SoftwareApplication",
-      "identifier": "torchvision",
-      "name": "torchvision",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=torchvision"
-    },
-    "3": {
       "@type": "SoftwareApplication",
       "identifier": "luz",
       "name": "luz",
@@ -131,7 +96,37 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=luz"
     },
+    "2": {
+      "@type": "SoftwareApplication",
+      "identifier": "R",
+      "name": "R",
+      "version": ">= 2.10"
+    },
+    "3": {
+      "@type": "SoftwareApplication",
+      "identifier": "torch",
+      "name": "torch",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=torch"
+    },
     "4": {
+      "@type": "SoftwareApplication",
+      "identifier": "torchvision",
+      "name": "torchvision",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=torchvision"
+    },
+    "5": {
       "@type": "SoftwareApplication",
       "identifier": "tuneR",
       "name": "tuneR",
@@ -143,71 +138,65 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=tuneR"
     },
-    "5": {
-      "@type": "SoftwareApplication",
-      "identifier": "R",
-      "name": "R",
-      "version": ">= 2.10"
-    },
     "6": {
       "@type": "SoftwareApplication",
-      "identifier": "stringr",
-      "name": "stringr",
+      "identifier": "aricode",
+      "name": "aricode",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=stringr"
+      "sameAs": "https://CRAN.R-project.org/package=aricode"
     },
     "7": {
       "@type": "SoftwareApplication",
-      "identifier": "seewave",
-      "name": "seewave",
+      "identifier": "caret",
+      "name": "caret",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=seewave"
+      "sameAs": "https://CRAN.R-project.org/package=caret"
     },
     "8": {
       "@type": "SoftwareApplication",
-      "identifier": "tibble",
-      "name": "tibble",
+      "identifier": "coro",
+      "name": "coro",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=tibble"
+      "sameAs": "https://CRAN.R-project.org/package=coro"
     },
     "9": {
       "@type": "SoftwareApplication",
-      "identifier": "ggpubr",
-      "name": "ggpubr",
+      "identifier": "cowplot",
+      "name": "cowplot",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=ggpubr"
+      "sameAs": "https://CRAN.R-project.org/package=cowplot"
     },
     "10": {
       "@type": "SoftwareApplication",
-      "identifier": "ROCR",
-      "name": "ROCR",
+      "identifier": "data.table",
+      "name": "data.table",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=ROCR"
+      "sameAs": "https://CRAN.R-project.org/package=data.table"
     },
     "11": {
       "@type": "SoftwareApplication",
@@ -223,29 +212,17 @@
     },
     "12": {
       "@type": "SoftwareApplication",
-      "identifier": "aricode",
-      "name": "aricode",
+      "identifier": "dplyr",
+      "name": "dplyr",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=aricode"
+      "sameAs": "https://CRAN.R-project.org/package=dplyr"
     },
     "13": {
-      "@type": "SoftwareApplication",
-      "identifier": "cowplot",
-      "name": "cowplot",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=cowplot"
-    },
-    "14": {
       "@type": "SoftwareApplication",
       "identifier": "ggplot2",
       "name": "ggplot2",
@@ -257,7 +234,24 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=ggplot2"
     },
+    "14": {
+      "@type": "SoftwareApplication",
+      "identifier": "ggpubr",
+      "name": "ggpubr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=ggpubr"
+    },
     "15": {
+      "@type": "SoftwareApplication",
+      "identifier": "grDevices",
+      "name": "grDevices"
+    },
+    "16": {
       "@type": "SoftwareApplication",
       "identifier": "magrittr",
       "name": "magrittr",
@@ -269,7 +263,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=magrittr"
     },
-    "16": {
+    "17": {
       "@type": "SoftwareApplication",
       "identifier": "purrr",
       "name": "purrr",
@@ -281,7 +275,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=purrr"
     },
-    "17": {
+    "18": {
       "@type": "SoftwareApplication",
       "identifier": "readr",
       "name": "readr",
@@ -293,7 +287,72 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=readr"
     },
-    "18": {
+    "19": {
+      "@type": "SoftwareApplication",
+      "identifier": "ROCR",
+      "name": "ROCR",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=ROCR"
+    },
+    "20": {
+      "@type": "SoftwareApplication",
+      "identifier": "seewave",
+      "name": "seewave",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=seewave"
+    },
+    "21": {
+      "@type": "SoftwareApplication",
+      "identifier": "stats",
+      "name": "stats"
+    },
+    "22": {
+      "@type": "SoftwareApplication",
+      "identifier": "stringr",
+      "name": "stringr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=stringr"
+    },
+    "23": {
+      "@type": "SoftwareApplication",
+      "identifier": "tibble",
+      "name": "tibble",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=tibble"
+    },
+    "24": {
+      "@type": "SoftwareApplication",
+      "identifier": "tidyr",
+      "name": "tidyr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=tidyr"
+    },
+    "25": {
       "@type": "SoftwareApplication",
       "identifier": "torchdatasets",
       "name": "torchdatasets",
@@ -305,7 +364,7 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=torchdatasets"
     },
-    "19": {
+    "26": {
       "@type": "SoftwareApplication",
       "identifier": "umap",
       "name": "umap",
@@ -317,7 +376,12 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=umap"
     },
-    "20": {
+    "27": {
+      "@type": "SoftwareApplication",
+      "identifier": "utils",
+      "name": "utils"
+    },
+    "28": {
       "@type": "SoftwareApplication",
       "identifier": "viridis",
       "name": "viridis",
@@ -329,48 +393,9 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=viridis"
     },
-    "21": {
-      "@type": "SoftwareApplication",
-      "identifier": "caret",
-      "name": "caret",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=caret"
-    },
-    "22": {
-      "@type": "SoftwareApplication",
-      "identifier": "coro",
-      "name": "coro",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=coro"
-    },
-    "23": {
-      "@type": "SoftwareApplication",
-      "identifier": "grDevices",
-      "name": "grDevices"
-    },
-    "24": {
-      "@type": "SoftwareApplication",
-      "identifier": "stats",
-      "name": "stats"
-    },
-    "25": {
-      "@type": "SoftwareApplication",
-      "identifier": "utils",
-      "name": "utils"
-    },
     "SystemRequirements": null
   },
-  "fileSize": "126190.708KB",
+  "fileSize": "126647.829KB",
   "citation": [
     {
       "@type": "SoftwareSourceCode",

@@ -199,7 +199,7 @@ evaluate_trainedmodel_performance_multi <-
 
             TempRowMulti <- cbind.data.frame(
               t(cm),
-              model_name,
+              training_data,
               n_epochs,
               model_type
             )
@@ -214,7 +214,7 @@ evaluate_trainedmodel_performance_multi <-
             TempRowMulti$AUC <- as.numeric(AUCval@y.values)
             TempRowMulti$Threshold <- threshold
             TempRowMulti$Class <- current_class
-            TempRowMulti$TestDataPath <- basename(image_data_dir)
+            TempRowMulti$TestDataPath <- image_data_dir
 
             CombinedTempRow <- rbind(CombinedTempRow, TempRowMulti)
           }
@@ -270,6 +270,7 @@ evaluate_trainedmodel_performance_multi <-
           levels = 1:length(class_names),
           labels = class_names
         ))
+
       Folder <-
         factor(Folder, levels = c(levels(Folder), class_names))
 
