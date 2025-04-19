@@ -46,6 +46,12 @@ train_CNN_multi(
 
 \item{output.base.path}{Character. Base path where the output files should be saved. Default is 'data/'.}
 
+\item{brightness}{Numeric. Brightness adjustment factor for color jitter. A value of 0 means no change. Higher values increase brightness. Default is 0.}
+
+\item{contrast}{Numeric. Contrast adjustment factor for color jitter. A value of 0 means no change. Higher values increase contrast. Default is 0.}
+
+\item{saturation}{Numeric. Saturation adjustment factor for color jitter. A value of 0 means no change. Higher values increase color saturation. Default is 0.}
+
 \item{trainingfolder}{Character. A descriptive name for the training data, used for naming output files.}
 
 \item{noise.category}{Character. Label for the noise category. Default is "Noise".}

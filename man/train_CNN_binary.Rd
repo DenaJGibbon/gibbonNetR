@@ -34,6 +34,12 @@ train_CNN_binary(
 
 \item{noise.weight}{Numeric. Assigned weight for the noise class. Default is 0.5.}
 
+\item{brightness}{Numeric. Brightness adjustment factor for color jitter. A value of 0 means no change. Higher values increase brightness. Default is 0.}
+
+\item{contrast}{Numeric. Contrast adjustment factor for color jitter. A value of 0 means no change. Higher values increase contrast. Default is 0.}
+
+\item{saturation}{Numeric. Saturation adjustment factor for color jitter. A value of 0 means no change. Higher values increase color saturation. Default is 0.}
+
 \item{unfreeze.param}{Logical. Determines whether to unfreeze all layers of the pretrained CNN for retraining. Default is TRUE.}
 
 \item{batch_size}{Numeric. Batch size for training the model. Default is 32.}
