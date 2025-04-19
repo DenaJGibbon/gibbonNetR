@@ -29,4 +29,19 @@ test_that("train_CNN_multi works", {
   # Check that the data frame has expected columns
   expect_true(all(c("AUC", "Class", "TestDataPath") %in% colnames(TempCSV)))
 
+  # Check that a model file was saved
+  model_files <- ListOutputFiles[str_detect(ListOutputFiles, ".pt$")]
+  expect_true(length(model_files) >= 1)
+
+  # Check model file naming pattern
+  expect_true(any(str_detect(basename(model_files), "resnet18")))
+
+  # Check that output folder structure is created correctly
+  expect_true(any(str_detect(ListOutputFiles, "performance_tables_multi/")))
+
+  # Check that accuracy or AUC values are numeric and in expected range
+  expect_true(all(TempCSV$AUC >= 0 & TempCSV$AUC <= 1))
+
+  # Check for expected levels in the Class column
+  expect_true("female.gibbon" %in% unique(TempCSV$Class))
 })

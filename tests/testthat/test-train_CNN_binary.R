@@ -26,5 +26,17 @@ test_that("Outputs appropriate test file", {
   # Check that the data frame has expected columns
   expect_true(all(c("AUC", "Class", "TestDataPath") %in% colnames(TempCSV)))
 
+  # Check that a model file was saved
+  model_files <- ListOutputFiles[str_detect(ListOutputFiles, "\\.pt$")]
+  expect_true(length(model_files) >= 1)
+
+  # Confirm architecture used in filename
+  expect_true(any(str_detect(basename(model_files), "alexnet")))
+
+  # Check that accuracy/AUC is within valid range
+  expect_true(all(TempCSV$AUC >= 0 & TempCSV$AUC <= 1))
+
+  # Confirm output subfolders created
+  expect_true(any(str_detect(ListOutputFiles, "performance_tables/")))
 
 })
