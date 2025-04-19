@@ -17,7 +17,7 @@ test_that("function returns expected values", {
   CSVName <- list.files(paste(tempdir(), "/data/", sep = ""), recursive = TRUE, full.names = TRUE)
 
   # List output files
-  CSVFiles <- list.files(paste(tempdir(), "/data/", sep = ""), recursive = TRUE, pattern = "\\.csv$", full.names = TRUE)
+  CSVFiles <- list.files(paste(tempdir(), "/data/performance_tables_trained/", sep = ""), recursive = TRUE, pattern = "\\.csv$", full.names = TRUE)
   expect_true(length(CSVFiles) > 0)
 
   # Read and check contents of first CSV
