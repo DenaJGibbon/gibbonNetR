@@ -15,7 +15,9 @@
 #' @param output.base.path Character. Base path where the output files should be saved. Default is 'data/'.
 #' @param trainingfolder Character. A descriptive name for the training data, used for naming output files.
 #' @param noise.category Character. Label for the noise category. Default is "Noise".
-#'
+#' @param brightness Numeric. Brightness adjustment factor for color jitter. A value of 0 means no change. Higher values increase brightness. Default is 0.
+#' @param contrast Numeric. Contrast adjustment factor for color jitter. A value of 0 means no change. Higher values increase contrast. Default is 0.
+#' @param saturation Numeric. Saturation adjustment factor for color jitter. A value of 0 means no change. Higher values increase color saturation. Default is 0.
 #' @return The function generates multiple output files, including:
 #' \itemize{
 #'   \item \strong{Trained Models}: If save.model = TRUE outputs saved model files (.pt) for specified architectures.

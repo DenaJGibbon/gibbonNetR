@@ -15,6 +15,7 @@
 #' @importFrom ggpubr ggline ggscatter
 #' @importFrom magrittr %>%
 #' @importFrom dplyr bind_rows
+#' @importFrom stats na.omit
 #' @note 'train_CNN_binary' and 'train_CNN_multi' output a directory of 'performance tables'.
 #' This function requres that directory as input.
 #' @examples

@@ -6,3 +6,10 @@
 #     stop("Incorrect 'torch' version detected. Please install torch 0.13.0 using remotes::install_version('torch', version = '0.13.0').")
 #   }
 # }
+
+utils::globalVariables(c(
+  "ActualClass",
+  "F1",
+  "Precision",
+  "AUC"
+))

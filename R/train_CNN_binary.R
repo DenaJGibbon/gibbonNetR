@@ -17,7 +17,9 @@
 #' @param positive.class Character. The name of the positive class label. Default is 'Gibbons'.
 #' @param negative.class Character. The name of the negative class label. Default is 'Noise'.
 #' @param list.thresholds Numerical list indicating thresholds. Default is seq(0.1,1,.1).
-#'
+#' @param brightness Numeric. Brightness adjustment factor for color jitter. A value of 0 means no change. Higher values increase brightness. Default is 0.
+#' @param contrast Numeric. Contrast adjustment factor for color jitter. A value of 0 means no change. Higher values increase contrast. Default is 0.
+#' @param saturation Numeric. Saturation adjustment factor for color jitter. A value of 0 means no change. Higher values increase color saturation. Default is 0.
 #' @return The function generates multiple output files, including:
 #' \itemize{
 #'   \item \strong{Trained Models}: If save.model = TRUE outputs saved model files (.pt) for specified architectures.

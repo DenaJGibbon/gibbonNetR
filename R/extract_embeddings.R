@@ -60,7 +60,6 @@
 extract_embeddings <- function(test_input,
                                model_path,
                                target_class,
-                               num_classes=5,
                                unsupervised = "TRUE") {
 
   # Ensure model_path is a valid file and contains a .pt extension
