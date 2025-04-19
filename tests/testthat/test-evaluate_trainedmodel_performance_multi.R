@@ -22,4 +22,10 @@ test_that("Outputs expected dataframe", {
 
   # Check that the data frame has expected columns
   expect_true(all(c("CNN.Architecture", "AUC", "Class") %in% colnames(as.data.frame(results))))
+
+  # Check some useful metrics are there
+  expect_true(all(c("Precision", "Recall", "F1", "Specificity", "Sensitivity") %in% colnames(results)))
+
+  # Ensure all provided classes are represented
+  expect_true(all(c("female.gibbon", "hornbill.rhino") %in% results$Class))
 })
