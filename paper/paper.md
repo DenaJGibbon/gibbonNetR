@@ -48,7 +48,7 @@ Until recently, deep learning implementations in R relied on the 'reticulate' pa
 
 # Overview
 
-This package provides functions to create spectrogram images using the 'seewave' package [@seewave2008], and train and deploy six CNN architectures: AlexNet [@krizhevsky2017], VGG16, VGG19 [@simonyan2014], ResNet18, ResNet50, and ResNet152 [@he2016]) trained on the ImageNet dataset [@deng2009 ]. This package has been used for automated detection of gunshots [@Vu2024] and the calls of two gibbon species [@clink2024automated; @Clink2024benchmark]. The package also has functions to evaluate model performance, deploy the highest-performing model over a directory of sound files, and extract embeddings from trained models to visualize acoustic data. We provide an example dataset that consists of labelled vocalizations of the loud calls of four vertebrates (see detailed description below) from Danum Valley Conservation Area, Sabah, Malaysia [@clinkzenodo2024]. Detailed usage instructions for 'gibbonNetR' can be found [Here](https://denajgibbon.github.io/gibbonNetR/)
+The package 'gibbonNetR' provides functions to create spectrogram images using the 'seewave' package [@seewave2008], and train and deploy six CNN architectures: AlexNet [@krizhevsky2017], VGG16, VGG19 [@simonyan2014], ResNet18, ResNet50, and ResNet152 [@he2016]) trained on the ImageNet dataset [@deng2009 ]. This package has been used for automated detection of gunshots [@Vu2024] and the calls of two gibbon species [@clink2024automated; @Clink2024benchmark]. The package also has functions to evaluate model performance, deploy the highest-performing model over a directory of sound files, and extract embeddings from trained models to visualize acoustic data. We provide an example dataset that consists of labelled vocalizations of the loud calls of four vertebrates (see detailed description below) from Danum Valley Conservation Area, Sabah, Malaysia [@clinkzenodo2024]. Detailed usage instructions for 'gibbonNetR' can be found on the [gibbonNetR documentation site](https://denajgibbon.github.io/gibbonNetR/)
 
 ## Data summary
 
@@ -68,11 +68,15 @@ The package currently allows for the training of six different CNN architectures
 
 We can compare the performance of different CNN architectures (Figure 2). Using the 'get_best_performance' function, we can evaluate the performance of different model architectures on the test dataset for the specified class. We can calculate the best F1, precision, recall using the 'caret' package [@kuhn2008], and the area under the ROC (Receiver Operating Characteristic) curve using the 'ROCR' package [@ROCR], which is a threshold or confidence independent metric that evaluates the classifier's ability to discriminate between positive and negative classes.
 
-```         
-PerformanceOutput <- get_best_performance(performancetables.dir=performancetables.dir,
-                                                      class='female.gibbon',
-                                                      model.type = "multi",
-                                                      Thresh.val=0)
+```r         
+PerformanceOutput <- get_best_performance(
+  performancetables.dir =
+    performancetables.dir,
+  class = 'female.gibbon',
+  model.type = "multi",
+  Thresh.val = 0
+)
+
 PerformanceOutput$f1_plot
 ```
 
