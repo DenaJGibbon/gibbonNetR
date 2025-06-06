@@ -17,6 +17,7 @@ knitr::opts_knit$set(root.dir = '/Users/denaclink/Desktop/RStudioProjects/gibbon
 
 devtools::load_all("/Users/denaclink/Desktop/RStudioProjects/gibbonNetR")
 ```
+Please note that due to random variation in model training, the actual output may vary slightly from what is shown here.
 
 # Create spectrogram images for training
 This example assumes you have downloaded the multiclass data as explained here: https://denajgibbon.github.io/gibbonNetR/articles/a01b-GettingStarted.html.
@@ -78,7 +79,7 @@ trainingfolder.short <- 'danummulticlassexample'
 architecture <- c('resnet18') # Choose from 'alexnet', 'vgg16', 'vgg19', 'resnet18', 'resnet50', or 'resnet152'.
 
 # We can specify the number of epochs to train here
-epoch.iterations <- c(1,2)
+epoch.iterations <- c(2)
 
 # Function to train a multi-class CNN
 gibbonNetR::train_CNN_multi(input.data.path=input.data.path,
