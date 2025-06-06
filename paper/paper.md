@@ -7,9 +7,11 @@ tags:
   - automated detection
 authors:
   - name: Dena Jane Clink
-    affiliation: 1 
+    affiliation: 1
+    orcid: 0000-0003-0363-5581
   - name: Abdul Hamid Ahmad
     affiliation: 2
+    orcid: 0000-0001-9658-8600
 affiliations:
  - name: K. Lisa Yang Center for Conservation Bioacoustics,Cornell Lab of Ornithology, Cornell University, Ithaca, New York, United States
    index: 1
