@@ -13,9 +13,9 @@ authors:
     affiliation: 2
     orcid: 0000-0001-9658-8600
 affiliations:
- - name: K. Lisa Yang Center for Conservation Bioacoustics,Cornell Lab of Ornithology, Cornell University, Ithaca, New York, United States
+ - name: K. Lisa Yang Center for Conservation Bioacoustics, Cornell Lab of Ornithology, Cornell University, Ithaca, New York, United States
    index: 1
- - name: Institute for Tropical Biology and Conservation,Universiti Malaysia Sabah (UMS), Kota Kinabalu, Sabah, Malaysia
+ - name: Institute for Tropical Biology and Conservation, Universiti Malaysia Sabah (UMS), Kota Kinabalu, Sabah, Malaysia
    index: 2
 
 date: 2025
@@ -40,7 +40,7 @@ Deep learning does not require feature engineering [@stevens2020], as the algori
 
 ## *Transfer learning*
 
-Training deep learning models generally requires a large amount of training data and substantial computing resources. Transfer learning is an approach wherein the architecture of a pretrained CNN (which is generally trained on a very large dataset) is applied to a new classification problem. For example, CNNs trained on the ImageNet dataset of \> 1 million images [@deng2009] such as ResNet have been applied to automated detection/classification of primate and bird species from PAM data [@dufourq2022; @ruan2022]. Generally, very few practitioners train a CNN from scratch, and there are two common approaches for transfer learning. The first option is to use the CNN as a feature extractor, and train only the last classification layer. The second option is known as 'fine-tuning', where instead of initializing a neural network with random weights, the initialization is done using the pre-trained network. Using these pre-trained weights are valuable because the model has already learned useful feature representations [@pytorch_quantized_transfer_learning]. Both approaches require substantially less computing power than training from scratch. The functions in the 'gibbonNetR' package allow users to train models using both types of transfer learning.
+Training deep learning models generally requires a large amount of training data and substantial computing resources. Transfer learning is an approach wherein the architecture of a pre-trained CNN (which is generally trained on a very large dataset) is applied to a new classification problem. For example, CNNs trained on the ImageNet dataset of \> 1 million images [@deng2009] such as ResNet have been applied to automated detection/classification of primate and bird species from PAM data [@dufourq2022; @ruan2022]. Generally, very few practitioners train a CNN from scratch, and there are two common approaches for transfer learning. The first option is to use the CNN as a feature extractor, and train only the last classification layer. The second option is known as 'fine-tuning', where instead of initializing a neural network with random weights, the initialization is done using the pre-trained network. Using these pre-trained weights are valuable because the model has already learned useful feature representations [@pytorch_quantized_transfer_learning]. Both approaches require substantially less computing power than training from scratch. The functions in the 'gibbonNetR' package allow users to train models using both types of transfer learning.
 
 ## State of the field
 
@@ -50,7 +50,7 @@ Until recently, deep learning implementations in R relied on the 'reticulate' pa
 
 # Overview
 
-The package 'gibbonNetR' provides functions to create spectrogram images using the 'seewave' package [@seewave2008], and train and deploy six CNN architectures: AlexNet [@krizhevsky2017], VGG16, VGG19 [@simonyan2014], ResNet18, ResNet50, and ResNet152 [@he2016]) trained on the ImageNet dataset [@deng2009 ]. This package has been used for automated detection of gunshots [@Vu2024] and the calls of two gibbon species [@clink2024automated; @Clink2024benchmark]. The package also has functions to evaluate model performance, deploy the highest-performing model over a directory of sound files, and extract embeddings from trained models to visualize acoustic data. We provide an example dataset that consists of labelled vocalizations of the loud calls of four vertebrates (see detailed description below) from Danum Valley Conservation Area, Sabah, Malaysia [@clinkzenodo2024]. Detailed usage instructions for 'gibbonNetR' can be found on the [gibbonNetR documentation site](https://denajgibbon.github.io/gibbonNetR/)
+The package 'gibbonNetR' provides functions to create spectrogram images using the 'seewave' package [@seewave2008], and train and deploy six CNN architectures: AlexNet [@krizhevsky2017], VGG16, VGG19 [@simonyan2014], ResNet18, ResNet50, and ResNet152 [@he2016]) trained on the ImageNet dataset [@deng2009 ]. This package has been used for automated detection of gunshots [@Vu2024] and the calls of two gibbon species [@clink2024automated; @Clink2024benchmark]. The package also has functions to evaluate model performance, deploy the highest-performing model over a directory of sound files, and extract embeddings from trained models to visualize acoustic data. We provide an example dataset that consists of labelled vocalizations of the loud calls of four vertebrates (see detailed description below) from Danum Valley Conservation Area, Sabah, Malaysia [@clinkzenodo2024]. Detailed usage instructions for 'gibbonNetR' can be found on the ['gibbonNetR' documentation site](https://denajgibbon.github.io/gibbonNetR/)
 
 ## Data summary
 
@@ -60,7 +60,7 @@ We include sound files and spectrogram images of five sound classes: great argus
 
 The package currently uses spectrogram images (Figure 1) to train and evaluate CNN model performance, and we include a function that can be used to create spectrogram images from Waveform Audio File Formant (.wav) files. The .wav files should be organized into separate folders, with each folder named according to the class label of the files it contains. We highly recommend that your test data come from a different recording time and/or location to better understand the generalizability of the models [@stowell2022].
 
-![Spectrograms of training clips for CNNs.](figures/spectro.png)
+![Spectrograms of training clips for CNNs. The x- and y-axis labels are not included when training the model, so are not shown here. The duration of the clips is approximately 12 seconds and the frequency range is 0-1.6 kHz.](figures/spectro.png)
 
 ## Model training
 
@@ -82,11 +82,11 @@ PerformanceOutput <- get_best_performance(
 PerformanceOutput$f1_plot
 ```
 
-![Evaluating performance of pretrained CNNs.](figures/modelperformance.pdf)
+![Evaluating performance of pre-trained CNNs.](figures/modelperformance.pdf)
 
 ## Extract embeddings
 
-Embeddings from deep learning models can be used as features in unsupervised approaches, with promising results for call repertoires [@10.1371/journal.pone.0283396] and individual identity [@lakdari2024mel]. This package contains a function to use pretrained CNNs to extract embeddings, where the trained model path, along with test data location and target class are specified. Depending on the research question, this output could be used to visualize true and false positives from automated detection, or to explore differences in call types or potential number of individuals in the dataset.
+Embeddings from deep learning models can be used as features in unsupervised approaches, with promising results for call repertoires [@10.1371/journal.pone.0283396] and individual identity [@lakdari2024mel]. This package contains a function to use pre-trained CNNs to extract embeddings, where the trained model path, along with test data location and target class are specified. Depending on the research question, this output could be used to visualize true and false positives from automated detection, or to explore differences in call types or potential number of individuals in the dataset.
 
 ## We can plot the unsupervised clustering results
 
