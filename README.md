@@ -1,7 +1,7 @@
 gibbonNetR R Package
 ================
 Dena J. Clink and Abdul Hamid Ahmad
-2025-03-24
+2025-06-07
 
 # Overview
 
@@ -22,6 +22,9 @@ enables visualization of differences in acoustic signals.
 
 A detailed usage guide can be found at:
 <https://denajgibbon.github.io/gibbonNetR/>
+
+Link to paper in the Journal of Open Source Software:
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.07250/status.svg)](https://doi.org/10.21105/joss.07250)
 
 # Prerequisites
 

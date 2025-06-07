@@ -1,8 +1,33 @@
-bibentry(
-  bibtype  = "Manual",
-  title    = "gibbonNetR: R Package for the Use of CNNs and Transfer Learning on Acoustic Data",
-  year = "2025",
-  author   = "Dena J. Clink and Abdul Hamid Ahmad",
-  journal  = "GitHub",
-  url = {'https://github.com/DenaJGibbon/gibbonNetR'}
-)
+authors:
+- family-names: Clink
+  given-names: Dena Jane
+  orcid: "https://orcid.org/0000-0003-0363-5581"
+- family-names: Ahmad
+  given-names: Abdul Hamid
+  orcid: "https://orcid.org/0000-0001-9658-8600"
+doi: 10.5281/zenodo.15608992
+message: If you use this software, please cite our article in the
+  Journal of Open Source Software.
+preferred-citation:
+  authors:
+  - family-names: Clink
+    given-names: Dena Jane
+    orcid: "https://orcid.org/0000-0003-0363-5581"
+  - family-names: Ahmad
+    given-names: Abdul Hamid
+    orcid: "https://orcid.org/0000-0001-9658-8600"
+  date-published: 2025-06-07
+  doi: 10.21105/joss.07250
+  issn: 2475-9066
+  issue: 110
+  journal: Journal of Open Source Software
+  publisher:
+    name: Open Journals
+  start: 7250
+  title: "gibbonNetR: an R Package for the Use of Convolutional Neural
+    Networks for Automated Detection of Acoustic Data"
+  type: article
+  url: "https://joss.theoj.org/papers/10.21105/joss.07250"
+  volume: 10
+title: "gibbonNetR: an R Package for the Use of Convolutional Neural
+  Networks for Automated Detection of Acoustic Data"

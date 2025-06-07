@@ -25,6 +25,9 @@ Users can train both binary and multi-class classification models on spectrogram
 
 A detailed usage guide can be found at: <https://denajgibbon.github.io/gibbonNetR/>
 
+Link to paper in the Journal of Open Source Software: 
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.07250/status.svg)](https://doi.org/10.21105/joss.07250)
+
 # Prerequisites
 This package assumes a basic understanding of machine learning, deep learning, and convolutional neural networks (CNNs). Users should be familiar with training and evaluating models, as well as handling spectrogram image data. For those new to these concepts, we recommend reviewing foundational machine learning and deep learning resources before using this package. a good starting point would be: 
 
