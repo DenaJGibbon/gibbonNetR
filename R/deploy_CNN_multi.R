@@ -104,19 +104,17 @@ deploy_CNN_multi <- function(output_folder,
 
   # Create output folders if they don't exist
   dir.create(output_folder,
-    recursive = TRUE,
-    showWarnings = TRUE
+             recursive = TRUE,
+             showWarnings = TRUE
   )
   dir.create(output_folder_selections,
-    recursive = TRUE,
-    showWarnings = TRUE
+             recursive = TRUE,
+             showWarnings = TRUE
   )
   dir.create(output_folder_wav,
-    recursive = TRUE,
-    showWarnings = TRUE
+             recursive = TRUE,
+             showWarnings = TRUE
   )
-
-  tempdir.id <- paste0(sample(c(letters, LETTERS), 4, replace = TRUE), collapse = "")
 
   path_to_files <-
     list.files(path_to_files, recursive = T, full.names = T)
@@ -184,14 +182,14 @@ deploy_CNN_multi <- function(output_folder,
         }
 
         for (q in 1:(length(length.files) - 1)) {
-          unlink(paste(tempdir(),tempdir.id, "/WavFiles", sep = ""), recursive = TRUE)
-          unlink(paste(tempdir(),tempdir.id, "/Images/Images", sep = ""), recursive = TRUE)
+          unlink(paste(tempdir(), "/WavFiles", sep = ""), recursive = TRUE)
+          unlink(paste(tempdir(), "/Images/Images", sep = ""), recursive = TRUE)
 
-          dir.create(paste(tempdir(),tempdir.id, "/WavFiles", sep = ""))
-          dir.create(paste(tempdir(),tempdir.id, "/Images/Images", sep = ""), recursive = TRUE)
+          dir.create(paste(tempdir(), "/WavFiles", sep = ""))
+          dir.create(paste(tempdir(), "/Images/Images", sep = ""), recursive = TRUE)
 
-          WavFileTempDir <- paste(tempdir(),tempdir.id, "/WavFiles", sep = "")
-          ImageTempDir <- paste(tempdir(),tempdir.id, "/Images/Images", sep = "")
+          WavFileTempDir <- paste(tempdir(), "/WavFiles", sep = "")
+          ImageTempDir <- paste(tempdir(), "/Images/Images", sep = "")
 
           RandomSub <- seq(length.files[q], length.files[q + 1], 1)
 
@@ -222,7 +220,7 @@ deploy_CNN_multi <- function(output_folder,
               1:length(short.sound.files),
               function(i) {
                 downsample(short.sound.files[[i]],
-                  samp.rate = downsample_rate
+                           samp.rate = downsample_rate
                 )
               }
             )
@@ -283,7 +281,7 @@ deploy_CNN_multi <- function(output_folder,
           # Predict using TopModel ----------------------------------------------------
           message("Classifying images using Top Model")
 
-          test.input <- paste(tempdir(),tempdir.id, "/Images/", sep = "")
+          test.input <- paste(tempdir(), "/Images/", sep = "")
 
           # Define transforms based on model type
           if (str_detect(architecture, pattern = "resnet")) {
@@ -344,8 +342,8 @@ deploy_CNN_multi <- function(output_folder,
           # Convert the integer predictions to factor and then to character based on the levels
           modelMultiNames <-
             factor(modelMultiPred,
-              levels = 1:length(class_names),
-              labels = class_names
+                   levels = 1:length(class_names),
+                   labels = class_names
             )
 
           outputTableTopModel <-
@@ -355,8 +353,8 @@ deploy_CNN_multi <- function(output_folder,
             c("PredictedClass", "Probability")
 
           image.files <- list.files(file.path(test.input),
-            recursive = T,
-            full.names = T
+                                    recursive = T,
+                                    full.names = T
           )
           nslash <- str_count(image.files, "/") + 1
           nslash <- nslash[1]

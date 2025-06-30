@@ -89,25 +89,24 @@ deploy_CNN_binary <- function(output_folder,
                               max_freq_khz = 2) {
   # Create output folders if they don't exist
   dir.create(output_folder,
-    recursive = TRUE,
-    showWarnings = FALSE
+             recursive = TRUE,
+             showWarnings = FALSE
   )
   dir.create(output_folder_selections,
-    recursive = TRUE,
-    showWarnings = FALSE
+             recursive = TRUE,
+             showWarnings = FALSE
   )
   dir.create(output_folder_wav,
-    recursive = TRUE,
-    showWarnings = FALSE
+             recursive = TRUE,
+             showWarnings = FALSE
   )
 
-  tempdir.id <- paste0(sample(c(letters, LETTERS), 4, replace = TRUE), collapse = "")
 
   if (is.list(path_to_files) == FALSE) {
     path_to_files <-
       list.files(path_to_files,
-        recursive = TRUE,
-        full.names = TRUE
+                 recursive = TRUE,
+                 full.names = TRUE
       )
   }
 
@@ -173,14 +172,14 @@ deploy_CNN_binary <- function(output_folder,
         }
 
         for (q in 1:(length(length.files) - 1)) {
-          unlink(paste(tempdir(),tempdir.id, "/WavFiles", sep = ""), recursive = TRUE)
-          unlink(paste(tempdir(),tempdir.id, "/Images/Images", sep = ""), recursive = TRUE)
+          unlink(paste(tempdir(), "/WavFiles", sep = ""), recursive = TRUE)
+          unlink(paste(tempdir(), "/Images/Images", sep = ""), recursive = TRUE)
 
-          dir.create(paste(tempdir(),tempdir.id, "/WavFiles", sep = ""))
-          dir.create(paste(tempdir(),tempdir.id, "/Images/Images", sep = ""), recursive = TRUE)
+          dir.create(paste(tempdir(), "/WavFiles", sep = ""))
+          dir.create(paste(tempdir(), "/Images/Images", sep = ""), recursive = TRUE)
 
-          WavFileTempDir <- paste(tempdir(),tempdir.id, "/WavFiles", sep = "")
-          ImageTempDir <- paste(tempdir(), tempdir.id, "/Images/Images", sep = "")
+          WavFileTempDir <- paste(tempdir(), "/WavFiles", sep = "")
+          ImageTempDir <- paste(tempdir(), "/Images/Images", sep = "")
 
           RandomSub <- seq(length.files[q], length.files[q + 1], 1)
 
@@ -211,7 +210,7 @@ deploy_CNN_binary <- function(output_folder,
               1:length(short.sound.files),
               function(i) {
                 downsample(short.sound.files[[i]],
-                  samp.rate = downsample_rate
+                           samp.rate = downsample_rate
                 )
               }
             )
@@ -272,7 +271,7 @@ deploy_CNN_binary <- function(output_folder,
           # Predict using TopModel ----------------------------------------------------
           message("Classifying images using Top Model")
 
-          test.input <- paste(tempdir(),tempdir.id, "/Images/", sep = "")
+          test.input <- paste(tempdir(), "/Images/", sep = "")
 
           # Define transforms based on model type
           if (str_detect(architecture, pattern = "resnet")) {
@@ -311,8 +310,8 @@ deploy_CNN_binary <- function(output_folder,
             as_array(torch_tensor(TrainedModelProb, device = "cpu"))
           TrainedModelClass <-
             ifelse((TrainedModelProb) < 0.5,
-              positive.class,
-              negative.class
+                   positive.class,
+                   negative.class
             )
 
           # Add the results to output tables
@@ -324,8 +323,8 @@ deploy_CNN_binary <- function(output_folder,
 
           image.files <-
             list.files(file.path(test.input),
-              recursive = TRUE,
-              full.names = TRUE
+                       recursive = TRUE,
+                       full.names = TRUE
             )
           nslash <- str_count(image.files, "/") + 1
           nslash <- nslash[1]
