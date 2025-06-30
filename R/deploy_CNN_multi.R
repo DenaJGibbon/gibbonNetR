@@ -116,6 +116,8 @@ deploy_CNN_multi <- function(output_folder,
     showWarnings = TRUE
   )
 
+  tempdir.id <- paste0(sample(c(letters, LETTERS), 4, replace = TRUE), collapse = "")
+
   path_to_files <-
     list.files(path_to_files, recursive = T, full.names = T)
 
@@ -182,14 +184,14 @@ deploy_CNN_multi <- function(output_folder,
         }
 
         for (q in 1:(length(length.files) - 1)) {
-          unlink(paste(tempdir(), "/WavFiles", sep = ""), recursive = TRUE)
-          unlink(paste(tempdir(), "/Images/Images", sep = ""), recursive = TRUE)
+          unlink(paste(tempdir(),tempdir.id, "/WavFiles", sep = ""), recursive = TRUE)
+          unlink(paste(tempdir(),tempdir.id, "/Images/Images", sep = ""), recursive = TRUE)
 
-          dir.create(paste(tempdir(), "/WavFiles", sep = ""))
-          dir.create(paste(tempdir(), "/Images/Images", sep = ""), recursive = TRUE)
+          dir.create(paste(tempdir(),tempdir.id, "/WavFiles", sep = ""))
+          dir.create(paste(tempdir(),tempdir.id, "/Images/Images", sep = ""), recursive = TRUE)
 
-          WavFileTempDir <- paste(tempdir(), "/WavFiles", sep = "")
-          ImageTempDir <- paste(tempdir(), "/Images/Images", sep = "")
+          WavFileTempDir <- paste(tempdir(),tempdir.id, "/WavFiles", sep = "")
+          ImageTempDir <- paste(tempdir(),tempdir.id, "/Images/Images", sep = "")
 
           RandomSub <- seq(length.files[q], length.files[q + 1], 1)
 
@@ -281,7 +283,7 @@ deploy_CNN_multi <- function(output_folder,
           # Predict using TopModel ----------------------------------------------------
           message("Classifying images using Top Model")
 
-          test.input <- paste(tempdir(), "/Images/", sep = "")
+          test.input <- paste(tempdir(),tempdir.id, "/Images/", sep = "")
 
           # Define transforms based on model type
           if (str_detect(architecture, pattern = "resnet")) {
